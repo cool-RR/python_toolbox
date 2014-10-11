@@ -514,15 +514,19 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         elif self.is_sliced:
             return self.unsliced[i + self.canonical_slice.start]
         elif self.is_dapplied:
-            return self.perm_type(self.undapplied[i], perm_space=self)
+            return self.perm_processor(
+                self.perm_type(self.undapplied[i], perm_space=self)
+            )
         elif self.is_degreed:
             if self.is_rapplied:
                 assert not self.is_recurrent and \
                        not self.is_partial and not self.is_combination and \
                        not self.is_dapplied and not self.is_sliced
-                return self.perm_type(map(self.sequence.__getitem__,
-                                          self.unrapplied[i]),
-                                      perm_space=self)
+                return self.perm_processor(
+                    self.perm_type(map(self.sequence.__getitem__,
+                                       self.unrapplied[i]),
+                                   perm_space=self)
+                )
             
             assert not self.is_rapplied and not self.is_recurrent and \
                    not self.is_partial and not self.is_combination and \
@@ -583,8 +587,10 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 else:
                     raise RuntimeError
             assert wip_i == 0
-            return self.perm_type((wip_perm_sequence_dict[k] for k in
-                                   self.domain), self)
+            return self.perm_processor(
+                self.perm_type((wip_perm_sequence_dict[k] for k in
+                                self.domain), self)
+            )
         elif self.is_recurrent:
             assert not self.is_dapplied and not self.is_degreed and \
                                                              not self.is_sliced
@@ -626,22 +632,26 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 else:
                     raise RuntimeError
             assert wip_i == 0
-            return self.perm_type(
-                dict_tools.get_list(wip_perm_sequence_dict, self.domain),
-                self
+            return self.perm_processor(
+                self.perm_type(
+                    dict_tools.get_list(wip_perm_sequence_dict, self.domain),
+                    self
+                )
             )
         
         elif self.is_fixed:
             free_values_perm = self._free_values_unsliced_perm_space[i]
             free_values_perm_iterator = iter(free_values_perm)
-            return self.perm_type(
-                tuple(
-                    (self._undapplied_fixed_map[m] if
-                     (m in self.fixed_indices) else
-                     next(free_values_perm_iterator))
+            return self.perm_processor(
+                self.perm_type(
+                    tuple(
+                        (self._undapplied_fixed_map[m] if
+                         (m in self.fixed_indices) else
+                         next(free_values_perm_iterator))
                                            for m in range(self.sequence_length)
-                ),
-                self
+                    ),
+                    self
+                )
             )
         
         elif self.is_combination:
@@ -660,7 +670,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     raise RuntimeError
             result = tuple(wip_perm_sequence)
             assert len(result) == self.n_elements
-            return self.perm_type(result, self)
+            return self.perm_processor(self.perm_type(result, self))
 
         
         else:
@@ -675,8 +685,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             result = tuple(unused_numbers.pop(factoradic_digit) for
                                          factoradic_digit in factoradic_number)
             assert sequence_tools.get_length(result) == self.n_elements
-            
-            return self.perm_type(result, self)
+            return self.perm_processor(self.perm_type(result, self))
                 
                 
     enumerated_sequence = caching.CachedProperty(

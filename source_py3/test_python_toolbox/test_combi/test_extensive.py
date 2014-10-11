@@ -145,7 +145,13 @@ class BrutePermSpace:
                 
 
 
+class StupidTuple(tuple):
+    pass
+        
+
 def perm_processor(perm):
+    if isinstance(perm, tuple):
+        perm = StupidTuple(perm)
     perm.was_processed_dawg = True
     return perm
 
