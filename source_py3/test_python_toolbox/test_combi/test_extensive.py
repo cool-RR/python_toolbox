@@ -217,7 +217,6 @@ def _check_variation_selection(variation_selection, perm_space_type,
                 None), 
         **kwargs
     )
-    
     assert perm_space.variation_selection == variation_selection
     assert perm_space.sequence_length == len(sequence)
     
@@ -517,3 +516,4 @@ for i, f in enumerate(_iterate_tests()):
 for i, partition in enumerate(sequence_tools.partitions(lambdas, 100)):
     exec('def test_%s(): return (%s)' %
          (i, ', '.join('%s()'% f.name for f in partition)))
+    

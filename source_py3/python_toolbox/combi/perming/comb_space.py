@@ -15,8 +15,8 @@ class CombSpace(PermSpace):
                  _degrees_for_checking=None):
         PermSpace.__init__(
             self, iterable_or_length=iterable_or_length, n_elements=n_elements,
-            is_combination=True, slice_=slice_, domain=_domain_for_checking,
-            degrees=_degrees_for_checking
+            is_combination=True, slice_=slice_, perm_processor=perm_processor,
+            domain=_domain_for_checking, degrees=_degrees_for_checking
         )
         
         
