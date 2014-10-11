@@ -122,6 +122,7 @@ class _BootstrappedCachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
         '''
         Decorate method to use value of `CachedProperty` as a context manager.
         '''
+        from python_toolbox import decorator_tools
         def inner(same_method_function, self_obj, *args, **kwargs):
             with getattr(self_obj, self.get_our_name(self_obj)):
                 return method_function(self_obj, *args, **kwargs)
@@ -136,8 +137,6 @@ class _BaseBagMixin:
     '''Mixin for `FrozenBag` and `FrozenOrderedBag`.'''
     
     def __init__(self, iterable={}):
-        from python_toolbox import math_tools
-        
         super().__init__()
         
         if isinstance(iterable, collections.Mapping):

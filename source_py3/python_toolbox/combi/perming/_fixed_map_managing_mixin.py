@@ -1,7 +1,6 @@
 import collections
 
 from python_toolbox import caching
-from python_toolbox import nifty_collections
 
 # (`PermSpace` exported to here from `perm_space.py` to avoid import loop.)
 

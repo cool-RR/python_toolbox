@@ -10,7 +10,7 @@ from python_toolbox import caching
 class EnumType(enum.EnumMeta):
     def __dir__(cls):
         return type.__dir__(cls) + cls._member_names_
-    _values_tuple= caching.CachedProperty(tuple)
+    _values_tuple = caching.CachedProperty(tuple)
     
     
     
