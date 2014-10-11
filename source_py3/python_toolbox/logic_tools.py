@@ -6,7 +6,6 @@
 import collections
 
 from python_toolbox import cute_iter_tools
-from python_toolbox import sequence_tools
 
 
 def all_equal(iterable, exhaustive=False):
@@ -38,7 +37,7 @@ def all_equal(iterable, exhaustive=False):
     else: # exhaustive is False
         pairs = cute_iter_tools.iterate_overlapping_subsequences(iterable)
         
-    return all(a==b for (a, b) in pairs)
+    return all(a == b for (a, b) in pairs)
 
 
 def get_equivalence_classes(iterable, key):
