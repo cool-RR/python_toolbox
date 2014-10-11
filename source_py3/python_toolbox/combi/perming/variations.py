@@ -105,7 +105,7 @@ variation_selection_space = VariationSelectionSpace()
         
 class VariationSelectionType(type):
     __call__ = lambda cls, variations: cls._create_from_sorted_set(
-                                   cls, sortedcontainers.SortedSet(variations))
+                                        sortedcontainers.SortedSet(variations))
     
 class VariationSelection(metaclass=VariationSelectionType):
     '''
