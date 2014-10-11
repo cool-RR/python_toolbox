@@ -123,6 +123,7 @@ class VariationSelection(metaclass=VariationSelectionType):
     with the same variations, you'll get the original `VariationSelection`
     object you created.
     '''
+    @classmethod
     @caching.cache()
     def _create_from_sorted_set(cls, variations):
         '''Create a `VariationSelection` from a `SortedSet` of variations.'''

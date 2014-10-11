@@ -110,8 +110,11 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             
     __iter__ = lambda self: iter(self._perm_sequence)
     
-    __eq__ = lambda self, other: (isinstance(other, Perm) and
-                                  self._reduced == other._reduced)
+    def __eq__(self, other):
+        return type(self) == type(other) and \
+                      self.nominal_perm_space == other.nominal_perm_space and \
+           cute_iter_tools.are_equal(self._perm_sequence, other._perm_sequence)
+
     __ne__ = lambda self, other: not (self == other)
     __hash__ = lambda self: hash(self._reduced)
     __bool__ = lambda self: bool(self._perm_sequence)
