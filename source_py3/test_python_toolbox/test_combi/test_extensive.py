@@ -411,6 +411,7 @@ def _check_variation_selection(variation_selection, perm_space_type,
         
         
 def _iterate_tests():
+    shitfuck = 70
     for variation_selection in combi.variations.variation_selection_space:
         
         kwargs = {}
@@ -492,7 +493,10 @@ def _iterate_tests():
             perm_processor_options = (NO_ARGUMENT,)
             
         #blocktodo remove
-        if variation_selection.is_combination and variation_selection.is_fixed:
+        # if variation_selection.is_combination and variation_selection.is_fixed and variation_selection.is_rapplied and variation_selection.is_partial:
+            # continue
+        if shitfuck:
+            shitfuck -= 1
             continue
             
         
