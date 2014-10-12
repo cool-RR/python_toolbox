@@ -411,7 +411,6 @@ def _check_variation_selection(variation_selection, perm_space_type,
         
         
 def _iterate_tests():
-    shitfuck = 0
     for variation_selection in combi.variations.variation_selection_space:
         
         kwargs = {}
@@ -492,14 +491,6 @@ def _iterate_tests():
         else:
             perm_processor_options = (NO_ARGUMENT,)
             
-        #blocktodo remove
-        # if variation_selection.is_combination and variation_selection.is_fixed and variation_selection.is_rapplied and variation_selection.is_partial:
-            # continue
-        if shitfuck:
-            shitfuck -= 1
-            continue
-            
-        
         product_space_ = combi.ProductSpace(
             ((variation_selection,), perm_space_type_options,
              iterable_or_length_and_sequence_options, domain_to_cut_options,
@@ -516,11 +507,10 @@ def _iterate_tests():
                 fucking_globals, locals()
             )
             
-_tests = tuple(_iterate_tests())
 
 # We use this shit because Nose can't parallelize generator tests:
 lambdas = []
-for i, f in enumerate(_tests):
+for i, f in enumerate(_iterate_tests()):
     f.name = 'f_%s' % i
     locals()[f.name] = f
     lambdas.append(f)
@@ -528,7 +518,4 @@ for i, partition in enumerate(sequence_tools.partitions(lambdas, 500)):
     exec('def test_%s(): return (%s)' %
          (i, ', '.join('%s()'% f.name for f in partition)))
     
-# for i in range(3, 65):
-    # # blocktodo remove
-    # exec('del test_%s' % i)
     
