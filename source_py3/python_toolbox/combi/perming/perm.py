@@ -202,7 +202,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         
     )
     uncombinationed = caching.CachedProperty(
-        lambda self: type(self)(
+        lambda self: Perm(
             self._perm_sequence,
             self.nominal_perm_space.uncombinationed
         )
