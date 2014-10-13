@@ -38,6 +38,8 @@ class _VariationRemovingMixin:
     @caching.CachedProperty
     def unrecurrented(self):
         '''A version of this `PermSpace` with no recurrences.'''
+        from .perm import UnrecurrentedPerm
+        from .comb import UnrecurrentedComb
         assert self.is_recurrent # Otherwise was overridden in `__init__`
         if self.is_sliced:
             raise Exception(

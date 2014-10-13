@@ -24,7 +24,7 @@ class _BasePermView:
 class PermItems(sequence_tools.CuteSequenceMixin, _BasePermView,
                 collections.Sequence):
     def __getitem__(self, i):
-        return (self.perm.domain[i], self.perm[i])
+        return (self.perm.domain[i], self.perm[self.perm.domain[i]])
     
 
 class PermAsDictoid(sequence_tools.CuteSequenceMixin, _BasePermView,
@@ -334,7 +334,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
 
 class UnrecurrentedMixin:
     __getitem__ = lambda self, i: super().__getitem__(i)[1]
-    __iter__ = lambda self: iter(tuple(zip(*super().__iter__(self)))[1])
+    __iter__ = lambda self: iter(tuple(zip(*super().__iter__()))[1])
     index = lambda self, item: super().index(i[1])
     
 class UnrecurrentedPerm(UnrecurrentedMixin, Perm):
