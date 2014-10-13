@@ -46,7 +46,7 @@ class BrutePermSpace:
     '''
     def __init__(self, iterable_or_length, domain=None, n_elements=None,
                  fixed_map={}, degrees=None, is_combination=False,
-                 slice_=None, perm_processor=None):
+                 slice_=None, perm_type=None):
         self.sequence = tuple(iterable_or_length) if \
             isinstance(iterable_or_length, collections.Iterable) else \
                                    sequence_tools.CuteRange(iterable_or_length)
@@ -69,11 +69,11 @@ class BrutePermSpace:
         
         self.slice_ = slice_
  
-        if perm_processor is None:
-            self.perm_processor = misc_tools.identity_function
+        if perm_type is None:
+            self.perm_type = tuple
             self.is_typed = False
         else:
-            self.perm_processor = perm_processor
+            self.perm_type = FruityTuple
             self.is_typed = True
         
         
@@ -82,8 +82,7 @@ class BrutePermSpace:
         if (self.is_recurrent and self.is_combination):
             def make_iterator():
                 crap = set()
-                # for item in map(self.perm_processor, self._iter()):
-                for item in self._iter():
+                for item in map(self.perm_type, self._iter()):
                     fc = nifty_collections.FrozenBag(item)
                     if fc in crap:
                         continue
@@ -92,8 +91,7 @@ class BrutePermSpace:
                         crap.add(fc)
             iterator = make_iterator()
         else:
-            # iterator = map(self.perm_processor, self._iter())
-            iterator = self._iter()
+            iterator = map(self.perm_type, self._iter())
         if self.slice_:
             return itertools.islice(iterator, self.slice_.start,
                                     self.slice_.stop)
@@ -105,9 +103,6 @@ class BrutePermSpace:
         for candidate in itertools.permutations(self.sequence, self.n_elements):
             if candidate in yielded_candidates:
                 continue
-            # if nifty_collections.FrozenCounter(candidate) > \
-                                                 # self._sequence_frozen_bag:
-                # continue
             if any(candidate[self.domain.index(key)] != value for
                                          key, value in self.fixed_map.items()):
                 continue
@@ -147,15 +142,10 @@ class BrutePermSpace:
                 
 
 
-# class StupidTuple(tuple):
-    # pass
-        
-
-def perm_processor(perm):
-    # if isinstance(perm, tuple):
-        # perm = StupidTuple(perm)
-    # perm.was_processed_dawg = True
-    return perm
+class FruityMixin: pass
+class FruityPerm(FruityMixin, Perm): pass
+class FruityComb(FruityMixin, Comb): pass
+class FruityTuple(FruityMixin, tuple): pass
 
 
 def _check_variation_selection(variation_selection, perm_space_type,

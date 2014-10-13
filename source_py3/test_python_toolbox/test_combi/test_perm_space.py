@@ -586,7 +586,7 @@ def test_recurrent():
     assert PermSpace(4).unrecurrented == PermSpace(4)
     
     
-def test_perm_processor():
+def test_perm_type():
     
     class Suit(nifty_collections.CuteEnum):
         club = 'club'
@@ -598,7 +598,7 @@ def test_perm_processor():
     
     class PokerHandSpace(combi.CombSpace):
         def __init__(self):
-            combi.CombSpace.__init__(self, cards, 5, perm_processor=PokerHand)
+            combi.CombSpace.__init__(self, cards, 5, perm_type=PokerHand)
             
     class PokerHand(combi.Comb):
         @caching.CachedProperty
