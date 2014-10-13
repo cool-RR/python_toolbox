@@ -24,7 +24,7 @@ class Variation(nifty_collections.CuteEnum):
     FIXED = 'fixed'
     DEGREED = 'degreed'
     SLICED = 'sliced'
-    PROCESSED = 'processed'
+    TYPED = 'typed'
     
         
 
@@ -146,7 +146,7 @@ class VariationSelection(metaclass=VariationSelectionType):
         self.is_fixed = Variation.FIXED in self.variations
         self.is_degreed = Variation.DEGREED in self.variations
         self.is_sliced = Variation.SLICED in self.variations
-        self.is_processed = Variation.PROCESSED in self.variations
+        self.is_typed = Variation.TYPED in self.variations
         self.is_pure = not self.variations
         
     @caching.cache()

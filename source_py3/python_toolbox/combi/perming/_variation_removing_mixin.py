@@ -32,7 +32,7 @@ class _VariationRemovingMixin:
                        key, value in self.fixed_map.items()},
             degrees=self.degrees, n_elements=self.n_elements,
             slice_=self.canonical_slice, is_combination=self.is_combination,
-            perm_processor=self.perm_processor
+            perm_type=self.perm_type
         )
     
     @caching.CachedProperty
@@ -46,6 +46,12 @@ class _VariationRemovingMixin:
                 "different number of elements, and thus the slice wouldn't be "
                 "usable. Please use `.unsliced` first."
             )
+        if self.is_typed:
+            raise Exception(
+                "You can't get an unrecurrented version of a typed "
+                "`PermSpace`, because we need to use the "
+                "`UnrecurrentedPerm` type to unrecurrent it."
+            )
         
         sequence_copy = list(self.sequence)
         processed_fixed_map = {}
@@ -54,19 +60,13 @@ class _VariationRemovingMixin:
             sequence_copy[value] = misc.MISSING_ELEMENT
             processed_fixed_map[key] = (index, value)
             
-        added_perm_processor = lambda perm: tuple(zip(*perm))[1]
-        if self.is_processed:
-            old_perm_processor = self.perm_processor
-            perm_processor = lambda perm: added_perm_processor(
-                                                      old_perm_processor(perm))
-        else:
-            perm_processor = added_perm_processor
             
         return PermSpace(
             enumerate(self.sequence), domain=self.domain, 
             fixed_map=processed_fixed_map, degrees=self.degrees,
             n_elements=self.n_elements, is_combination=self.is_combination,
-            perm_processor=perm_processor
+            perm_type=UnrecurrentedComb if self.is_combination
+                                                         else UnrecurrentedPerm
         )
       
 
@@ -91,23 +91,30 @@ class _VariationRemovingMixin:
             self.sequence, n_elements=self.sequence_length,
             fixed_map=self.fixed_map, degrees=self.degrees,
             slice_=self.canonical_slice, is_combination=self.is_combination,
-            perm_processor=self.perm_processor
+            perm_type=self.perm_type
         )
 
     @caching.CachedProperty
     def uncombinationed(self):
         '''A version of this `PermSpace` where permutations have order.'''
+        from .perm import Perm
         if self.is_sliced:
             raise Exception(
                 "Can't convert sliced `CombSpace` directly to "
                 "uncombinationed, because the number of items would be "
                 "different. Use `.unsliced` first."
             )
+        if self.is_typed:
+            raise Exception(
+                "Can't convert typed `CombSpace` directly to "
+                "uncombinationed, because the perm class would still be a "
+                "subclass of `Comb`."
+            )
         return PermSpace(
             self.sequence, domain=self.domain, fixed_map=self.fixed_map,
             degrees=self.degrees, slice_=None,
             n_elements=self.n_elements, is_combination=False,
-            perm_processor=self.perm_processor
+            perm_type=Perm
         )
 
     undapplied = caching.CachedProperty(
@@ -115,7 +122,6 @@ class _VariationRemovingMixin:
             self.sequence, fixed_map=self._undapplied_fixed_map,
             degrees=self.degrees, slice_=self.canonical_slice,
             n_elements=self.n_elements, is_combination=self.is_combination,
-            perm_processor=self.perm_processor
         ),
         doc='''A version of this `PermSpace` without a custom domain.'''
     )
@@ -130,7 +136,7 @@ class _VariationRemovingMixin:
             self.sequence, domain=self.domain, fixed_map=None,
             degrees=self.degrees, n_elements=self.n_elements,
             is_combination=self.is_combination,
-            perm_processor=self.perm_processor
+            perm_type=self.perm_type
         )
     
     @caching.CachedProperty
@@ -143,7 +149,7 @@ class _VariationRemovingMixin:
             self.sequence, domain=self.domain, fixed_map=self.fixed_map,
             degrees=None, n_elements=self.n_elements,
             is_combination=self.is_combination,
-            perm_processor=self.perm_processor
+            perm_type=self.perm_type
         )
     
     unsliced = caching.CachedProperty(
@@ -151,7 +157,7 @@ class _VariationRemovingMixin:
             self.sequence, domain=self.domain, fixed_map=self.fixed_map,
             n_elements=self.n_elements, is_combination=self.is_combination, 
             degrees=self.degrees, slice_=None,
-            perm_processor=self.perm_processor
+            perm_type=self.perm_type
         ),
         doc='''An unsliced version of this `PermSpace`.'''
     )

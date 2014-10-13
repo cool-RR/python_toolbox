@@ -50,7 +50,7 @@ class PermSpaceType(abc.ABCMeta):
                 iterable_or_length=arguments['iterable_or_length'], 
                 n_elements=arguments.get('n_elements', None),
                 slice_=arguments.get('slice_', None),
-                perm_processor=arguments.get('perm_processor', None),
+                perm_type=arguments.get('perm_type', Perm),
                 _domain_for_checking=arguments.get('domain', None),
                 _degrees_for_checking=arguments.get('degrees', None),
             )
@@ -130,7 +130,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     
     def __init__(self, iterable_or_length, domain=None, *, n_elements=None, 
                  fixed_map=None, degrees=None, is_combination=False,
-                 slice_=None, perm_processor=None):
+                 slice_=None, perm_type=Perm):
         
         ### Making basic argument checks: #####################################
         #                                                                     #
@@ -329,10 +329,9 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         
         ### Figuring out perm processor: ######################################
         #                                                                     #
-        self.is_processed = \
-                     perm_processor not in (None, misc_tools.identity_function)
+        self.is_typed = perm_type not in (None, misc_tools.identity_function)
             
-        self.perm_processor = perm_processor if self.is_processed else \
+        self.perm_type = perm_type if self.is_typed else \
                                                    misc_tools.identity_function
         #                                                                     #
         ### Finished figuring out perm processor. #############################
@@ -340,7 +339,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         
         self.is_pure = not (self.is_rapplied or self.is_fixed or self.is_sliced
                             or self.is_degreed or self.is_partial or
-                            self.is_combination or self.is_processed)
+                            self.is_combination or self.is_typed)
         
         if self.is_pure:
             self.purified = self
@@ -359,8 +358,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             self.undegreed = self
         if not self.is_sliced:
             self.unsliced = self
-        if not self.is_processed:
-            self.unprocessed = self
+        if not self.is_typed:
+            self.untyped = self
 
     __init__.signature = inspect.signature(__init__)
             
@@ -446,7 +445,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                  variations.Variation.FIXED if self.is_fixed else None,
                  variations.Variation.DEGREED if self.is_degreed else None,
                  variations.Variation.SLICED if self.is_sliced else None,
-                 variations.Variation.PROCESSED if self.is_processed
+                 variations.Variation.TYPED if self.is_typed
                                                                     else None,)
             )
         )
@@ -490,7 +489,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             (', fixed_map=%s' % (self.fixed_map,)) if self.is_fixed else '',
             (', degrees=%s' % (self.degrees,)) if self.is_degreed else '',
             (', perm_processor=%s' % (self.perm_processor,)) if
-                                                     self.is_processed else '',
+                                                     self.is_typed else '',
             ('[%s:%s]' % (self.slice_.start, self.slice_.stop)) if
                                                          self.is_sliced else ''
         )
@@ -976,7 +975,7 @@ from . import _variation_adding_mixin
 from . import _fixed_map_managing_mixin
 
 # Must set these after-the-fact because of import loop:
-PermSpace.perm_type = Perm
+PermSpace.perm_type = PermSpace._default_perm_type = Perm
 _variation_removing_mixin.PermSpace = PermSpace
 _variation_adding_mixin.PermSpace = PermSpace
 _fixed_map_managing_mixin.PermSpace = PermSpace

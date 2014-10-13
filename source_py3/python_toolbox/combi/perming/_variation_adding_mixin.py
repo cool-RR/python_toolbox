@@ -19,7 +19,7 @@ class _VariationAddingMixin:
                                                        self.fixed_map.items()},
             degrees=self.degrees, slice_=self.canonical_slice,
             n_elements=self.n_elements, is_combination=self.is_combination,
-            perm_processor=self.perm_processor
+            perm_type=self.perm_type
         )
     
     # There's no `.get_recurrented` because we can't know which sequence you'd
@@ -38,16 +38,23 @@ class _VariationAddingMixin:
             self.sequence, domain=self.domain, fixed_map=self.fixed_map,
             degrees=self.degrees, slice_=None,
             is_combination=self.is_combination, n_elements=n_elements,
-            perm_processor=self.perm_processor
+            perm_type=self.perm_type
         )
     
     @caching.CachedProperty
     def combinationed(self):
+        from .comb import Comb
         if self.is_sliced:
             raise Exception(
                 "Can't get a combinationed version of a sliced `PermSpace`"
                 "directly, because the number of items would be different. "
                 "Use `.unsliced` first."
+            )
+        if self.is_typed:
+            raise Exception(
+                "Can't convert typed `PermSpace` directly to "
+                "combinationed, because the perm class would not be a "
+                "subclass of `Comb`."
             )
         if self.is_degreed:
             raise Exception("Can't use degrees with combination spaces.")
@@ -55,7 +62,7 @@ class _VariationAddingMixin:
         return PermSpace(
             self.sequence, domain=self.domain, n_elements=self.n_elements,
             fixed_map=self.fixed_map, is_combination=True,
-            perm_processor=self.perm_processor
+            perm_type=Comb
         )
         
         
@@ -73,7 +80,7 @@ class _VariationAddingMixin:
                                                    self._undapplied_fixed_map},
             degrees=self.degrees, slice_=self.canonical_slice,
             n_elements=self.n_elements, is_combination=self.is_combination,
-            perm_processor=self.perm_processor
+            perm_type=self.perm_type
         )
     
     def get_fixed(self, fixed_map):
@@ -91,7 +98,7 @@ class _VariationAddingMixin:
             self.sequence, domain=self.domain, fixed_map=combined_fixed_map,
             degrees=self.degrees, slice_=None,
             n_elements=self.n_elements, is_combination=self.is_combination,
-            perm_processor=self.perm_processor
+            perm_type=self.perm_type
         )
     
     def get_degreed(self, degrees):
@@ -110,25 +117,25 @@ class _VariationAddingMixin:
             self.sequence, domain=self.domain, fixed_map=self.fixed_map,
             degrees=degrees_to_use, n_elements=self.n_elements,
             is_combination=self.is_combination,
-            perm_processor=self.perm_processor
+            perm_type=self.perm_type
         )
     
     
     # There's no `get_sliced` because slicing is done using Python's normal
     # slice notation, e.g. perm_space[4:-7].
     
-    def get_processed(self, perm_processor):
+    def get_processed(self, perm_type):
         '''Get a version of this `PermSpace` that has a range of `sequence`.'''
-        if self.is_processed:
-            old_perm_processor = self.perm_processor
-            added_perm_processor = perm_processor
-            perm_processor = lambda perm: added_perm_processor(
-                                                      old_perm_processor(perm))
+        if self.is_typed:
+            old_perm_type = self.perm_type
+            added_perm_type = perm_type
+            perm_type = lambda perm: added_perm_type(
+                                                      old_perm_type(perm))
         return PermSpace(
             self.sequence, domain=self.domain,
             fixed_map=self.fixed_map,
             degrees=self.degrees, slice_=self.canonical_slice,
             n_elements=self.n_elements, is_combination=self.is_combination,
-            perm_processor=perm_processor
+            perm_type=perm_type
         )
     

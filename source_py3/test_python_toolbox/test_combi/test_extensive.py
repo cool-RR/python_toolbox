@@ -71,10 +71,10 @@ class BrutePermSpace:
  
         if perm_processor is None:
             self.perm_processor = misc_tools.identity_function
-            self.is_processed = False
+            self.is_typed = False
         else:
             self.perm_processor = perm_processor
-            self.is_processed = True
+            self.is_typed = True
         
         
         
@@ -243,7 +243,7 @@ def _check_variation_selection(variation_selection, perm_space_type,
     assert hash(perm_space) == \
                           hash(PermSpace(**kwargs)[perm_space.canonical_slice])
     
-    assert variation_selection.is_processed == perm_space.is_processed
+    assert variation_selection.is_typed == perm_space.is_typed
 
     if perm_space.is_sliced and perm_space.length >= 2:
         assert perm_space[0] == perm_space.unsliced[2]
@@ -283,7 +283,7 @@ def _check_variation_selection(variation_selection, perm_space_type,
                                      variation_selection.is_partial or
                                      variation_selection.is_combination))
         
-        if variation_selection.is_processed:
+        if variation_selection.is_typed:
             # assert perm.was_processed_dawg is True
             pass
         else:
@@ -486,7 +486,7 @@ def _iterate_tests():
             slice_options = (NO_ARGUMENT,)
             
             
-        if variation_selection.is_processed:
+        if variation_selection.is_typed:
             perm_processor_options = (perm_processor,)
         else:
             perm_processor_options = (NO_ARGUMENT,)
