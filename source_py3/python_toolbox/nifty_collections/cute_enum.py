@@ -10,6 +10,11 @@ from python_toolbox import caching
 class EnumType(enum.EnumMeta):
     def __dir__(cls):
         return type.__dir__(cls) + cls._member_names_
+    
+    __getitem__ = lambda self, i: self._values_tuple[i]
+    # This `__getitem__` is important, so we could feed enum types straight
+    # into `ProductSpace`.
+    
     _values_tuple = caching.CachedProperty(tuple)
     
     

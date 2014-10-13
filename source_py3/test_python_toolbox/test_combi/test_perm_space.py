@@ -7,6 +7,8 @@ import itertools
 from python_toolbox import cute_testing
 from python_toolbox import math_tools
 from python_toolbox import cute_iter_tools
+from python_toolbox import nifty_collections
+from python_toolbox import caching
 from python_toolbox import sequence_tools
 
 from python_toolbox import combi
@@ -533,6 +535,22 @@ def test_recurrent():
         ('b', 'b'),
     )
     assert recurrent_perm_space.unrecurrented.length == 200 * 199
+    assert tuple(map(tuple, recurrent_perm_space.unrecurrented[0:6])) == (
+        ('a', 'b'),
+        ('a', 'a'),
+        ('a', 'b'),
+        ('a', 'a'),
+        ('a', 'b'),
+        ('a', 'a'),
+    )
+    assert tuple(map(tuple, recurrent_perm_space.unrecurrented[-6:])) == (
+        ('b', 'b'),
+        ('b', 'a'),
+        ('b', 'b'),
+        ('b', 'a'),
+        ('b', 'b'),
+        ('b', 'a'),
+    )
     
     recurrent_comb_space = CombSpace('ab' * 100, n_elements=2)
     assert recurrent_comb_space.length == 3
@@ -566,3 +584,29 @@ def test_recurrent():
     )
     
     assert PermSpace(4).unrecurrented == PermSpace(4)
+    
+    
+def test_perm_processor():
+    
+    class Suit(nifty_collections.CuteEnum):
+        club = 'club'
+        diamond = 'diamond'
+        heart = 'heart'
+        spade = 'spade'
+    
+    cards = combi.ProductSpace((range(1, 14), Suit))
+    
+    class PokerHandSpace(combi.CombSpace):
+        def __init__(self):
+            combi.CombSpace.__init__(self, cards, 5, perm_processor=PokerHand)
+            
+    class PokerHand(combi.Comb):
+        @caching.CachedProperty
+        def score(self):
+            return 3
+        
+    poker_hand_space = PokerHandSpace()
+    
+    poker_hand_space.take_random().score
+            
+            

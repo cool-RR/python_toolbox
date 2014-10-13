@@ -37,6 +37,7 @@ def test():
     assert Flavor.VANILLA < Flavor.RASPBERRY
     assert not (Flavor.VANILLA > Flavor.RASPBERRY)
         
-        
+    assert Flavor[2] == Flavor.RASPBERRY
+    assert Flavor[:2] == (Flavor.CHOCOLATE, Flavor.VANILLA)
         
             

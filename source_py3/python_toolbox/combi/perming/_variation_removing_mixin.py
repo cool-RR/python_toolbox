@@ -54,14 +54,13 @@ class _VariationRemovingMixin:
             sequence_copy[value] = misc.MISSING_ELEMENT
             processed_fixed_map[key] = (index, value)
             
-        # added_perm_processor = lambda perm: zip(*perm)[1]
-        # if self.is_processed:
-            # old_perm_processor = self.perm_processor
-            # perm_processor = lambda perm: added_perm_processor(
-                                                      # old_perm_processor(perm))
-        # else:
-            # perm_processor = added_perm_processor
-        perm_processor = misc_tools.identity_function
+        added_perm_processor = lambda perm: tuple(zip(*perm))[1]
+        if self.is_processed:
+            old_perm_processor = self.perm_processor
+            perm_processor = lambda perm: added_perm_processor(
+                                                      old_perm_processor(perm))
+        else:
+            perm_processor = added_perm_processor
             
         return PermSpace(
             enumerate(self.sequence), domain=self.domain, 

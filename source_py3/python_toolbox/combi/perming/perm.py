@@ -72,10 +72,13 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         ### Analyzing `perm_space`: ###########################################
         #                                                                     #
         if perm_space is None:
-            # We're assuming that `number_or_perm_sequence` is a pure
-            # permutation sequence. Not asserting this because that would
-            # be O(n).
-            self.nominal_perm_space = PermSpace(len(perm_sequence))
+            if isinstance(perm_sequence, Perm):
+                self.nominal_perm_space = perm_sequence.nominal_perm_space
+            else:
+                # We're assuming that `number_or_perm_sequence` is a pure
+                # permutation sequence. Not asserting this because that would
+                # be O(n).
+                self.nominal_perm_space = PermSpace(len(perm_sequence))
         else: # perm_space is not None
             self.nominal_perm_space = perm_space.unsliced.undegreed.unfixed
             
