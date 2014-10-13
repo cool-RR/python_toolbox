@@ -335,7 +335,10 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
 class UnrecurrentedMixin:
     __getitem__ = lambda self, i: super().__getitem__(i)[1]
     __iter__ = lambda self: iter(tuple(zip(*super().__iter__()))[1])
-    index = lambda self, item: super().index(i[1])
+    index = lambda self, item: self.nominal_perm_space.domain[
+        next(j for j, pair in enumerate(self._perm_sequence)
+                                                            if pair[1] == item)
+    ]
     
 class UnrecurrentedPerm(UnrecurrentedMixin, Perm):
     pass
