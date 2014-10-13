@@ -830,6 +830,9 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             if perm.is_rapplied:
                 return self.unrapplied.index(perm.unrapplied)
             
+            if not cute_iter_tools.is_sorted(perm):
+                raise ValueError
+            
             processed_perm_sequence = tuple(
                 self.sequence_length - 1 -
                                      item for item in perm._perm_sequence[::-1]
