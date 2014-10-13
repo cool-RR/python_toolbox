@@ -182,7 +182,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         # but the first index we haven't taken already.
         rapplied_sequence = list(self.nominal_perm_space.sequence)
         new_perm_sequence = []
-        for i in self:
+        for i in self._perm_sequence:
             i_index = rapplied_sequence.index(i)
             rapplied_sequence[i_index] = misc.MISSING_ELEMENT
             new_perm_sequence.append(i_index)
