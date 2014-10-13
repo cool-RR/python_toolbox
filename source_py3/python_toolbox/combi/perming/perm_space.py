@@ -949,7 +949,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         perm_space = cls(
             sequence, n_elements=n_elements, fixed_map=fixed_map, 
             is_combination=is_combination, slice_=slice_,
-            perm_processor=perm_processor 
+            perm_type=perm_type 
         )
         perm_space.prefix = tuple(prefix)
         return perm_space

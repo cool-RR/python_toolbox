@@ -151,7 +151,7 @@ class FruityTuple(FruityMixin, tuple): pass
 def _check_variation_selection(variation_selection, perm_space_type,
                                iterable_or_length_and_sequence, domain_to_cut,
                                n_elements, is_combination, purified_fixed_map,
-                               degrees, slice_, perm_processor):
+                               degrees, slice_, perm_type):
     assert isinstance(variation_selection, combi.variations.VariationSelection)
     
     kwargs = {}
@@ -184,8 +184,8 @@ def _check_variation_selection(variation_selection, perm_space_type,
     if variation_selection.is_degreed:
         kwargs['degrees'] = degrees = (0, 2, 4, 5)
         
-    if perm_processor != NO_ARGUMENT:
-        kwargs['perm_processor'] = perm_processor
+    if perm_type != NO_ARGUMENT:
+        kwargs['perm_type'] = perm_type
 
     try:
         perm_space = perm_space_type(**kwargs)
@@ -477,16 +477,19 @@ def _iterate_tests():
             
             
         if variation_selection.is_typed:
-            perm_processor_options = (perm_processor,)
+            if variation_selection.is_combination:
+                perm_type_options = (FruityComb,)
+            else:
+                perm_type_options = (FruityPerm,)
         else:
-            perm_processor_options = (NO_ARGUMENT,)
+            perm_type_options = (NO_ARGUMENT,)
             
         product_space_ = combi.ProductSpace(
             ((variation_selection,), perm_space_type_options,
              iterable_or_length_and_sequence_options, domain_to_cut_options,
              n_elements_options, is_combination_options,
              purified_fixed_map_options, degrees_options, slice_options,
-             perm_processor_options)
+             perm_type_options)
         )
         
         for i in range(len(product_space_)):
