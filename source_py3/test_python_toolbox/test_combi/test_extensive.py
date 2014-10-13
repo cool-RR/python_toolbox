@@ -154,9 +154,6 @@ def _check_variation_selection(variation_selection, perm_space_type,
                                degrees, slice_, perm_type):
     assert isinstance(variation_selection, combi.variations.VariationSelection)
     
-    if not variation_selection.number == 17:
-        return # blocktodo remove
-    
     kwargs = {}
     
     iterable_or_length, sequence = iterable_or_length_and_sequence
