@@ -68,8 +68,8 @@ def test_unrecurrented():
     assert 'aba' in recurrent_comb_space
     assert 'bbc' in recurrent_comb_space
     unrecurrented_comb_space = recurrent_comb_space.unrecurrented
-    assert math_tools.factorial(6, 3) == unrecurrented_comb_space.length > \
-           recurrent_comb_space.length == 7
+    assert unrecurrented_comb_space.length > \
+           recurrent_comb_space.length == 14
     comb = unrecurrented_comb_space[7]
     assert all(i in 'abc' for i in comb)
     assert set(''.join(comb)) == set('abc')
