@@ -301,10 +301,14 @@ def _check_variation_selection(variation_selection, perm_space_type,
             assert perm == perm.undapplied == perm_space.undapplied[i]
             
         if variation_selection.is_combination:
-            assert perm != perm.uncombinationed
+            if variation_selection.is_typed:
+                with cute_testing.RaiseAssertor(TypeError):
+                    perm.uncombinationed
+            else:
+                assert perm != perm.uncombinationed
         else:
             assert perm == perm.uncombinationed
-            
+        
         assert type(perm) == combi.Comb if variation_selection.is_combination \
                                                                 else combi.Perm
         

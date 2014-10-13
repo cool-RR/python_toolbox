@@ -29,7 +29,7 @@ class _VariationAddingMixin:
     def get_partialled(self, n_elements):
         '''Get a partialled version of this `PermSpace`.'''
         if self.is_sliced:
-            raise Exception(
+            raise TypeError(
                 "Can't get partial of sliced `PermSpace` directly, because "
                 "the number of items would be different. Use `.unsliced` "
                 "first."
@@ -45,19 +45,19 @@ class _VariationAddingMixin:
     def combinationed(self):
         from .comb import Comb
         if self.is_sliced:
-            raise Exception(
+            raise TypeError(
                 "Can't get a combinationed version of a sliced `PermSpace`"
                 "directly, because the number of items would be different. "
                 "Use `.unsliced` first."
             )
         if self.is_typed:
-            raise Exception(
+            raise TypeError(
                 "Can't convert typed `PermSpace` directly to "
                 "combinationed, because the perm class would not be a "
                 "subclass of `Comb`."
             )
         if self.is_degreed:
-            raise Exception("Can't use degrees with combination spaces.")
+            raise TypeError("Can't use degrees with combination spaces.")
         
         return PermSpace(
             self.sequence, domain=self.domain, n_elements=self.n_elements,
@@ -69,7 +69,7 @@ class _VariationAddingMixin:
     def get_dapplied(self, domain):
         '''Get a version of this `PermSpace` that has a domain of `domain`.'''
         if self.is_combination:
-            raise Exception("Can't use a domain with combination spaces.")
+            raise TypeError("Can't use a domain with combination spaces.")
         domain = \
                sequence_tools.ensure_iterable_is_immutable_sequence(domain)
         if len(domain) != self.n_elements:
@@ -86,7 +86,7 @@ class _VariationAddingMixin:
     def get_fixed(self, fixed_map):
         '''Get a fixed version of this `PermSpace`.'''
         if self.is_sliced:
-            raise Exception("Can't be used on sliced perm spaces. Try "
+            raise TypeError("Can't be used on sliced perm spaces. Try "
                             "`perm_space.unsliced.get_fixed(...)`.")
         combined_fixed_map = dict(self.fixed_map)
         for key, value in fixed_map.items():
@@ -104,10 +104,10 @@ class _VariationAddingMixin:
     def get_degreed(self, degrees):
         '''Get a degreed version of this `PermSpace`.'''
         if self.is_sliced:
-            raise Exception("Can't be used on sliced perm spaces. Try "
+            raise TypeError("Can't be used on sliced perm spaces. Try "
                             "`perm_space.unsliced.get_degreed(...)`.")
         if self.is_combination:
-            raise Exception("Can't use degrees with combination spaces.")
+            raise TypeError("Can't use degrees with combination spaces.")
         degrees = sequence_tools.to_tuple(degrees, item_type=int)
         if not degrees:
             return self

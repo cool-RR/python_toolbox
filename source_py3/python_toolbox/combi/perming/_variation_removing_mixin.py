@@ -19,7 +19,7 @@ class _VariationRemovingMixin:
     def unrapplied(self):
         '''A version of this `PermSpace` without a custom range.'''
         if self.is_recurrent and self.is_sliced:
-            raise Exception(
+            raise TypeError(
                 "You can't get an unrapplied version of a recurrent, sliced "
                 "`PermSpace` because after unrapplying it, it'll no longer be "
                 "recurrent, and thus have a different number of elements, and "
@@ -42,14 +42,14 @@ class _VariationRemovingMixin:
         from .comb import UnrecurrentedComb
         assert self.is_recurrent # Otherwise was overridden in `__init__`
         if self.is_sliced:
-            raise Exception(
+            raise TypeError(
                 "You can't get an unrecurrented version of a sliced "
                 "`PermSpace` because after unrecurrenting it, it'll have a "
                 "different number of elements, and thus the slice wouldn't be "
                 "usable. Please use `.unsliced` first."
             )
         if self.is_typed:
-            raise Exception(
+            raise TypeError(
                 "You can't get an unrecurrented version of a typed "
                 "`PermSpace`, because we need to use the "
                 "`UnrecurrentedPerm` type to unrecurrent it."
@@ -77,13 +77,13 @@ class _VariationRemovingMixin:
         '''A non-partial version of this `PermSpace`.'''
         assert self.is_partial # Otherwise this property would be overridden.
         if self.is_sliced:
-            raise Exception(
+            raise TypeError(
                 "Can't convert sliced `PermSpace` directly to unpartialled, "
                 "because the number of items would be different. Use "
                 "`.unsliced` first."
             )
         if self.is_dapplied:
-            raise Exception(
+            raise TypeError(
                 "Can't convert a partial, dapplied `PermSpace` to "
                 "non-partialled, because we'll need to extend the domain with "
                 "more items and we don't know which to use."
@@ -101,13 +101,13 @@ class _VariationRemovingMixin:
         '''A version of this `PermSpace` where permutations have order.'''
         from .perm import Perm
         if self.is_sliced:
-            raise Exception(
+            raise TypeError(
                 "Can't convert sliced `CombSpace` directly to "
                 "uncombinationed, because the number of items would be "
                 "different. Use `.unsliced` first."
             )
         if self.is_typed:
-            raise Exception(
+            raise TypeError(
                 "Can't convert typed `CombSpace` directly to "
                 "uncombinationed, because the perm class would still be a "
                 "subclass of `Comb`."
@@ -133,7 +133,7 @@ class _VariationRemovingMixin:
     def unfixed(self):
         '''An unfixed version of this `PermSpace`.'''
         if self.is_sliced:
-            raise Exception("Can't be used on sliced perm spaces. Try "
+            raise TypeError("Can't be used on sliced perm spaces. Try "
                             "`perm_space.unsliced.unfixed`.")
         return PermSpace(
             self.sequence, domain=self.domain, fixed_map=None,
@@ -146,7 +146,7 @@ class _VariationRemovingMixin:
     def undegreed(self):
         '''An undegreed version of this `PermSpace`.'''
         if self.is_sliced:
-            raise Exception("Can't be used on sliced perm spaces. Try "
+            raise TypeError("Can't be used on sliced perm spaces. Try "
                             "`perm_space.unsliced.undegreed`.")
         return PermSpace(
             self.sequence, domain=self.domain, fixed_map=self.fixed_map,
