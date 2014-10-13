@@ -71,8 +71,12 @@ def test_unrecurrented():
     unrecurrented_comb_space = recurrent_comb_space.unrecurrented
     assert 6 * 5 * 4 // 3 // 2 == unrecurrented_comb_space.length > \
            recurrent_comb_space.length == 7
-    comb = unrecurrented_comb_space[7]
-    assert all(i in 'abc' for i in comb)
-    assert set(''.join(comb)) <= set('abc')
-    
-    
+    for i, comb in enumerate(unrecurrented_comb_space):
+        assert all(i in 'abc' for i in comb)
+        assert set(''.join(comb)) <= set('abc')
+        assert isinstance(comb, combi.UnrecurrentedComb)
+        assert comb[0] in 'abc'
+        comb.unrapplied
+        assert unrecurrented_comb_space.index(comb) == i
+        
+        

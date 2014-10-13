@@ -1,4 +1,4 @@
-from .perm import Perm, UnrecurrentedMixin
+from .perm import Perm, UnrecurrentedPerm
 from .comb_space import CombSpace
 
         
@@ -15,7 +15,7 @@ class Comb(Perm):
                       perm_space=perm_space)
         
 
-class UnrecurrentedComb(UnrecurrentedMixin, Comb):
+class UnrecurrentedComb(UnrecurrentedPerm, Comb):
     pass
         
         

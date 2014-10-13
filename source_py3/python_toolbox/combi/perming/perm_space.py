@@ -717,7 +717,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             raise ValueError('An unordered iterable is never contained in a '
                              '`PermSpace`. Try an ordered one.')
         
-        perm_set = set(perm)
+        perm_set = set(perm) if not isinstance(perm, UnrecurrentedPerm) \
+                                                  else set(perm._perm_sequence)
         if not (perm_set <= set(self.sequence)):
             raise ValueError
         
@@ -744,7 +745,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             wip_perm_number = 0
             wip_perm_sequence_dict = dict(self.fixed_map)
             unused_values = list(self.free_values)
-            for i, value in enumerate(perm):
+            for i, value in enumerate(perm._perm_sequence):
                 if i in self.fixed_indices:
                     continue
                 unused_values.remove(value)
@@ -769,7 +770,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             reserved_values = list(self.fixed_map.values())
             perm_sequence_list = list(perm._perm_sequence)
             shit_set = set()
-            for i, value in enumerate(perm):
+            for i, value in enumerate(perm._perm_sequence):
                 if i in self.fixed_map:
                     if self.fixed_map[i] == value:
                         unused_values.remove(value)
@@ -811,7 +812,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         elif self.is_fixed:
             assert not self.is_degreed and not self.is_recurrent
             free_values_perm_sequence = []
-            for i, perm_item in perm.items:
+            for i, perm_item in zip(self.domain, perm._perm_sequence):
                 if i in self.fixed_map:
                     if self.fixed_map[i] != perm_item:
                         raise ValueError
@@ -830,7 +831,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             if perm.is_rapplied:
                 return self.unrapplied.index(perm.unrapplied)
             
-            if not cute_iter_tools.is_sorted(perm):
+            if not cute_iter_tools.is_sorted(perm._perm_sequence):
                 raise ValueError
             
             processed_perm_sequence = tuple(
@@ -849,7 +850,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             
             factoradic_number = []
             unused_values = list(self.sequence)
-            for i, value in enumerate(perm):
+            for i, value in enumerate(perm._perm_sequence):
                 index_of_current_number = unused_values.index(value)
                 factoradic_number.append(index_of_current_number)
                 unused_values.remove(value)
@@ -963,7 +964,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         
         
 
-from .perm import Perm
+from .perm import Perm, UnrecurrentedPerm
 from . import _variation_removing_mixin
 from . import _variation_adding_mixin
 from . import _fixed_map_managing_mixin
