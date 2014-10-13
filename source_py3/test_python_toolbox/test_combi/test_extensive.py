@@ -309,8 +309,16 @@ def _check_variation_selection(variation_selection, perm_space_type,
         else:
             assert perm == perm.uncombinationed
         
-        assert type(perm) == combi.Comb if variation_selection.is_combination \
-                                                                else combi.Perm
+        if variation_selection.is_combination:
+            if variation_selection.is_typed:
+                assert type(perm) == FruityComb
+            else:
+                assert type(perm) == Comb
+        else:
+            if variation_selection.is_typed:
+                assert type(perm) == FruityPerm
+            else:
+                assert type(perm) == Perm
         
         if variation_selection.variations <= {
             variations.Variation.DAPPLIED, variations.Variation.RAPPLIED,
