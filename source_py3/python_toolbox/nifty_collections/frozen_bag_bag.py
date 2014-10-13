@@ -26,34 +26,34 @@ class FrozenBagBag(FrozenBag):
                 raise TypeError('Keys to `FrozenChunkCounter` must be '
                                 'non-negative integers.')
             
-    def get_sub_ftts_for_one_crate_removed(self):
-        sub_ftts_counter = collections.Counter()
+    def get_sub_fbbs_for_one_crate_removed(self):
+        sub_fbbs_counter = collections.Counter()
         for key_to_reduce, value_of_key_to_reduce in self.items():
-            sub_ftt_prototype = collections.Counter(self)
-            sub_ftt_prototype[key_to_reduce] -= 1
-            sub_ftt_prototype[key_to_reduce - 1] += 1
-            sub_ftts_counter[FrozenBagBag(sub_ftt_prototype)] = \
+            sub_fbb_prototype = collections.Counter(self)
+            sub_fbb_prototype[key_to_reduce] -= 1
+            sub_fbb_prototype[key_to_reduce - 1] += 1
+            sub_fbbs_counter[FrozenBagBag(sub_fbb_prototype)] = \
                                                          value_of_key_to_reduce
-        return FrozenBag(sub_ftts_counter)
+        return FrozenBag(sub_fbbs_counter)
             
-    def get_sub_ftts_for_one_crate_and_previous_piles_removed(self):
-        sub_ftts = []
+    def get_sub_fbbs_for_one_crate_and_previous_piles_removed(self):
+        sub_fbbs = []
         growing_dict = {}
         for key_to_reduce, value_of_key_to_reduce in \
                                                 reversed(sorted(self.items())):
             growing_dict[key_to_reduce] = value_of_key_to_reduce
             
-            sub_ftt_prototype = collections.Counter(growing_dict)
-            sub_ftt_prototype[key_to_reduce] -= 1
-            sub_ftt_prototype[key_to_reduce - 1] += 1
+            sub_fbb_prototype = collections.Counter(growing_dict)
+            sub_fbb_prototype[key_to_reduce] -= 1
+            sub_fbb_prototype[key_to_reduce - 1] += 1
             
             for i in range(value_of_key_to_reduce):
-                sub_ftts.append(
+                sub_fbbs.append(
                     FrozenBagBag(
                         {key: (i if key == key_to_reduce else value)
-                               for key, value in sub_ftt_prototype.items()}
+                               for key, value in sub_fbb_prototype.items()}
                     )
                 )
-        return tuple(sub_ftts)
+        return tuple(sub_fbbs)
             
     
