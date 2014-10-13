@@ -487,7 +487,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             ', is_combination=True' if self.is_combination else '',
             (', fixed_map=%s' % (self.fixed_map,)) if self.is_fixed else '',
             (', degrees=%s' % (self.degrees,)) if self.is_degreed else '',
-            (', perm_type=%s' % (self.perm_type,)) if self.is_typed else '',
+            (', perm_type=%s' % (self.perm_type.__name__,)) if self.is_typed
+                                                                       else '',
             ('[%s:%s]' % (self.slice_.start, self.slice_.stop)) if
                                                          self.is_sliced else ''
         )

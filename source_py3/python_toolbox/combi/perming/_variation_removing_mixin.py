@@ -124,6 +124,7 @@ class _VariationRemovingMixin:
             self.sequence, fixed_map=self._undapplied_fixed_map,
             degrees=self.degrees, slice_=self.canonical_slice,
             n_elements=self.n_elements, is_combination=self.is_combination,
+            perm_type=self.perm_type
         ),
         doc='''A version of this `PermSpace` without a custom domain.'''
     )
