@@ -189,20 +189,20 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         #                                                                     #
         ### Finished calculating the new perm sequence. #######################
         
-        unrapplied = Perm(new_perm_sequence,
-                          self.nominal_perm_space.unrapplied)
+        unrapplied = type(self)(new_perm_sequence,
+                                self.nominal_perm_space.unrapplied)
         assert not unrapplied.is_rapplied
         return unrapplied
     
     undapplied = caching.CachedProperty(
-        lambda self: Perm(
+        lambda self: type(self)(
             self._perm_sequence,
             self.nominal_perm_space.undapplied
         )
         
     )
     uncombinationed = caching.CachedProperty(
-        lambda self: Perm(
+        lambda self: type(self)(
             self._perm_sequence,
             self.nominal_perm_space.uncombinationed
         )
@@ -244,8 +244,8 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             else:
                 return result_type(permed_generator)
         elif isinstance(sequence, Perm):
-            return Perm(permed_generator,
-                        sequence.nominal_perm_space)
+            return type(self)(permed_generator,
+                              sequence.nominal_perm_space)
         elif isinstance(sequence, str):
             return ''.join(permed_generator)
         else:
@@ -325,8 +325,8 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         else:
             return NotImplemented
         
-    __reversed__ = lambda self: Perm(reversed(self._perm_sequence),
-                                     self.nominal_perm_space)
+    __reversed__ = lambda self: type(self)(reversed(self._perm_sequence),
+                                           self.nominal_perm_space)
     
     items = caching.CachedProperty(PermItems)
     as_dictoid = caching.CachedProperty(PermAsDictoid)

@@ -321,8 +321,8 @@ def _check_variation_selection(variation_selection, perm_space_type,
                                             not variation_selection.is_degreed:
             assert perm_space.index(perm) == i
             
-        assert Perm(iter(perm), perm_space=perm_space) == perm
-        assert Perm(perm._perm_sequence, perm_space=perm_space) == perm
+        assert type(perm)(iter(perm), perm_space=perm_space) == perm
+        assert type(perm)(perm._perm_sequence, perm_space=perm_space) == perm
         
         assert perm.length == perm_space.n_elements
         if variation_selection.is_partial or variation_selection.is_rapplied \
