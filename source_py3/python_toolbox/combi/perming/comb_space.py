@@ -40,4 +40,4 @@ class CombSpace(PermSpace):
 from .comb import Comb
 
 # Must set this after-the-fact because of import loop:
-CombSpace.perm_type = CombSpace._default_perm_type = Comb
+CombSpace.perm_type = CombSpace.default_perm_type = Comb

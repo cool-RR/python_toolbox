@@ -50,7 +50,7 @@ class PermSpaceType(abc.ABCMeta):
                 iterable_or_length=arguments['iterable_or_length'], 
                 n_elements=arguments.get('n_elements', None),
                 slice_=arguments.get('slice_', None),
-                perm_type=arguments.get('perm_type', Perm),
+                perm_type=arguments.get('perm_type', None),
                 _domain_for_checking=arguments.get('domain', None),
                 _degrees_for_checking=arguments.get('degrees', None),
             )
@@ -130,7 +130,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     
     def __init__(self, iterable_or_length, domain=None, *, n_elements=None, 
                  fixed_map=None, degrees=None, is_combination=False,
-                 slice_=None, perm_type=Perm):
+                 slice_=None, perm_type=None):
         
         ### Making basic argument checks: #####################################
         #                                                                     #
@@ -329,10 +329,9 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         
         ### Figuring out perm processor: ######################################
         #                                                                     #
-        self.is_typed = perm_type not in (None, misc_tools.identity_function)
+        self.is_typed = perm_type not in (None, self.default_perm_type)
             
-        self.perm_type = perm_type if self.is_typed else \
-                                                   misc_tools.identity_function
+        self.perm_type = perm_type if self.is_typed else self.default_perm_type
         #                                                                     #
         ### Finished figuring out perm processor. #############################
         
@@ -488,8 +487,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             ', is_combination=True' if self.is_combination else '',
             (', fixed_map=%s' % (self.fixed_map,)) if self.is_fixed else '',
             (', degrees=%s' % (self.degrees,)) if self.is_degreed else '',
-            (', perm_processor=%s' % (self.perm_processor,)) if
-                                                     self.is_typed else '',
+            (', perm_type=%s' % (self.perm_type,)) if self.is_typed else '',
             ('[%s:%s]' % (self.slice_.start, self.slice_.stop)) if
                                                          self.is_sliced else ''
         )
@@ -503,7 +501,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 self.sequence, domain=self.domain, n_elements=self.n_elements,
                 fixed_map=self.fixed_map, degrees=self.degrees,
                 is_combination=self.is_combination, slice_=canonical_slice,
-                perm_processor=self.perm_processor
+                perm_type=self.perm_type
             )
         
         assert isinstance(i, numbers.Integral)
@@ -515,19 +513,17 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         elif self.is_sliced:
             return self.unsliced[i + self.canonical_slice.start]
         elif self.is_dapplied:
-            return self.perm_processor(
-                self.perm_type(self.undapplied[i], perm_space=self)
-            )
+            return self.perm_type(self.undapplied[i], perm_space=self)
+            
         elif self.is_degreed:
             if self.is_rapplied:
                 assert not self.is_recurrent and \
                        not self.is_partial and not self.is_combination and \
                        not self.is_dapplied and not self.is_sliced
-                return self.perm_processor(
-                    self.perm_type(map(self.sequence.__getitem__,
-                                       self.unrapplied[i]),
-                                   perm_space=self)
-                )
+                return self.perm_type(map(self.sequence.__getitem__,
+                                          self.unrapplied[i]),
+                                      perm_space=self)
+                
             
             assert not self.is_rapplied and not self.is_recurrent and \
                    not self.is_partial and not self.is_combination and \
@@ -588,10 +584,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 else:
                     raise RuntimeError
             assert wip_i == 0
-            return self.perm_processor(
-                self.perm_type((wip_perm_sequence_dict[k] for k in
-                                self.domain), self)
-            )
+            return self.perm_type((wip_perm_sequence_dict[k] for k in
+                                   self.domain), self)
         elif self.is_recurrent:
             assert not self.is_dapplied and not self.is_degreed and \
                                                              not self.is_sliced
@@ -633,26 +627,22 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 else:
                     raise RuntimeError
             assert wip_i == 0
-            return self.perm_processor(
-                self.perm_type(
-                    dict_tools.get_list(wip_perm_sequence_dict, self.domain),
-                    self
-                )
+            return self.perm_type(
+                dict_tools.get_list(wip_perm_sequence_dict, self.domain),
+                self
             )
         
         elif self.is_fixed:
             free_values_perm = self._free_values_unsliced_perm_space[i]
             free_values_perm_iterator = iter(free_values_perm)
-            return self.perm_processor(
-                self.perm_type(
-                    tuple(
-                        (self._undapplied_fixed_map[m] if
-                         (m in self.fixed_indices) else
-                         next(free_values_perm_iterator))
-                                           for m in range(self.sequence_length)
-                    ),
-                    self
-                )
+            return self.perm_type(
+                tuple(
+                    (self._undapplied_fixed_map[m] if
+                     (m in self.fixed_indices) else
+                     next(free_values_perm_iterator))
+                                       for m in range(self.sequence_length)
+                ),
+                self
             )
         
         elif self.is_combination:
@@ -671,7 +661,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     raise RuntimeError
             result = tuple(wip_perm_sequence)
             assert len(result) == self.n_elements
-            return self.perm_processor(self.perm_type(result, self))
+            return self.perm_type(result, self)
 
         
         else:
@@ -686,7 +676,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             result = tuple(unused_numbers.pop(factoradic_digit) for
                                          factoradic_digit in factoradic_number)
             assert sequence_tools.get_length(result) == self.n_elements
-            return self.perm_processor(self.perm_type(result, self))
+            return self.perm_type(result, self)
                 
                 
     enumerated_sequence = caching.CachedProperty(
@@ -703,7 +693,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     _reduced = property(
         lambda self: (type(self), self.sequence, self.domain, 
                       tuple(sorted(self.fixed_map.items())),
-                      self.canonical_slice, self.perm_processor)
+                      self.canonical_slice, self.perm_type)
     )
              
     __eq__ = lambda self, other: (isinstance(other, PermSpace) and
@@ -917,7 +907,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     @classmethod
     def _create_with_cut_prefix(cls, sequence, domain=None, *,
         n_elements=None, fixed_map=None, degrees=None, is_combination=False,
-        slice_=None, perm_processor=None, shit_set=frozenset()):
+        slice_=None, perm_type=None, shit_set=frozenset()):
         '''blocktododoc'''
         
         # Tricky thing here: Trying to put as much as we can in a sequence head
@@ -975,7 +965,7 @@ from . import _variation_adding_mixin
 from . import _fixed_map_managing_mixin
 
 # Must set these after-the-fact because of import loop:
-PermSpace.perm_type = PermSpace._default_perm_type = Perm
+PermSpace.perm_type = PermSpace.default_perm_type = Perm
 _variation_removing_mixin.PermSpace = PermSpace
 _variation_adding_mixin.PermSpace = PermSpace
 _fixed_map_managing_mixin.PermSpace = PermSpace
