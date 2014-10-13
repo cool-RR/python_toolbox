@@ -3,6 +3,7 @@
 
 import pickle
 import itertools
+import functools
 
 from python_toolbox import cute_testing
 from python_toolbox import math_tools
@@ -594,19 +595,68 @@ def test_perm_type():
         heart = 'heart'
         spade = 'spade'
     
-    cards = combi.ProductSpace((range(1, 14), Suit))
+    @functools.total_ordering
+    class Card():
+        def __init__(self, number_and_suit):
+            number, suit = number_and_suit
+            assert number in range(1, 14)
+            assert isinstance(suit, Suit)
+            self.number = number
+            self.suit = suit
+            
+        _sequence = \
+                  caching.CachedProperty(lambda self: (self.number, self.suit))
+        _reduced = \
+              caching.CachedProperty(lambda self: (type(self), self._sequence))
+        def __lt__(self, other):
+            if not isinstance(other, Card): return NotImplemented
+            return self._sequence < other._sequence
+        def __eq__(self, other):
+            return type(self) == type(other) and \
+                                              self._sequence == other._sequence
+        __hash__ = lambda self: hash(self._reduced)
+        __repr__ = lambda self: '%s%s' % (
+            self.number if self.number <= 10 else 'jqk'[self.number - 11],
+            str(self.suit.name)[0].capitalize()
+        )
+            
+            
+        
+    card_space = combi.MapSpace(Card,
+                                combi.ProductSpace((range(1, 14), Suit)))
     
     class PokerHandSpace(combi.CombSpace):
         def __init__(self):
-            combi.CombSpace.__init__(self, cards, 5, perm_type=PokerHand)
+            super().__init__(card_space, 5, perm_type=PokerHand)
             
     class PokerHand(combi.Comb):
         @caching.CachedProperty
-        def score(self):
-            return 3
+        def stupid_score(self):
+            return tuple(
+                zip(*nifty_collections.Bag(card.number for card in self)
+                    .most_common()))[1]
         
     poker_hand_space = PokerHandSpace()
     
-    poker_hand_space.take_random().score
-            
-            
+    assert isinstance(poker_hand_space[0], PokerHand)
+    
+    some_poker_hands = MapSpace(poker_hand_space.__getitem__,
+                                range(1000000, 2000000, 17060))
+    some_poker_hand_scores = set(poker_hand.stupid_score for poker_hand
+                                                           in some_poker_hands)
+    assert (1, 1, 1, 1, 1) in some_poker_hand_scores
+    assert (2, 1, 1, 1) in some_poker_hand_scores
+    assert (2, 2, 1) in some_poker_hand_scores
+    assert (3, 1, 1) in some_poker_hand_scores
+
+    card_comb_sequence = (Card((1, Suit.club)), Card((2, Suit.diamond)), 
+                          Card((3, Suit.heart)), Card((4, Suit.spade)),
+                          Card((5, Suit.club)))
+    assert cute_iter_tools.is_sorted(card_comb_sequence)
+    assert card_comb_sequence in poker_hand_space
+    assert PokerHand(card_comb_sequence, poker_hand_space) in poker_hand_space
+    assert card_comb_sequence[::-1] not in poker_hand_space
+    assert PokerHand(card_comb_sequence[::-1], poker_hand_space) \
+                                                        not in poker_hand_space
+    assert PokerHand(card_comb_sequence, poker_hand_space).stupid_score == \
+                                                                (1, 1, 1, 1, 1)
