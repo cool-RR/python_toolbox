@@ -2,8 +2,10 @@
 # This program is distributed under the MIT license.
 
 from python_toolbox import sequence_tools
+from python_toolbox import math_tools
 from python_toolbox import cute_testing
 
+from python_toolbox import combi
 from python_toolbox.combi import *
 
 
@@ -60,3 +62,16 @@ def test():
     
     
         
+def test_unrecurrented():
+    recurrent_comb_space = CombSpace('abcabc', 3)
+    assert 'abc' in recurrent_comb_space
+    assert 'aba' in recurrent_comb_space
+    assert 'bbc' in recurrent_comb_space
+    unrecurrented_comb_space = recurrent_comb_space.unrecurrented
+    assert math_tools.factorial(6, 3) == unrecurrented_comb_space.length > \
+           recurrent_comb_space.length == 7
+    comb = unrecurrented_comb_space[7]
+    assert all(i in 'abc' for i in comb)
+    assert set(''.join(comb)) == set('abc')
+    
+    

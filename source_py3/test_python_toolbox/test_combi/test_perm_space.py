@@ -590,7 +590,7 @@ def test_recurrent():
 def test_unrecurrented():
     recurrent_perm_space = combi.PermSpace('abcabc')
     unrecurrented_perm_space = recurrent_perm_space.unrecurrented
-    assert len(unrecurrented_perm_space) == math_tools.factorial(6)
+    assert unrecurrented_perm_space.length == math_tools.factorial(6)
     perm = unrecurrented_perm_space[100]
     assert all(i in 'abc' for i in perm)
     assert set(map(perm.index, 'abc')) < {0, 1, 2, 3, 4}
