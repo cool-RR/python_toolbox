@@ -831,6 +831,10 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             if perm.is_rapplied:
                 return self.unrapplied.index(perm.unrapplied)
             
+            assert not self.is_rapplied and not self.is_recurrent and \
+                   not self.is_dapplied and not self.is_fixed and \
+                                                            not self.is_degreed
+            
             if not cute_iter_tools.is_sorted(perm._perm_sequence):
                 raise ValueError
             
@@ -843,8 +847,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                                   enumerate(processed_perm_sequence, start=1)),
                 0
             )
-        
-            
               
         else:
             
