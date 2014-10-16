@@ -6,7 +6,7 @@ from python_toolbox import cute_testing
 from python_toolbox import zip_tools
 
 
-def test_zipping_in_memory():
+def test():
     ''' '''
     files = (
         ('meow.txt', b"I'm a cat."), 
