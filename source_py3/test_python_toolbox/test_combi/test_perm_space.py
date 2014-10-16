@@ -215,6 +215,7 @@ def test_fixed_perm_space():
     weird_fixed_perm_space = PermSpace(range(100),
                                        fixed_map=zip(range(90), range(90)))
     assert weird_fixed_perm_space.length == math_tools.factorial(10)
+    assert weird_fixed_perm_space[-1234566][77] == 77
     assert len(repr(weird_fixed_perm_space)) <= 100
     
     
@@ -309,7 +310,7 @@ def test_degreed_perm_space():
     )
     
     assert PermSpace(
-        7, 'travels',
+        7, domain='travels',
         fixed_map={'l': 5, 'a': 2, 't': 0, 'v': 3, 'r': 1, 'e': 6},
         degrees=(1, 3, 5)
     ).length == 1
