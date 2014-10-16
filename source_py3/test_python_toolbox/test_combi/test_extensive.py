@@ -504,8 +504,6 @@ def _iterate_tests():
              perm_type_options)
         )
         
-        if variation_selection.number != 14:
-            continue
         for i in range(len(product_space_)):
             fucking_globals = dict(globals())
             fucking_globals.update(locals())
