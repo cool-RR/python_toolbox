@@ -177,16 +177,16 @@ class _BaseBagMixin:
         return tuple(heapq.nlargest(n, self.items(),
                                     key=operator.itemgetter(1)))
 
+    @property
     def elements(self):
         '''
         Iterate over elements repeating each as many times as its count.
 
             >>> c = Bag('ABCABC')
-            >>> tuple(c.elements())
+            >>> tuple(c.elements)
             ('A', 'B', 'A', 'B', 'C', 'C')
     
         '''
-        # Emulate Bag.do from Smalltalk and Multiset.begin from C++.
         return itertools.chain.from_iterable(
             itertools.starmap(itertools.repeat, self.items())
         )
@@ -398,7 +398,7 @@ class _BaseBagMixin:
                 key, count in self.items())
             )
 
-    __bool__ = lambda self: any(True for element in self.elements())
+    __bool__ = lambda self: any(True for element in self.elements)
     
     ###########################################################################
     ### Defining comparison methods: ##########################################
@@ -416,6 +416,8 @@ class _BaseBagMixin:
         That means that for every key in `self`, its count in `other` is bigger
         or equal than in `self`-- And there's at least one key for which the
         count in `other` is strictly bigger.
+        
+        Or in other words: `set(self.eleme)`
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
@@ -432,7 +434,7 @@ class _BaseBagMixin:
         '''
         `self` is a strictly bigger bag than `other`.
         
-        That means that for every key in `self`, its count in `other` is smaller
+        That means that for every key in `other`, its count in `other` is smaller
         or equal than in `self`-- And there's at least one key for which the
         count in `other` is strictly smaller.
         '''        
@@ -447,7 +449,14 @@ class _BaseBagMixin:
                 found_strict_difference = True
         return found_strict_difference
   
-      def __le__(self, other):
+    def __le__(self, other):
+        '''
+        `self` is a smaller or equal to `other`.
+        
+        That means that for every key in `self`, its count in `other` is bigger
+        or equal than in `self`-- And there's at least one key for which the
+        count in `other` is strictly bigger.
+        '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         for element, count in self.items():

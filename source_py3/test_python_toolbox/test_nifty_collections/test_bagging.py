@@ -50,7 +50,7 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         
         assert set(bag.most_common()) == set(bag.most_common(len(bag))) == \
                                set(collections.Counter(bag).most_common()) == \
-                         set(collections.Counter(bag.elements()).most_common())
+                         set(collections.Counter(bag.elements).most_common())
         
         assert bag.most_common(1) == (('a', 5),)
         assert set(bag.most_common(3)) == set((('a', 5), ('b', 2), ('r', 2)))
@@ -65,7 +65,7 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         assert bag & bag == \
                bag & bag & bag == bag
         
-        assert self.bag_type(bag.elements()) == bag
+        assert self.bag_type(bag.elements) == bag
         
         with cute_testing.RaiseAssertor(TypeError):
             + bag
