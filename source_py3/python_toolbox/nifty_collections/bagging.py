@@ -400,7 +400,9 @@ class _BaseBagMixin:
 
     __bool__ = lambda self: any(True for element in self.elements())
     
-    
+    ###########################################################################
+    ### Defining comparison methods: ##########################################
+    #                                                                         #
     # We define all the comparison methods manually instead of using
     # `total_ordering` because `total_ordering` assumes that >= means (> and
     # ==) while we, in `FrozenOrderedBag`, don't have that hold because ==
@@ -408,6 +410,13 @@ class _BaseBagMixin:
     # alertness know no bounds.
     
     def __lt__(self, other):
+        '''
+        `self` is a strictly smaller bag than `other`.
+        
+        That means that for every key in `self`, its count in `other` is bigger
+        or equal than in `self`-- And there's at least one key for which the
+        count in `other` is strictly bigger.
+        '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         found_strict_difference = False # Until challenged.
@@ -419,15 +428,14 @@ class _BaseBagMixin:
                 found_strict_difference = True
         return found_strict_difference
     
-    def __le__(self, other):
-        if not isinstance(other, _BaseBagMixin):
-            return NotImplemented
-        for element, count in self.items():
-            if count > other[element]:
-                return False
-        return True
-    
     def __gt__(self, other):
+        '''
+        `self` is a strictly bigger bag than `other`.
+        
+        That means that for every key in `self`, its count in `other` is smaller
+        or equal than in `self`-- And there's at least one key for which the
+        count in `other` is strictly smaller.
+        '''        
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         found_strict_difference = False # Until challenged.
@@ -438,6 +446,14 @@ class _BaseBagMixin:
             elif self[element] > other[element]:
                 found_strict_difference = True
         return found_strict_difference
+  
+      def __le__(self, other):
+        if not isinstance(other, _BaseBagMixin):
+            return NotImplemented
+        for element, count in self.items():
+            if count > other[element]:
+                return False
+        return True
     
     def __ge__(self, other):
         if not isinstance(other, _BaseBagMixin):
@@ -447,7 +463,10 @@ class _BaseBagMixin:
             if self[element] < other[element]:
                 return False
         return True
-            
+    #                                                                         #
+    ### Finished defining comparison methods. #################################
+    ###########################################################################
+    
     def __repr__(self):
         if not self:
             return '%s()' % type(self).__name__
