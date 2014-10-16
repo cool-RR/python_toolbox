@@ -136,7 +136,14 @@ class _BootstrappedCachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
             
 
 class _BaseBagMixin:
-    '''Mixin for `FrozenBag` and `FrozenOrderedBag`.'''
+    '''
+    Mixin for `FrozenBag` and `FrozenOrderedBag`.
+    
+    Most of the bag functionality is implemented here, with a few finishing
+    touches in the classes that inherit from this. This mixin is used both for
+    ordered, unordered, frozen and mutable bags, so only the methods that are
+    general to all of them are implemented here.
+    '''
     
     def __init__(self, iterable={}):
         super().__init__()
@@ -160,8 +167,8 @@ class _BaseBagMixin:
         Results are sorted from the most common to the least. If `n is None`,
         then list all element counts.
 
-            >>> FrozenBag('abcdeabcdabcaba').most_common(3)
-            [('a', 5), ('b', 4), ('c', 3)]
+            >>> Bag('abcdeabcdabcaba').most_common(3)
+            (('a', 5), ('b', 4), ('c', 3))
 
         '''
         if n is None:
@@ -174,20 +181,10 @@ class _BaseBagMixin:
         '''
         Iterate over elements repeating each as many times as its count.
 
-            >>> c = FrozenBag('ABCABC')
-            >>> sorted(c.elements())
-            ['A', 'A', 'B', 'B', 'C', 'C']
+            >>> c = Bag('ABCABC')
+            >>> tuple(c.elements())
+            ('A', 'B', 'A', 'B', 'C', 'C')
     
-            # Knuth's example for prime factors of 1836:  2**2 * 3**3 * 17**1
-            >>> prime_factors = FrozenBag({2: 2, 3: 3, 17: 1})
-            >>> product = 1
-            >>> for factor in prime_factors.elements():     # loop over factors
-            ...     product *= factor                       # and multiply them
-            >>> product
-            1836
-
-        Note, if an element's count has been set to zero or is a negative
-        number, `.elements()` will ignore it.
         '''
         # Emulate Bag.do from Smalltalk and Multiset.begin from C++.
         return itertools.chain.from_iterable(
@@ -197,19 +194,40 @@ class _BaseBagMixin:
     def __contains__(self, item):
         return (self[item] >= 1)
     
-    n_elements = property(lambda self: sum(self.values()))
+    n_elements = property(
+        lambda self: sum(self.values()), 
+        doc='''Number of total elements in the bag.'''
+    )
     
     @property
     def frozen_bag_bag(self):
+        '''
+        A `FrozenBagBag` of this bag.
+        
+        This means, a bag where `3: 4` means "The original bag has 4 different
+        keys with a value of 3."
+
+        Example:
+        
+            >>> bag = Bag('abracadabra')
+            >>> bag
+            Bag({'b': 2, 'r': 2, 'a': 5, 'd': 1, 'c': 1})
+            >>> bag.frozen_bag_bag
+            FrozenBagBag({1: 2, 2: 2, 5: 1})
+        
+        '''
         from .frozen_bag_bag import FrozenBagBag
         return FrozenBagBag(self.values())
 
     def __or__(self, other):
         '''
-        Get the maximum of value in either of the input bags.
-
-            >>> FrozenBag('abbb') | FrozenBag('bcc')
-            FrozenBag({'b': 3, 'c': 2, 'a': 1})
+        Make a union bag of these two bags.
+        
+        The new bag will have, for each key, the higher of the two amounts for
+        that key in the two original bags.
+        
+            >>> Bag('abbb') | Bag('bcc')
+            Bag({'b': 3, 'c': 2, 'a': 1})
             
         '''
         if not isinstance(other, _BaseBagMixin):
@@ -221,10 +239,13 @@ class _BaseBagMixin:
     
     def __and__(self, other):
         '''
-
-        Get the minimum of corresponding counts.
-            >>> FrozenBag('abbb') & FrozenBag('bcc')
-            FrozenBag({'b': 1})
+        Make an intersection bag of these two bags.
+        
+        The new bag will have, for each key, the lower of the two amounts for
+        that key in the two original bags.
+        
+            >>> Bag('abbb') & Bag('bcc')
+            Bag({'b': 1,})
             
         '''
         if not isinstance(other, _BaseBagMixin):
@@ -260,6 +281,7 @@ class _BaseBagMixin:
         )
 
     def __mul__(self, other):
+        '''Get a new bag that has all counts multiplied by the integer `other`.'''
         if not math_tools.is_integer(other):
             return NotImplemented
         return type(self)(self._dict_type((key, count * other) for
@@ -268,6 +290,20 @@ class _BaseBagMixin:
     __rmul__ = lambda self, other: self * other
     
     def __floordiv__(self, other):
+        '''
+        Do a floor-division `self // other`.
+        
+        `other` can be either an integer or a bag.
+        
+        If `other` is an integer, the result will be the biggest bag possible
+        so that `result * other <= self`.
+        
+        If `other` is a bag, the result will be the maximum number of times you
+        can put `other` inside of `self` without having it surpass `self` for
+        any key. (Or in other words, the biggest integer possible so that
+        `result * other <= self`.)
+        '''
+        
         if math_tools.is_integer(other):
             return (
                 type(self)(self._dict_type((key, count // other) for
@@ -290,6 +326,19 @@ class _BaseBagMixin:
             return NotImplemented
         
     def __mod__(self, other):
+        '''
+        Do a modulo `self % other`.
+        
+        `other` can be either an integer or a bag.
+        
+        If `other` is an integer, the result will be the biggest bag possible
+        so that `result * other <= self`.
+        
+        If `other` is a bag, the result will be the maximum number of times you
+        can put `other` inside of `self` without having it surpass `self` for
+        any key. (Or in other words, the biggest integer possible so that
+        `result * other <= self`.)
+        '''        
         if math_tools.is_integer(other):
             return (
                 type(self)(self._dict_type((key, count % other) for
