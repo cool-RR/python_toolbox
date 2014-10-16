@@ -31,7 +31,7 @@ class _ZeroCountAttempted(Exception):
     '''        
     
 def _count_elements_slow(mapping, iterable):
-    '''Bag elements from the iterable.'''
+    '''Put elements from `iterable` into `mapping`.'''
     mapping_get = mapping.get
     for element in iterable:
         mapping[element] = mapping_get(element, 0) + 1
@@ -43,6 +43,7 @@ except ImportError:
         
 
 def _process_count(count):
+    '''Process a count of an item to ensure it's a positive `int`.'''
     if not math_tools.is_integer(count):
         raise TypeError(
             'You passed %s as a count, while a `Bag` can only handle integer '
@@ -64,8 +65,9 @@ class _BootstrappedCachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
     '''
     A property that is calculated only once for an object, and then cached.
     
-    This is defined here in `bagging.py` because we can't import the canonical
-    `CachedProperty` because of an import loop.
+    This is redefined here in `bagging.py`, in addition to having it defined in
+    `python_toolbox.caching`, because we can't import the canonical
+    `CachedProperty` from there because of an import loop.
     
     Usage:
     
@@ -78,7 +80,7 @@ class _BootstrappedCachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
                 time.sleep(5) # Time consuming process that creates personality
                 return 'Nice person'
         
-            personality = CachedProperty(_get_personality)
+            personality = _BootstrappedCachedProperty(_get_personality)
             
     You can also put in a value as the first argument if you'd like to have it
     returned instead of using a getter. (It can be a tobag static value like
@@ -243,8 +245,13 @@ class _BaseBagMixin:
 
     def __sub__(self, other):
         '''
-        blocktododoc
-        Negative counts are truncated to zero.        
+        Get the subtraction of one bag from another.
+        
+        This creates a new bag which has the items of the first bag minus the
+        items of the second one. Negative counts are truncated to zero: If
+        there are any items in the second bag that are more than the items in
+        the first bag, the result for that key will simply be zero rather than
+        a negative amount.
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented

@@ -10,7 +10,6 @@ from python_toolbox import zip_tools
 
 
 def test():
-    ''' '''
     with temp_file_tools.create_temp_folder() as temp_folder:
         assert isinstance(temp_folder, pathlib.Path)
         
