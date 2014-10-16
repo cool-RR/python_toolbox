@@ -14,11 +14,11 @@ class _VariationAddingMixin:
         if len(sequence) != self.sequence_length:
             raise Exception
         return PermSpace(
-            sequence, domain=self.domain,
+            sequence, n_elements=self.n_elements, domain=self.domain,
             fixed_map={key: sequence[value] for key, value in
                                                        self.fixed_map.items()},
             degrees=self.degrees, slice_=self.canonical_slice,
-            n_elements=self.n_elements, is_combination=self.is_combination,
+            is_combination=self.is_combination,
             perm_type=self.perm_type
         )
     
@@ -35,9 +35,9 @@ class _VariationAddingMixin:
                 "first."
             )
         return PermSpace(
-            self.sequence, domain=self.domain, fixed_map=self.fixed_map,
-            degrees=self.degrees, slice_=None,
-            is_combination=self.is_combination, n_elements=n_elements,
+            self.sequence, n_elements=n_elements, domain=self.domain,
+            fixed_map=self.fixed_map, degrees=self.degrees, slice_=None,
+            is_combination=self.is_combination,
             perm_type=self.perm_type
         )
     
@@ -60,7 +60,7 @@ class _VariationAddingMixin:
             raise TypeError("Can't use degrees with combination spaces.")
         
         return PermSpace(
-            self.sequence, domain=self.domain, n_elements=self.n_elements,
+            self.sequence, n_elements=self.n_elements, domain=self.domain, 
             fixed_map=self.fixed_map, is_combination=True,
             perm_type=Comb
         )
@@ -75,11 +75,11 @@ class _VariationAddingMixin:
         if len(domain) != self.n_elements:
             raise Exception
         return PermSpace(
-            self.sequence, domain,
+            self.sequence, n_elements=self.n_elements, domain=domain,
             fixed_map={domain[key]: value for key, value in
                                                    self._undapplied_fixed_map},
             degrees=self.degrees, slice_=self.canonical_slice,
-            n_elements=self.n_elements, is_combination=self.is_combination,
+            is_combination=self.is_combination,
             perm_type=self.perm_type
         )
     
@@ -95,10 +95,9 @@ class _VariationAddingMixin:
             combined_fixed_map[key] = value
             
         return PermSpace(
-            self.sequence, domain=self.domain, fixed_map=combined_fixed_map,
-            degrees=self.degrees, slice_=None,
-            n_elements=self.n_elements, is_combination=self.is_combination,
-            perm_type=self.perm_type
+            self.sequence, n_elements=self.n_elements, domain=self.domain,
+            fixed_map=combined_fixed_map, degrees=self.degrees, slice_=None,
+            is_combination=self.is_combination, perm_type=self.perm_type
         )
     
     def get_degreed(self, degrees):
@@ -114,10 +113,9 @@ class _VariationAddingMixin:
         degrees_to_use = \
            degrees if not self.is_degreed else set(degrees) & set(self.degrees)
         return PermSpace(
-            self.sequence, domain=self.domain, fixed_map=self.fixed_map,
-            degrees=degrees_to_use, n_elements=self.n_elements,
-            is_combination=self.is_combination,
-            perm_type=self.perm_type
+            self.sequence, n_elements=self.n_elements, domain=self.domain,
+            fixed_map=self.fixed_map, degrees=degrees_to_use, 
+            is_combination=self.is_combination, perm_type=self.perm_type
         )
     
     
@@ -132,10 +130,9 @@ class _VariationAddingMixin:
             perm_type = lambda perm: added_perm_type(
                                                       old_perm_type(perm))
         return PermSpace(
-            self.sequence, domain=self.domain,
-            fixed_map=self.fixed_map,
-            degrees=self.degrees, slice_=self.canonical_slice,
-            n_elements=self.n_elements, is_combination=self.is_combination,
+            self.sequence, n_elements=self.n_elements, domain=self.domain,
+            fixed_map=self.fixed_map, degrees=self.degrees,
+            slice_=self.canonical_slice, is_combination=self.is_combination,
             perm_type=perm_type
         )
     

@@ -128,7 +128,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         else:
             return cls(argument)
     
-    def __init__(self, iterable_or_length, domain=None, *, n_elements=None, 
+    def __init__(self, iterable_or_length, n_elements=None, *, domain=None, 
                  fixed_map=None, degrees=None, is_combination=False,
                  slice_=None, perm_type=None):
         
@@ -478,6 +478,11 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             sequence_repr = \
                       ''.join((sequence_repr[:35], ' ... ', sequence_repr[-1]))
             
+        fixed_map_repr = repr(self.fixed_map)
+        if len(fixed_map_repr) > 40:
+            fixed_map_repr = ''.join(
+                            (fixed_map_repr[:35], ' ... ', fixed_map_repr[-1]))
+            
         return '<%s: %s%s%s%s%s%s%s>%s' % (
             type(self).__name__,
             domain_snippet,
@@ -485,7 +490,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             (', n_elements=%s' % (self.n_elements,)) if self.is_partial
                                                                        else '',
             ', is_combination=True' if self.is_combination else '',
-            (', fixed_map=%s' % (self.fixed_map,)) if self.is_fixed else '',
+            (', fixed_map=%s' % (fixed_map_repr,)) if self.is_fixed else '',
             (', degrees=%s' % (self.degrees,)) if self.is_degreed else '',
             (', perm_type=%s' % (self.perm_type.__name__,)) if self.is_typed
                                                                        else '',

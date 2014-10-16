@@ -212,6 +212,11 @@ def test_fixed_perm_space():
     
     assert big_fixed_perm_space.index(small_fixed_perm_space[1]) != 1
     
+    weird_fixed_perm_space = PermSpace(range(100),
+                                       fixed_map=zip(range(90), range(90)))
+    assert weird_fixed_perm_space.length == math_tools.factorial(10)
+    assert len(repr(weird_fixed_perm_space)) <= 100
+    
     
 def test_rapplied_perm_space():
     rapplied_perm_space = PermSpace('meow')

@@ -27,12 +27,12 @@ class _VariationRemovingMixin:
                 "first."
             )
         return PermSpace(
-            self.sequence_length, domain=self.domain, 
+            self.sequence_length, n_elements=self.n_elements,
+            domain=self.domain, 
             fixed_map={key: self.sequence.index(value) for
                        key, value in self.fixed_map.items()},
-            degrees=self.degrees, n_elements=self.n_elements,
-            slice_=self.canonical_slice, is_combination=self.is_combination,
-            perm_type=self.perm_type
+            degrees=self.degrees, slice_=self.canonical_slice,
+            is_combination=self.is_combination, perm_type=self.perm_type
         )
     
     @caching.CachedProperty
@@ -64,9 +64,9 @@ class _VariationRemovingMixin:
             
             
         return PermSpace(
-            enumerate(self.sequence), domain=self.domain, 
-            fixed_map=processed_fixed_map, degrees=self.degrees,
-            n_elements=self.n_elements, is_combination=self.is_combination,
+            enumerate(self.sequence), n_elements=self.n_elements,
+            domain=self.domain, fixed_map=processed_fixed_map,
+            degrees=self.degrees, is_combination=self.is_combination,
             perm_type=UnrecurrentedComb if self.is_combination
                                                          else UnrecurrentedPerm
         )
@@ -113,17 +113,16 @@ class _VariationRemovingMixin:
                 "subclass of `Comb`."
             )
         return PermSpace(
-            self.sequence, domain=self.domain, fixed_map=self.fixed_map,
-            degrees=self.degrees, slice_=None,
-            n_elements=self.n_elements, is_combination=False,
-            perm_type=Perm
+            self.sequence, n_elements=self.n_elements, domain=self.domain,
+            fixed_map=self.fixed_map, degrees=self.degrees, slice_=None,
+            is_combination=False, perm_type=Perm
         )
 
     undapplied = caching.CachedProperty(
         lambda self: PermSpace(
-            self.sequence, fixed_map=self._undapplied_fixed_map,
-            degrees=self.degrees, slice_=self.canonical_slice,
-            n_elements=self.n_elements, is_combination=self.is_combination,
+            self.sequence, n_elements=self.n_elements,
+            fixed_map=self._undapplied_fixed_map, degrees=self.degrees,
+            slice_=self.canonical_slice, is_combination=self.is_combination,
             perm_type=self.perm_type
         ),
         doc='''A version of this `PermSpace` without a custom domain.'''
@@ -136,10 +135,9 @@ class _VariationRemovingMixin:
             raise TypeError("Can't be used on sliced perm spaces. Try "
                             "`perm_space.unsliced.unfixed`.")
         return PermSpace(
-            self.sequence, domain=self.domain, fixed_map=None,
-            degrees=self.degrees, n_elements=self.n_elements,
-            is_combination=self.is_combination,
-            perm_type=self.perm_type
+            self.sequence, n_elements=self.n_elements,
+            domain=self.domain, fixed_map=None, degrees=self.degrees,
+            is_combination=self.is_combination, perm_type=self.perm_type
         )
     
     @caching.CachedProperty
@@ -149,18 +147,16 @@ class _VariationRemovingMixin:
             raise TypeError("Can't be used on sliced perm spaces. Try "
                             "`perm_space.unsliced.undegreed`.")
         return PermSpace(
-            self.sequence, domain=self.domain, fixed_map=self.fixed_map,
-            degrees=None, n_elements=self.n_elements,
-            is_combination=self.is_combination,
-            perm_type=self.perm_type
+            self.sequence, n_elements=self.n_elements, domain=self.domain,
+            fixed_map=self.fixed_map, degrees=None,
+            is_combination=self.is_combination, perm_type=self.perm_type
         )
     
     unsliced = caching.CachedProperty(
         lambda self: PermSpace(
-            self.sequence, domain=self.domain, fixed_map=self.fixed_map,
-            n_elements=self.n_elements, is_combination=self.is_combination, 
-            degrees=self.degrees, slice_=None,
-            perm_type=self.perm_type
+            self.sequence, n_elements=self.n_elements, domain=self.domain,
+            fixed_map=self.fixed_map, is_combination=self.is_combination, 
+            degrees=self.degrees, slice_=None, perm_type=self.perm_type
         ),
         doc='''An unsliced version of this `PermSpace`.'''
     )
