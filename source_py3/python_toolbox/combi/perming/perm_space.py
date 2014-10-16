@@ -634,7 +634,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     raise RuntimeError
             assert wip_i == 0
             return self.perm_type(
-                dict_tools.get_list(wip_perm_sequence_dict, self.domain),
+                dict_tools.get_tuple(wip_perm_sequence_dict, self.domain),
                 self
             )
         
