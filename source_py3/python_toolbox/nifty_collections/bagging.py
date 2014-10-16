@@ -417,7 +417,7 @@ class _BaseBagMixin:
         or equal than in `self`-- And there's at least one key for which the
         count in `other` is strictly bigger.
         
-        Or in other words: `set(self.eleme)`
+        Or in other words: `set(self.elements) < set(other.elements)`.
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
@@ -437,6 +437,8 @@ class _BaseBagMixin:
         That means that for every key in `other`, its count in `other` is smaller
         or equal than in `self`-- And there's at least one key for which the
         count in `other` is strictly smaller.
+        
+        Or in other words: `set(self.elements) > set(other.elements)`.
         '''        
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
@@ -451,11 +453,12 @@ class _BaseBagMixin:
   
     def __le__(self, other):
         '''
-        `self` is a smaller or equal to `other`.
+        `self` is smaller or equal to `other`.
         
         That means that for every key in `self`, its count in `other` is bigger
-        or equal than in `self`-- And there's at least one key for which the
-        count in `other` is strictly bigger.
+        or equal than in `self`.
+        
+        Or in other words: `set(self.elements) <= set(other.elements)`.
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
@@ -465,6 +468,14 @@ class _BaseBagMixin:
         return True
     
     def __ge__(self, other):
+        '''
+        `self` is bigger or equal to `other`.
+        
+        That means that for every key in `other`, its count in `other` is bigger
+        or equal than in `self`.
+        
+        Or in other words: `set(self.elements) >= set(other.elements)`.
+        '''        
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         all_elements = set(other) | set(self)
