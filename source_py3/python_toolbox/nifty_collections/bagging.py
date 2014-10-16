@@ -331,13 +331,14 @@ class _BaseBagMixin:
         
         `other` can be either an integer or a bag.
         
-        If `other` is an integer, the result will be the biggest bag possible
-        so that `result * other <= self`.
+        If `other` is an integer, the result will be a bag with `% other` done
+        on the count of every item from `self`. Or you can also think of it as
+        `self - (self // other)`, which happens to be the same bag.
         
-        If `other` is a bag, the result will be the maximum number of times you
-        can put `other` inside of `self` without having it surpass `self` for
-        any key. (Or in other words, the biggest integer possible so that
-        `result * other <= self`.)
+        If `other` is a bag, the result will be the bag that's left when you
+        subtract as many copies of `other` from this bag, until you can't
+        subtract without truncating some keys. Or in other words, it's `self -
+        (self // other)`.
         '''        
         if math_tools.is_integer(other):
             return (
@@ -350,6 +351,21 @@ class _BaseBagMixin:
             return NotImplemented
         
     def __divmod__(self, other):
+        '''
+        Get `(self // other, self % other)`.
+        
+        If `other` is an integer, the first item of the result will be the
+        biggest bag possible so that `result * other <= self`. The second item
+        will be a bag with `% other` done on the count of every item from
+        `self`, or you can also think of it as `self - (self // other)`, which
+        happens to be the same bag.
+        
+        If `other` is a bag, the first item of the result will be the maximum
+        number of times you can put `other` inside of `self` without having it
+        surpass `self` for any key. (Or in other words, the biggest integer
+        possible so that `result * other <= self`.) The second item will be the
+        result of the first item subtracted from `self`.
+        '''
         if math_tools.is_integer(other):
             return (
                 type(self)(self._dict_type((key, count // other) for
@@ -370,6 +386,7 @@ class _BaseBagMixin:
             return NotImplemented
 
     def __pow__(self, other, modulo=None):
+        '''Get a new bag with every item raised to the power of `other`.'''
         if not math_tools.is_integer(other):
             return NotImplemented
         if modulo is None:
@@ -387,7 +404,8 @@ class _BaseBagMixin:
     # We define all the comparison methods manually instead of using
     # `total_ordering` because `total_ordering` assumes that >= means (> and
     # ==) while we, in `FrozenOrderedBag`, don't have that hold because ==
-    # takes the items' order into account.
+    # takes the items' order into account. Yes, my intelligence and sense of
+    # alertness know no bounds.
     
     def __lt__(self, other):
         if not isinstance(other, _BaseBagMixin):
