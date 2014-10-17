@@ -517,7 +517,9 @@ def iterate_popitem(item_poppable, lazy_tuple=False):
 
 
 def zip_non_equal(iterables, lazy_tuple=False):
-    '''blocktododoc'''
+    '''
+    Zip the iterables, but only yield the tuples where the items aren't equal.
+    '''
     from python_toolbox import logic_tools
     iterator = (items for items in zip(*iterables)
                 if not logic_tools.all_equal(items))
