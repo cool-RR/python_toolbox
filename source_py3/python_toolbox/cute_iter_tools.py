@@ -11,6 +11,7 @@ import itertools
 import builtins
 import numbers
 
+from python_toolbox import sequence_tools
 from python_toolbox import math_tools
 
 infinity = float('inf')
@@ -397,17 +398,21 @@ def get_single_if_any(iterable,
             return first_item
         
         
-def are_equal(*sequences):
-    '''blocktododoc'''
+def are_equal(*sequences, easy_types=frozenset((sequence_tools.CuteRange))):
+    '''
+    Are the given sequences equal?
+    
+    This tries to make a cheap comparison between the sequences if possible,
+    but if not, it goes over the sequences in parallel item-by-item and checks
+    whether the items are all equal.
+    '''
     from python_toolbox import logic_tools
     sequence_types = set(map(type, sequences))
     
     # Trying cheap comparison:
     if len(sequence_types) == 1 and issubclass(
                 get_single_if_any(sequence_types), collections.Sequence) and \
-                               not get_single_if_any(sequence_types) == range:
-        # (Excluding `xrange` from this fast check because it has no
-        # `__eq__` on Python 3.3 and earlier.)
+                     issubclass(get_single_if_any(sequence_types), easy_types):
         return logic_tools.all_equal(sequences)
     
     # If cheap comparison didn't work, trying item-by-item comparison:
