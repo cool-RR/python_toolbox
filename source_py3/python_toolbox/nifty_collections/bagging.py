@@ -748,12 +748,22 @@ class _OrderedBagMixin(Ordered):
         else:
             return True
         
-    index = misc_tools.ProxyProperty('._dict.index')
+    index = misc_tools.ProxyProperty(
+        '._dict.index',
+        doc='Get the index number of a key in the bag.'
+    )
         
         
 class _FrozenBagMixin:
+    '''Mixin for a bag that's frozen. (i.e. can't be changed, is hashable.)'''
     
-    n_elements = _BootstrappedCachedProperty(lambda self: sum(self.values()))
+    # Some properties are redefined here to be cached, since the bag is frozen
+    # and they can't change anyway, so why not cache them.
+    
+    n_elements = _BootstrappedCachedProperty(
+        lambda self: sum(self.values()),
+        doc='''Number of total elements in the bag.'''
+    )
     
     @_BootstrappedCachedProperty
     def frozen_bag_bag(self):
@@ -779,13 +789,12 @@ class _FrozenBagMixin:
 
 class _BaseDictDelegator(collections.MutableMapping):
     '''
-    A dict-like object.
+    Base class for a dict-like object.
     
     It has its `dict` functionality delegated to `self._dict` which actually
     implements the `dict` functionality. Subclasses override `_dict_type` to
     determine the type of `dict` to use. (Regular or ordered.)
     '''
-    # Start by filling-out the abstract methods
     def __init__(self, dict=None, **kwargs):
         self._dict = self._dict_type()
         if dict is not None:
@@ -796,7 +805,7 @@ class _BaseDictDelegator(collections.MutableMapping):
     def __getitem__(self, key):
         if key in self._dict:
             return self._dict[key]
-        if hasattr(self.__class__, "__missing__"):
+        if hasattr(self.__class__, '__missing__'):
             return self.__class__.__missing__(self, key)
         raise KeyError(key)
     def __setitem__(self, key, item): self._dict[key] = item
@@ -835,13 +844,27 @@ class _OrderedDictDelegator(Ordered, _BaseDictDelegator):
     an actual `OrderedDict`.
     '''    
     _dict_type = OrderedDict
-    index = misc_tools.ProxyProperty('._dict.index')
+    index = misc_tools.ProxyProperty(
+        '._dict.index',
+        doc='Get the index number of a key in this dict.'
+    )
     move_to_end = misc_tools.ProxyProperty(
         '._dict.move_to_end',
+        doc='Move a key to the end (or start by passing `last=False`.)'
     )
-    sort = misc_tools.ProxyProperty('._dict.sort')
+    sort = misc_tools.ProxyProperty(
+        '._dict.sort',
+        doc='Sort the keys in this dict. (With optional `key` function.)'
+    )
 
 class _DictDelegator(DefinitelyUnordered, _BaseDictDelegator):
+    '''
+    A `dict`-like object.
+    
+    It has its `dict` functionality delegated to `self._dict` which is an
+    actual `dict`.
+    '''    
+    
     _dict_type = dict
 
                 
