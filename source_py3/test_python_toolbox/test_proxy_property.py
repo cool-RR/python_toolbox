@@ -29,7 +29,7 @@ def test():
             '.y',
             doc='Proxy for `y`.'
         )
-        z_proxy = ProxyProperty('.obj.z')
+        z_proxy = ProxyProperty('.obj.z', doc='aye, this my favorite z.')
         uuid_proxy = ProxyProperty(
             '.uuid',
             'Object-specific UUID.'
@@ -68,6 +68,10 @@ def test():
     assert a0.z_proxy == [1, 2, 3] != a1.z_proxy == 'z'
     #                                                                         #
     ### Finished setting proxy-properties to different values. ################
+    
+    assert repr(A.x_proxy) == '''<ProxyProperty: '.x'>'''
+    assert repr(A.z_proxy) == ('''<ProxyProperty: '.obj.z', doc='aye, this '''
+                               '''my favorite z.'>''')
 
 
 def test_dot():
