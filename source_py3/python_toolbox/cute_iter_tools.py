@@ -448,7 +448,7 @@ def is_sorted(iterable, *, rising=True, strict=False, key=None):
                 (True, False): operator.le,
                 (True, True): operator.lt,}[(rising, strict)]
     for first_item, second_item in iterate_overlapping_subsequences(iterable):
-        if not comparer(key(second_item), key(first_item)):
+        if not comparer(key(first_item), key(second_item)):
             return False
     else:
         return True
