@@ -932,7 +932,11 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     def _create_with_cut_prefix(cls, sequence, domain=None, *,
         n_elements=None, fixed_map=None, degrees=None, is_combination=False,
         slice_=None, perm_type=None, shit_set=frozenset()):
-        '''blocktododoc'''
+        '''
+        Create a `PermSpace`, cutting off a prefix if possible.
+        
+        blocktododoc
+        '''
         
         # Tricky thing here: Trying to put as much as we can in a sequence head
         # that'll shorten the sequence we'll give to the candidate space
