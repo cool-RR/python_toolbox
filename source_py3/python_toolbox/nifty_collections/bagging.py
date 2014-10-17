@@ -644,6 +644,7 @@ class _MutableBagMixin(_BaseBagMixin):
 
 
     def __imul__(self, other):
+        '''Multiply all the counts in this bag by the integer `other`.'''
         if not math_tools.is_integer(other):
             return NotImplemented
         for key in tuple(self):
@@ -652,6 +653,21 @@ class _MutableBagMixin(_BaseBagMixin):
             
             
     def __ifloordiv__(self, other):
+        '''
+        Make this bag into a floor-division `self // other`.
+        
+        `other` can be either an integer or a bag.
+        
+        If `other` is an integer, the result will be the biggest bag possible
+        so that `result * other <= self`.
+        
+        If `other` is a bag, the result will be the maximum number of times you
+        can put `other` inside of `self` without having it surpass `self` for
+        any key. (Or in other words, the biggest integer possible so that
+        `result * other <= self`.) Since this result is an integer rather than
+        a bug, the result variable will be set to it but this bag wouldn't
+        really be modified.
+        '''
         if not math_tools.is_integer(other):
             return NotImplemented
         for key in tuple(self):
