@@ -4,7 +4,6 @@
 import collections
 
 from python_toolbox import math_tools
-from python_toolbox import cute_iter_tools
 
 infinity = float('inf')
 infinities = (infinity, -infinity)
@@ -34,6 +33,7 @@ class CanonicalSlice:
             
         '''
         from python_toolbox import sequence_tools
+        from python_toolbox import cute_iter_tools
         
         if isinstance(slice_, CanonicalSlice):
             slice_ = slice(slice_.start, slice_.stop, slice_.step)

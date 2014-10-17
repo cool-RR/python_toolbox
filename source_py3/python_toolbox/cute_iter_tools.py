@@ -398,7 +398,7 @@ def get_single_if_any(iterable,
             return first_item
         
         
-def are_equal(*sequences, easy_types=frozenset((sequence_tools.CuteRange))):
+def are_equal(*sequences, easy_types=(sequence_tools.CuteRange,)):
     '''
     Are the given sequences equal?
     

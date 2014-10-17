@@ -12,7 +12,6 @@ import random
 from python_toolbox import math_tools
 from python_toolbox import caching
 from python_toolbox import misc_tools
-from python_toolbox import cute_iter_tools
 
 infinity = float('inf')
 
@@ -188,6 +187,7 @@ def pop_until(sequence, condition=bool):
     
     When sequence is empty, propagates the `IndexError`.
     '''
+    from python_toolbox import cute_iter_tools
     for item in cute_iter_tools.iterate_pop(sequence):
         if condition(item):
             return item
@@ -275,6 +275,8 @@ def divide_to_slices(sequence, n_slices):
         [range(0, 4), range(4, 7), range(7, 10)]
         
     '''
+    from python_toolbox import cute_iter_tools
+    
     assert isinstance(n_slices, numbers.Integral)
     assert n_slices >= 1
     

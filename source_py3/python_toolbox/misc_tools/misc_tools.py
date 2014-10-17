@@ -12,8 +12,6 @@ import functools
 import sys
 import threading
 
-from python_toolbox import cute_iter_tools
-
 
 _email_pattern = re.compile(
     r"(^[-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*"
@@ -38,6 +36,7 @@ def is_subclass(candidate, base_class):
     not a type. (Python issue 10569.)
     '''
     # todo: disable ability to use nested iterables.
+    from python_toolbox import cute_iter_tools
     if cute_iter_tools.is_iterable(base_class):
         return any(is_subclass(candidate, single_base_class) for 
                    single_base_class in base_class)
@@ -171,6 +170,8 @@ def find_clear_place_on_circle(circle_points, circle_size=1):
     possible. (Since this is a circle, there's wraparound, e.g. the end of the
     interval connects to the start.)
     '''
+
+    from python_toolbox import cute_iter_tools
 
     # Before starting, taking care of two edge cases:
     if not circle_points:
