@@ -107,6 +107,10 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
      - Combination: If you pass in `is_combination=True` or use the subclass
        `CombSpace`, then you'll have a space of combinations (combs) instead of
        perms. Combs are like perms except there's no order to the elements.
+     - Typed: If you pass in a perm subclass as `perm_type`, you'll get a typed
+       `PermSpace`, meaning that the perms will use the class you provide 
+       rather than the default `Perm`. This is useful when you want to provide 
+       extra functionality on top of `Perm`.
 
     Note: Some of the options are not allowed to be used with each other.
     
@@ -328,6 +332,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         
         ### Figuring out perm processor: ######################################
         #                                                                     #
+        assert issubclass(perm_type, Perm)
         self.is_typed = perm_type not in (None, self.default_perm_type)
             
         self.perm_type = perm_type if self.is_typed else self.default_perm_type
