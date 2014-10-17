@@ -74,9 +74,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     
         >>> perm_space = PermSpace(3)
         >>> tuple(perm_space)
-        (<Perm: (0 / 6) (0, 1, 2)>, <Perm: (1 / 6) (0, 2, 1)>,
-         <Perm: (2 / 6) (1, 0, 2)>, <Perm: (3 / 6) (1, 2, 0)>,
-         <Perm: (4 / 6) (2, 0, 1)>, <Perm: (5 / 6) (2, 1, 0)>)
+        (<Perm: (0, 1, 2)>, <Perm: (0, 2, 1)>, <Perm: (1, 0, 2)>,
+         <Perm: (1, 2, 0)>, <Perm: (2, 0, 1)>, <Perm: (2, 1, 0)>)
 
     The permutations are generated on-demand, not in advance. This means you
     can easily create something like `PermSpace(1000)`, which has about
@@ -891,7 +890,10 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     
     __bool__ = lambda self: bool(self.length)
     
-    _domain_set = caching.CachedProperty(lambda self: set(self.domain))
+    _domain_set = caching.CachedProperty(
+        lambda self: set(self.domain),
+        '''The set of items in this space's domain.'''
+    )
     
     
     def __lt__(self, other):
