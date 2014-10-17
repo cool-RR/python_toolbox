@@ -10,9 +10,22 @@ from .bagging import FrozenBag
 
 class FrozenBagBag(FrozenBag):
     '''
+    A bag where a key is the number of recurrences of an item in another bag.
     
+    A `FrozenBagBag` is usually created as a property of another bag or
+    container. If the original bag has 3 different items that have a count of 2
+    each, then this `FrozenBagBag` would have the key-value pair `2: 3`. Note
+    that the original keys are not saved here, only their number of
+    recurrences.
+
+    Example:
     
-    blocktododoc do entire crate metaphor with drawings. say that crates of the same pile are identical.
+        >>> bag = Bag('abracadabra')
+        >>> bag
+        Bag({'b': 2, 'r': 2, 'a': 5, 'd': 1, 'c': 1})
+        >>> bag.frozen_bag_bag
+        FrozenBagBag({1: 2, 2: 2, 5: 1})
+        
     '''
     def __init__(self, iterable):
         super().__init__(iterable)
