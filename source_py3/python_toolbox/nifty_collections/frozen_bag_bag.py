@@ -5,7 +5,7 @@ import collections
 
 from python_toolbox import math_tools
 
-from .bagging import FrozenBag
+from .bagging import Bag, FrozenBag
 
 
 class FrozenBagBag(FrozenBag):
@@ -30,24 +30,24 @@ class FrozenBagBag(FrozenBag):
     def __init__(self, iterable):
         super().__init__(iterable)
         
-        # All zero values were already fileterd out by `FrozenCounter`, we'll
+        # All zero values were already fileterd out by `FrozenBag`, we'll
         # filter out just the non-natural-number keys.
         for key in [key for key in self if not isinstance(key, math_tools.Natural)]:
             if key == 0:
                 del self._dict[key]
             else:
-                raise TypeError('Keys to `FrozenChunkCounter` must be '
+                raise TypeError('Keys to `FrozenBagBag` must be '
                                 'non-negative integers.')
             
     def get_sub_fbbs_for_one_crate_removed(self):
-        sub_fbbs_counter = collections.Counter()
+        sub_fbbs_bag = Bag()
         for key_to_reduce, value_of_key_to_reduce in self.items():
-            sub_fbb_prototype = collections.Counter(self)
+            sub_fbb_prototype = Bag(self)
             sub_fbb_prototype[key_to_reduce] -= 1
             sub_fbb_prototype[key_to_reduce - 1] += 1
-            sub_fbbs_counter[FrozenBagBag(sub_fbb_prototype)] = \
+            sub_fbbs_bag[FrozenBagBag(sub_fbb_prototype)] = \
                                                          value_of_key_to_reduce
-        return FrozenBag(sub_fbbs_counter)
+        return FrozenBag(sub_fbbs_bag)
             
     def get_sub_fbbs_for_one_crate_and_previous_piles_removed(self):
         sub_fbbs = []
@@ -56,7 +56,7 @@ class FrozenBagBag(FrozenBag):
                                                 reversed(sorted(self.items())):
             growing_dict[key_to_reduce] = value_of_key_to_reduce
             
-            sub_fbb_prototype = collections.Counter(growing_dict)
+            sub_fbb_prototype = Bag(growing_dict)
             sub_fbb_prototype[key_to_reduce] -= 1
             sub_fbb_prototype[key_to_reduce - 1] += 1
             
