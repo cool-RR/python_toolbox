@@ -933,19 +933,15 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         n_elements=None, fixed_map=None, degrees=None, is_combination=False,
         slice_=None, perm_type=None, shit_set=frozenset()):
         '''
-        Create a `PermSpace`, cutting off a prefix if possible.
+        Create a `PermSpace`, cutting a prefix off the start if possible.
         
-        blocktododoc
+        This is used internally in `PermSpace.__getitem__` and
+        `PermSpace.index`. It's important to cut off the prefix, especially for
+        `CombSpace` because in such cases it obviates the need for a
+        `fixed_map`, and `CombSpace` doesn't work with `fixed_map`.
         '''
-        
-        # Tricky thing here: Trying to put as much as we can in a sequence head
-        # that'll shorten the sequence we'll give to the candidate space
-        # instead of using a fixed map, if possible. This is crucial for
-        # `CombSpace` which can't use `fixed_map`.
-        
         if degrees is not None:
             raise NotImplementedError
-        
         
         prefix = []
         fixed_map = dict(fixed_map)
@@ -981,8 +977,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         )
         perm_space.prefix = tuple(prefix)
         return perm_space
-        
-        
     
         
         
