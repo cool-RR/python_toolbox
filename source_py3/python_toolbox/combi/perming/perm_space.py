@@ -453,12 +453,17 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     
     @caching.CachedProperty
     def _frozen_ordered_bag(self):
-        '''blocktododoc'''
+        '''
+        A `FrozenOrderedBag` of the items in this space's sequence.
+        
+        This is useful for recurrent perm-spaces, where some counts would be 2
+        or higher.
+        '''
         return nifty_collections.FrozenOrderedBag(self.sequence)
             
     _frozen_bag_bag = caching.CachedProperty(
         lambda self: self._frozen_ordered_bag.frozen_bag_bag,
-        '''blocktododoc'''
+        '''A `FrozenBagBag` of items in this space's sequence.'''
     )
         
             
