@@ -658,8 +658,10 @@ class _MutableBagMixin(_BaseBagMixin):
         
         `other` can be either an integer or a bag.
         
-        If `other` is an integer, the result will be the biggest bag possible
-        so that `result * other <= self`.
+        If `other` is an integer, this bag will have all its counts
+        floor-divided by `other`. (You can also think of it as: This bag will
+        become the biggest bag possible so that if you multiply it by `other`,
+        it'll still be smaller or equal to its old `self`.)
         
         If `other` is a bag, the result will be the maximum number of times you
         can put `other` inside of `self` without having it surpass `self` for
@@ -676,6 +678,22 @@ class _MutableBagMixin(_BaseBagMixin):
             
         
     def __imod__(self, other):
+        '''
+        Make this bag int a modulo `self % other`.
+        
+        `other` can be either an integer or a bag.
+        
+        If `other` is an integer, the result will have all its counts modulo-ed
+        by `other`. Or you can also think of it as becoming the bag `self -
+        (self // other)`, which happens to be the same bag.
+        
+        If `other` is a bag, the result will be the bag that's left when you
+        subtract as many copies of `other` from this bag, until you can't
+        subtract without truncating some keys. Or in other words, it's `self -
+        (self // other)`. Since this result is an integer rather than
+        a bug, the result variable will be set to it but this bag wouldn't
+        really be modified.
+        '''
         if math_tools.is_integer(other):
             for key in tuple(self):
                 self[key] %= other
@@ -689,6 +707,7 @@ class _MutableBagMixin(_BaseBagMixin):
             
 
     def __ipow__(self, other, modulo=None):
+        '''Raise each count in this bag to the power of `other`.'''
         if not math_tools.is_integer(other):
             return NotImplemented
         for key in tuple(self):
@@ -696,11 +715,19 @@ class _MutableBagMixin(_BaseBagMixin):
         return self
     
     def popitem(self):
+        '''
+        Pop an item from this bag, returning `(key, count)` and removing it.
+        '''
         return self._dict.popitem()
       
 
 
 class _OrderedBagMixin(Ordered):
+    '''
+    Mixin for a bag that's ordered.
+    
+    
+    '''
     __reversed__ = lambda self: reversed(self._dict)
     
     def __eq__(self, other):
