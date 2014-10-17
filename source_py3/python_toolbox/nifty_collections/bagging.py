@@ -606,6 +606,20 @@ class _MutableBagMixin(_BaseBagMixin):
             
 
     def __iadd__(self, other):
+        '''
+        Make this bag into a sum bag of this bag and `other`.
+        
+        After the operation, this bag will have, for each key, the sum of the
+        two amounts for that key in each of the two original bags.
+        
+        Example:
+        
+            >>> bag = Bag('abbb')
+            >>> bag += Bag('bcc')
+            >>> bag
+            Bag({'b': 4, 'c': 2, 'a': 1})
+            
+        '''        
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         for key, other_count in tuple(other.items()):
@@ -615,8 +629,12 @@ class _MutableBagMixin(_BaseBagMixin):
 
     def __isub__(self, other):
         '''
-        blocktododoc
-        Negative counts are truncated to zero.        
+        Subtract `other` from this bag.
+        
+        This reduces the count of each key in this bag by its count in `other`.
+        Negative counts are truncated to zero: If there are any items in the
+        second bag that are more than the items in the first bag, the result
+        for that key will simply be zero rather than a negative amount.
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
