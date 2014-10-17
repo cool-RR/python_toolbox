@@ -39,7 +39,22 @@ class FrozenBagBag(FrozenBag):
                 raise TypeError('Keys to `FrozenBagBag` must be '
                                 'non-negative integers.')
             
-    def get_sub_fbbs_for_one_crate_removed(self):
+    def get_sub_fbbs_for_one_key_removed(self):
+        '''
+        Get all FBBs that are like this one but with one key removed.
+        
+        We're talking about a key from the original bag, not from the FBB.
+        
+        Example:
+        
+            >>> fbb = FrozenBagBag({2: 3, 3: 10})
+            >>> fbb.get_sub_fbbs_for_one_key_removed()
+            FrozenBag({FrozenBagBag({1: 1, 2: 2, 3: 10}): 3,
+                       FrozenBagBag({2: 4, 3: 9}): 10})
+
+        The results come in a `FrozenBag`, where each count is the number of
+        different options for making that sub-FBB.
+        '''
         sub_fbbs_bag = Bag()
         for key_to_reduce, value_of_key_to_reduce in self.items():
             sub_fbb_prototype = Bag(self)
@@ -49,7 +64,24 @@ class FrozenBagBag(FrozenBag):
                                                          value_of_key_to_reduce
         return FrozenBag(sub_fbbs_bag)
             
-    def get_sub_fbbs_for_one_crate_and_previous_piles_removed(self):
+    def get_sub_fbbs_for_one_key_and_previous_piles_removed(self):
+        '''
+        Get all FBBs that are like this one but with one key removed.
+        
+        We're talking about a key from the original bag, not from the FBB.
+        
+        Example:
+        
+            >>> fbb = FrozenBagBag({2: 3, 3: 10})
+            >>> fbb.get_sub_fbbs_for_one_key_removed()
+            FrozenBag({FrozenBagBag({1: 1, 2: 2, 3: 10}): 3,
+                       FrozenBagBag({2: 4, 3: 9}): 10})
+
+        The results come in a `FrozenBag`, where each count is the number of
+        different options for making that sub-FBB.
+        
+        blocktododo
+        '''        
         sub_fbbs = []
         growing_dict = {}
         for key_to_reduce, value_of_key_to_reduce in \
