@@ -226,6 +226,8 @@ class _BaseBagMixin:
         The new bag will have, for each key, the higher of the two amounts for
         that key in the two original bags.
         
+        Example:
+        
             >>> Bag('abbb') | Bag('bcc')
             Bag({'b': 3, 'c': 2, 'a': 1})
             
@@ -244,6 +246,8 @@ class _BaseBagMixin:
         The new bag will have, for each key, the lower of the two amounts for
         that key in the two original bags.
         
+        Example:
+        
             >>> Bag('abbb') & Bag('bcc')
             Bag({'b': 1,})
             
@@ -257,6 +261,18 @@ class _BaseBagMixin:
 
 
     def __add__(self, other):
+        '''
+        Make a sum bag of these two bags.
+        
+        The new bag will have, for each key, the sum of the two amounts for
+        that key in each of the two original bags.
+        
+        Example:
+        
+            >>> Bag('abbb') + Bag('bcc')
+            Bag({'b': 4, 'c': 2, 'a': 1})
+            
+        '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         return type(self)(self._dict_type(
@@ -505,15 +521,19 @@ class _BaseBagMixin:
         
 
 class _MutableBagMixin(_BaseBagMixin):
+    '''Mixin for a bag that's mutable. (i.e. not frozen.)'''
+    
     def __setitem__(self, i, count):
         try:
             super().__setitem__(i, _process_count(count))
         except _ZeroCountAttempted:
             del self[i]
-        
     
     
     def setdefault(self, key, default):
+        '''
+        Get value of `key`, unless it's zero/missing, if so set to `default`.
+        '''
         current_count = self[key]
         if current_count > 0:
             return current_count
@@ -533,8 +553,10 @@ class _MutableBagMixin(_BaseBagMixin):
             pass
         
     def pop(self, key, default=_NO_DEFAULT):
-        '''D.pop(k[,d]) -> v, remove specified key and return the corresponding value.
-          If key is not found, d is returned if given, otherwise KeyError is raised.
+        '''
+        Remove `key` from the bag, returning its value.
+        
+        If `key` is missing and `default` is given, returns `default`.
         '''
         value = self[key]
         if value == 0 and default is not _NO_DEFAULT:
@@ -545,10 +567,15 @@ class _MutableBagMixin(_BaseBagMixin):
 
     def __ior__(self, other):
         '''
-        Get the maximum of value in either of the input bags.
-
-            >>> FrozenBag('abbb') | FrozenBag('bcc')
-            FrozenBag({'b': 3, 'c': 2, 'a': 1})
+        Make this bag into a union bag of this bag and `other`.
+        
+        After the operation, this bag will have, for each key, the higher of
+        the two amounts for that key in the two original bags.
+        
+            >>> bag = Bag('abbb')
+            >>> bag |= Bag('bcc')
+            >>> bag
+            Bag({'b': 3, 'c': 2, 'a': 1})
             
         '''
         if not isinstance(other, _BaseBagMixin):
@@ -560,10 +587,15 @@ class _MutableBagMixin(_BaseBagMixin):
     
     def __iand__(self, other):
         '''
-
-        Get the minimum of corresponding counts.
-            >>> FrozenBag('abbb') & FrozenBag('bcc')
-            FrozenBag({'b': 1})
+        Make this bag into an intersection bag of this bag and `other`.
+        
+        After the operation, this bag will have, for each key, the lower of the
+        two amounts for that key in the two original bags.
+        
+            >>> bag = Bag('abbb')
+            >>> bag &= Bag('bcc')
+            >>> bag
+            Bag({'b': 1,})
             
         '''
         if not isinstance(other, _BaseBagMixin):
@@ -728,6 +760,11 @@ class Bag(_MutableBagMixin, _DictDelegator):
     
     It can be created from either an iterable like above, or from a `dict`. 
     
+    This class provides a lot of methods that `collections.Counter` doesn't;
+    among them are a plethora of arithmetic operations (both between bags and
+    bags and between bags and integers), comparison methods between bags, and
+    more.
+
     This is similar to Python's builtin `collections.Counter`, except unlike
     `collections.Counter`, we don't think of it as a "dict that happens to
     count objects" but as an object that is absolutely intended for counting
@@ -756,9 +793,13 @@ class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
     `collections.Counter` and we don't have to deal with all the complications
     that follow. Only positive integers are allowed as counts.
     
+    This class provides a lot of methods that `collections.Counter` doesn't;
+    among them are a plethora of arithmetic operations (both between bags and
+    bags and between bags and integers), comparison methods between bags, and
+    more.
+
     Also, unlike `collections.Counter`, items have an order. (Simliarly to
     `collections.OrderedDict`.)
-    
     '''
     def popitem(self, last=True):
         return self._dict.popitem(last=last)
@@ -785,9 +826,13 @@ class FrozenBag(_BaseBagMixin, _FrozenBagMixin, FrozenDict):
     `collections.Counter` and we don't have to deal with all the complications
     that follow. Only positive integers are allowed as counts.
     
+    This class provides a lot of methods that `collections.Counter` doesn't;
+    among them are a plethora of arithmetic operations (both between bags and
+    bags and between bags and integers), comparison methods between bags, and
+    more.
+    
     Also, unlike `collections.Counter`, it's immutable, therefore it's also
     hashable, and thus it can be used as a key in dicts and sets.
-
     '''
     def __hash__(self):
         return hash((type(self), frozenset(self.items())))
@@ -812,6 +857,11 @@ class FrozenOrderedBag(_OrderedBagMixin, _FrozenBagMixin, _BaseBagMixin,
     `collections.Counter` and we don't have to deal with all the complications
     that follow. Only positive integers are allowed as counts.
     
+    This class provides a lot of methods that `collections.Counter` doesn't;
+    among them are a plethora of arithmetic operations (both between bags and
+    bags and between bags and integers), comparison methods between bags, and
+    more.
+
     Also, unlike `collections.Counter`:
      - Items have an order. (Simliarly to `collections.OrderedDict`.)
      - It's immutable, therefore it's also hashable, and thus it can be used as
