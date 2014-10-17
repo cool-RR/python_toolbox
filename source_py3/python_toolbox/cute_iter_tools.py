@@ -6,6 +6,7 @@
 # exception
 
 import collections
+import operator
 import itertools
 import builtins
 import numbers
@@ -422,13 +423,32 @@ def are_equal(*sequences):
         return True
 
     
-def is_sorted(iterable, key=None):
-    '''blocktododoc'''
+def is_sorted(iterable, *, rising=True, strict=False, key=None):
+    '''
+    Is `iterable` sorted?
+    
+    Goes over the iterable item by item and checks whether it's sorted. If one
+    item breaks the order, returns `False` and stops iterating. If after going
+    over all the items, they were all sorted, returns `True`.
+    
+    You may specify `rising=False` to check for a reverse ordering. (i.e. each
+    item should be lower or equal than the last one.)
+    
+    You may specify `strict=True` to check for a strict order. (i.e. each item
+    must be strictly bigger than the last one, or strictly smaller if
+    `rising=False`.)
+    
+    You may specify a key function as the `key` argument.
+    '''
     from python_toolbox import misc_tools
     if key is None:
         key = misc_tools.identity_function
+    comparer = {(False, False): operator.ge,
+                (False, True): operator.gt,
+                (True, False): operator.le,
+                (True, True): operator.lt,}[(rising, strict)]
     for first_item, second_item in iterate_overlapping_subsequences(iterable):
-        if not key(second_item) >= key(first_item):
+        if not comparer(key(second_item), key(first_item)):
             return False
     else:
         return True
