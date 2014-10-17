@@ -1,3 +1,6 @@
+# Copyright 2009-2015 Ram Rachum.
+# This program is distributed under the MIT license.
+
 from python_toolbox import exceptions
 from python_toolbox import cute_iter_tools
 from python_toolbox import nifty_collections

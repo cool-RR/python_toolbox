@@ -1,3 +1,6 @@
+# Copyright 2009-2015 Ram Rachum.
+# This program is distributed under the MIT license.
+
 from .perm import Perm, UnrecurrentedPerm
 from .comb_space import CombSpace
 

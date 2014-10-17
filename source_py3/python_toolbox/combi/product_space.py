@@ -1,3 +1,6 @@
+# Copyright 2009-2015 Ram Rachum.
+# This program is distributed under the MIT license.
+
 import collections
 
 from python_toolbox import math_tools
