@@ -920,12 +920,21 @@ class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
     `collections.OrderedDict`.)
     '''
     def popitem(self, last=True):
+        '''
+        Pop an item from this bag, returning `(key, count)` and removing it.
+        
+        By default, the item will be popped from the end. Pass `last=False` to
+        pop from the start.
+        '''        
         return self._dict.popitem(last=last)
     move_to_end = misc_tools.ProxyProperty(
         '._dict.move_to_end',
-        'test'
+        doc='Move a key to the end (or start by passing `last=False`.)'
     )
-    sort = misc_tools.ProxyProperty('._dict.sort')
+    sort = misc_tools.ProxyProperty(
+        '._dict.sort',
+        doc='Sort the keys in this bag. (With optional `key` function.)'
+    )
       
     
                 
