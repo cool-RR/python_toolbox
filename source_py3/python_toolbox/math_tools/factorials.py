@@ -12,7 +12,7 @@ infinities = (infinity, -infinity)
 
 def factorial(x, start=1):
     '''
-    Calculate a factorial
+    Calculate a factorial.
     
     This differs from the built-in `math.factorial` in that it allows a `start`
     argument. If one is given, the function returns `(x!)/(start!)`.
