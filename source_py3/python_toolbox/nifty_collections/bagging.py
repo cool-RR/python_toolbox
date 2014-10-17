@@ -726,11 +726,19 @@ class _OrderedBagMixin(Ordered):
     '''
     Mixin for a bag that's ordered.
     
-    
+    Items will be ordered according to insertion order. In every interface
+    where items from this bag are iterated on, they will be returned by their
+    order.
     '''
     __reversed__ = lambda self: reversed(self._dict)
     
     def __eq__(self, other):
+        '''
+        Is this bag equal to `other`?
+        
+        Order *does* count, so if `other` has a different order, the result
+        will be `False`.
+        '''
         if type(self) != type(other):
             return False
         for item, other_item in itertools.zip_longest(self.items(),
