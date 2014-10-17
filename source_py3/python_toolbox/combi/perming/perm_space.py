@@ -332,10 +332,10 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         
         ### Figuring out perm processor: ######################################
         #                                                                     #
-        assert issubclass(perm_type, Perm)
         self.is_typed = perm_type not in (None, self.default_perm_type)
             
         self.perm_type = perm_type if self.is_typed else self.default_perm_type
+        assert issubclass(self.perm_type, Perm)
         #                                                                     #
         ### Finished figuring out perm processor. #############################
         
@@ -628,7 +628,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                         n_elements=self.n_elements,
                         fixed_map=wip_perm_sequence_dict,
                         is_combination=self.is_combination,
-                        shit_set=shit_set
+                        shit_set=shit_set, perm_type=self.perm_type
                     )
                     
                     if wip_i < candidate_sub_perm_space.length:
@@ -813,7 +813,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                         n_elements=self.n_elements,
                         fixed_map=temp_fixed_map,
                         is_combination=self.is_combination,
-                        shit_set=shit_set
+                        shit_set=shit_set, perm_type=self.perm_type
                     )
                     
                     wip_perm_number += candidate_sub_perm_space.length
@@ -973,7 +973,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         perm_space = cls(
             sequence, n_elements=n_elements, fixed_map=fixed_map, 
             is_combination=is_combination, slice_=slice_,
-            perm_type=perm_type 
+            perm_type=perm_type
         )
         perm_space.prefix = tuple(prefix)
         return perm_space
