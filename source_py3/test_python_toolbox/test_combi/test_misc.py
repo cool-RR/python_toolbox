@@ -22,6 +22,9 @@ def test():
     assert combi.misc.get_short_factorial_string(float('inf'),
                                           minus_one=True) == '''float('inf')'''
 
-def test_binomial_in_root_namespace():
-    assert hasattr(combi, 'binomial')
-    assert combi.binomial(7, 3) == 35
+def test_things_in_root_namespace():
+    combi.binomial
+    combi.Bag
+    combi.OrderedBag
+    combi.FrozenBag
+    combi.FrozenOrderedBag
