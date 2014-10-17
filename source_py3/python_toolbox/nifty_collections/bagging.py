@@ -757,13 +757,34 @@ class _FrozenBagMixin:
     
     @_BootstrappedCachedProperty
     def frozen_bag_bag(self):
+        '''
+        A `FrozenBagBag` of this bag.
+        
+        This means, a bag where `3: 4` means "The original bag has 4 different
+        keys with a value of 3."
+
+        Example:
+        
+            >>> bag = Bag('abracadabra')
+            >>> bag
+            Bag({'b': 2, 'r': 2, 'a': 5, 'd': 1, 'c': 1})
+            >>> bag.frozen_bag_bag
+            FrozenBagBag({1: 2, 2: 2, 5: 1})
+        
+        '''
         from .frozen_bag_bag import FrozenBagBag
         return FrozenBagBag(self.values())
         
     
 
 class _BaseDictDelegator(collections.MutableMapping):
-
+    '''
+    A dict-like object.
+    
+    It has its `dict` functionality delegated to `self._dict` which actually
+    implements the `dict` functionality. Subclasses override `_dict_type` to
+    determine the type of `dict` to use. (Regular or ordered.)
+    '''
     # Start by filling-out the abstract methods
     def __init__(self, dict=None, **kwargs):
         self._dict = self._dict_type()
@@ -783,11 +804,9 @@ class _BaseDictDelegator(collections.MutableMapping):
     def __iter__(self):
         return iter(self._dict)
 
-    # Modify __contains__ to work correctly when __missing__ is present
     def __contains__(self, key):
         return key in self._dict
 
-    # Now, add the methods in dicts but not in MutableMapping
     def __repr__(self): return repr(self._dict)
     def copy(self):
         if self.__class__ is _OrderedDictDelegator:
@@ -809,9 +828,17 @@ class _BaseDictDelegator(collections.MutableMapping):
         return d
 
 class _OrderedDictDelegator(Ordered, _BaseDictDelegator):
+    '''
+    An `OrderedDict`-like object.
+    
+    It has its `OrderedDict` functionality delegated to `self._dict` which is
+    an actual `OrderedDict`.
+    '''    
     _dict_type = OrderedDict
     index = misc_tools.ProxyProperty('._dict.index')
-    move_to_end = misc_tools.ProxyProperty('._dict.move_to_end')
+    move_to_end = misc_tools.ProxyProperty(
+        '._dict.move_to_end',
+    )
     sort = misc_tools.ProxyProperty('._dict.sort')
 
 class _DictDelegator(DefinitelyUnordered, _BaseDictDelegator):
@@ -840,7 +867,6 @@ class Bag(_MutableBagMixin, _DictDelegator):
     objects. This means we do not allow arbitrary values for counts like
     `collections.Counter` and we don't have to deal with all the complications
     that follow. Only positive integers are allowed as counts.
-    
     '''                
     
                 
@@ -872,7 +898,10 @@ class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
     '''
     def popitem(self, last=True):
         return self._dict.popitem(last=last)
-    move_to_end = misc_tools.ProxyProperty('._dict.move_to_end')
+    move_to_end = misc_tools.ProxyProperty(
+        '._dict.move_to_end',
+        'test'
+    )
     sort = misc_tools.ProxyProperty('._dict.sort')
       
     

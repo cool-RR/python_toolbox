@@ -59,7 +59,7 @@ class ProxyProperty:
                             "make it clear it's an attribute. %s does not "
                             "start with a dot." % repr(attribute_name))
         self.getter = self.setter = None
-        exec('def getter(thing): return thing%s' % attribute_name, globals(), locals())
+        exec('def getter(thing): return thing%s' % attribute_name)
         exec('def setter(thing, value): thing%s = value' % attribute_name)
         exec('self.getter, self.setter = getter, setter')
         self.attribute_name = attribute_name[1:]
@@ -78,4 +78,11 @@ class ProxyProperty:
         # `__delete__`?
         
         return self.setter(thing, value)
+        
+    def __repr__(self):
+        return '<%s: %s%s>' % (
+            type(self).__name__,
+            repr('.%s' % self.attribute_name),
+            ', doc=%s' % repr(self.__doc__) if self.__doc__ else ''
+        )
         
