@@ -66,21 +66,30 @@ class FrozenBagBag(FrozenBag):
             
     def get_sub_fbbs_for_one_key_and_previous_piles_removed(self):
         '''
-        Get all FBBs that are like this one but with one key removed.
+        Get all sub-FBBs with one key and previous piles removed.
         
-        We're talking about a key from the original bag, not from the FBB.
-        
-        Example:
+        What does this mean? First, we organize all the items in arbitrary
+        order. Then we go over the piles (e.g. an item of `2: 3` is three piles
+        with 2 crates each), and for each pile we make an FBB that has all the
+        piles in this FBB except it has one item reduced from the pile we
+        chose, and it doesn't have all the piles to its left.
         
             >>> fbb = FrozenBagBag({2: 3, 3: 10})
-            >>> fbb.get_sub_fbbs_for_one_key_removed()
-            FrozenBag({FrozenBagBag({1: 1, 2: 2, 3: 10}): 3,
-                       FrozenBagBag({2: 4, 3: 9}): 10})
+            >>> fbb.get_sub_fbbs_for_one_key_and_previous_piles_removed()
+            (FrozenBagBag({2: 1}),
+             FrozenBagBag({2: 1, 3: 1}),
+             FrozenBagBag({2: 1, 3: 2}),
+             FrozenBagBag({2: 1, 3: 3}),
+             FrozenBagBag({2: 1, 3: 4}),
+             FrozenBagBag({2: 1, 3: 5}),
+             FrozenBagBag({2: 1, 3: 6}),
+             FrozenBagBag({2: 1, 3: 7}),
+             FrozenBagBag({2: 1, 3: 8}),
+             FrozenBagBag({2: 1, 3: 9}),
+             FrozenBagBag({1: 1, 3: 10}),
+             FrozenBagBag({1: 1, 2: 1, 3: 10}),
+             FrozenBagBag({1: 1, 2: 2, 3: 10}))
 
-        The results come in a `FrozenBag`, where each count is the number of
-        different options for making that sub-FBB.
-        
-        blocktododo
         '''        
         sub_fbbs = []
         growing_dict = {}
