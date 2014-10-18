@@ -367,6 +367,24 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         
         
 class BaseMutableBagTestCase(BaseBagTestCase):
+    
+    def test_get_mutable(self):
+        bag = self.bag_type('abracadabra')
+        assert not hasattr(bag, 'get_mutable')
+        with cute_testing.RaiseAssertor(AttributeError):
+            bag.get_mutable()
+            
+    def test_get_frozen(self):
+        bag = self.bag_type('abracadabra')
+        frozen_bag = bag.get_frozen()
+        assert isinstance(frozen_bag, collections.Hashable)
+        if isinstance(bag, nifty_collections.Ordered):
+            assert tuple(bag.items()) == tuple(frozen_bag.items())
+        else:
+            assert set(bag.items()) == set(frozen_bag.items())
+        assert type(frozen_bag).__name__ == 'Frozen%s' % type(bag).__name__
+        assert frozen_bag.get_mutable() == bag
+    
     def test_hash(self):
         bag = self.bag_type('abracadabra')
         assert not isinstance(bag, collections.Hashable)
@@ -521,6 +539,25 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         
     
 class BaseFrozenBagTestCase(BaseBagTestCase):
+    
+    def test_get_mutable(self):
+        bag = self.bag_type('abracadabra')
+        mutable_bag = bag.get_mutable()
+        assert not isinstance(mutable_bag, collections.Hashable)
+        if isinstance(bag, nifty_collections.Ordered):
+            assert tuple(bag.items()) == tuple(mutable_bag.items())
+        else:
+            assert set(bag.items()) == set(mutable_bag.items())
+        assert type(bag).__name__ == 'Frozen%s' % type(mutable_bag).__name__
+        assert mutable_bag.get_frozen() == bag
+
+            
+    def test_get_frozen(self):
+        bag = self.bag_type('abracadabra')
+        assert not hasattr(bag, 'get_frozen')
+        with cute_testing.RaiseAssertor(AttributeError):
+            bag.get_frozen()
+
     
     def test_hash(self):
         bag = self.bag_type('abracadabra')

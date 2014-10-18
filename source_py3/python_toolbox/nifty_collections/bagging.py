@@ -719,8 +719,11 @@ class _MutableBagMixin(_BaseBagMixin):
         Pop an item from this bag, returning `(key, count)` and removing it.
         '''
         return self._dict.popitem()
-      
-
+    
+    def get_frozen(self):
+        '''Get a frozen version of this bag.'''
+        return self._frozen_type(self)
+     
 
 class _OrderedBagMixin(Ordered):
     '''
@@ -785,6 +788,9 @@ class _FrozenBagMixin:
         from .frozen_bag_bag import FrozenBagBag
         return FrozenBagBag(self.values())
         
+    def get_mutable(self):
+        '''Get a mutable version of this bag.'''
+        return self._mutable_type(self)
     
 
 class _BaseDictDelegator(collections.MutableMapping):
@@ -890,7 +896,9 @@ class Bag(_MutableBagMixin, _DictDelegator):
     objects. This means we do not allow arbitrary values for counts like
     `collections.Counter` and we don't have to deal with all the complications
     that follow. Only positive integers are allowed as counts.
-    '''                
+    '''
+    
+    
     
                 
 class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
@@ -935,7 +943,7 @@ class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
         '._dict.sort',
         doc='Sort the keys in this bag. (With optional `key` function.)'
     )
-      
+    
     
                 
 class FrozenBag(_BaseBagMixin, _FrozenBagMixin, FrozenDict):
@@ -1001,3 +1009,8 @@ class FrozenOrderedBag(_OrderedBagMixin, _FrozenBagMixin, _BaseBagMixin,
     def __hash__(self):
         return hash((type(self), tuple(self.items())))
         
+        
+Bag._frozen_type = FrozenBag
+OrderedBag._frozen_type = FrozenOrderedBag
+FrozenBag._mutable_type = Bag
+FrozenOrderedBag._mutable_type = OrderedBag
