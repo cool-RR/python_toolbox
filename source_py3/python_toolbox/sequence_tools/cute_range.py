@@ -166,7 +166,7 @@ class CuteRange(CuteSequence):
         if self.step != 1:
             return self._repr
         else:
-            return '%s..%s' % (self.start, self.stop)
+            return '%s..%s' % (self.start, self.stop - 1)
         
     
     def __getitem__(self, i, allow_out_of_range=False):

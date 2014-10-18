@@ -73,6 +73,9 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     Here is the simplest possible `PermSpace`:
     
         >>> perm_space = PermSpace(3)
+        <PermSpace: 0..2>
+        >>> perm_space[2]
+        <Perm: (1, 0, 2)>
         >>> tuple(perm_space)
         (<Perm: (0, 1, 2)>, <Perm: (0, 2, 1)>, <Perm: (1, 0, 2)>,
          <Perm: (1, 2, 0)>, <Perm: (2, 0, 1)>, <Perm: (2, 1, 0)>)
@@ -151,7 +154,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     @classmethod
     def coerce(cls, argument):
         '''Make `argument` into something of class `cls` if it isn't.'''
-        if isinstance(argument, PermSpace):
+        if isinstance(argument, cls):
             return argument
         else:
             return cls(argument)
