@@ -58,7 +58,6 @@ class PermSpaceType(abc.ABCMeta):
             return super().__call__(*args, **kwargs)
         
         
-@functools.total_ordering
 class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 _FixedMapManagingMixin, sequence_tools.CuteSequenceMixin,
                 collections.Sequence, metaclass=PermSpaceType):
