@@ -355,14 +355,14 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         #                                                                     #
         ### Finished figuring out slice and length. ###########################
         
-        ### Figuring out perm processor: ######################################
+        ### Figuring out perm type: ###########################################
         #                                                                     #
         self.is_typed = perm_type not in (None, self.default_perm_type)
             
         self.perm_type = perm_type if self.is_typed else self.default_perm_type
         assert issubclass(self.perm_type, Perm)
         #                                                                     #
-        ### Finished figuring out perm processor. #############################
+        ### Finished figuring out perm type. ##################################
         
         
         self.is_pure = not (self.is_rapplied or self.is_fixed or self.is_sliced

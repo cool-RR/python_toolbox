@@ -126,12 +126,9 @@ class _VariationAddingMixin:
     # slice notation, e.g. perm_space[4:-7].
     
     def get_typed(self, perm_type):
-        '''Get a version of this `PermSpace` that has a range of `sequence`.'''
-        if self.is_typed:
-            old_perm_type = self.perm_type
-            added_perm_type = perm_type
-            perm_type = lambda perm: added_perm_type(
-                                                      old_perm_type(perm))
+        '''
+        Get a version of this `PermSpace` where perms are of a custom type.
+        '''
         return PermSpace(
             self.sequence, n_elements=self.n_elements, domain=self.domain,
             fixed_map=self.fixed_map, degrees=self.degrees,
