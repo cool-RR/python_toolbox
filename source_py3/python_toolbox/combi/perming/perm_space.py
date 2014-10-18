@@ -90,10 +90,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     `PermSpace` allows the creation of various special kinds of permutation
     spaces. For example, you can specify an integer to `n_elements` to set a
     permutation length that's smaller than the sequence length. (a.k.a.
-    k-permutaions.) This variation of a `PermSpace `is called "partial" and
-    it's one of 8 different variations, that are listed below. Most of these
-    variations can be used in conjuction with each other freely, but some
-    cannot. (See `variation_clashes` in `variations.py` for a list of clashes.)
+    k-permutaions.) This variation of a `PermSpace` is called "partial" and
+    it's one of 8 different variations, that are listed below. 
     
      - Rapplied (Range-applied): having an arbitrary sequence as a range.
        To make one, pass your sequence as the first argument instead of the
@@ -101,6 +99,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
        
      - Dapplied (Domain-applied): having an arbitrary sequence as a domain.
        To make one, pass a sequence into the `domain` argument.
+       
+     - Recurrent: blocktododoc
        
      - Fixed: Having a specified number of indices always pointing at certain
        values, making the space smaller. To make one, pass a dict from each
@@ -131,7 +131,9 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
        rather than the default `Perm`. This is useful when you want to provide 
        extra functionality on top of `Perm` that's specific to your use case.
 
-    Note: Some of the options are not allowed to be used with each other.
+    Most of these variations can be used in conjuction with each other, but
+    some cannot. (See `variation_clashes` in `variations.py` for a list of
+    clashes.)
     
     For each of these variations, there's a function to make a perm space have
     that variation and get rid of it. For example, if you want to make a normal
