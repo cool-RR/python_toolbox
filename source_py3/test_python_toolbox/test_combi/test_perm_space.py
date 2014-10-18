@@ -267,10 +267,16 @@ def test_dapplied_perm_space():
                      '''<Perm: ('g', 'r', 'o', 'w', 'l') => (4, 3, 2, 1, 0)>'''
     
     assert dapplied_perm.index(4) == 'g'
-    
+        
     assert dapplied_perm.as_dictoid['g'] == 4
     assert dapplied_perm.items[0] == ('g', 4)
     
+    with cute_testing.RaiseAssertor(IndexError):
+        dapplied_perm[2]
+    with cute_testing.RaiseAssertor(IndexError):
+        dapplied_perm.as_dictoid[2]
+    with cute_testing.RaiseAssertor(ValueError):
+        dapplied_perm.index('x')
     
     # `__contains__` works on the values, not the keys:
     for char in 'growl':

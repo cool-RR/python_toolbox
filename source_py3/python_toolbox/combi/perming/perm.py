@@ -236,7 +236,15 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     )
 
     def __getitem__(self, i):
-        i_to_use = self.domain.index(i) if self.is_dapplied else i
+        if self.is_dapplied:
+            try:
+                i_to_use = self.domain.index(i)
+            except TypeError:
+                # Some types, like `str`, annoyingly raise `TypeError` instead
+                # of `IndexError`.
+                raise IndexError
+        else:
+            i_to_use = i
         return self._perm_sequence[i_to_use]
         
     length = property(
