@@ -4,7 +4,7 @@
    "Ram Rachum at ram.rachum.com" including link. The license may be obtained
    at http://creativecommons.org/licenses/by-sa/3.0/
 
-.. _topics-proxy-property:
+.. _topics-cheat-hashing:
 
-:mod:`proxy_property` - documentation not written
+:mod:`cheat_hashing` - documentation not written
 ======================================

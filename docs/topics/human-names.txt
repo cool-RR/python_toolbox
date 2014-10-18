@@ -4,7 +4,7 @@
    "Ram Rachum at ram.rachum.com" including link. The license may be obtained
    at http://creativecommons.org/licenses/by-sa/3.0/
 
-.. _topics-monkeypatch-copy-reg:
+.. _topics-human-names:
 
-:mod:`monkeypatch_copy_reg` - documentation not written
+:mod:`human_names` - documentation not written
 ======================================

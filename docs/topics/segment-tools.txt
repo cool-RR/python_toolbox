@@ -4,7 +4,7 @@
    "Ram Rachum at ram.rachum.com" including link. The license may be obtained
    at http://creativecommons.org/licenses/by-sa/3.0/
 
-.. _topics-collection-tools:
+.. _topics-segment-tools:
 
-:mod:`collection_tools` - documentation not written
+:mod:`segment_tools` - documentation not written
 ======================================
