@@ -369,32 +369,44 @@ def _call_until_exception(function, exception):
         raise StopIteration
 
     
-def get_single_if_any(iterable,
-                      exception_on_multiple=Exception('More than one value '
-                                                      'not allowed.')):
+def get_single_if_any(iterable, *, 
+                      exception_on_multiple=True, none_on_multiple=False):
     '''
     Get the single item of `iterable`, if any.
     
-    If `iterable` has one item, return it. If it's empty, return `None`. If it has
-    more than one item, raise an exception. (Unless
-    `exception_on_multiple=None`.)
+    Default behavior: Get the first item from `iterable`, and ensure it doesn't
+    have any more items (raise an exception if it does.)
+
+    If you pass in `exception_on_multiple=False`: If `iterable` has more than
+    one item, an exception won't be raised. The first value will be returned.
+
+    If you pass in `none_on_multiple=True`: If `iterable` has more than one
+    item, `None` will be returned regardless of the value of the first item.
+    Note that passing `none_on_multiple=True` causes the
+    `exception_on_multiple` argument to be ignored. (This is a bit ugly but I
+    made it that way so you wouldn't have to manually pass
+    `exception_on_multiple=False` in this case.)
     '''
-    assert isinstance(exception_on_multiple, Exception) or \
-                                                  exception_on_multiple is None
+    if none_on_multiple:
+        exception_on_multiple = False
     iterator = iter(iterable)
     try:
         first_item = next(iterator)
     except StopIteration:
         return None
     else:
-        if exception_on_multiple:
+        if exception_on_multiple or none_on_multiple:
             try:
                 second_item = next(iterator)
             except StopIteration:
                 return first_item
             else:
-                raise exception_on_multiple
-        else: # not exception_on_multiple
+                if none_on_multiple:
+                    return None
+                else:
+                    assert exception_on_multiple
+                    raise Exception('More than one value not allowed.')
+        else:
             return first_item
         
         
