@@ -18,14 +18,26 @@ from .. import misc
 infinity = float('inf')
 
 
-class _BasePermView:
+class _BasePermView(metaclass=abc.ABCMeta):
+    '''
+    Abstract base class for viewers on Perm.
+    '''
     def __init__(self, perm):
         self.perm = perm
     __repr__ = lambda self: '<%s: %s>' % (type(self).__name__, self.perm)
+    
+    @abc.abstractmethod
+    def __getitem__(self, i): pass
 
 
 class PermItems(sequence_tools.CuteSequenceMixin, _BasePermView,
                 collections.Sequence):
+    '''
+    A viewer of a perm's items, similar to `dict.items()`.
+    
+    This lets you access the perm (both index access and iteration) where 
+    '''
+    
     def __getitem__(self, i):
         return (self.perm.domain[i], self.perm[self.perm.domain[i]])
     

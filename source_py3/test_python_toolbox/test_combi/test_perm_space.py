@@ -27,10 +27,10 @@ def test_perm_spaces():
     assert pure_0a == pure_0b == pure_0c == pure_0d
     assert len(pure_0a) == len(pure_0b) == len(pure_0c) == len(pure_0d)
     assert repr(pure_0a) == repr(pure_0b) == repr(pure_0c) == \
-                                           repr(pure_0d) == '<PermSpace: 0..4>'
+                                           repr(pure_0d) == '<PermSpace: 0..3>'
     
     assert repr(PermSpace(sequence_tools.CuteRange(3, 7))) == \
-                                                            '<PermSpace: 3..7>'
+                                                            '<PermSpace: 3..6>'
     assert repr(PermSpace(sequence_tools.CuteRange(3, 7, 2))) == \
                                               '<PermSpace: CuteRange(3, 7, 2)>'
     assert repr(PermSpace(tuple(sequence_tools.CuteRange(3, 7, 2)))) == \
@@ -285,11 +285,11 @@ def test_dapplied_perm_space():
     assert not dapplied_perm_space._just_fixed.is_combination
     assert not dapplied_perm_space._just_fixed.is_degreed
     
-    assert repr(dapplied_perm_space) == "<PermSpace: 'growl' => 0..5>"
+    assert repr(dapplied_perm_space) == "<PermSpace: 'growl' => 0..4>"
     
     # Testing `repr` shortening: 
-    assert repr(PermSpace(20, domain=tuple(range(20, 0, -1)))) == (
-        '<PermSpace: (20, 19, 18, 17, 16, 15, 14, 13, 12 ... ) => 0..20>'
+    assert repr(PermSpace(20, domain=tuple(range(19, -1, -1)))) == (
+        '<PermSpace: (19, 18, 17, 16, 15, 14, 13, 12, 11 ... ) => 0..19>'
     )
     
 def test_degreed_perm_space():
