@@ -233,8 +233,12 @@ def _check_variation_selection(variation_selection, perm_space_type,
     assert hash(perm_space) == \
                           hash(PermSpace(**kwargs)[perm_space.canonical_slice])
     
+    typed_perm_space = perm_space.get_typed(FruityComb if
+                            variation_selection.is_combination else FruityPerm)
+    assert typed_perm_space.is_typed
     assert variation_selection.is_typed is perm_space.is_typed is \
-                                             (perm_space != perm_space.untyped)
+         (perm_space != perm_space.untyped) is (perm_space == typed_perm_space)
+    
 
     if perm_space.is_sliced and perm_space.length >= 2:
         assert perm_space[0] == perm_space.unsliced[2]
