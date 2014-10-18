@@ -453,9 +453,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 # This division is always without a remainder, because math.
             
             
-        
-            
-    
     @caching.CachedProperty
     def variation_selection(self):
         '''
