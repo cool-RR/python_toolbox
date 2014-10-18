@@ -28,7 +28,7 @@ class BinarySearchProfile:
     '''
     
     def __init__(self, sequence, value, function=misc_tools.identity_function,
-                 both=None):
+                 *, both=None):
         '''
         Construct a `BinarySearchProfile`.
         
