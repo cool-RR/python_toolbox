@@ -17,6 +17,12 @@ if sys.version_info[:2] <= (2, 6):
         "2.7, or 3.3 or above, so you can't use it unless you upgrade your "
         "Python version."
     )
+if sys.version_info[0] == 3 and sys.version_info[1] <= 2:
+    raise Exception(
+        "You're using Python <= 3.2, but this package requires either Python "
+        "3.3 or above, or Python 2.7, so you can't use it unless you upgrade "
+        "your Python version."
+    )
 #                                                                             #
 ### Finished confirming correct Python version. ###############################
 
