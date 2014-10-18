@@ -21,8 +21,6 @@ Documentation: http://python-toolbox.readthedocs.org
 
 GitHub: https://github.com/cool-RR/python_toolbox
 
-CI server: https://jenkins.shiningpanda-ci.com/python-toolbox/job/python_toolbox/
-
 The Python Toolbox is released under the MIT license.
 
 # Not backward-compatible yet #
