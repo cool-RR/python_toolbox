@@ -404,7 +404,11 @@ def are_equal(*sequences, easy_types=(sequence_tools.CuteRange,)):
     
     This tries to make a cheap comparison between the sequences if possible,
     but if not, it goes over the sequences in parallel item-by-item and checks
-    whether the items are all equal.
+    whether the items are all equal. A cheap comparison is attempted only if
+    the sequences are all of the same type, and that type is in `easy_types`.
+    (It's important to restrict `easy_types` only to types where equality
+    between the sequences is the same as equality between every item in the
+    sequences.)
     '''
     from python_toolbox import logic_tools
     sequence_types = set(map(type, sequences))
