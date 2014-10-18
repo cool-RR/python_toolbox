@@ -70,13 +70,16 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     The permutations may be accessed by index number, the permutation space can
     have its range and domain specified, some items can be fixed, and more.
     
-    Here is a simple `PermSpace`:
+    Here is the simplest possible `PermSpace`:
     
         >>> perm_space = PermSpace(3)
         >>> tuple(perm_space)
         (<Perm: (0, 1, 2)>, <Perm: (0, 2, 1)>, <Perm: (1, 0, 2)>,
          <Perm: (1, 2, 0)>, <Perm: (2, 0, 1)>, <Perm: (2, 1, 0)>)
 
+    The members are `Perm` objects, which are sequence-like objects that have
+    extra functionality. (See documentation of `Perm` for more info.)
+    
     The permutations are generated on-demand, not in advance. This means you
     can easily create something like `PermSpace(1000)`, which has about
     10**2500 permutations in it (a number that far exceeds the number of
@@ -84,33 +87,49 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     by index number any permutation of the 10**2500 permutations in a fraction
     of a second as well.
     
-    There are several variations that a perm space could have:
+    `PermSpace` allows the creation of various special kinds of permutation
+    spaces. For example, you can specify an integer to `n_elements` to set a
+    permutation length that's smaller than the sequence length. (a.k.a.
+    k-permutaions.) This variation of a `PermSpace `is called "partial" and
+    it's one of 8 different variations, that are listed below. Most of these
+    variations can be used in conjuction with each other freely, but some
+    cannot. (See `variation_clashes` in `variations.py` for a list of clashes.)
+    
      - Rapplied (Range-applied): having an arbitrary sequence as a range.
-       To make one, pass your sequence as the first argument.
+       To make one, pass your sequence as the first argument instead of the
+       length.
+       
      - Dapplied (Domain-applied): having an arbitrary sequence as a domain.
        To make one, pass a sequence into the `domain` argument.
+       
      - Fixed: Having a specified number of indices always pointing at certain
        values, making the space smaller. To make one, pass a dict from each
        key to the value it should be fixed to as the argument `fixed_map`.
+       
      - Sliced: A perm space can be sliced like any Python sequence (except you
        can't change the step.) To make one, use slice notation on an existing
-       perm space, e.g. perm_space[56:100]
+       perm space, e.g. `perm_space[56:100]`.
+       
      - Degreed: A perm space can be limited to perms of a certain degree. (A
        perm's degree is the number of transformations it takes to make it.)
        To make one, pass into the `degrees` argument either a single degree
        (like `5`) or a tuple of different degrees (like `(1, 3, 7)`)
+       
      - Partial: A perm space can be partial, in which case not all elements
        are used in perms. E.g. you can have a perm space of a sequence of
        length 5 but with `n_elements=3`, so every perm will have only 3 items.
        (These are usually called "k-permutations" in math-land.) To make one,
        pass a number as the argument `n_elements`.
+       
      - Combination: If you pass in `is_combination=True` or use the subclass
-       `CombSpace`, then you'll have a space of combinations (combs) instead of
-       perms. Combs are like perms except there's no order to the elements.
+       `CombSpace`, then you'll have a space of combinations (`Comb`s) instead
+       of perms. `Comb`s are like `Perm``s except there's no order to the 
+       elements. (They are always forced into canonical order.)
+       
      - Typed: If you pass in a perm subclass as `perm_type`, you'll get a typed
        `PermSpace`, meaning that the perms will use the class you provide 
        rather than the default `Perm`. This is useful when you want to provide 
-       extra functionality on top of `Perm`.
+       extra functionality on top of `Perm` that's specific to your use case.
 
     Note: Some of the options are not allowed to be used with each other.
     
