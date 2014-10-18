@@ -456,10 +456,10 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     @caching.CachedProperty
     def variation_selection(self):
         '''
-        The selection of variations that describe this space.
+        The selection of variations that describes this space.
         
         For example, a rapplied, recurrent, fixed `PermSpace` will get
-        `<VariationSelection #196: rapplied, recurrent, fixed>`.
+        `<VariationSelection #392: rapplied, recurrent, fixed>`.
         '''
         variation_selection = variations.VariationSelection(
             filter(
@@ -925,13 +925,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         '''The set of items in this space's domain.'''
     )
     
-    
-    def __lt__(self, other):
-        if isinstance(other, PermSpace):
-            return self._reduced < other._reduced
-        else:
-            return NotImplemented
-        
         
     def __reduce__(self, *args, **kwargs):
         #######################################################################
