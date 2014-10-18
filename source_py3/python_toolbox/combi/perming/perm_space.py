@@ -100,7 +100,11 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
      - Dapplied (Domain-applied): having an arbitrary sequence as a domain.
        To make one, pass a sequence into the `domain` argument.
        
-     - Recurrent: blocktododoc
+     - Recurrent: If you provide a sequence (making the space rapplied) and
+       that sequence has repeating items, you've made a recurrent `PermSpace`.
+       It'll be shorter because all of the copies of same item will be 
+       considered the same item. (Though they will appear more than once, 
+       according to their count in the sequence.)
        
      - Fixed: Having a specified number of indices always pointing at certain
        values, making the space smaller. To make one, pass a dict from each

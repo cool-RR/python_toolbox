@@ -125,7 +125,7 @@ class _VariationAddingMixin:
     # There's no `get_sliced` because slicing is done using Python's normal
     # slice notation, e.g. perm_space[4:-7].
     
-    def get_processed(self, perm_type):
+    def get_typed(self, perm_type):
         '''Get a version of this `PermSpace` that has a range of `sequence`.'''
         if self.is_typed:
             old_perm_type = self.perm_type

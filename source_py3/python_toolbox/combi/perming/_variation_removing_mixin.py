@@ -183,4 +183,13 @@ class _VariationRemovingMixin:
         lambda self: self.unsliced.undegreed.unfixed, 
     )
         
+    untyped = caching.CachedProperty(
+        lambda self: PermSpace(
+            self.sequence, n_elements=self.n_elements, domain=self.domain,
+            fixed_map=self.fixed_map, is_combination=self.is_combination, 
+            degrees=self.degrees, slice_=self._slice,
+            perm_type=self.default_perm_type
+        ),
+        doc='''An untyped version of this `PermSpace`.'''
+    )
     

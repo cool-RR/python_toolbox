@@ -233,7 +233,8 @@ def _check_variation_selection(variation_selection, perm_space_type,
     assert hash(perm_space) == \
                           hash(PermSpace(**kwargs)[perm_space.canonical_slice])
     
-    assert variation_selection.is_typed == perm_space.is_typed
+    assert variation_selection.is_typed is perm_space.is_typed is \
+                                             (perm_space != perm_space.untyped)
 
     if perm_space.is_sliced and perm_space.length >= 2:
         assert perm_space[0] == perm_space.unsliced[2]
@@ -273,12 +274,7 @@ def _check_variation_selection(variation_selection, perm_space_type,
                                      variation_selection.is_partial or
                                      variation_selection.is_combination))
         
-        if variation_selection.is_typed:
-            # assert perm.was_processed_dawg is True
-            pass
-        else:
-            assert not hasattr(perm, 'was_processed_dawg')
-        
+        assert isinstance(perm, FruityMixin) is variation_selection.is_typed
         
         if variation_selection.is_rapplied:
             assert perm != perm.unrapplied
