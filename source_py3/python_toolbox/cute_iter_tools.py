@@ -375,7 +375,7 @@ def get_single_if_any(iterable,
     '''
     Get the single item of `iterable`, if any.
     
-    If `iterable` has one item, return it. If it's empty, get `None`. If it has
+    If `iterable` has one item, return it. If it's empty, return `None`. If it has
     more than one item, raise an exception. (Unless
     `exception_on_multiple=None`.)
     '''
@@ -415,8 +415,7 @@ def are_equal(*sequences, easy_types=(sequence_tools.CuteRange,)):
     
     # Trying cheap comparison:
     if len(sequence_types) == 1 and issubclass(
-                get_single_if_any(sequence_types), collections.Sequence) and \
-                     issubclass(get_single_if_any(sequence_types), easy_types):
+                                get_single_if_any(sequence_types), easy_types):
         return logic_tools.all_equal(sequences)
     
     # If cheap comparison didn't work, trying item-by-item comparison:
