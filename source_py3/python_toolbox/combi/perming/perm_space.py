@@ -33,8 +33,7 @@ class PermSpaceType(abc.ABCMeta):
     Metaclass for `PermSpace` and `CombSpace`.
     
     The functionality provided is: If someone tries to instantiate `PermSpace`
-    while specifying `is_combination=True`, we automatically use `CombSpace`
-    for him.
+    while specifying `is_combination=True`, we automatically use `CombSpace`.
     '''
     def __call__(cls, *args, **kwargs):
         if cls == PermSpace and kwargs.get('is_combination', False):

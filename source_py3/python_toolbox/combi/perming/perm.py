@@ -47,14 +47,7 @@ class PermItems(sequence_tools.CuteSequenceMixin, _BasePermView,
 
 class PermAsDictoid(sequence_tools.CuteSequenceMixin, _BasePermView,
                     collections.Mapping):
-    '''blocktododoc
-    A viewer of a perm's items, similar to `dict.items()`.
-    
-    This is useful for dapplied perms; it lets you view the perm (both index
-    access and iteration) as a sequence where each item is a 2-tuple, where the
-    first item is from the domain and the second item is its corresponding item
-    from the sequence.
-    '''    
+    '''A dict-like interface to a `Perm`.'''    
     def __getitem__(self, key):
         return self.perm[key]
     def __iter__(self):
@@ -63,6 +56,12 @@ class PermAsDictoid(sequence_tools.CuteSequenceMixin, _BasePermView,
     
 
 class PermType(abc.ABCMeta):
+    '''
+    Metaclass for `Perm` and `Comb`.
+    
+    The functionality provided is: If someone tries to create a `Perm` with a
+    `CombSpace`, we automatically use `Comb`.
+    '''
     def __call__(cls, item, perm_space=None):
         if cls == Perm and isinstance(perm_space, CombSpace):
             cls = Comb
@@ -72,6 +71,11 @@ class PermType(abc.ABCMeta):
 @functools.total_ordering
 class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
            metaclass=PermType):
+    '''
+    A permutation.
+    
+    
+    '''
     
     @classmethod
     def coerce(cls, item, perm_space=None):
