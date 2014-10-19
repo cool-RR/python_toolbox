@@ -247,6 +247,7 @@ def ensure_iterable_is_sequence(iterable, default_type=tuple,
 
 
 class CuteSequenceMixin(misc_tools.AlternativeLengthMixin):
+    '''A sequence mixin that adds extra functionality.'''
     def take_random(self):
         '''Take a random item from the sequence.'''
         return self[random.randint(0, get_length(self) - 1)]
@@ -258,10 +259,11 @@ class CuteSequenceMixin(misc_tools.AlternativeLengthMixin):
         
     
 class CuteSequence(CuteSequenceMixin, collections.Sequence):
-    pass
+    '''A sequence type that adds extra functionality.'''
 
 
 def get_length(sequence):
+    '''Get the length of a sequence.'''
     return sequence.length if hasattr(sequence, 'length') else len(sequence)
         
         
