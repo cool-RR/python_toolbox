@@ -385,7 +385,14 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
       
     def get_neighbors(self, *, degrees=(1,), perm_space=None):
         '''
+        Get the neighbor permutations of this permutation.
         
+        This means, get the permutations that are close to this permutation. By
+        default, this means permutations that are one transformation (switching
+        a pair of items) away from this permutation. You can specify a custom
+        sequence of integers to the `degrees` argument to get different degrees
+        of relation. (e.g. specify `degrees=(1, 2)` to get both the closest
+        neighbors and the second-closest neighbors.)
         '''
         from ..map_space import MapSpace
         if self.is_combination or self.is_recurrent or self.is_partial:
