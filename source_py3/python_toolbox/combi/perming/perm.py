@@ -72,13 +72,25 @@ class PermType(abc.ABCMeta):
 class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
            metaclass=PermType):
     '''
-    A permutation.
+    A permutation of items from a `PermSpace`
     
+    In combinatorics, a permutation is a sequence of items taken from the
+    original sequence.
+    
+    Example:
+    
+        >>> perm_space = PermSpace('abcd')
+        >>> perm = Perm('dcba', perm_space)
+        >>> perm
+        <Perm: ('d', 'c', 'b', 'a')>
+        >>> perm_space.index(perm)
+        23
     
     '''
     
     @classmethod
     def coerce(cls, item, perm_space=None):
+        '''Coerce item into a perm, optionally of a specified `PermSpace`.'''
         if isinstance(item, Perm) and (perm_space is not None) and \
           (item.nominal_perm_space == perm_space._nominal_perm_space_of_perms):
             return item
@@ -88,10 +100,10 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     
     def __init__(self, perm_sequence, perm_space=None):
         '''
+        Create the `Perm`.
         
-        Not supplying `perm_space` is allowed only if given either a number (in
-        which case a pure infinite perm space will be assumed) or a sequence of
-        natural numbers.
+        If `perm_space` is not supplied, we assume that this is a pure
+        permutation, i.e. a permutation on `range(len(perm_sequence))`.
         '''
         perm_space = None if perm_space is None \
                                               else PermSpace.coerce(perm_space)
@@ -171,6 +183,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         )
         
     def index(self, member):
+        '''Get the index number of `member` in the permutation.'''
         numerical_index = self._perm_sequence.index(member)
         return self.nominal_perm_space. \
                domain[numerical_index] if self.is_dapplied else numerical_index
@@ -178,6 +191,12 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
 
     @caching.CachedProperty
     def inverse(self):
+        '''
+        The inverse of this permutation.
+        
+        This means, the permutation such that `perm * ~perm` would be the identity
+        permutation.
+        '''
         if self.is_partial:
             raise TypeError("Partial perms don't have an inverse.")
         if self.is_rapplied:
@@ -197,13 +216,14 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     __invert__ = lambda self: self.inverse
     
     domain = caching.CachedProperty(
-        lambda self: self.nominal_perm_space.domain
+        lambda self: self.nominal_perm_space.domain,
+        '''The permutation's domain.'''
     )
     
         
     @caching.CachedProperty
     def unrapplied(self):
-        
+        '''An unrapplied version of this permutation.'''
         ### Calculating the new perm sequence: ################################
         #                                                                     #
         # This is more complex than a one-line generator because of recurrent
@@ -228,14 +248,16 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         lambda self: type(self)(
             self._perm_sequence,
             self.nominal_perm_space.undapplied
-        )
+        ),
+        '''An undapplied version of this permutation.'''
         
     )
     uncombinationed = caching.CachedProperty(
         lambda self: Perm(
             self._perm_sequence,
             self.nominal_perm_space.uncombinationed
-        )
+        ),
+        '''A non-combination version of this permutation.'''
         
     )
 
@@ -256,18 +278,13 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     )
     
     def apply(self, sequence, result_type=None):
-        '''
+        '''blocktododoc
+        App
         
         Specify `result_type` to determine the type of the result returned. If
         `result_type=None`, will use `tuple`, except when `other` is a `str` or
         `Perm`, in which case that same type would be used.
         '''
-        # if self.is_rapplied:
-            # raise TypeError("Can't apply a rapplied permutation, try "
-                            # "`perm.unrapplied`.")
-        # if self.is_dapplied:
-            # raise TypeError("Can't apply a dapplied permutation, try "
-                            # "`perm.undapplied`.")
         sequence = \
              sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
         if sequence_tools.get_length(sequence) < \
