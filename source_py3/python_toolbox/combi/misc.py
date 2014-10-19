@@ -13,7 +13,7 @@ class MISSING_ELEMENT:
     '''A placeholder for a missing element used in internal calculations.'''
         
         
-def get_short_factorial_string(number, minus_one=False):
+def get_short_factorial_string(number, *, minus_one=False):
     '''
     Get a short description of the factorial of `number`.
     
