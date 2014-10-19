@@ -278,8 +278,18 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     )
     
     def apply(self, sequence, result_type=None):
-        '''blocktododoc
-        App
+        '''
+        Apply the perm to a sequence, choosing items from it.
+        
+        This can also be used as `sequence * perm`. Example:
+        
+        >>> perm = PermSpace(5)[10]
+        >>> perm
+        <Perm: (0, 2, 4, 1, 3)>
+        >>> perm.apply('growl')
+        'golrw'
+        >>> 'growl' * perm
+        'golrw'
         
         Specify `result_type` to determine the type of the result returned. If
         `result_type=None`, will use `tuple`, except when `other` is a `str` or
@@ -314,6 +324,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     # multiplication of objects of the same type.)
             
     def __pow__(self, exponent):
+        '''Raise the perm by the power of `exponent`.'''
         assert isinstance(exponent, numbers.Integral)
         if exponent <= -1:
             return self.inverse ** (- exponent)
@@ -326,6 +337,15 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             
     @caching.CachedProperty
     def degree(self):
+        '''
+        The permutation's degree.
+        
+        You can think of a permutation's degree like this: Imagine that you're
+        starting with the identity permutation, and you want to make this
+        permutation, by switching two items with each other over and over again
+        until you get this permutation. The degree is the number of such
+        switches you'll have to make.
+        '''
         if self.is_partial:
             return NotImplemented
         else:
@@ -334,6 +354,13 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     
     @caching.CachedProperty
     def n_cycles(self):
+        '''
+        The number of cycles in this permutation.
+        
+        If item 1 points at item 7, and item 7 points at item 3, and item 3
+        points at item 1 again, then that's one cycle. `n_cycles` is the total
+        number of cycles in this permutation.
+        '''
         if self.is_partial:
             return NotImplemented
         if self.is_rapplied:
@@ -357,6 +384,9 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
       
       
     def get_neighbors(self, *, degrees=(1,), perm_space=None):
+        '''
+        
+        '''
         from ..map_space import MapSpace
         if self.is_combination or self.is_recurrent or self.is_partial:
             raise NotImplementedError
