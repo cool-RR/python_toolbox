@@ -11,7 +11,6 @@ from .lazy_tuple import LazyTuple
 from .frozen_dict_and_frozen_ordered_dict import FrozenDict, FrozenOrderedDict
 from .bagging import Bag, OrderedBag, FrozenBag, FrozenOrderedBag
 from .frozen_bag_bag import FrozenBagBag
-from .default_sorted_dict import DefaultSortedDict
 from .cute_enum import CuteEnum
 
 from .emitting_ordered_set import EmittingOrderedSet
