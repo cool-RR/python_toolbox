@@ -8,6 +8,27 @@ from python_toolbox import sequence_tools
 
         
 class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
+    '''
+    A product space between sequences.
+    
+    This is similar to Python's builtin `itertools.product`, except that it
+    behaves like a sequence rather than an iterable. (Though it's also
+    iterable.) You can access any item by its index number.
+    
+    Example:
+    
+        >>> product_space = ProductSpace(('abc', range(4)))
+        >>> product_space
+        <ProductSpace: 3 * 4>
+        >>> product_space.length
+        12
+        >>> product_space[10]
+        ('c', 2)
+        >>> tuple(product_space)
+        (('a', 0), ('a', 1), ('a', 2), ('a', 3), ('b', 0), ('b', 1), ('b', 2),
+         ('b', 3), ('c', 0), ('c', 1), ('c', 2), ('c', 3))
+
+    '''
     def __init__(self, sequences):
         self.sequences = sequence_tools. \
                                ensure_iterable_is_immutable_sequence(sequences)
@@ -48,6 +69,7 @@ class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
                                   self._reduced == other._reduced)
     
     def index(self, given_sequence):
+        '''Get the index number of `given_sequence` in this product space.'''
         if not isinstance(given_sequence, collections.Sequence) or \
                                 not len(given_sequence) == len(self.sequences):
             raise ValueError
