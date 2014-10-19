@@ -10,11 +10,23 @@ infinity = float('inf')
 
 
 class MISSING_ELEMENT: 
-    '''blocktotodoc'''
+    '''A placeholder for a missing element used in internal calculations.'''
         
         
 def get_short_factorial_string(number, minus_one=False):
-    '''blocktotodoc'''
+    '''
+    Get a short description of the factorial of `number`.
+    
+    If the number is long, just uses factorial notation. 
+    
+    Examples:
+    
+        >>> get_short_factorial_string(4)
+        '24'
+        >>> get_short_factorial_string(14)
+        '14!'
+    
+    '''
     assert number >= 0 and \
                     isinstance(number, math_tools.PossiblyInfiniteIntegral)
     if number == infinity:
