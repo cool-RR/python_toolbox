@@ -430,7 +430,8 @@ class UnrecurrentedMixin:
     __iter__ = lambda self: iter(tuple(zip(*super().__iter__()))[1])
     index = lambda self, item: self.nominal_perm_space.domain[
         next(j for j, pair in enumerate(self._perm_sequence)
-                                                            if pair[1] == item)
+                                                           if pair[1] == item),
+        '''Get the index number of `member` in the permutation.'''
     ]
     
 class UnrecurrentedPerm(UnrecurrentedMixin, Perm):
