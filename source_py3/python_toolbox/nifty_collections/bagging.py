@@ -517,6 +517,27 @@ class _BaseBagMixin:
     def __reversed__(self):
         # Gets overridden in `_OrderedBagMixin`.
         raise TypeError("Can't reverse an unordered bag.")
+    
+
+    def get_contained_bags(self):
+        '''
+        Get all counters that are subsets of this bags.
+        
+        This means all counters that have counts identical or smaller for each
+        key.
+        '''
+        from python_toolbox import combi
+        
+        keys, amounts = zip(*((key, amount) for key, amount in self.items()))
+        
+        return combi.MapSpace(
+            lambda amounts_tuple:
+                         type(self)(self._dict_type(zip(keys, amounts_tuple))),
+            combi.ProductSpace(map(lambda amount: range(amount+1), amounts))
+        )
+    
+
+    
         
         
 
@@ -791,7 +812,22 @@ class _FrozenBagMixin:
     def get_mutable(self):
         '''Get a mutable version of this bag.'''
         return self._mutable_type(self)
-    
+
+    # Poor man's caching done here because we can't import
+    # `python_toolbox.caching` due to import loop:
+    _contained_bags = None
+    def get_contained_bags(self):
+        '''
+        Get all counters that are subsets of this bags.
+        
+        This means all counters that have counts identical or smaller for each
+        key.
+        '''
+        if self._contained_bags is None:
+            self._contained_bags = super().get_contained_bags()
+        return self._contained_bags
+        
+
 
 class _BaseDictDelegator(collections.MutableMapping):
     '''
