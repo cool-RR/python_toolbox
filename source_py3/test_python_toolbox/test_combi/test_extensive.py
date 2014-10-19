@@ -413,12 +413,13 @@ def _check_variation_selection(variation_selection, perm_space_type,
         
         
 def _iterate_tests():
-    for variation_selection in combi.variations.variation_selection_space:
+    for variation_selection in \
+                            combi.perming.variations.variation_selection_space:
         
         kwargs = {}
         
         if variation_selection.is_recurrent and \
-                                               not variation_selection.is_rapplied:
+                                           not variation_selection.is_rapplied:
             assert not variation_selection.is_allowed
             # Can't even test this illogical clash.
             continue
