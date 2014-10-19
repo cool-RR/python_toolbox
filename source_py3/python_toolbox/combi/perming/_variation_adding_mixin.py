@@ -8,7 +8,7 @@ from python_toolbox import sequence_tools
 
 
 class _VariationAddingMixin:
-
+    '''Mixin for `PermSpace` to add variations to a perm space.'''
     def get_rapplied(self, sequence):
         '''Get a version of this `PermSpace` that has a range of `sequence`.'''
         assert not self.is_rapplied
@@ -46,6 +46,7 @@ class _VariationAddingMixin:
     
     @caching.CachedProperty
     def combinationed(self):
+        '''Get a combination version of this perm space.'''
         from .comb import Comb
         if self.is_sliced:
             raise TypeError(
@@ -104,7 +105,7 @@ class _VariationAddingMixin:
         )
     
     def get_degreed(self, degrees):
-        '''Get a degreed version of this `PermSpace`.'''
+        '''Get a version of this `PermSpace` restricted to certain degrees.'''
         if self.is_sliced:
             raise TypeError("Can't be used on sliced perm spaces. Try "
                             "`perm_space.unsliced.get_degreed(...)`.")
@@ -120,7 +121,6 @@ class _VariationAddingMixin:
             fixed_map=self.fixed_map, degrees=degrees_to_use, 
             is_combination=self.is_combination, perm_type=self.perm_type
         )
-    
     
     # There's no `get_sliced` because slicing is done using Python's normal
     # slice notation, e.g. perm_space[4:-7].

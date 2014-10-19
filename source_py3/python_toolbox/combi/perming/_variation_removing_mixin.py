@@ -10,7 +10,7 @@ from .. import misc
 
 
 class _VariationRemovingMixin:
-    
+    '''Mixin for `PermSpace` to add variations to a perm space.'''
     purified = caching.CachedProperty(
         lambda self: PermSpace(len(self.sequence)),
         doc='''An purified version of this `PermSpace`.'''
