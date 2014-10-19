@@ -60,6 +60,13 @@ class FrozenDict(DefinitelyUnordered, _AbstractFrozenDict):
         
 
 class FrozenOrderedDict(Ordered, _AbstractFrozenDict):
+    '''
+    An immutable, ordered `dict`.
+    
+    A `dict` that is ordered and can't be changed. The advantage of this over
+    `OrderedDict` is mainly that it's hashable, and thus can be used as a key
+    in dicts and sets.
+    '''    
     _dict_type = OrderedDict
     
     def __eq__(self, other):

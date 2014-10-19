@@ -30,7 +30,6 @@ class Personality:
     
     def __init__(self, persistent):
 
-        
         from python_toolbox import human_names
         # (Importing inside function to avoid importing this heavy module on
         # general import time.)
