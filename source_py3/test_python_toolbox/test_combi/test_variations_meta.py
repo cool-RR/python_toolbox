@@ -15,14 +15,14 @@ infinities = (infinity, -infinity)
 
 
 def test():
-    assert len(combi.variations.variation_selection_space) == \
-                                           2 ** len(combi.variations.Variation)
+    assert len(combi.perming.variations.variation_selection_space) == \
+                                   2 ** len(combi.perming.variations.Variation)
     
     for i, variation_selection in \
-                         enumerate(combi.variations.variation_selection_space):
+                 enumerate(combi.perming.variations.variation_selection_space):
         assert isinstance(variation_selection,
-                          combi.variations.VariationSelection)
-        assert combi.variations.variation_selection_space. \
+                          combi.perming.variations.VariationSelection)
+        assert combi.perming.variations.variation_selection_space. \
                                                 index(variation_selection) == i
         assert cute_iter_tools.is_sorted(variation_selection.variations)
         
