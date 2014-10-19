@@ -12,6 +12,13 @@ infinity = float('inf')
 
         
 class MapSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
+    '''
+    A space of a function applied to a sequence.
+    
+    This is similar to Python's builtin `map`, except that it behaves like a
+    sequence rather than an iterable. (Though it's also iterable.) You can
+    access any item by its index number.
+    '''    
     def __init__(self, function, sequence):
         
         self.function = function
