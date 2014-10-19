@@ -152,7 +152,8 @@ def _check_variation_selection(variation_selection, perm_space_type,
                                iterable_or_length_and_sequence, domain_to_cut,
                                n_elements, is_combination, purified_fixed_map,
                                degrees, slice_, perm_type):
-    assert isinstance(variation_selection, combi.variations.VariationSelection)
+    assert isinstance(variation_selection,
+                      combi.perming.variations.VariationSelection)
     
     kwargs = {}
     
@@ -321,8 +322,9 @@ def _check_variation_selection(variation_selection, perm_space_type,
                 assert type(perm) == Perm
         
         if variation_selection.variations <= {
-            variations.Variation.DAPPLIED, variations.Variation.RAPPLIED,
-                                            variations.Variation.COMBINATION,}:
+            perming.variations.Variation.DAPPLIED,
+            perming.variations.Variation.RAPPLIED,
+            perming.variations.Variation.COMBINATION,}:
             assert perm.nominal_perm_space == perm_space
         assert perm.nominal_perm_space == \
                                    perm_space._nominal_perm_space_of_perms == \
