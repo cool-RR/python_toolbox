@@ -9,10 +9,18 @@ from python_toolbox import caching
 
 
 class _FixedMapManagingMixin:
+    '''
+    Mixin for `PermSpace` to manage the `fixed_map`. (For fixed perm spaces.)
+    '''
     
     @caching.CachedProperty
     def fixed_indices(self):
-        '''The indices of any fixed items in this `PermSpace`.'''
+        '''
+        The indices of any fixed items in this `PermSpace`.
+        
+        This'll be different from `self.fixed_map.keys()` for dapplied perm
+        spaces.
+        '''
         if not self.fixed_map:
             return ()
         return tuple(map(self.domain.index, self.fixed_map))

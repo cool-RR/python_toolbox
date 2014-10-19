@@ -32,7 +32,12 @@ class Variation(nifty_collections.CuteEnum):
         
 
 class UnallowedVariationSelectionException(exceptions.CuteException):
-    '''An unallowed selection of variations was attempted.'''
+    '''
+    An unallowed selection of variations was attempted.
+    
+    For example, you can't make dapplied combination spaces, and if you'll try,
+    you'll get an earful of this here exception.
+    '''
     def __init__(self, variation_clash):
         self.variation_clash = variation_clash
         assert variation_clash in variation_clashes
