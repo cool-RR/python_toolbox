@@ -86,9 +86,13 @@ class CuteRange(CuteSequence):
     `CuteRange` is like Python's built-in `range`, except (1) it's cute and (2)
     it's completely different. LOL, just kidding.
     
-    `CuteRange` takes start, stop and step arguments just like `range`, but it
-    allows you to use floating-point numbers (or decimals), and it allows you
-    to use infinite numbers to produce infinite ranges.
+    `CuteRange` takes `start`, `stop` and `step` arguments just like `range`,
+    but it allows you to use floating-point numbers (or decimals), and it
+    allows you to use infinite numbers to produce infinite ranges.
+    
+    Obviously, `CuteRange` allows iteration, index access, searching for a
+    number's index number, checking whether a number is in the range or not,
+    and slicing.
     
     Examples:
     
@@ -210,6 +214,7 @@ class CuteRange(CuteSequence):
         return self.length if isinstance(self.length, numbers.Integral) else 0
         
     def index(self, i, start=-infinity, stop=infinity):
+        '''Get the index number of `i` in this `CuteRange`.'''
         from python_toolbox import math_tools
         if not isinstance(i, numbers.Number):
             raise ValueError
