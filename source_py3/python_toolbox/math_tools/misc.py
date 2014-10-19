@@ -119,6 +119,12 @@ def restrict_number_to_range(number, low_cutoff=-infinity,
         
         
 def binomial(big, small):
+    '''
+    Get the binomial coefficient (big small).
+    
+    This is used in combinatorical calculations. More information:
+    http://en.wikipedia.org/wiki/Binomial_coefficient
+    '''
     if big == small:
         return 1
     if big < small:
@@ -129,11 +135,17 @@ def binomial(big, small):
 
 
 def product(numbers):
+    '''Get the product of all the numbers in `numbers`.'''
     from python_toolbox import misc_tools
     return misc_tools.general_product(numbers, start=1)
     
     
 def is_integer(x):
+    '''
+    Is `x` an integer?
+    
+    Does return `True` for things like 1.0 and `1+0j`.
+    '''
     try:
         inted_x = int(x)
     except (TypeError, ValueError, OverflowError):

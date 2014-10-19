@@ -113,8 +113,7 @@ def to_factoradic(number, n_digits_pad=0):
     current_number = number
     for i in range(n_digits)[::-1]:
         unit = math.factorial(i)
-        digits[n_digits - i - 1], current_number = \
-                                                   divmod(current_number, unit)
+        digits[n_digits - i - 1], current_number = divmod(current_number, unit)
     result = tuple(digits)
     if (len(result) < n_digits_pad):
         return ((0,) * (n_digits_pad - len(result))) + result
