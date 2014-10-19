@@ -415,7 +415,8 @@ def test_partial_perm_space():
     empty_partial_perm_space = PermSpace(5, n_elements=6)
     assert empty_partial_perm_space.length == 0
     assert empty_partial_perm_space.variation_selection == \
-                  variations.VariationSelection({variations.Variation.PARTIAL})
+           perming.variations.VariationSelection(
+                                        {perming.variations.Variation.PARTIAL})
     assert empty_partial_perm_space != PermSpace(5, n_elements=7)
     with cute_testing.RaiseAssertor(IndexError):
         empty_partial_perm_space[0]
