@@ -13,7 +13,7 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
     
     For example:
     
-        >>> tuple(combi.SelectionSpace(range(2)))
+        >>> tuple(SelectionSpace(range(2)))
         (set(), {1}, {0}, {0, 1})
         
     The selections (which are sets) can be for any number of items, from zero
@@ -23,7 +23,7 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
     in advance, but rather on demand. So you can create a `SelectionSpace` like
     this:
     
-        >>> selection_space = combi.SelectionSpace(range(10**4))
+        >>> selection_space = SelectionSpace(range(10**4))
         
     And take a random selection from it:
     
