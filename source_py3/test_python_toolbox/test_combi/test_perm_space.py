@@ -4,6 +4,7 @@
 import pickle
 import itertools
 import functools
+import math
 
 from python_toolbox import cute_testing
 from python_toolbox import math_tools
