@@ -26,7 +26,6 @@ explaining what it's good for and the basics of using it.
    caching/index
    change-tracker
    cheat-hashing
-   collection-tools
    color-tools
    combi
    comparison-tools
