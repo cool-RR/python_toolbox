@@ -4,7 +4,6 @@
 import collections
 
 from python_toolbox import math_tools
-from python_toolbox import cute_iter_tools
 
 infinity = float('inf')
 infinities = (infinity, -infinity)
@@ -13,26 +12,33 @@ infinities = (infinity, -infinity)
 class CanonicalSlice(object):
     def __init__(self, slice_, iterable_or_length=None, offset=0):
         '''
-        Parse a `slice` object into a `CanonicalSlice` with start, stop, step.
+    A canonical representation of a `slice` with `start`, `stop`, and `step`.
         
         This is helpful because `slice`'s own `.start`, `.stop` and `.step` are
-        sometimes specified as `None` for convenience, so Python will infer
-        them automatically. Here we make them explicit. If we're given an
-        iterable (or the length of one) in `iterable_or_length`, we'll give a
-        canoncial slice for that length, otherwise we'll do a generic one,
-        which is rarely usable for actual slicing because it often has
-        `infinity` in it, so it's useful only for canonalization. (e.g.
-        checking whether two different slices are actually equal.)
+    sometimes specified as `None` for convenience, so Python will infer them
+    automatically. Here we make them explicit. If we're given an iterable (or
+    the length of one) in `iterable_or_length`, we'll give a canoncial slice
+    for that length, otherwise we'll do a generic one, which is rarely usable
+    for actual slicing because it often has `infinity` in it, so it's useful
+    only for canonalization. (e.g. checking whether two different slices are
+    actually equal.)
     
         When doing a generic canonical slice (without giving an iterable or
         length):
-            If `start` is `None`, it will be set to `0` (if the `step` is
-        positive) or `infinity` (if the `step` is negative.)
-            If `stop` is `None`, it will be set to `infinity` (if the `step` is
+    
+      - If `start` is `None`, it will be set to `0` (if the `step` is positive)
+        or `infinity` (if the `step` is negative.)
+    
+      - If `stop` is `None`, it will be set to `infinity` (if the `step` is
         positive) or `0` (if the `step` is negative.)
-            If `step` is `None`, it will be changed to the default `1`.
+    
+      - If `step` is `None`, it will be changed to the default `1`.
+        
         '''
+    
+    def __init__(self, slice_, iterable_or_length=None, offset=0):
         from python_toolbox import sequence_tools
+        from python_toolbox import cute_iter_tools
         
         if isinstance(slice_, CanonicalSlice):
             slice_ = slice(slice_.start, slice_.stop, slice_.step)
@@ -46,7 +52,7 @@ class CanonicalSlice(object):
                 self.length = sequence_tools.get_length(iterable_or_length)
             else:
                 assert isinstance(iterable_or_length, collections.Iterable)
-                self.length = cute_iter_tools.get_length(iterable)
+                self.length = cute_iter_tools.get_length(iterable_or_length)
         else:
             self.length = None
             
@@ -105,7 +111,7 @@ class CanonicalSlice(object):
         #                                                                     #
         ### Finished parsing `stop`. ##########################################
             
-        if (self.step > 0 and self.start >= self.stop > 0) or \
+        if (self.step > 0 and self.start >= self.stop >= 0) or \
            (self.step < 0 and self.stop >= self.start):
             # We have a case of an empty slice.
             self.start = self.stop = 0
