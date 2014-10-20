@@ -59,7 +59,7 @@ class PermSpaceType(abc.ABCMeta):
         
 class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 _FixedMapManagingMixin, sequence_tools.CuteSequenceMixin,
-                collections.Sequence, metaclass=PermSpaceType):
+                collections.Sequence):
     '''
     A space of permutations on a sequence.
     
@@ -148,6 +148,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     
     A perm space that has none of these variations is called pure.
     '''
+    
+    __metaclass__ = PermSpaceType
     
     @classmethod
     def coerce(cls, argument):
@@ -917,6 +919,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             return str(self.length)
     
     __bool__ = lambda self: bool(self.length)
+    __nonzero__ = __bool__
     
     _domain_set = caching.CachedProperty(
         lambda self: set(self.domain),

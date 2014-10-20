@@ -116,7 +116,7 @@ class VariationSelectionType(type):
     __call__ = lambda cls, variations: cls._create_from_sorted_set(
                                         sortedcontainers.SortedSet(variations))
     
-class VariationSelection(metaclass=VariationSelectionType):
+class VariationSelection(object):
     '''
     A selection of variations of a `PermSpace`.
     
@@ -132,6 +132,9 @@ class VariationSelection(metaclass=VariationSelectionType):
     with the same variations, you'll get the original `VariationSelection`
     object you created.
     '''
+    
+    __metaclass__ = VariationSelectionType
+    
     @classmethod
     @caching.cache()
     def _create_from_sorted_set(cls, variations):
