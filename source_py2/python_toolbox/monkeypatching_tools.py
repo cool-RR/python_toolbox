@@ -3,7 +3,6 @@
 
 '''Tools for monkeypatching.'''
 
-import sys
 import collections
 import inspect
 import types
@@ -71,7 +70,7 @@ def monkeypatch(monkeypatchee, name=None, override_if_exists=True):
                 #                                                             #
                 if isinstance(function, caching.CachedProperty):
                     if not isinstance(function.getter, types.FunctionType):
-                        raise NotImplemented
+                        raise NotImplementedError
                     name_ = function.getter.__name__
                 elif isinstance(function, (classmethod, staticmethod)):
                     name_ = function.__func__.__name__

@@ -1,8 +1,6 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Defines miscellaneous tools.'''
-
 import re
 
 

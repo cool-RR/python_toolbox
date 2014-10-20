@@ -1,12 +1,6 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''
-Defines the `ReasonedBool` class.
-
-See its documentation for more details.
-'''
-
 
 class ReasonedBool(object):
     '''

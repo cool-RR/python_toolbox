@@ -152,7 +152,6 @@ my_classifiers = [
 
 install_requires = ['setuptools']
 if sys.version_info[:2] <= (3, 3):
-    install_requires.append('funcsigs,>=0.4,<1')
     install_requires.append('pathlib,>=1.0.1,<2')
     install_requires.append('enum34>=1.0,<2')
     

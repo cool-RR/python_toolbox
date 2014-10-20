@@ -44,4 +44,3 @@ class ReasonedBool:
     
     def __bool__(self):
         return self.value
-    __nonzero__ = __bool__
