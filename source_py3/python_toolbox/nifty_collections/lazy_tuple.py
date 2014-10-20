@@ -49,7 +49,6 @@ def _with_lock(method, *args, **kwargs):
         return method(*args, **kwargs)
 
 
-@collections.Sequence.register
 @functools.total_ordering    
 class LazyTuple(collections.Sequence):
     '''

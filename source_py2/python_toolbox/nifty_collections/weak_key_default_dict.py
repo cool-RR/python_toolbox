@@ -8,7 +8,7 @@ See its documentation for more details.
 '''
 # todo: revamp
 
-import UserDict
+import collections
 from weakref import ref
 
 

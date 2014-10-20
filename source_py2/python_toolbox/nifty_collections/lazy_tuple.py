@@ -7,6 +7,7 @@ This module defines the `LazyTuple` class.
 See its documentation for more information.
 '''
 
+import functools
 import threading
 import collections
 import itertools
@@ -48,9 +49,8 @@ def _with_lock(method, *args, **kwargs):
         return method(*args, **kwargs)
 
     
-
-@comparison_tools.total_ordering    
-class LazyTuple(collections.Sequence, object):
+@functools.total_ordering    
+class LazyTuple(collections.Sequence):
     '''
     A lazy tuple which requests as few values as possible from its iterator.
     
@@ -84,7 +84,7 @@ class LazyTuple(collections.Sequence, object):
                                not isinstance(iterable, LazyTuple)
         
         self.is_exhausted = True if was_given_a_sequence else False
-        '''Flag saying whether the internal iterator is totally exhausted.'''
+        '''Flag saying whether the internal iterator is tobag exhausted.'''
         
         self.collected_data = iterable if was_given_a_sequence else []
         '''All the items that were collected from the iterable.'''
@@ -209,10 +209,12 @@ class LazyTuple(collections.Sequence, object):
         return not self.__eq__(other)
     
     
-    def __nonzero__(self):
-        self.exhaust(0)
-        return bool(self.collected_data)
+    def __bool__(self):
+        try: next(iter(self))
+        except StopIteration: return False
+        else: return True
 
+    __nonzero__ = __bool__
     
     def __lt__(self, other):
         if not self and other:
