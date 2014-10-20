@@ -1,9 +1,9 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-from __future__ import division
-
 import numbers
+import collections
+import itertools
 
 infinity = float('inf')
 
@@ -11,6 +11,18 @@ infinity = float('inf')
 _stirling_caches = []
 _n_highest_cache_completed = -1
 def stirling(n, k, skip_calculation=False):
+    '''
+    Calculate Stirling number of the second kind of `n` and `k`.
+    
+    More information about these numbers:
+    https://en.wikipedia.org/wiki/Stirling_numbers_of_the_second_kind
+    
+    Example:
+    
+        >>> stirling(3, 2)
+        -3
+    
+    '''
     global _n_highest_cache_completed
     if k not in xrange(n + 1):
         return 0
@@ -51,5 +63,17 @@ def stirling(n, k, skip_calculation=False):
 
 
 def abs_stirling(n, k):
+    '''
+    Calculate Stirling number of the first kind of `n` and `k`.
+    
+    More information about these numbers:
+    https://en.wikipedia.org/wiki/Stirling_numbers_of_the_first_kind
+    
+    Example:
+    
+        >>> abs_stirling(3, 2)
+        3
+    
+    '''
     return abs(stirling(n, k))
     
