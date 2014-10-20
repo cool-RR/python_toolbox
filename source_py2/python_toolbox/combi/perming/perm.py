@@ -427,7 +427,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
     as_dictoid = caching.CachedProperty(PermAsDictoid)
     
 
-class UnrecurrentedMixin:
+class UnrecurrentedMixin(object):
     '''Mixin for a permutation in a space that's been unrecurrented.'''
     def __getitem__(self, i):
         return super(UnrecurrentedMixin, self).__getitem__(i)[1]

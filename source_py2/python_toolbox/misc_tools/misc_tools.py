@@ -354,7 +354,7 @@ def decimal_number_from_string(string):
 
 
 
-class AlternativeLengthMixin:
+class AlternativeLengthMixin(object):
     '''
     Mixin for sized types that makes it easy to return non-standard lengths.
     

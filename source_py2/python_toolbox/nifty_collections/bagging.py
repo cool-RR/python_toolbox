@@ -19,7 +19,7 @@ from .frozen_dict_and_frozen_ordered_dict import FrozenDict, FrozenOrderedDict
 from .abstract import Ordered, DefinitelyUnordered
 
 
-class _NO_DEFAULT: 
+class _NO_DEFAULT(object): 
     '''Stand-in value used in `_BaseBagMixin.pop` when no default is wanted.'''
             
 class _ZeroCountAttempted(Exception):
@@ -135,7 +135,7 @@ class _BootstrappedCachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
         return '<%s: %s>' % (type(self).__name__, self.our_name or self.getter)
             
 
-class _BaseBagMixin:
+class _BaseBagMixin(object):
     '''
     Mixin for `FrozenBag` and `FrozenOrderedBag`.
     
@@ -779,7 +779,7 @@ class _OrderedBagMixin(Ordered):
     )
         
         
-class _FrozenBagMixin:
+class _FrozenBagMixin(object):
     '''Mixin for a bag that's frozen. (i.e. can't be changed, is hashable.)'''
     
     # Some properties are redefined here to be cached, since the bag is frozen

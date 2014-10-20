@@ -8,7 +8,7 @@ from python_toolbox import caching
 # (`PermSpace` exported to here from `perm_space.py` to avoid import loop.)
 
 
-class _FixedMapManagingMixin:
+class _FixedMapManagingMixin(object):
     '''
     Mixin for `PermSpace` to manage the `fixed_map`. (For fixed perm spaces.)
     '''

@@ -47,7 +47,7 @@ def flatten(iterable):
         return []
 
 
-class NO_FILL_VALUE:
+class NO_FILL_VALUE(object):
     '''
     Sentinel that means: Don't fill last partition with default fill values.
     '''

@@ -30,7 +30,7 @@ class NO_ARGUMENT(metaclass=_NO_ARGUMENT_TYPE): pass
         
 
 
-class BrutePermSpace:
+class BrutePermSpace(object):
     '''
     A `PermSpace` substitute used for testing `PermSpace`.
     
@@ -142,7 +142,7 @@ class BrutePermSpace:
                 
 
 
-class FruityMixin: pass
+class FruityMixin(object): pass
 class FruityPerm(FruityMixin, Perm): pass
 class FruityComb(FruityMixin, Comb): pass
 class FruityTuple(FruityMixin, tuple): pass

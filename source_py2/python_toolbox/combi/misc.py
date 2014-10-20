@@ -10,7 +10,7 @@ from python_toolbox import misc_tools
 infinity = float('inf')
 
 
-class MISSING_ELEMENT: 
+class MISSING_ELEMENT(object): 
     '''A placeholder for a missing element used in internal calculations.'''
         
         

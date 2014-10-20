@@ -9,7 +9,7 @@ from .. import misc
 # (`PermSpace` exported to here from `perm_space.py` to avoid import loop.)
 
 
-class _VariationRemovingMixin:
+class _VariationRemovingMixin(object):
     '''Mixin for `PermSpace` to add variations to a perm space.'''
     purified = caching.CachedProperty(
         lambda self: PermSpace(len(self.sequence)),

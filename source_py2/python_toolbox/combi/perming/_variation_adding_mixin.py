@@ -7,7 +7,7 @@ from python_toolbox import sequence_tools
 # (`PermSpace` exported to here from `perm_space.py` to avoid import loop.)
 
 
-class _VariationAddingMixin:
+class _VariationAddingMixin(object):
     '''Mixin for `PermSpace` to add variations to a perm space.'''
     def get_rapplied(self, sequence):
         '''Get a version of this `PermSpace` that has a range of `sequence`.'''
