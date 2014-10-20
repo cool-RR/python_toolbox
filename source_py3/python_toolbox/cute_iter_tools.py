@@ -506,6 +506,12 @@ class PushbackIterator:
     __iter__ = lambda self: self
             
     def push_back(self):
+        '''
+        Push the last item back, so it'll come up in the next iteration.
+        
+        You can't push back twice without iterating, because we only save the
+        last item and not any previous items.
+        '''
         if self.last_item == _PUSHBACK_SENTINEL:
             raise Exception
         if self.just_pushed_back:

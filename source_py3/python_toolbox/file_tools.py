@@ -18,11 +18,11 @@ numbered_name_pattern = re.compile(
 )
 
 def _get_next_path(path):
-    '''
+    r'''
     Get the name that `path` should be renamed to if taken.
     
-    For example, "c:\\example.ogg" would become "c:\\example (1).ogg", while
-    "c:\\example (1).ogg" would become "c:\\example (2).ogg".
+    For example, "c:\example.ogg" would become "c:\example (1).ogg", while
+    "c:\example (1).ogg" would become "c:\example (2).ogg".
     
     (Uses `Path` objects rather than strings.)
     '''
