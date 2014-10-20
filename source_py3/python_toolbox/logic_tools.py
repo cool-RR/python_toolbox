@@ -23,17 +23,16 @@ def all_equal(iterable, exhaustive=False):
     # todo: Maybe I should simply check if `len(set(iterable)) == 1`? Will not
     # work for unhashables.
     
-    
     if exhaustive is True:
         items = tuple(iterable)
         if len(items) <= 1:
             return True
         from python_toolbox import combi
         pairs = tuple(
-            tuple(items[i] for i in comb) for comb in
-                                                 combi.CombSpace(len(items), 2)
+            items * comb for comb in combi.CombSpace(len(items), 2)
         )
-        # Must do it like that because items might not be hashable.
+        # Can't feed the items directly to `CombSpace` because they might not
+        # be hashable.
     else: # exhaustive is False
         pairs = cute_iter_tools.iterate_overlapping_subsequences(iterable)
         
