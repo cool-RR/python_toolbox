@@ -14,6 +14,7 @@ import __builtin__
 import numbers
 
 from python_toolbox import sequence_tools
+from python_toolbox import misc_tools
 from python_toolbox import math_tools
 
 infinity = float('inf')
@@ -374,7 +375,7 @@ def _call_until_exception(function, exception):
 
 
 @misc_tools.limit_positional_arguments(1)    
-def get_single_if_any(iterable, *, 
+def get_single_if_any(iterable,
                       exception_on_multiple=True, none_on_multiple=False):
     '''
     Get the single item of `iterable`, if any.
@@ -415,7 +416,7 @@ def get_single_if_any(iterable, *,
             return first_item        
         
         
-def are_equal(*sequences, easy_types=(sequence_tools.CuteRange,)):
+def are_equal(*sequences, **kwargs):
     '''
     Are the given sequences equal?
     
@@ -429,6 +430,8 @@ def are_equal(*sequences, easy_types=(sequence_tools.CuteRange,)):
     '''
     from python_toolbox import logic_tools
     sequence_types = set(map(type, sequences))
+    
+    easy_types = kwargs.get('easy_types', (sequence_tools.CuteRange,))
     
     # Trying cheap comparison:
     if len(sequence_types) == 1 and issubclass(
@@ -448,7 +451,8 @@ def are_equal(*sequences, easy_types=(sequence_tools.CuteRange,)):
         return True
 
     
-def is_sorted(iterable, *, rising=True, strict=False, key=None):
+@misc_tools.limit_positional_arguments(1)
+def is_sorted(iterable, rising=True, strict=False, key=None):
     '''
     Is `iterable` sorted?
     
