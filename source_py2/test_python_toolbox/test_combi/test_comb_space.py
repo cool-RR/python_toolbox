@@ -61,7 +61,7 @@ def test():
     
     
     
-        def test_unrecurrented():
+def test_unrecurrented():
     recurrent_comb_space = CombSpace('abcabc', 3)
     assert 'abc' in recurrent_comb_space
     assert 'aba' in recurrent_comb_space
