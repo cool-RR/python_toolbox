@@ -14,6 +14,7 @@ import functools
 import sys
 import threading
 
+from python_toolbox import decorator_tools
 from python_toolbox import cute_iter_tools
 
 
@@ -378,3 +379,31 @@ class AlternativeLengthMixin:
     
     __nonzero__ = __bool__
         
+    
+@decorator_tools.helpful_decorator_builder
+def limit_positional_arguments(n_positional_arguments=0):
+    '''
+    Decorator to limit the number of positional arguments a function takes.
+    
+    This is a poor man's version of the `*` magic argument from Python 3. It's
+    useful when you don't want to let people use some arguments without
+    specifying them as keyword arguments, because if they access them as
+    positional arguments, you can't ever change their order or insert more
+    arguments there because of backward compatibility.
+    '''
+    def decorator(function):
+        @functools.wraps(function)
+        def inner(*args, **kwargs):
+            if len(args) > n_positional_arguments:
+                raise TypeError('%s takes at most %s positional arguments '
+                                'but %s were given.' % (
+                                    function, n_positional_arguments,
+                                    len(args)
+                                ))
+            else:
+                return function(*args, **kwargs)
+        return inner
+    return decorator
+            
+        
+    
