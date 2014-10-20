@@ -429,8 +429,10 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
 
 class UnrecurrentedMixin:
     '''Mixin for a permutation in a space that's been unrecurrented.'''
-    __getitem__ = lambda self, i: super().__getitem__(i)[1]
-    __iter__ = lambda self: iter(tuple(zip(*super().__iter__()))[1])
+    def __getitem__(self, i):
+        return super(UnrecurrentedMixin, self).__getitem__(i)[1]
+    def __iter__(self, i):
+        return iter(tuple(zip(*super(UnrecurrentedMixin, self).__iter__()))[1])
     index = lambda self, item: self.nominal_perm_space.domain[
         next(j for j, pair in enumerate(self._perm_sequence)
                                                             if pair[1] == item)

@@ -940,7 +940,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             pass
         #                                                                     #
         #######################################################################
-        return super().__reduce__(*args, **kwargs)
+        return super(PermSpace, self).__reduce__(*args, **kwargs)
         
         
     def _coerce_perm(self, perm):

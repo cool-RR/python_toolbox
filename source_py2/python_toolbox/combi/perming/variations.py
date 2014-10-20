@@ -41,7 +41,7 @@ class UnallowedVariationSelectionException(exceptions.CuteException):
     def __init__(self, variation_clash):
         self.variation_clash = variation_clash
         assert variation_clash in variation_clashes
-        super().__init__(
+        super(UnallowedVariationSelectionException, self).__init__(
             "You can't create a `PermSpace` that's %s." % (
                 ' and '.join(
                     '%s%s' % (
@@ -81,7 +81,9 @@ class VariationSelectionSpace(SelectionSpace):
         return VariationSelection(SelectionSpace.__getitem__(self, i))
         
     def index(self, variation_selection):
-        return super().index(variation_selection.variations)
+        return super(VariationSelectionSpace, self).index(
+            variation_selection.variations
+        )
         
     @caching.cache()
     def __repr__(self):
@@ -142,7 +144,7 @@ class VariationSelection(object):
         # This method exsits so we could cache canonically. The `__new__`
         # method canonicalizes the `variations` argument to a `SortedSet` and
         # we cache according to it.
-        variation_selection = super().__new__(cls)
+        variation_selection = super(VariationSelection, cls).__new__(cls)
         variation_selection.__init__(variations)
         return variation_selection
         

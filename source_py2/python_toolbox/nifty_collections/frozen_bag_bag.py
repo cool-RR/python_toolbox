@@ -28,7 +28,7 @@ class FrozenBagBag(FrozenBag):
         
     '''
     def __init__(self, iterable):
-        super().__init__(iterable)
+        super(FrozenBagBag, self).__init__(iterable)
         
         # All zero values were already fileterd out by `FrozenBag`, we'll
         # filter out just the non-natural-number keys.

@@ -146,7 +146,7 @@ class _BaseBagMixin:
     '''
     
     def __init__(self, iterable={}):
-        super().__init__()
+        super(_BaseBagMixin, self).__init__()
         
         if isinstance(iterable, collections.Mapping):
             for key, value, in iterable.items():
@@ -547,7 +547,7 @@ class _MutableBagMixin(_BaseBagMixin):
     
     def __setitem__(self, i, count):
         try:
-            super().__setitem__(i, _process_count(count))
+            super(_MutableBagMixin, self).__setitem__(i, _process_count(count))
         except _ZeroCountAttempted:
             del self[i]
     
@@ -825,7 +825,8 @@ class _FrozenBagMixin:
         key.
         '''
         if self._contained_bags is None:
-            self._contained_bags = super().get_contained_bags()
+            self._contained_bags = \
+                              super(_FrozenBagMixin, self).get_contained_bags()
         return self._contained_bags
         
 

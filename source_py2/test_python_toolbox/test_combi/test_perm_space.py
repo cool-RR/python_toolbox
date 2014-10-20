@@ -651,7 +651,8 @@ def test_perm_type():
     
     class PokerHandSpace(combi.CombSpace):
         def __init__(self):
-            super().__init__(card_space, 5, perm_type=PokerHand)
+            super(PokerHandSpace, self).__init__(card_space, 5,
+                                                 perm_type=PokerHand)
             
     class PokerHand(combi.Comb):
         @caching.CachedProperty
