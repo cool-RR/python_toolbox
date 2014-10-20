@@ -8,10 +8,12 @@
 from __future__ import division
 
 import collections
+import operator
 import itertools
 import __builtin__
 import numbers
 
+from python_toolbox import sequence_tools
 from python_toolbox import math_tools
 
 infinity = float('inf')
@@ -43,7 +45,7 @@ def iterate_overlapping_subsequences(iterable, length=2, wrap_around=False,
     )
 
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections
         return nifty_collections.LazyTuple(iterator)
     else:
         return iterator
@@ -90,9 +92,9 @@ def _iterate_overlapping_subsequences(iterable, length, wrap_around):
         yield tuple(deque)
         
     
-def shorten(iterable, n, lazy_tuple=False):
+def shorten(iterable, length, lazy_tuple=False):
     '''
-    Shorten an iterable to length `n`.
+    Shorten an iterable to `length`.
     
     Iterate over the given iterable, but stop after `n` iterations (Or when the
     iterable stops iteration by itself.)
@@ -101,30 +103,30 @@ def shorten(iterable, n, lazy_tuple=False):
 
     If `lazy_tuple=True`, returns a `LazyTuple` rather than an iterator.
     '''
-    iterator = _shorten(iterable=iterable, n=n)
+    iterator = _shorten(iterable=iterable, length=length)
 
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections
         return nifty_collections.LazyTuple(iterator)
     else:
         return iterator
 
 
-def _shorten(iterable, n):
+def _shorten(iterable, length):
 
-    if n == infinity:
+    if length == infinity:
         for thing in iterable:
             yield thing
         raise StopIteration
     
-    assert isinstance(n, int)
+    assert isinstance(length, int)
 
-    if n == 0:
+    if length == 0:
         raise StopIteration
     
     for i, thing in enumerate(iterable):
         yield thing
-        if i + 1 == n: # Checking `i + 1` to avoid pulling an extra item.
+        if i + 1 == length: # Checking `i + 1` to avoid pulling an extra item.
             raise StopIteration
         
         
@@ -142,7 +144,7 @@ def enumerate(iterable, reverse_index=False, lazy_tuple=False):
     iterator = _enumerate(iterable=iterable, reverse_index=reverse_index)
 
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections
         return nifty_collections.LazyTuple(iterator)
     else:
         return iterator
@@ -156,7 +158,7 @@ def _enumerate(iterable, reverse_index):
         try:
             length = sequence_tools.get_length(iterable)
         except AttributeError:
-            iterable = revenifty_collections.LazyTuple(iterable)
+            iterable = nifty_collections.LazyTuple(iterable)
             length = len(iterable)
         return itertools.izip(range(length - 1, -1, -1), iterable)
 
@@ -181,7 +183,7 @@ def get_length(iterable):
     If given an iterator, it will be exhausted.
     '''
     i = 0
-    for thing in iterable:
+    for _ in iterable:
         i += 1
     return i
 
@@ -195,7 +197,7 @@ def iter_with(iterable, context_manager, lazy_tuple=False):
     iterator = _iter_with(iterable=iterable, context_manager=context_manager)
 
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections
         return nifty_collections.LazyTuple(iterator)
     else:
         return iterator
@@ -215,9 +217,9 @@ def _iter_with(iterable, context_manager):
         yield next_item
         
         
-def get_items(iterable, n, container_type=tuple):
+def get_items(iterable, n_items, container_type=tuple):
     '''
-    Get the next `n` items from the iterable as a `tuple`.
+    Get the next `n_items` items from the iterable as a `tuple`.
     
     If there are less than `n` items, no exception will be raised. Whatever
     items are there will be returned.
@@ -225,7 +227,7 @@ def get_items(iterable, n, container_type=tuple):
     If you pass in a different kind of container than `tuple` as
     `container_type`, it'll be used to wrap the results.
     '''
-    return container_type(shorten(iterable, n))
+    return container_type(shorten(iterable, n_items))
 
 
 def double_filter(filter_function, iterable, lazy_tuple=False):
@@ -239,7 +241,8 @@ def double_filter(filter_function, iterable, lazy_tuple=False):
     Note that this function is not thread-safe. (You may not consume the two
     iterators on two separate threads.)
     
-    If `lazy_tuple=True`, returns a `LazyTuple` rather than an iterator.
+    If `lazy_tuple=True`, returns two `LazyTuple` objects rather than two
+    iterator.
     '''
     iterator = iter(iterable)
     
@@ -271,7 +274,7 @@ def double_filter(filter_function, iterable, lazy_tuple=False):
     iterators = (make_true_iterator(), make_false_iterator())
     
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections
         return tuple(map(nifty_collections.LazyTuple, iterators))
     else:
         return iterators
@@ -315,7 +318,7 @@ def fill(iterable, fill_value=None, fill_value_maker=None, length=infinity,
                      length=length)
     
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections
         return nifty_collections.LazyTuple(iterator)
     elif sequence_type is None:
         return iterator
@@ -354,7 +357,7 @@ def call_until_exception(function, exception, lazy_tuple=False):
     '''
     iterator = _call_until_exception(function, exception)
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import
+        from python_toolbox import nifty_collections
         return nifty_collections.LazyTuple(iterator)
     else:
         return iterator
@@ -369,46 +372,67 @@ def _call_until_exception(function, exception):
     except exceptions:
         raise StopIteration
 
-    
-def get_single_if_any(iterable,
-                      exception_on_multiple=Exception('More than one value '
-                                                      'not allowed.')):
+
+@misc_tools.limit_positional_arguments(1)    
+def get_single_if_any(iterable, *, 
+                      exception_on_multiple=True, none_on_multiple=False):
     '''
     Get the single item of `iterable`, if any.
     
-    If `iterable` has one item, return it. If it's empty, get `None`. If it has
-    more than one item, raise an exception. (Unless
-    `exception_on_multiple=None`.)
+    Default behavior: Get the first item from `iterable`, and ensure it doesn't
+    have any more items (raise an exception if it does.)
+
+    If you pass in `exception_on_multiple=False`: If `iterable` has more than
+    one item, an exception won't be raised. The first value will be returned.
+
+    If you pass in `none_on_multiple=True`: If `iterable` has more than one
+    item, `None` will be returned regardless of the value of the first item.
+    Note that passing `none_on_multiple=True` causes the
+    `exception_on_multiple` argument to be ignored. (This is a bit ugly but I
+    made it that way so you wouldn't have to manually pass
+    `exception_on_multiple=False` in this case.)
     '''
-    assert isinstance(exception_on_multiple, Exception) or \
-                                                  exception_on_multiple is None
+    if none_on_multiple:
+        exception_on_multiple = False
     iterator = iter(iterable)
     try:
         first_item = next(iterator)
     except StopIteration:
         return None
     else:
-        if exception_on_multiple:
+        if exception_on_multiple or none_on_multiple:
             try:
                 second_item = next(iterator)
             except StopIteration:
                 return first_item
             else:
-                raise exception_on_multiple
-        else: # not exception_on_multiple
+                if none_on_multiple:
+                    return None
+                else:
+                    assert exception_on_multiple
+                    raise Exception('More than one value not allowed.')
+        else:
             return first_item        
         
-def are_equal(*sequences):
-    from python_toolbox import sys_tools
+        
+def are_equal(*sequences, easy_types=(sequence_tools.CuteRange,)):
+    '''
+    Are the given sequences equal?
+    
+    This tries to make a cheap comparison between the sequences if possible,
+    but if not, it goes over the sequences in parallel item-by-item and checks
+    whether the items are all equal. A cheap comparison is attempted only if
+    the sequences are all of the same type, and that type is in `easy_types`.
+    (It's important to restrict `easy_types` only to types where equality
+    between the sequences is the same as equality between every item in the
+    sequences.)
+    '''
     from python_toolbox import logic_tools
     sequence_types = set(map(type, sequences))
     
     # Trying cheap comparison:
     if len(sequence_types) == 1 and issubclass(
-             get_single_if_any(sequence_types), collections.Sequence) and \
-                           not get_single_if_any(sequence_types) == xrange:
-        # (Excluding `xrange` from this fast check because it has no
-        # `__eq__`.)
+                                get_single_if_any(sequence_types), easy_types):
         return logic_tools.all_equal(sequences)
     
     # If cheap comparison didn't work, trying item-by-item comparison:
@@ -424,12 +448,32 @@ def are_equal(*sequences):
         return True
 
     
-def is_sorted(iterable, key=None):
+def is_sorted(iterable, *, rising=True, strict=False, key=None):
+    '''
+    Is `iterable` sorted?
+    
+    Goes over the iterable item by item and checks whether it's sorted. If one
+    item breaks the order, returns `False` and stops iterating. If after going
+    over all the items, they were all sorted, returns `True`.
+    
+    You may specify `rising=False` to check for a reverse ordering. (i.e. each
+    item should be lower or equal than the last one.)
+    
+    You may specify `strict=True` to check for a strict order. (i.e. each item
+    must be strictly bigger than the last one, or strictly smaller if
+    `rising=False`.)
+    
+    You may specify a key function as the `key` argument.
+    '''
     from python_toolbox import misc_tools
     if key is None:
         key = misc_tools.identity_function
+    comparer = {(False, False): operator.ge,
+                (False, True): operator.gt,
+                (True, False): operator.le,
+                (True, True): operator.lt,}[(rising, strict)]
     for first_item, second_item in iterate_overlapping_subsequences(iterable):
-        if not key(second_item) >= key(first_item):
+        if not comparer(key(first_item), key(second_item)):
             return False
     else:
         return True
@@ -468,6 +512,12 @@ class PushbackIterator(object):
     __iter__ = lambda self: self
             
     def push_back(self):
+        '''
+        Push the last item back, so it'll come up in the next iteration.
+        
+        You can't push back twice without iterating, because we only save the
+        last item and not any previous items.
+        '''
         if self.last_item == _PUSHBACK_SENTINEL:
             raise Exception
         if self.just_pushed_back:
@@ -493,3 +543,16 @@ def iterate_popitem(item_poppable, lazy_tuple=False):
     
 
 
+def zip_non_equal(iterables, lazy_tuple=False):
+    '''
+    Zip the iterables, but only yield the tuples where the items aren't equal.
+    '''
+    from python_toolbox import logic_tools
+    iterator = (items for items in zip(*iterables)
+                if not logic_tools.all_equal(items))
+
+    if lazy_tuple:
+        from python_toolbox import nifty_collections
+        return nifty_collections.LazyTuple(iterator)
+    else:
+        return iterator

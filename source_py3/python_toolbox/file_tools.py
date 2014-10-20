@@ -1,8 +1,6 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Defines various tools related to temporary files.'''
-
 import pathlib
 import os
 import re

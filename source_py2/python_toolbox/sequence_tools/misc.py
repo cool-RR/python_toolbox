@@ -12,7 +12,6 @@ import random
 from python_toolbox import math_tools
 from python_toolbox import caching
 from python_toolbox import misc_tools
-from python_toolbox import cute_iter_tools
 
 infinity = float('inf')
 
@@ -188,6 +187,7 @@ def pop_until(sequence, condition=bool):
     
     When sequence is empty, propagates the `IndexError`.
     '''
+    from python_toolbox import cute_iter_tools
     for item in cute_iter_tools.iterate_pop(sequence):
         if condition(item):
             return item
@@ -213,8 +213,10 @@ def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
     otherwise, it makes it into a `tuple`, or into any other data type
     specified in `default_type`.
     '''
+    from python_toolbox import nifty_collections
     assert isinstance(iterable, collections.Iterable)
-    if not allow_unordered and isinstance(iterable, (set, frozenset)):
+    if not allow_unordered and \
+                   isinstance(iterable, nifty_collections.DefinitelyUnordered):
         raise UnorderedIterableException
     if isinstance(iterable, collections.MutableSequence) or \
        isinstance(iterable, unallowed_types) or \
@@ -245,6 +247,7 @@ def ensure_iterable_is_sequence(iterable, default_type=tuple,
 
 
 class CuteSequenceMixin(misc_tools.AlternativeLengthMixin):
+    '''A sequence mixin that adds extra functionality.'''
     def take_random(self):
         '''Take a random item from the sequence.'''
         return self[random.randint(0, get_length(self) - 1)]
@@ -256,10 +259,11 @@ class CuteSequenceMixin(misc_tools.AlternativeLengthMixin):
         
     
 class CuteSequence(CuteSequenceMixin, collections.Sequence):
-    pass
+    '''A sequence type that adds extra functionality.'''
 
 
 def get_length(sequence):
+    '''Get the length of a sequence.'''
     return sequence.length if hasattr(sequence, 'length') else len(sequence)
         
         
@@ -273,6 +277,8 @@ def divide_to_slices(sequence, n_slices):
         [range(0, 4), range(4, 7), range(7, 10)]
         
     '''
+    from python_toolbox import cute_iter_tools
+    
     assert isinstance(n_slices, numbers.Integral)
     assert n_slices >= 1
     
@@ -286,3 +292,4 @@ def divide_to_slices(sequence, n_slices):
     assert indices[-1] == sequence_length
     return [sequence[x:y] for x, y in
                      cute_iter_tools.iterate_overlapping_subsequences(indices)]
+    

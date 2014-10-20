@@ -19,6 +19,6 @@ def deepcopy_as_simple_object(thing, memo=None):
     memo[id(thing)] = new_thing
     for (name, subthing) in vars(thing).iteritems():
         new_thing.__dict__[name] = copy.deepcopy(subthing, memo)
-    return(new_thing)
+    return new_thing
         
     

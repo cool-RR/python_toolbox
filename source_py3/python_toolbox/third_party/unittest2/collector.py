@@ -1,6 +1,3 @@
-# Copyright 2009-2015 Ram Rachum.
-# This program is distributed under the MIT license.
-
 import os
 import sys
 from .loader import defaultTestLoader

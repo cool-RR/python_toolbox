@@ -43,9 +43,9 @@ def filter_items(d, condition, double=False, force_dict_type=None):
         )
 
 
-def get_list(d, iterable):
-    '''Get a list of values corresponding to an `iterable` of keys.'''
-    return [d[key] for key in iterable]
+def get_tuple(d, iterable):
+    '''Get a tuple of values corresponding to an `iterable` of keys.'''
+    return tuple(d[key] for key in iterable)
 
 
 def get_contained(d, container):
@@ -190,6 +190,9 @@ def remove_keys(d, keys_to_remove):
             
             
 def get_sorted_values(d, key=None):
+    '''
+    Get the values of dict `d` as a `tuple` sorted by their respective keys.
+    '''
     kwargs = {'key': key,} if key is not None else {}
-    return dict_tools.get_list(d, sorted(d.keys(), **kwargs))
+    return get_tuple(d, sorted(d.keys(), **kwargs))
     
