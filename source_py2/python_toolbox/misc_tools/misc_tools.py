@@ -389,7 +389,7 @@ def limit_positional_arguments(n_positional_arguments=0):
     useful when you don't want to let people use some arguments without
     specifying them as keyword arguments, because if they access them as
     positional arguments, you can't ever change their order or insert more
-    arguments there because of backward compatibility.
+    arguments there because of backward compatibility. 
     '''
     def decorator(function):
         @functools.wraps(function)
