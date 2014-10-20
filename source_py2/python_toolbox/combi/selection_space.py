@@ -1,25 +1,9 @@
+# Copyright 2009-2015 Ram Rachum.
+# This program is distributed under the MIT license.
+
 import collections
-import types
-import sys
-import math
-import numbers
 
-from python_toolbox import misc_tools
-from python_toolbox import binary_search
-from python_toolbox import dict_tools
-from python_toolbox import nifty_collections
-from python_toolbox import caching
-
-from python_toolbox import math_tools
 from python_toolbox import sequence_tools
-from python_toolbox import cute_iter_tools
-from python_toolbox import nifty_collections
-
-from . import misc
-from python_toolbox import misc_tools
-
-infinity = float('inf')
-
 
         
 class SelectionSpace(sequence_tools.CuteSequenceMixin,
@@ -29,7 +13,7 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
     
     For example:
     
-        >>> tuple(combi.SelectionSpace(range(2)))
+        >>> tuple(SelectionSpace(range(2)))
         (set(), {1}, {0}, {0, 1})
         
     The selections (which are sets) can be for any number of items, from zero
@@ -39,7 +23,7 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
     in advance, but rather on demand. So you can create a `SelectionSpace` like
     this:
     
-        >>> selection_space = combi.SelectionSpace(range(10**4))
+        >>> selection_space = SelectionSpace(range(10**4))
         
     And take a random selection from it:
     

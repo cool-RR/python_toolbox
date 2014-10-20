@@ -8,14 +8,12 @@ See its documentation for more details.
 '''
 # todo: examine thread-safety
 
-import functools
 import datetime as datetime_module
 
 from python_toolbox import misc_tools
 from python_toolbox import binary_search
 from python_toolbox import decorator_tools
 from python_toolbox.sleek_reffing import SleekCallArgs
-from python_toolbox.nifty_collections import OrderedDict
 
 infinity = float('inf')
 
@@ -69,6 +67,8 @@ def cache(max_size=infinity, time_to_keep=None):
     # compile a function accordingly, so functions with a simple argspec won't
     # have to go through so much shit. update: probably it will help only for
     # completely argumentless function. so do one for those.
+    
+    from python_toolbox.nifty_collections import OrderedDict
     
     if time_to_keep is not None:
         if max_size != infinity:

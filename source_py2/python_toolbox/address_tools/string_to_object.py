@@ -13,7 +13,7 @@ from .shared import (_contained_address_pattern, _address_pattern,
 
 
 def resolve(string, root=None, namespace={}):
-    '''
+    r'''
     Resolve an address into a Python object. A more powerful version of `eval`.
     
     The main advantage it has over `eval` is that it automatically imports

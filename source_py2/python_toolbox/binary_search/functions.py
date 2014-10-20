@@ -89,10 +89,10 @@ def _binary_search_both(sequence, value,
         medium = (low + high) // 2
         medium_value = get(medium)
         if medium_value > value:
-            high = medium; high_value = medium_value
+            high, high_value = medium, medium_value
             continue
         if medium_value < value:
-            low = medium; low_value = medium_value
+            low, low_value = medium, medium_value
             continue
         if medium_value == value:
             return (sequence[medium], sequence[medium])

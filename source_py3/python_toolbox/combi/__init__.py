@@ -1,8 +1,6 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-
-
 from python_toolbox.math_tools import binomial
 
 from python_toolbox.nifty_collections import (Bag, OrderedBag, FrozenBag,

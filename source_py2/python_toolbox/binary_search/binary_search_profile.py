@@ -27,6 +27,7 @@ class BinarySearchProfile(object):
     than one time.
     '''
     
+    @misc_tools.limit_positional_arguments(4)
     def __init__(self, sequence, value, function=misc_tools.identity_function,
                  both=None):
         '''

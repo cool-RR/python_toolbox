@@ -1,33 +1,28 @@
-import collections
-import types
-import sys
-import math
-import numbers
+# Copyright 2009-2015 Ram Rachum.
+# This program is distributed under the MIT license.
 
-from python_toolbox import misc_tools
-from python_toolbox import binary_search
-from python_toolbox import dict_tools
+import collections
+
 from python_toolbox import nifty_collections
 from python_toolbox import caching
-
-from python_toolbox import math_tools
 from python_toolbox import sequence_tools
-from python_toolbox import cute_iter_tools
-from python_toolbox import nifty_collections
-from python_toolbox import misc_tools
-
-from . import misc
 
 infinity = float('inf')
 
 
         
 class MapSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
+    '''
+    A space of a function applied to a sequence.
+    
+    This is similar to Python's builtin `map`, except that it behaves like a
+    sequence rather than an iterable. (Though it's also iterable.) You can
+    access any item by its index number.
+    '''    
     def __init__(self, function, sequence):
         
         self.function = function
-        self.sequence = sequence_tools. \
-                                         ensure_iterable_is_immutable_sequence(
+        self.sequence = sequence_tools.ensure_iterable_is_immutable_sequence(
             sequence,
             default_type=nifty_collections.LazyTuple
         )
@@ -61,6 +56,7 @@ class MapSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
              
     __eq__ = lambda self, other: (isinstance(other, MapSpace) and
                                   self._reduced == other._reduced)
+    __hash__ = lambda self: hash(self._reduced)
     
     __bool__ = lambda self: bool(self.sequence)
         

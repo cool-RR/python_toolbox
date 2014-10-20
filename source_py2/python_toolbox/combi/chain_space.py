@@ -1,22 +1,14 @@
-import collections
-import types
-import sys
-import math
-import numbers
+# Copyright 2009-2015 Ram Rachum.
+# This program is distributed under the MIT license.
 
-from python_toolbox import misc_tools
+import collections
+
 from python_toolbox import binary_search
-from python_toolbox import dict_tools
 from python_toolbox import nifty_collections
 from python_toolbox import caching
 
-from python_toolbox import math_tools
 from python_toolbox import sequence_tools
-from python_toolbox import cute_iter_tools
 from python_toolbox import nifty_collections
-
-from . import misc
-from python_toolbox import misc_tools
 
 infinity = float('inf')
 
@@ -30,12 +22,12 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     index number rather than just iteration.
     '''
     def __init__(self, sequences):
-        
         self.sequences = nifty_collections.LazyTuple(
             (sequence_tools.ensure_iterable_is_immutable_sequence(
                 sequence, default_type=nifty_collections.LazyTuple)
                                                      for sequence in sequences)
         )
+        
     @caching.CachedProperty
     @nifty_collections.LazyTuple.factory()
     def accumulated_lengths(self):
@@ -53,7 +45,6 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
         
         
     length = caching.CachedProperty(lambda self: self.accumulated_lengths[-1])
-        
         
     def __repr__(self):
         return '<%s: %s>' % (
@@ -96,6 +87,7 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
                    if (not isinstance(sequence, str) or isinstance(item, str)))
         
     def index(self, item):
+        '''Get the index number of `item` in this space.'''
         for sequence, accumulated_length in zip(self.sequences,
                                                 self.accumulated_lengths):
             try:
