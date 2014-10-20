@@ -163,6 +163,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     __ne__ = lambda self, other: not (self == other)
     __hash__ = lambda self: hash(self._reduced)
     __bool__ = lambda self: bool(self._perm_sequence)
+    __nonzero__ = __bool__
     
     def __contains__(self, item):
         try:
