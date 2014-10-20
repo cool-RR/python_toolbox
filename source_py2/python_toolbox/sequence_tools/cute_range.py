@@ -120,6 +120,7 @@ class CuteRange(CuteSequence):
         
     __eq__ = lambda self, other: (type(self) == type(other) and
                                   (self._reduced == other._reduced))
+    __ne__ = lambda self, other: not self == other
     
     distance_to_cover = caching.CachedProperty(lambda self:
                                                         self.stop - self.start)
