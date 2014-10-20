@@ -79,13 +79,9 @@ def test_meaningful_cases():
     for meaningful_numerator, meaningful_denominator in meaningful_cases:
         cute_quotient, cute_remainder = cute_divmod(meaningful_numerator,
                                                     meaningful_denominator)
-        regular_quotient, regular_remainder = divmod(meaningful_numerator,
-                                                     meaningful_denominator)
         assert cute_equal(cute_quotient,
                           cute_floor_div(meaningful_numerator,
                                          meaningful_denominator))
-        assert not cute_equal((cute_quotient, cute_remainder), 
-                              (regular_quotient, regular_remainder))
         assert (cute_quotient ==
                           (meaningful_numerator / meaningful_denominator)) or \
         (0 <= ((meaningful_numerator / meaningful_denominator)

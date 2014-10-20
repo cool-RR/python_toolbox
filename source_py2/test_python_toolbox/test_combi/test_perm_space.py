@@ -3,7 +3,14 @@
 
 import pickle
 import itertools
+import functools
+import math
 
+from python_toolbox import cute_testing
+from python_toolbox import math_tools
+from python_toolbox import cute_iter_tools
+from python_toolbox import nifty_collections
+from python_toolbox import caching
 from python_toolbox import sequence_tools
 
 from python_toolbox import combi
@@ -21,7 +28,14 @@ def test_perm_spaces():
     assert pure_0a == pure_0b == pure_0c == pure_0d
     assert len(pure_0a) == len(pure_0b) == len(pure_0c) == len(pure_0d)
     assert repr(pure_0a) == repr(pure_0b) == repr(pure_0c) == \
-                                repr(pure_0d) == '<PermSpace: CuteRange(0, 4)>'
+                                           repr(pure_0d) == '<PermSpace: 0..3>'
+    
+    assert repr(PermSpace(sequence_tools.CuteRange(3, 7))) == \
+                                                            '<PermSpace: 3..6>'
+    assert repr(PermSpace(sequence_tools.CuteRange(3, 7, 2))) == \
+                                              '<PermSpace: CuteRange(3, 7, 2)>'
+    assert repr(PermSpace(tuple(sequence_tools.CuteRange(3, 7, 2)))) == \
+                                                          '<PermSpace: (3, 5)>'
     
     assert cute_iter_tools.are_equal(pure_0a, pure_0b, pure_0c, pure_0d)
     
@@ -42,9 +56,9 @@ def test_perm_spaces():
     assert first_perm.index(0) == 0
     with cute_testing.RaiseAssertor(ValueError): first_perm.index(5)
     
-    assert last_perm.rapply('meow') == 'woem'
-    assert last_perm.rapply('meow', str) == 'woem'
-    assert last_perm.rapply('meow', tuple) == tuple('woem')
+    assert last_perm.apply('meow') == 'woem'
+    assert last_perm.apply('meow', str) == 'woem'
+    assert last_perm.apply('meow', tuple) == tuple('woem')
     
     with cute_testing.RaiseAssertor(IndexError): pure_0a[- pure_0a.length - 1]
     with cute_testing.RaiseAssertor(IndexError): pure_0a[- pure_0a.length - 2]
@@ -54,8 +68,7 @@ def test_perm_spaces():
     with cute_testing.RaiseAssertor(IndexError): pure_0a[pure_0a.length + 2]
     with cute_testing.RaiseAssertor(IndexError): pure_0a[pure_0a.length + 300]
     
-    with cute_testing.RaiseAssertor(): Perm(24, pure_0a)
-    with cute_testing.RaiseAssertor(): Perm(-1, pure_0a)
+    with cute_testing.RaiseAssertor(): pure_0a[24]
     
     assert pure_0a.take_random() in pure_0c
     
@@ -84,13 +97,12 @@ def test_perm_spaces():
                                                                      first_perm
     
     
-    assert isinstance(first_perm.items, combi.perm.PermItems)
+    assert isinstance(first_perm.items, combi.perming.perm.PermItems)
     assert first_perm.items[2] == (2, 2)
     assert repr(first_perm.items) == '<PermItems: %s>' % repr(first_perm)
-    assert isinstance(first_perm.as_dictoid, combi.perm.PermAsDictoid)
+    assert isinstance(first_perm.as_dictoid, combi.perming.perm.PermAsDictoid)
     assert first_perm.as_dictoid[2] == 2
     assert dict(first_perm.as_dictoid) == {0: 0, 1: 1, 2: 2, 3: 3}
-    assert first_perm % 7 == 0
     assert not (first_perm != first_perm)
     assert first_perm == first_perm
     assert first_perm
@@ -100,8 +112,6 @@ def test_perm_spaces():
     assert some_perm.inverse == ~ some_perm
     assert ~ ~ some_perm == some_perm
     
-    assert int(first_perm) == 0
-    assert int(last_perm) == len(pure_perm_space) - 1
     
     assert first_perm in pure_perm_space
     assert set(first_perm) not in pure_perm_space # No order? Not contained.
@@ -118,21 +128,15 @@ def test_perm_spaces():
                                                 len(pure_perm_space) - 1
     assert pure_perm_space.index(some_perm) == 7
     
-    assert Perm(7, pure_perm_space) ==  Perm(7, range(4)) == Perm(7, 4) == \
-                                                                    some_perm
-    
-    assert Perm((1, 3, 2, 0)) * 'meow' == 'ewom'
-    assert Perm((1, 3, 2, 0)) * Perm('meow', 'meow') == Perm('ewom', 'meow')
-    assert Perm((0, 1, 2, 3)) * [0, 1, 2, 3] == (0, 1, 2, 3)
+    assert 'meow' * Perm((1, 3, 2, 0)) == 'ewom'
+    assert Perm('meow', 'meow') * Perm((1, 3, 2, 0)) == Perm('ewom', 'meow')
+    assert [0, 1, 2, 3] * Perm((0, 1, 2, 3)) == (0, 1, 2, 3)
     assert Perm((0, 1, 2, 3)) * Perm((0, 1, 2, 3)) == Perm((0, 1, 2, 3))
-    assert Perm((0, 1, 3, 2)) * Perm((2, 0, 1, 3)) == Perm((2, 0, 3, 1))
+    assert Perm((2, 0, 1, 3)) * Perm((0, 1, 3, 2)) == Perm((2, 0, 3, 1))
     
     assert (Perm((0, 1, 2, 3)) ** (- 2)) == (Perm((0, 1, 2, 3)) ** (- 1)) == \
            (Perm((0, 1, 2, 3)) ** (0)) == (Perm((0, 1, 2, 3)) ** (1)) == \
            (Perm((0, 1, 2, 3)) ** 2) == (Perm((0, 1, 2, 3)) ** 3)
-    
-    assert Perm('woem', 'meow') ** (-1) == Perm('woem', 'meow')
-    assert Perm('mowe', 'meow') ** (-1) == Perm('mweo', 'meow')
     
     assert set(map(bool, (pure_0a[4:4], pure_0a[3:2]))) == {False}
     assert pure_0a[2:6][1:-1] == pure_0a[3:5]
@@ -149,7 +153,6 @@ def test_perm_spaces():
     
     for i in [10**10, 3*11**9-344, 4*12**8-5, 5*3**20+4]:
         perm = big_perm_space[i]
-        perm.number # Just ensuring no exception
         assert big_perm_space.index(perm) == i
         
     repr_of_big_perm_space = repr(PermSpace(tuple(range(100, 0, -1))))
@@ -210,6 +213,12 @@ def test_fixed_perm_space():
     
     assert big_fixed_perm_space.index(small_fixed_perm_space[1]) != 1
     
+    weird_fixed_perm_space = PermSpace(range(100),
+                                       fixed_map=zip(range(90), range(90)))
+    assert weird_fixed_perm_space.length == math_tools.factorial(10)
+    assert weird_fixed_perm_space[-1234566][77] == 77
+    assert len(repr(weird_fixed_perm_space)) <= 100
+    
     
 def test_rapplied_perm_space():
     rapplied_perm_space = PermSpace('meow')
@@ -240,10 +249,7 @@ def test_dapplied_perm_space():
     assert (0, 4, 'ooga booga', 2, 3, 1) not in dapplied_perm_space
     assert dapplied_perm_space.get_partialled(3)[2] not in dapplied_perm_space
     
-    assert dapplied_perm_space.undapplied[7] in dapplied_perm_space
-    # (This is true because the only difference between the two perms is the
-    # domain, so we let it slide, because we still want to look at them as
-    # sequences and not dicts.)
+    assert dapplied_perm_space.undapplied[7] not in dapplied_perm_space
     
     dapplied_perm = dapplied_perm_space[-1]
     assert dapplied_perm in dapplied_perm_space
@@ -259,13 +265,19 @@ def test_dapplied_perm_space():
     assert dapplied_perm['r'] == 3
     assert dapplied_perm['g'] == 4
     assert repr(dapplied_perm) == \
-         '''<Perm: (119 / 120) ('g', 'r', 'o', 'w', 'l') => (4, 3, 2, 1, 0)>'''
+                     '''<Perm: ('g', 'r', 'o', 'w', 'l') => (4, 3, 2, 1, 0)>'''
     
     assert dapplied_perm.index(4) == 'g'
     
     assert dapplied_perm.as_dictoid['g'] == 4
     assert dapplied_perm.items[0] == ('g', 4)
     
+    with cute_testing.RaiseAssertor(IndexError):
+        dapplied_perm[2]
+    with cute_testing.RaiseAssertor(IndexError):
+        dapplied_perm.as_dictoid[2]
+    with cute_testing.RaiseAssertor(ValueError):
+        dapplied_perm.index('x')
     
     # `__contains__` works on the values, not the keys:
     for char in 'growl':
@@ -280,13 +292,11 @@ def test_dapplied_perm_space():
     assert not dapplied_perm_space._just_fixed.is_combination
     assert not dapplied_perm_space._just_fixed.is_degreed
     
-    assert repr(dapplied_perm_space) == \
-                                      "<PermSpace: 'growl' => CuteRange(0, 5)>"
+    assert repr(dapplied_perm_space) == "<PermSpace: 'growl' => 0..4>"
     
     # Testing `repr` shortening: 
-    assert repr(PermSpace(20, domain=tuple(range(20, 0, -1)))) == (
-        '<PermSpace: (20, 19, 18, 17, 16, 15, 14, 13, 12 ... ) => '
-        'CuteRange(0, 20)>'
+    assert repr(PermSpace(20, domain=tuple(range(19, -1, -1)))) == (
+        '<PermSpace: (19, 18, 17, 16, 15, 14, 13, 12, 11 ... ) => 0..19>'
     )
     
 def test_degreed_perm_space():
@@ -298,15 +308,16 @@ def test_degreed_perm_space():
         assert perm.degree == 1
         
         
-    for perm in PermSpace(5, degrees=(1, 3)):
+    perm_space = PermSpace(5, degrees=(1, 3))
+    for perm in perm_space:
         assert perm.degree in (1, 3)
         
     assert cute_iter_tools.is_sorted(
-        [perm.number for perm in PermSpace(5, degrees=(1, 3))]
+        [perm_space.index(perm) for perm in perm_space]
     )
     
     assert PermSpace(
-        7, 'travels',
+        7, domain='travels',
         fixed_map={'l': 5, 'a': 2, 't': 0, 'v': 3, 'r': 1, 'e': 6},
         degrees=(1, 3, 5)
     ).length == 1
@@ -360,11 +371,8 @@ def test_degreed_perm_space():
         assert perm.unrapplied.is_dapplied
         
     assert cute_iter_tools.is_sorted(
-        [perm.number for perm in funky_perm_space]
+        [funky_perm_space.index(perm) for perm in funky_perm_space]
     )
-    
-    assert cute_iter_tools.is_sorted(funky_perm_space)
-    
     
     other_perms_chain_space = ChainSpace((funky_perm_space.unsliced[:2],
                                           funky_perm_space.unsliced[-2:]))
@@ -384,11 +392,6 @@ def test_degreed_perm_space():
         
     assert other_perms_chain_space.length + funky_perm_space.length == \
                                                funky_perm_space.unsliced.length
-    
-    assert cute_iter_tools.is_sorted(
-        [perm.number for perm in other_perms_chain_space]
-    )
-    
     
     assert funky_perm_space.unsliced.length + \
            funky_perm_space.unsliced.undegreed.get_degreed(
@@ -410,8 +413,18 @@ def test_degreed_perm_space():
     
     
 def test_partial_perm_space():
-    with cute_testing.RaiseAssertor():
-        PermSpace(5, n_elements=6)
+    empty_partial_perm_space = PermSpace(5, n_elements=6)
+    assert empty_partial_perm_space.length == 0
+    assert empty_partial_perm_space.variation_selection == \
+           perming.variations.VariationSelection(
+                                        {perming.variations.Variation.PARTIAL})
+    assert empty_partial_perm_space != PermSpace(5, n_elements=7)
+    with cute_testing.RaiseAssertor(IndexError):
+        empty_partial_perm_space[0]
+    assert range(4) not in empty_partial_perm_space
+    assert range(5) not in empty_partial_perm_space
+    assert range(6) not in empty_partial_perm_space
+    assert range(7) not in empty_partial_perm_space
         
     perm_space_0 = PermSpace(5, n_elements=5)
     perm_space_1 = PermSpace(5, n_elements=3)
@@ -464,7 +477,6 @@ def test_partial_perm_space():
         assert perm_space_2.index(perm) == i
         reconstructed_perm = Perm(tuple(perm), perm_space=perm_space_2)
         assert perm == reconstructed_perm
-        assert perm.number == reconstructed_perm.number == i
         
     
     for i, perm in enumerate(perm_space_7):
@@ -476,20 +488,21 @@ def test_partial_perm_space():
         assert perm[0] < perm[1]
         reconstructed_perm = Perm(tuple(perm), perm_space=perm_space_7)
         assert perm == reconstructed_perm
-        assert perm.number == reconstructed_perm.number == i
         
     assert cute_iter_tools.is_sorted(
-        [perm.number for perm in perm_space_2]
+        [perm_space_2.index(perm) for perm in perm_space_2]
     )
     assert cute_iter_tools.is_sorted(
         [tuple(perm) for perm in perm_space_2]
     )
     assert cute_iter_tools.is_sorted(
-        [perm.number for perm in perm_space_7]
+        [perm_space_7.index(perm) for perm in perm_space_7]
     )
     assert cute_iter_tools.is_sorted(
         [tuple(perm) for perm in perm_space_7]
     )
+    
+    assert empty_partial_perm_space.length == 0
     
     
 def test_neighbors():
@@ -502,7 +515,7 @@ def test_neighbors():
     
     
     
-    first_and_second_level_neighbors = perm.get_neighbors((1, 2))
+    first_and_second_level_neighbors = perm.get_neighbors(degrees=(1, 2))
     assert Perm('woem', 'meow') in first_and_second_level_neighbors
     assert Perm('meow', 'meow') not in first_and_second_level_neighbors
     assert Perm('owem', 'meow') in first_and_second_level_neighbors
@@ -511,8 +524,163 @@ def test_neighbors():
     
     assert set(first_level_neighbors) < set(first_and_second_level_neighbors)
     
-    assert perm in perm.get_neighbors((0, 1))
-    assert set(first_level_neighbors) < set(perm.get_neighbors((0, 1)))
-    assert len(first_level_neighbors) + 1 == len(perm.get_neighbors((0, 1)))
+    assert perm in perm.get_neighbors(degrees=(0, 1))
+    assert set(first_level_neighbors) < set(perm.get_neighbors(degrees=(0, 1)))
+    assert len(first_level_neighbors) + 1 == \
+                                        len(perm.get_neighbors(degrees=(0, 1)))
     
     
+def test_recurrent():
+    recurrent_perm_space = PermSpace('abbccddd', n_elements=3)
+    assert recurrent_perm_space.is_recurrent
+    assert recurrent_perm_space.is_partial
+    assert recurrent_perm_space.length == 52
+    assert recurrent_perm_space.combinationed.length == 14
+    
+    assert recurrent_perm_space.get_fixed({1: 'b',}).length == 14
+    
+    assert PermSpace('aab', n_elements=1).length == 2
+    
+    recurrent_perm_space = PermSpace('ab' * 100, n_elements=2)
+    assert recurrent_perm_space.length == 4
+    assert tuple(map(tuple, recurrent_perm_space)) == (
+        ('a', 'b'),
+        ('a', 'a'),
+        ('b', 'a'),
+        ('b', 'b'),
+    )
+    assert recurrent_perm_space.unrecurrented.length == 200 * 199
+    assert tuple(map(tuple, recurrent_perm_space.unrecurrented[0:6])) == (
+        ('a', 'b'),
+        ('a', 'a'),
+        ('a', 'b'),
+        ('a', 'a'),
+        ('a', 'b'),
+        ('a', 'a'),
+    )
+    assert tuple(map(tuple, recurrent_perm_space.unrecurrented[-6:])) == (
+        ('b', 'b'),
+        ('b', 'a'),
+        ('b', 'b'),
+        ('b', 'a'),
+        ('b', 'b'),
+        ('b', 'a'),
+    )
+    
+    recurrent_comb_space = CombSpace('ab' * 100, n_elements=2)
+    assert recurrent_comb_space.length == 3
+    assert tuple(map(tuple, recurrent_comb_space)) == (
+        ('a', 'b'),
+        ('a', 'a'),
+        ('b', 'b'),
+    )
+    
+    recurrent_perm_space = PermSpace('ab' * 100 + 'c', n_elements=2)
+    assert recurrent_perm_space.length == 8
+    assert tuple(map(tuple, recurrent_perm_space)) == (
+        ('a', 'b'),
+        ('a', 'a'),
+        ('a', 'c'),
+        ('b', 'a'),
+        ('b', 'b'),
+        ('b', 'c'),
+        ('c', 'a'),
+        ('c', 'b'),
+    )
+    
+    recurrent_comb_space = CombSpace('ab' * 100 + 'c', n_elements=2)
+    assert recurrent_comb_space.length == 5
+    assert tuple(map(tuple, recurrent_comb_space)) == (
+        ('a', 'b'),
+        ('a', 'a'),
+        ('a', 'c'),
+        ('b', 'b'),
+        ('b', 'c'),
+    )
+    
+    assert PermSpace(4).unrecurrented == PermSpace(4)
+    
+    
+def test_unrecurrented():
+    recurrent_perm_space = combi.PermSpace('abcabc')
+    unrecurrented_perm_space = recurrent_perm_space.unrecurrented
+    assert unrecurrented_perm_space.length == math_tools.factorial(6)
+    perm = unrecurrented_perm_space[100]
+    assert all(i in 'abc' for i in perm)
+    assert set(map(perm.index, 'abc')) < {0, 1, 2, 3, 4}
+    assert set(''.join(perm)) == set('abc')
+    
+    
+def test_perm_type():
+    
+    class Suit(nifty_collections.CuteEnum):
+        club = 'club'
+        diamond = 'diamond'
+        heart = 'heart'
+        spade = 'spade'
+    
+    @functools.total_ordering
+    class Card():
+        def __init__(self, number_and_suit):
+            number, suit = number_and_suit
+            assert number in range(1, 14)
+            assert isinstance(suit, Suit)
+            self.number = number
+            self.suit = suit
+            
+        _sequence = \
+                  caching.CachedProperty(lambda self: (self.number, self.suit))
+        _reduced = \
+              caching.CachedProperty(lambda self: (type(self), self._sequence))
+        def __lt__(self, other):
+            if not isinstance(other, Card): return NotImplemented
+            return self._sequence < other._sequence
+        def __eq__(self, other):
+            return type(self) == type(other) and \
+                                              self._sequence == other._sequence
+        __hash__ = lambda self: hash(self._reduced)
+        __repr__ = lambda self: '%s%s' % (
+            self.number if self.number <= 10 else 'jqk'[self.number - 11],
+            str(self.suit.name)[0].capitalize()
+        )
+            
+            
+        
+    card_space = combi.MapSpace(Card,
+                                combi.ProductSpace((range(1, 14), Suit)))
+    
+    class PokerHandSpace(combi.CombSpace):
+        def __init__(self):
+            super().__init__(card_space, 5, perm_type=PokerHand)
+            
+    class PokerHand(combi.Comb):
+        @caching.CachedProperty
+        def stupid_score(self):
+            return tuple(
+                zip(*nifty_collections.Bag(card.number for card in self)
+                    .most_common()))[1]
+        
+    poker_hand_space = PokerHandSpace()
+    
+    assert isinstance(poker_hand_space[0], PokerHand)
+    
+    some_poker_hands = MapSpace(poker_hand_space.__getitem__,
+                                range(1000000, 2000000, 17060))
+    some_poker_hand_scores = set(poker_hand.stupid_score for poker_hand
+                                                           in some_poker_hands)
+    assert (1, 1, 1, 1, 1) in some_poker_hand_scores
+    assert (2, 1, 1, 1) in some_poker_hand_scores
+    assert (2, 2, 1) in some_poker_hand_scores
+    assert (3, 1, 1) in some_poker_hand_scores
+    
+    card_comb_sequence = (Card((1, Suit.club)), Card((2, Suit.diamond)), 
+                          Card((3, Suit.heart)), Card((4, Suit.spade)),
+                          Card((5, Suit.club)))
+    assert cute_iter_tools.is_sorted(card_comb_sequence)
+    assert card_comb_sequence in poker_hand_space
+    assert PokerHand(card_comb_sequence, poker_hand_space) in poker_hand_space
+    assert card_comb_sequence[::-1] not in poker_hand_space
+    assert PokerHand(card_comb_sequence[::-1], poker_hand_space) \
+                                                        not in poker_hand_space
+    assert PokerHand(card_comb_sequence, poker_hand_space).stupid_score == \
+                                                                (1, 1, 1, 1, 1)

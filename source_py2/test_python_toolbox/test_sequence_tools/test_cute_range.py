@@ -9,6 +9,12 @@ from python_toolbox.sequence_tools import CuteRange
 infinity = float('inf')
 
 
+def test():
+    for x, y in zip((CuteRange(10.4, -float('inf'), -7.1)[:5]),
+                    (10.4, 3.3, -3.8, -10.9, -18.0, -25.1)):
+        assert abs(x - y) < 0.000001
+
+
 def test_finite():
     finite_range_arguments_tuples = (
         (10,), (3,), (20, 30), (20, 30, 2), (20, 30, -2)
@@ -68,4 +74,9 @@ def test_float():
         assert float in list(map(type, cr0[:2]))
         
         
+    def test_short_repr():
+    assert CuteRange(7, 10).short_repr == '7..9'
+    assert CuteRange(7, 10, 3).short_repr == 'CuteRange(7, 10, 3)'
+    assert CuteRange(-8, infinity).short_repr == '-8..inf'
+    assert CuteRange(8, -infinity, -1).short_repr == 'CuteRange(8, -inf, -1)'
     

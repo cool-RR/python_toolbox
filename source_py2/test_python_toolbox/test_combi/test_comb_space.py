@@ -2,7 +2,10 @@
 # This program is distributed under the MIT license.
 
 from python_toolbox import sequence_tools
+from python_toolbox import math_tools
+from python_toolbox import cute_testing
 
+from python_toolbox import combi
 from python_toolbox.combi import *
 
 
@@ -12,11 +15,12 @@ def test():
     assert isinstance(comb_space, PermSpace)
     assert comb_space.length == 1 + 2 + 3 + 4 + 5
     things_in_comb_space = (
-        'du', 'db', 'br', ('d', 'u'), {'d', 'u'}, Comb('du', comb_space)
+        'du', 'db', 'br', ('d', 'u'), Comb('du', comb_space)
     )
     things_not_in_comb_space = (
         'dx', 'dub', ('d', 'x'), {'d', 'u', 'b'}, Comb('dux', comb_space),
-        Comb('du', CombSpace('other', 2))
+        Comb('du', CombSpace('other', 2)), {'d', 'u'}, 'ud', 'rb',
+        Comb('bu', comb_space)
     )
     
     for thing in things_in_comb_space:
@@ -57,4 +61,21 @@ def test():
     
     
     
+        def test_unrecurrented():
+    recurrent_comb_space = CombSpace('abcabc', 3)
+    assert 'abc' in recurrent_comb_space
+    assert 'aba' in recurrent_comb_space
+    assert 'bcb' in recurrent_comb_space
+    assert 'bbc' not in recurrent_comb_space # Because 'bcb' precedes it. 
+    unrecurrented_comb_space = recurrent_comb_space.unrecurrented
+    assert 6 * 5 * 4 // 3 // 2 == unrecurrented_comb_space.length > \
+           recurrent_comb_space.length == 7
+    for i, comb in enumerate(unrecurrented_comb_space):
+        assert all(i in 'abc' for i in comb)
+        assert set(''.join(comb)) <= set('abc')
+        assert isinstance(comb, combi.UnrecurrentedComb)
+        assert comb[0] in 'abc'
+        comb.unrapplied
+        assert unrecurrented_comb_space.index(comb) == i
+        
         

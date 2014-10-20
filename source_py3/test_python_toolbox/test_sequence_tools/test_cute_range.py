@@ -9,8 +9,6 @@ from python_toolbox.sequence_tools import CuteRange
 infinity = float('inf')
 
 
-
-
 def test():
     for x, y in zip((CuteRange(10.4, -float('inf'), -7.1)[:5]),
                     (10.4, 3.3, -3.8, -10.9, -18.0, -25.1)):

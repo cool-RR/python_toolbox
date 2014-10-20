@@ -43,13 +43,9 @@ def test():
     checkers = [_check_deepcopying, _check_process_passing]
     cross_process_persistent_classes = [A, CrossProcessPersistent]
     
-    iterator = itertools.product(
-        checkers,
-        cross_process_persistent_classes,
-    )
-    
-    for checker, cross_process_persistent_class in iterator:
-        yield checker, cross_process_persistent_class
+    for checker, type_ in itertools.product(checkers,
+                                            cross_process_persistent_classes):
+        checker(type_)
     
         
 def _check_deepcopying(cross_process_persistent_class):
@@ -177,10 +173,11 @@ def test_helpful_warnings_for_old_protocols():
     )
     
     for pickle_module, cross_process_persistent, old_protocol in iterator:
-        yield (_check_helpful_warnings_for_old_protocols, 
+        _check_helpful_warnings_for_old_protocols(
                pickle_module,
                cross_process_persistent,
-               old_protocol)
+            old_protocol
+        )
             
     
 def _check_helpful_warnings_for_old_protocols(pickle_module,

@@ -10,8 +10,8 @@ from python_toolbox.logic_tools import all_equal
 
 def test():
     '''Test the basic working of `all_equal`.'''
-    yield _check, False
-    yield _check, True
+    _check(False)
+    _check(True)
 
 
 def _check(exhaustive):
@@ -36,7 +36,7 @@ def _check(exhaustive):
                                             # infinite.
     
     
-def test_exhaustive():
+def test_exhaustive_true():
     '''Test `all_equal` in cases where `exhaustive=True` is relevant.'''
     
     class FunkyFloat(float):
@@ -53,3 +53,4 @@ def test_exhaustive():
     assert all_equal(funky_floats)
     assert not all_equal(funky_floats, exhaustive=True)
                 
+    

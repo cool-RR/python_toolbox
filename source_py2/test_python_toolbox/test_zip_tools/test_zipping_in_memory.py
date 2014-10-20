@@ -6,15 +6,15 @@ from python_toolbox import cute_testing
 from python_toolbox import zip_tools
 
 
-def test_zipping_in_memory():
+def test():
     ''' '''
     files = (
-        ('meow.txt', "I'm a cat."), 
-        ('dog.txt', "I'm a dog."), 
-        ('folder/binary.bin', ''.join(map(chr, xrange(256))))
+        ('meow.txt', b"I'm a cat."), 
+        ('dog.txt', b"I'm a dog."), 
+        ('folder/binary.bin', bytes(bytearray(range(256))))
     )
     
     zip_archive = zip_tools.zip_in_memory(files)
-    assert isinstance(zip_archive, str)
+    assert isinstance(zip_archive, bytes)
     assert set(zip_tools.unzip_in_memory(zip_archive)) == set(files)
     
