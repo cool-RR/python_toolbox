@@ -1,7 +1,10 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
+from python_toolbox import misc_tools
+
 from .perm_space import PermSpace
+
 
 class CombSpace(PermSpace):
     '''
@@ -29,7 +32,8 @@ class CombSpace(PermSpace):
     extra functionality. (See documentation of `Comb` and `Perm` for more
     info.)
     '''
-    def __init__(self, iterable_or_length, n_elements, *, slice_=None,
+    @misc_tools.limit_positional_arguments(3)
+    def __init__(self, iterable_or_length, n_elements, slice_=None,
                  perm_type=None, _domain_for_checking=None,
                  _degrees_for_checking=None):
         PermSpace.__init__(

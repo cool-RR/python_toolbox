@@ -18,10 +18,11 @@ from .. import misc
 infinity = float('inf')
 
 
-class _BasePermView(metaclass=abc.ABCMeta):
+class _BasePermView(object):
     '''
     Abstract base class for viewers on Perm.
     '''
+    __metaclass__ = abc.ABCMeta
     def __init__(self, perm):
         self.perm = perm
     __repr__ = lambda self: '<%s: %s>' % (type(self).__name__, self.perm)
@@ -69,8 +70,7 @@ class PermType(abc.ABCMeta):
         
 
 @functools.total_ordering
-class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
-           metaclass=PermType):
+class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
     '''
     A permutation of items from a `PermSpace`
     
@@ -87,6 +87,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         23
     
     '''
+    __metaclass__ = PermType
     
     @classmethod
     def coerce(cls, item, perm_space=None):
@@ -384,7 +385,8 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         return n_cycles
       
       
-    def get_neighbors(self, *, degrees=(1,), perm_space=None):
+    @misc_tools.limit_positional_arguments(1)
+    def get_neighbors(self, degrees=(1,), perm_space=None):
         '''
         Get the neighbor permutations of this permutation.
         

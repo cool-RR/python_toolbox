@@ -16,6 +16,7 @@ from python_toolbox import cute_iter_tools
 from python_toolbox import nifty_collections
 from python_toolbox import dict_tools
 from python_toolbox import misc_tools
+from python_toolbox.third_party import funcsigs
 
 from .. import misc
 from . import variations
@@ -54,7 +55,7 @@ class PermSpaceType(abc.ABCMeta):
                 _degrees_for_checking=arguments.get('degrees', None),
             )
         else:
-            return super().__call__(*args, **kwargs)
+            return super(PermSpaceType, cls).__call__(*args, **kwargs)
         
         
 class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
@@ -393,7 +394,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         if not self.is_typed:
             self.untyped = self
 
-    __init__.signature = inspect.signature(__init__)
+    __init__.signature = funcsigs.signature(__init__)
             
     @caching.CachedProperty
     def _unsliced_length(self):
