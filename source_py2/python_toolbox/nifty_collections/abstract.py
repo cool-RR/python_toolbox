@@ -3,7 +3,7 @@
 
 import abc
 import collections
-import queue
+import Queue as queue
 import multiprocessing.queues
 
 

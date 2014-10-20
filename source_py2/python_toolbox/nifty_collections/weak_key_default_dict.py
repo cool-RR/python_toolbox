@@ -9,6 +9,7 @@ See its documentation for more details.
 # todo: revamp
 
 import collections
+import UserDict
 from weakref import ref
 
 

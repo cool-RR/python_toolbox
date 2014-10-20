@@ -159,7 +159,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         else:
             return cls(argument)
     
-    def __init__(self, iterable_or_length, n_elements=None, *, domain=None, 
+    @misc_tools.limit_positional_arguments(3)
+    def __init__(self, iterable_or_length, n_elements=None, domain=None, 
                  fixed_map=None, degrees=None, is_combination=False,
                  slice_=None, perm_type=None):
         
@@ -948,7 +949,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     prefix = None
     
     @classmethod
-    def _create_with_cut_prefix(cls, sequence, domain=None, *,
+    @misc_tools.limit_positional_arguments(3)
+    def _create_with_cut_prefix(cls, sequence, domain=None,
         n_elements=None, fixed_map=None, degrees=None, is_combination=False,
         slice_=None, perm_type=None, shit_set=frozenset()):
         '''

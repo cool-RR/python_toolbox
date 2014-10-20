@@ -6,8 +6,6 @@
 import sys
 import re
 
-from python_toolbox import cute_iter_tools
-
 
 def docstring_trim(docstring):
     '''Trim a docstring, removing redundant tabs.'''
