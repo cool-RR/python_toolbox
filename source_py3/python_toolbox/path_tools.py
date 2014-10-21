@@ -5,7 +5,11 @@
 
 import sys
 import os
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 import glob
 import types
 

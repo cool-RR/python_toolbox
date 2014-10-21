@@ -1,7 +1,11 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 
 from python_toolbox import cute_testing
 from python_toolbox import temp_file_tools

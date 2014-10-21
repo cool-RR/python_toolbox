@@ -5,7 +5,11 @@
 
 import tempfile
 import os.path
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 
 import nose.tools
 

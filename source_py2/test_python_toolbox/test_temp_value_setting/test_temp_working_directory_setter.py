@@ -4,7 +4,11 @@
 '''Testing `python_toolbox.temp_value_setting.TempWorkingDirectorySetter`.'''
 
 import os
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 import shutil
 import tempfile
 

@@ -13,7 +13,11 @@ import glob
 import os
 import types
 import pkgutil
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 
 from python_toolbox import dict_tools
 

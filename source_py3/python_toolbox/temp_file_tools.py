@@ -5,7 +5,11 @@
 
 import tempfile
 import shutil
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 
 from python_toolbox import context_management 
 

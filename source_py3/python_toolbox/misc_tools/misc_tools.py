@@ -4,7 +4,11 @@
 '''This module defines miscellaneous tools.'''
 
 import operator
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 import re
 import math
 import types

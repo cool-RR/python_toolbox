@@ -6,7 +6,11 @@
 from __future__ import division
 
 import operator
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 import re
 import math
 import types

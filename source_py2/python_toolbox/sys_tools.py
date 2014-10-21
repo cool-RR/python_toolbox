@@ -5,7 +5,11 @@
 
 
 import sys
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 import cStringIO as string_io_module
 
 from python_toolbox.context_management import (ContextManager,

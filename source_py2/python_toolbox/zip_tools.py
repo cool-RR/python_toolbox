@@ -8,7 +8,11 @@ import zipfile as zip_module
 import cStringIO as string_io_module
 import os
 import re
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 import fnmatch
 
 
