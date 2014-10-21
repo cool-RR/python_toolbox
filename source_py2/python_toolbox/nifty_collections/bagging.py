@@ -766,8 +766,8 @@ class _OrderedBagMixin(Ordered):
         '''
         if type(self) != type(other):
             return False
-        for item, other_item in itertools.zip_longest(self.items(),
-                                                      other.items()):
+        for item, other_item in itertools.izip_longest(self.items(),
+                                                       other.items()):
             if item != other_item:
                 return False
         else:
