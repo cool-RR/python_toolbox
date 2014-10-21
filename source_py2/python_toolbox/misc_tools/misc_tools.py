@@ -404,6 +404,7 @@ def limit_positional_arguments(n_positional_arguments=0):
                                 ))
             else:
                 return function(*args, **kwargs)
+        inner.wrapped = function
         return inner
     return decorator
             

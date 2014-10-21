@@ -394,7 +394,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         if not self.is_typed:
             self.untyped = self
 
-    __init__.signature = funcsigs.signature(__init__)
+    __init__.signature = funcsigs.signature(__init__.wrapped)
             
     @caching.CachedProperty
     def _unsliced_length(self):
