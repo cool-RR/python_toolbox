@@ -13,6 +13,9 @@ def test():
         RASPBERRY = 'raspberry'
         BANANA = 'banana'
         
+    Flavor.values = (Flavor.CHOCOLATE, Flavor.VANILLA, Flavor.RASPBERRY,
+                     Flavor.BANANA)
+        
     assert tuple(Flavor) == (Flavor.CHOCOLATE, Flavor.VANILLA,
                              Flavor.RASPBERRY, Flavor.BANANA)
     
