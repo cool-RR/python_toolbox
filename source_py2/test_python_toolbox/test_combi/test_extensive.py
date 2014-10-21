@@ -92,7 +92,7 @@ class BrutePermSpace(object):
                         crap.add(fc)
             iterator = make_iterator()
         else:
-            iterator = map(self.perm_type, self._iter())
+            iterator = iter(map(self.perm_type, self._iter()))
         if self.slice_:
             return itertools.islice(iterator, self.slice_.start,
                                     self.slice_.stop)
