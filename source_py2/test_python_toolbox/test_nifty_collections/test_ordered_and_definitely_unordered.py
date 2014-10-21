@@ -32,7 +32,7 @@ def test():
         list, tuple, str, bytearray, bytes,
         nifty_collections.OrderedDict, collections.OrderedDict,
         nifty_collections.OrderedBag, nifty_collections.FrozenOrderedBag, 
-        queue_module.Queue, collections.deque
+        collections.deque
     }
     definitely_unordereds = {
         set, frozenset, collections.defaultdict, collections.Counter,

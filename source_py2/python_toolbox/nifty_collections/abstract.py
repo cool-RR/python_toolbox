@@ -21,6 +21,7 @@ class Ordered():
     __slots__ = ()
 
 
+Ordered.register(bytearray)
 Ordered.register(collections.Sequence)
 Ordered.register(collections.OrderedDict)
 Ordered.register(collections.deque)
