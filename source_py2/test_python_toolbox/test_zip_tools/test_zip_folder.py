@@ -3,6 +3,11 @@
 
 from python_toolbox import cute_testing
 from python_toolbox import temp_file_tools
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 
 from python_toolbox import zip_tools
 
@@ -15,9 +20,9 @@ def test():
         folder_to_zip.mkdir()
         assert isinstance(folder_to_zip, pathlib.Path)
         
-        (folder_to_zip / 'some_file.txt').open('w').write('hello there!')
+        (folder_to_zip / 'some_file.txt').open('w').write(u'hello there!')
         (folder_to_zip / 'some_other_file.txt').open('w').write(
-                                                          'hello there again!')
+                                                         u'hello there again!')
         
         zip_file_path = temp_folder / 'archive.zip'
         assert isinstance(zip_file_path, pathlib.Path)
