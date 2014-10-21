@@ -4,6 +4,8 @@ import sys as _sys
 
 __all__ = ['Enum', 'IntEnum', 'unique']
 
+version = 1, 0, 3
+
 pyver = float('%s.%s' % _sys.version_info[:2])
 
 try:
@@ -163,7 +165,10 @@ class EnumMeta(type):
         __order__ = classdict.get('__order__')
         if __order__ is None:
             if pyver < 3.0:
-                __order__ = [name for (name, value) in sorted(members.items(), key=lambda item: item[1])]
+                try:
+                    __order__ = [name for (name, value) in sorted(members.items(), key=lambda item: item[1])]
+                except TypeError:
+                    __order__ = [name for name in sorted(members.keys())]
             else:
                 __order__ = classdict._member_names
         else:
@@ -643,7 +648,7 @@ def __dir__(self):
             for m in cls.__dict__
             if m[0] != '_'
             ]
-    return (['__class__', '__doc__', '__module__', 'name', 'value'] + added_behavior)
+    return (['__class__', '__doc__', '__module__', ] + added_behavior)
 temp_enum_dict['__dir__'] = __dir__
 del __dir__
 
