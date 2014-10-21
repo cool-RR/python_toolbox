@@ -151,8 +151,6 @@ my_classifiers = [
 
 
 install_requires = ['setuptools']
-if sys.version_info[:2] <= (3, 3):
-    install_requires.append('pathlib,>=1.0.1,<2')
     
 
 setuptools.setup(
