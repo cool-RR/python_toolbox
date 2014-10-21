@@ -24,7 +24,8 @@ from python_toolbox.nifty_collections import (Bag, OrderedBag,
 infinity = float('inf')
 infinities = (infinity, -infinity)
 
-class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
+class BaseBagTestCase(cute_testing.TestCase):
+    __metaclass__ = abc.ABCMeta
     __test__ = False
     def test_common(self):
         bag = self.bag_type('abracadabra')

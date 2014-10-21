@@ -26,7 +26,8 @@ class _NO_ARGUMENT_TYPE(type):
     __repr__ = lambda cls: '<%s>' % cls.__name__
         
 
-class NO_ARGUMENT(metaclass=_NO_ARGUMENT_TYPE): pass
+class NO_ARGUMENT(object):
+    __metaclass__ = _NO_ARGUMENT_TYPE
         
 
 

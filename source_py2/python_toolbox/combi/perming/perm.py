@@ -431,7 +431,7 @@ class UnrecurrentedMixin(object):
     '''Mixin for a permutation in a space that's been unrecurrented.'''
     def __getitem__(self, i):
         return super(UnrecurrentedMixin, self).__getitem__(i)[1]
-    def __iter__(self, i):
+    def __iter__(self):
         return iter(tuple(zip(*super(UnrecurrentedMixin, self).__iter__()))[1])
     index = lambda self, item: self.nominal_perm_space.domain[
         next(j for j, pair in enumerate(self._perm_sequence)

@@ -11,7 +11,7 @@ class EnumType(enum.EnumMeta):
     '''Metaclass for our kickass enum type.'''
     def __dir__(cls):
         # working around Python bug 22506 that would be fixed in Python 3.5.
-        return type.__dir__(cls) + cls._member_names_
+        return object.__dir__(cls) + cls._member_names_
     
     __getitem__ = lambda self, i: self._values_tuple[i]
     # This `__getitem__` is important, so we could feed enum types straight
