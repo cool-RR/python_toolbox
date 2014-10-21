@@ -74,7 +74,7 @@ def test_float():
         assert float in list(map(type, cr0[:2]))
         
         
-    def test_short_repr():
+def test_short_repr():
     assert CuteRange(7, 10).short_repr == '7..9'
     assert CuteRange(7, 10, 3).short_repr == 'CuteRange(7, 10, 3)'
     assert CuteRange(-8, infinity).short_repr == '-8..inf'
