@@ -26,6 +26,7 @@ class OrderedDict(StdlibOrderedDict):
         link_next = link[1]
         link_prev[1] = link_next
         link_next[0] = link_prev
+        root = self.__root
         if last:
             last = self.__root[0]
             link[0] = last
@@ -36,6 +37,7 @@ class OrderedDict(StdlibOrderedDict):
             link[0] = self.__root
             link[1] = first
             root[1] = first[0] = link
+            
 
     def sort(self, key=None, reverse=False):
         '''
