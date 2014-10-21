@@ -169,7 +169,7 @@ class BaseBagTestCase(cute_testing.TestCase):
                 assert not smaller_item >= item
                 assert not smaller_item > item
                 assert smaller_item != item
-            not_smaller_items = [item for item in next(zip(*hierarchy)) if
+            not_smaller_items = [item for item in zip(*hierarchy)[0] if
                                                      item not in smaller_items]
             for not_smaller_item in not_smaller_items:
                 assert not item < smaller_item
