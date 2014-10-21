@@ -15,11 +15,12 @@ del enum.EnumMeta.__dir__
 
 class EnumType(enum.EnumMeta):
     '''Metaclass for our kickass enum type.'''
-    __getitem__ = lambda self, i: self.values[i]
+    __getitem__ = lambda self, i: self._values_tuple[i]
     # This `__getitem__` is important, so we could feed enum types straight
     # into `ProductSpace`.
     
-    __iter__ = lambda self: iter(self.values)
+    _values_tuple = caching.CachedProperty(tuple)
+    
         
     
 @functools.total_ordering
@@ -33,7 +34,7 @@ class _OrderableEnumMixin(object):
     doesn't override them.
     '''
     number = caching.CachedProperty(
-        lambda self: type(self).values.index(self)
+        lambda self: type(self)._values_tuple.index(self)
     )
     __lt__ = lambda self, other: isinstance(other, CuteEnum) and \
                                                    (self.number < other.number)
@@ -43,10 +44,10 @@ class CuteEnum(_OrderableEnumMixin, enum.Enum):
     '''
     An improved version of Python's builtin `enum.Enum` type.
     
-    Note that on Python 2, you must include a line like this after every Enum
+    Note that on Python 2, you must include a line like this in your enum
     definition:
     
-        Flavor.values = (CHOCOLATE, VANILLA, RASPBERRY, BANANA)
+        __order__ = 'CHOCOLATE VANILLA RASPBERRY BANANA'
 
     This defines the order of elements. (On Python 3 you don't have to do this
     because Python 3 can figure out the order by itself.)

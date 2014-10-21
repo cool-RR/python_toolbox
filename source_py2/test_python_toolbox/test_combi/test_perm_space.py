@@ -618,7 +618,7 @@ def test_perm_type():
         diamond = 'diamond'
         heart = 'heart'
         spade = 'spade'
-    Suit.values = (Suit.club, Suit.diamond, Suit.heart, Suit.spade)
+        __order__ = 'club diamond heart spade'
     
     @functools.total_ordering
     class Card():

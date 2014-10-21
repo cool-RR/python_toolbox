@@ -28,9 +28,8 @@ class Variation(nifty_collections.CuteEnum):
     DEGREED = 'degreed'
     SLICED = 'sliced'
     TYPED = 'typed'
-Variation.values = (Variation.RAPPLIED, Variation.RECURRENT, Variation.PARTIAL,
-                    Variation.COMBINATION, Variation.DAPPLIED, Variation.FIXED,
-                    Variation.DEGREED, Variation.SLICED, Variation.TYPED)    
+    __order__ = ('RAPPLIED RECURRENT PARTIAL COMBINATION DAPPLIED FIXED '
+                 'DEGREED SLICED TYPED')
         
 
 class UnallowedVariationSelectionException(exceptions.CuteException):

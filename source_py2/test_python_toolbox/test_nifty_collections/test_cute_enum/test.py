@@ -12,9 +12,7 @@ def test():
         VANILLA = 'vanilla'
         RASPBERRY = 'raspberry'
         BANANA = 'banana'
-        
-    Flavor.values = (Flavor.CHOCOLATE, Flavor.VANILLA, Flavor.RASPBERRY,
-                     Flavor.BANANA)
+        __order__ = 'CHOCOLATE VANILLA RASPBERRY BANANA'
         
     assert tuple(Flavor) == (Flavor.CHOCOLATE, Flavor.VANILLA,
                              Flavor.RASPBERRY, Flavor.BANANA)
