@@ -1,24 +1,25 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-import enum
+from python_toolbox.third_party import enum
 import functools
 
 from python_toolbox import caching
 
+        
+# @orking around Python bug 22506 that would be fixed in Python 3.5:
+del enum.EnumMeta.__dir__
+# This makes enum members not appear in `dir` but it also prevents other
+# important items from being deleted.
+
 
 class EnumType(enum.EnumMeta):
     '''Metaclass for our kickass enum type.'''
-    def __dir__(cls):
-        # working around Python bug 22506 that would be fixed in Python 3.5.
-        return object.__dir__(cls) + cls._member_names_
-    
     __getitem__ = lambda self, i: self._values_tuple[i]
     # This `__getitem__` is important, so we could feed enum types straight
     # into `ProductSpace`.
     
     _values_tuple = caching.CachedProperty(tuple)
-    
     
     
 @functools.total_ordering
