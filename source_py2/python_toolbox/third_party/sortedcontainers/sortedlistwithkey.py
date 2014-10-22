@@ -26,11 +26,12 @@ class Pair:
         return self.key > that.key
     def __ge__(self, that):
         return self.key >= that.key
-    def __getitem__(self, index):
-        return self.key if index == 0 else self.value
     @recursive_repr
     def __repr__(self):
         return 'Pair({0}, {1})'.format(repr(self.key), repr(self.value))
+
+def identity(value):
+    return value
 
 class SortedListWithKey(MutableSequence):
     """
@@ -38,8 +39,7 @@ class SortedListWithKey(MutableSequence):
     items in sorted order.
     """
 
-    def __init__(self, iterable=None, load=1000, key=lambda val: val,
-                 value_orderable=True):
+    def __init__(self, iterable=None, key=identity, load=1000):
         """
         A SortedListWithKey provides most of the same methods as a list, but
         keeps the items in sorted order.
@@ -55,26 +55,20 @@ class SortedListWithKey(MutableSequence):
         default until you start benchmarking. See implementation details for
         more information.
 
+        An optional *key* argument defines a callable that, like the `key`
+        argument to Python's `sorted` function, extracts a comparison key from
+        each element. The default is the identity function.
+
         An optional *key* specifies a key function to apply to inserted
         values. Values will be ordered by their key. A SortedListWithKey
         must maintain the sort order at all times.
-
-        An optional *value_orderable* specifies whether the inserted values are
-        orderable with respect to each other regardless of the key. There is a
-        significant performance improvement possible when values themselves have
-        a total ordering.
 
         SortedListWithKey implements the MutableSequence Abstract Base Class
         type.
         """
         self._key = key
+        self._load = load
         self._list = SortedList(load=load)
-        self._ordered = value_orderable
-
-        if value_orderable:
-            self._pair = lambda key, value: (key, value)
-        else:
-            self._pair = Pair
 
         if iterable is not None:
             self.update(iterable)
@@ -85,22 +79,18 @@ class SortedListWithKey(MutableSequence):
 
     def add(self, value):
         """Add the element *value* to the list."""
-        pair = self._pair(self._key(value), value)
-        self._list.add(pair)
+        self._list.add(Pair(self._key(value), value))
 
     def update(self, iterable):
         """Update the list by adding all elements from *iterable*."""
-        _key, _pair = self._key, self._pair
-        self._list.update(_pair(_key(val), val) for val in iterable)
+        _key = self._key
+        self._list.update(Pair(_key(val), val) for val in iterable)
 
     def __contains__(self, value):
         """Return True if and only if *value* is an element in the list."""
         _list = self._list
         _key = self._key(value)
-        _pair = self._pair(_key, value)
-
-        if self._ordered:
-            return _pair in _list
+        _pair = Pair(_key, value)
 
         _maxes = _list._maxes
 
@@ -141,11 +131,7 @@ class SortedListWithKey(MutableSequence):
         """
         _list = self._list
         _key = self._key(value)
-        _pair = self._pair(_key, value)
-
-        if self._ordered:
-            _list.discard(_pair)
-            return
+        _pair = Pair(_key, value)
 
         _maxes = _list._maxes
 
@@ -187,21 +173,17 @@ class SortedListWithKey(MutableSequence):
         """
         _list = self._list
         _key = self._key(value)
-        _pair = self._pair(_key, value)
-
-        if self._ordered:
-            _list.remove(_pair)
-            return
+        _pair = Pair(_key, value)
 
         _maxes = _list._maxes
 
         if not _maxes:
-            raise ValueError
+            raise ValueError('{0} is not in list'.format(repr(value)))
 
         pos = bisect_left(_maxes, _pair)
 
         if pos == len(_maxes):
-            raise ValueError
+            raise ValueError('{0} is not in list'.format(repr(value)))
 
         _lists = _list._lists
 
@@ -213,7 +195,7 @@ class SortedListWithKey(MutableSequence):
         while True:
             pair = _lists[pos][idx]
             if _key != pair.key:
-                raise ValueError
+                raise ValueError('{0} is not in list'.format(repr(value)))
             if value == pair.value:
                 _list._delete(pos, idx)
                 return
@@ -221,7 +203,7 @@ class SortedListWithKey(MutableSequence):
             if idx == len_sublist:
                 pos += 1
                 if pos == len_lists:
-                    raise ValueError
+                    raise ValueError('{0} is not in list'.format(repr(value)))
                 len_sublist = len(_lists[pos])
                 idx = 0
 
@@ -240,9 +222,9 @@ class SortedListWithKey(MutableSequence):
         Supports slicing.
         """
         if isinstance(index, slice):
-            return list(tup[1] for tup in self._list[index])
+            return list(tup.value for tup in self._list[index])
         else:
-            return self._list[index][1]
+            return self._list[index].value
 
     def __setitem__(self, index, value):
         """
@@ -250,19 +232,19 @@ class SortedListWithKey(MutableSequence):
 
         Supports slicing.
         """
-        _key, _pair = self._key, self._pair
+        _key = self._key
         if isinstance(index, slice):
-            self._list[index] = list(_pair(_key(val), val) for val in value)
+            self._list[index] = list(Pair(_key(val), val) for val in value)
         else:
-            self._list[index] = _pair(_key(value), value)
+            self._list[index] = Pair(_key(value), value)
 
     def __iter__(self):
         """Create an iterator over the list."""
-        return iter(tup[1] for tup in iter(self._list))
+        return iter(tup.value for tup in iter(self._list))
 
     def __reversed__(self):
         """Create an iterator to traverse the list in reverse."""
-        return iter(tup[1] for tup in reversed(self._list))
+        return iter(tup.value for tup in reversed(self._list))
 
     def __len__(self):
         """Return the number of elements in the list."""
@@ -274,30 +256,24 @@ class SortedListWithKey(MutableSequence):
         appropriate index to insert *value*. If *value* is already present, the
         insertion point will be before (to the left of) any existing entries.
         """
-        pair = self._pair(self._key(value), value)
-        return self._list.bisect_left(pair)
+        return self._list.bisect_left(Pair(self._key(value), value))
 
     def bisect(self, value):
         """Same as bisect_right."""
-        pair = self._pair(self._key(value), value)
-        return self._list.bisect_right(pair)
+        return self._list.bisect_right(Pair(self._key(value), value))
 
     def bisect_right(self, value):
         """
         Same as *bisect_left*, but if *value* is already present, the insertion
         point will be after (to the right of) any existing entries.
         """
-        pair = self._pair(self._key(value), value)
-        return self._list.bisect_right(pair)
+        return self._list.bisect_right(Pair(self._key(value), value))
 
     def count(self, value):
         """Return the number of occurrences of *value* in the list."""
         _list = self._list
         _key = self._key(value)
-        _pair = self._pair(_key, value)
-
-        if self._ordered:
-            return _list.count(_pair)
+        _pair = Pair(_key, value)
 
         _maxes = _list._maxes
 
@@ -333,37 +309,31 @@ class SortedListWithKey(MutableSequence):
 
     def copy(self):
         """Return a shallow copy of the sorted list with key."""
-        _key, _ordered, _load = self._key, self._ordered, self._list._load
-        kwargs = dict(key=_key, value_orderable=_ordered, load=_load)
-        return SortedListWithKey(self, **kwargs)
+        return SortedListWithKey(self, key=self._key, load=self._load)
 
-    def __copy__(self):
-        """Return a shallow copy of the sorted list with key."""
-        return self.copy()
+    __copy__ = copy
 
     def append(self, value):
         """
         Append the element *value* to the list. Raises a ValueError if the
         *value* would violate the sort order.
         """
-        pair = self._pair(self._key(value), value)
-        self._list.append(pair)
+        self._list.append(Pair(self._key(value), value))
 
     def extend(self, iterable):
         """
         Extend the list by appending all elements from *iterable*. Raises a
         ValueError if the sort order would be violated.
         """
-        _key, _pair = self._key, self._pair
-        self._list.extend(_pair(_key(val), val) for val in iterable)
+        _key = self._key
+        self._list.extend(Pair(_key(val), val) for val in iterable)
 
     def insert(self, index, value):
         """
         Insert the element *value* into the list at *index*. Raises a ValueError
         if the *value* at *index* would violate the sort order.
         """
-        pair = self._pair(self._key(value), value)
-        self._list.insert(index, pair)
+        self._list.insert(index, Pair(self._key(value), value))
 
     def pop(self, index=-1):
         """
@@ -371,7 +341,7 @@ class SortedListWithKey(MutableSequence):
         list is empty or index is out of range.  Negative indices are supported,
         as for slice indices.
         """
-        return self._list.pop(index)[1]
+        return self._list.pop(index).value
 
     def index(self, value, start=None, stop=None):
         """
@@ -382,11 +352,7 @@ class SortedListWithKey(MutableSequence):
         """
         _list = self._list
         _key = self._key(value)
-        _pair = self._pair(_key, value)
-
-        if self._ordered:
-            return _list.index(_pair, start, stop)
-
+        _pair = Pair(_key, value)
         _len = _list._len
 
         if start is None:
@@ -404,13 +370,13 @@ class SortedListWithKey(MutableSequence):
             stop = _len
 
         if stop <= start:
-            raise ValueError
+            raise ValueError('{0} is not in list'.format(repr(value)))
 
         _maxes = _list._maxes
         pos = bisect_left(_maxes, _pair)
 
         if pos == len(_maxes):
-            raise ValueError
+            raise ValueError('{0} is not in list'.format(repr(value)))
 
         _lists = _list._lists
 
@@ -422,7 +388,7 @@ class SortedListWithKey(MutableSequence):
         while True:
             pair = _lists[pos][idx]
             if _key != pair.key:
-                raise ValueError
+                raise ValueError('{0} is not in list'.format(repr(value)))
             if value == pair.value:
                 loc = _list._loc(pos, idx)
                 if start <= loc < stop:
@@ -431,13 +397,13 @@ class SortedListWithKey(MutableSequence):
             if idx == len_sublist:
                 pos += 1
                 if pos == len_lists:
-                    raise ValueError
+                    raise ValueError('{0} is not in list'.format(repr(value)))
                 len_sublist = len(_lists[pos])
                 idx = 0
 
     def as_list(self):
         """Very efficiently convert the SortedListWithKey to a list."""
-        return list(tup[1] for tup in self._list.as_list())
+        return list(tup.value for tup in self._list.as_list())
 
     def __add__(self, that):
         """
@@ -445,11 +411,7 @@ class SortedListWithKey(MutableSequence):
         *that*. Elements in *that* do not need to be properly ordered with
         respect to *self*.
         """
-        result = SortedListWithKey(
-            key=self._key,
-            value_orderable=self._ordered,
-            load=self._list._load
-        )
+        result = SortedListWithKey(key=self._key, load=self._load)
         values = self.as_list()
         values.extend(that)
         result.update(values)
@@ -469,12 +431,7 @@ class SortedListWithKey(MutableSequence):
         in SortedList.
         """
         values = self.as_list() * that
-        return SortedListWithKey(
-            values,
-            key=self._key,
-            value_orderable=self._ordered,
-            load=self._list._load
-        )
+        return SortedListWithKey(values, key=self._key, load=self._load)
 
     def __imul__(self, that):
         """
@@ -519,16 +476,15 @@ class SortedListWithKey(MutableSequence):
     @recursive_repr
     def __repr__(self):
         """Return string representation of SortedListWithKey."""
-        temp = '{0}({1}, key={2}, value_orderable={3}, load={4})'
+        temp = '{0}({1}, key={2}, load={3})'
         return temp.format(
             self.__class__.__name__,
             repr(self.as_list()),
             repr(self._key),
-            repr(self._ordered),
-            repr(self._list._load)
+            repr(self._load)
         )
 
     def _check(self):
         _list, _key = self._list, self._key
         _list._check()
-        assert all(pair[0] == _key(pair[1]) for pair in _list)
+        assert all(pair.key == _key(pair.value) for pair in _list)

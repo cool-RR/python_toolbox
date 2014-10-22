@@ -195,19 +195,19 @@ class SortedList(MutableSequence):
         _maxes = self._maxes
 
         if not _maxes:
-            raise ValueError
+            raise ValueError('{0} not in list'.format(repr(val)))
 
         pos = bisect_left(_maxes, val)
 
         if pos == len(_maxes):
-            raise ValueError
+            raise ValueError('{0} not in list'.format(repr(val)))
 
         _lists = self._lists
         idx = bisect_left(_lists[pos], val)
         if _lists[pos][idx] == val:
             self._delete(pos, idx)
         else:
-            raise ValueError
+            raise ValueError('{0} not in list'.format(repr(val)))
 
     def _delete(self, pos, idx):
         """Delete the item at the given (pos, idx).
@@ -240,7 +240,7 @@ class SortedList(MutableSequence):
 
         elif len(_lists) > 1:
 
-            if pos == 0:
+            if not pos:
                 pos += 1
 
             prev = pos - 1
@@ -307,12 +307,12 @@ class SortedList(MutableSequence):
 
         Computing the index is the sum of the total and beta: 5 + 3 = 8.
         """
-        if pos == 0:
+        if not pos:
             return idx
 
         _index = self._index
 
-        if len(_index) == 0:
+        if not len(_index):
             self._build_index()
 
         total = 0
@@ -395,16 +395,16 @@ class SortedList(MutableSequence):
                 return len(_lists) - 1, last_len + idx
             idx += _len
             if idx < 0:
-                raise IndexError
+                raise IndexError('list index out of range')
         elif idx >= _len:
-            raise IndexError
+            raise IndexError('list index out of range')
 
         if idx < len(_lists[0]):
             return 0, idx
 
         _index = self._index
 
-        if len(_index) == 0:
+        if not len(_index):
             self._build_index()
 
         pos = 0
@@ -644,7 +644,8 @@ class SortedList(MutableSequence):
                 idx_prev = len(_lists[pos_prev]) - 1
 
             if _lists[pos_prev][idx_prev] > val:
-                raise ValueError
+                msg = '{0} not in sort order at index {1}'.format(repr(val), idx)
+                raise ValueError(msg)
 
         # Check that the inserted value is not greater than
         # the previous value.
@@ -658,7 +659,8 @@ class SortedList(MutableSequence):
                 idx_next = 0
 
             if _lists[pos_next][idx_next] < val:
-                raise ValueError
+                msg = '{0} not in sort order at index {1}'.format(repr(val), idx)
+                raise ValueError(msg)
 
     def __setitem__(self, index, value):
         """
@@ -731,25 +733,27 @@ class SortedList(MutableSequence):
                               for pos in range(1, len(value)))
 
                 if not ordered:
-                    raise ValueError
+                    raise ValueError('given sequence not in sort order')
 
                 # Check ordering in context of sorted list.
 
-                if start == 0 or len(value) == 0:
+                if not start or not len(value):
                     # Nothing to check on the lhs.
                     pass
                 else:
                     if self[start - 1] > value[0]:
-                        raise ValueError
+                        msg = '{0} not in sort order at index {1}'.format(repr(value[0]), start)
+                        raise ValueError(msg)
 
-                if stop == len(self) or len(value) == 0:
+                if stop == len(self) or not len(value):
                     # Nothing to check on the rhs.
                     pass
                 else:
                     # "stop" is exclusive so we don't need
                     # to add one for the index.
                     if self[stop] < value[-1]:
-                        raise ValueError
+                        msg = '{0} not in sort order at index {1}'.format(repr(value[-1]), stop)
+                        raise ValueError(msg)
 
                 # Delete the existing values.
 
@@ -859,9 +863,7 @@ class SortedList(MutableSequence):
         """Return a shallow copy of the sorted list."""
         return SortedList(self, load=self._load)
 
-    def __copy__(self):
-        """Return a shallow copy of the sorted list."""
-        return self.copy()
+    __copy__ = copy
 
     def append(self, val):
         """
@@ -879,7 +881,8 @@ class SortedList(MutableSequence):
         pos = len(_lists) - 1
 
         if val < _lists[pos][-1]:
-            raise ValueError
+            msg = '{0} not in sort order at index {1}'.format(repr(val), self._len)
+            raise ValueError(msg)
 
         _maxes[pos] = val
         _lists[pos].append(val)
@@ -898,13 +901,14 @@ class SortedList(MutableSequence):
 
         if any(values[pos - 1] > values[pos]
                for pos in range(1, len(values))):
-            raise ValueError
+            raise ValueError('given sequence not in sort order')
 
         offset = 0
 
         if _maxes:
             if values[0] < _lists[-1][-1]:
-                raise ValueError
+                msg = '{0} not in sort order at index {1}'.format(repr(values[0]), self._len)
+                raise ValueError(msg)
 
             if len(_lists[-1]) < self._half:
                 _lists[-1].extend(values[:_load])
@@ -954,9 +958,10 @@ class SortedList(MutableSequence):
             self._len = 1
             return
 
-        if idx == 0:
+        if not idx:
             if val > _lists[0][0]:
-                raise ValueError
+                msg = '{0} not in sort order at index {1}'.format(repr(val), 0)
+                raise ValueError(msg)
             else:
                 _lists[0].insert(0, val)
                 self._expand(0)
@@ -966,7 +971,8 @@ class SortedList(MutableSequence):
         if idx == _len:
             pos = len(_lists) - 1
             if _lists[pos][-1] > val:
-                raise ValueError
+                msg = '{0} not in sort order at index {1}'.format(repr(val), _len)
+                raise ValueError(msg)
             else:
                 _lists[pos].append(val)
                 _maxes[pos] = _lists[pos][-1]
@@ -988,7 +994,8 @@ class SortedList(MutableSequence):
             self._expand(pos)
             self._len += 1
         else:
-            raise ValueError
+            msg = '{0} not in sort order at index {1}'.format(repr(val), idx)
+            raise ValueError(msg)
 
     def pop(self, idx=-1):
         """
@@ -997,7 +1004,7 @@ class SortedList(MutableSequence):
         as for slice indices.
         """
         if (idx < 0 and -idx > self._len) or (idx >= self._len):
-            raise IndexError
+            raise IndexError('pop index out of range')
 
         pos, idx = self._pos(idx)
         val = self._lists[pos][idx]
@@ -1015,7 +1022,7 @@ class SortedList(MutableSequence):
         _len, _maxes = self._len, self._maxes
 
         if not _maxes:
-            raise ValueError
+            raise ValueError('{0} is not in list'.format(repr(val)))
 
         if start is None:
             start = 0
@@ -1032,19 +1039,19 @@ class SortedList(MutableSequence):
             stop = _len
 
         if stop <= start:
-            raise ValueError
+            raise ValueError('{0} is not in list'.format(repr(val)))
 
         stop -= 1
         pos_left = bisect_left(_maxes, val)
 
         if pos_left == len(_maxes):
-            raise ValueError
+            raise ValueError('{0} is not in list'.format(repr(val)))
 
         _lists = self._lists
         idx_left = bisect_left(_lists[pos_left], val)
 
         if _lists[pos_left][idx_left] != val:
-            raise ValueError
+            raise ValueError('{0} is not in list'.format(repr(val)))
 
         left = self._loc(pos_left, idx_left)
 
@@ -1057,7 +1064,7 @@ class SortedList(MutableSequence):
             if start <= right:
                 return start
 
-        raise ValueError
+        raise ValueError('{0} is not in list'.format(repr(val)))
 
     def as_list(self):
         """Very efficiently convert the SortedList to a list."""
