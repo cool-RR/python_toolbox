@@ -24,7 +24,7 @@ def test():
         (folder_to_zip / 'some_other_file.txt').open('w').write(
                                                          u'hello there again!')
         
-        import gc; gc.collect()
+        import gc; gc.collect() # Making PyPy happy.
         
         zip_file_path = temp_folder / 'archive.zip'
         assert isinstance(zip_file_path, pathlib.Path)
@@ -44,3 +44,6 @@ def test():
             ('folder_to_zip/some_file.txt', 'hello there!'), 
             ('folder_to_zip/some_other_file.txt', 'hello there again!'), 
         }
+        
+        import gc; gc.collect() # Making PyPy happy.
+        
