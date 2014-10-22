@@ -83,7 +83,7 @@ class BrutePermSpace(object):
         if (self.is_recurrent and self.is_combination):
             def make_iterator():
                 crap = set()
-                for item in map(self.perm_type, self._iter()):
+                for item in itertools.imap(self.perm_type, self._iter()):
                     fc = nifty_collections.FrozenBag(item)
                     if fc in crap:
                         continue
@@ -92,7 +92,7 @@ class BrutePermSpace(object):
                         crap.add(fc)
             iterator = make_iterator()
         else:
-            iterator = iter(map(self.perm_type, self._iter()))
+            iterator = iter(itertools.imap(self.perm_type, self._iter()))
         if self.slice_:
             return itertools.islice(iterator, self.slice_.start,
                                     self.slice_.stop)
@@ -147,7 +147,6 @@ class FruityMixin(object): pass
 class FruityPerm(FruityMixin, Perm): pass
 class FruityComb(FruityMixin, Comb): pass
 class FruityTuple(FruityMixin, tuple): pass
-
 
 def _check_variation_selection(variation_selection, perm_space_type,
                                iterable_or_length_and_sequence, domain_to_cut,
@@ -264,7 +263,7 @@ def _check_variation_selection(variation_selection, perm_space_type,
         # really not.
     
     for i, (perm, brute_perm_tuple) in enumerate(
-                      itertools.islice(zip(perm_space, brute_perm_space), 10)):
+           itertools.islice(itertools.izip(perm_space, brute_perm_space), 10)):
         
         assert tuple(perm) == brute_perm_tuple
         assert perm in perm_space
