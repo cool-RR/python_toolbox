@@ -154,9 +154,6 @@ def _check_variation_selection(variation_selection, perm_space_type,
                                degrees, slice_, perm_type):
     assert isinstance(variation_selection,
                       combi.perming.variations.VariationSelection)
-    # return  #blocktodo remove
-    print(variation_selection.number) #blocktodo remove
-    
     kwargs = {}
     
     iterable_or_length, sequence = iterable_or_length_and_sequence
