@@ -67,8 +67,12 @@ def test_index():
         ordered_dict.index('Non-existing key')
         
         
-def test_reversed():
+def test_builtin_reversed():
     '''Test the `OrderedDict.__reversed__` method.'''
     
     ordered_dict = OrderedDict(((1, 'a'), (2, 'b'), (3, 'c')))
-    assert list(reversed(ordered_dict)) == [3, 2, 1]
+    assert list(reversed(ordered_dict)) == [3, 2, 1]    
+def test_reversed():
+    ordered_dict = OrderedDict(((1, 'a'), (2, 'b'), (3, 'c')))
+    assert ordered_dict.reversed == OrderedDict(((3, 'c'), (2, 'b'), (1, 'a')))
+    assert type(ordered_dict.reversed) is type(ordered_dict) is OrderedDict
