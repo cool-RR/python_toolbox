@@ -980,6 +980,10 @@ class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
         doc='Sort the keys in this bag. (With optional `key` function.)'
     )
     
+    @property
+    def reversed(self):
+        '''Get a version of this `OrderedBag` with key order reversed.'''
+        return type(self)(self._dict_type(reversed(tuple(self.items()))))
     
                 
 class FrozenBag(_BaseBagMixin, _FrozenBagMixin, FrozenDict):
@@ -1044,6 +1048,14 @@ class FrozenOrderedBag(_OrderedBagMixin, _FrozenBagMixin, _BaseBagMixin,
     '''
     def __hash__(self):
         return hash((type(self), tuple(self.items())))
+    
+    @_BootstrappedCachedProperty
+    def reversed(self):
+        '''
+        Get a version of this `FrozenOrderedBag` with key order reversed.
+        '''        
+        return type(self)(self._dict_type(reversed(tuple(self.items()))))
+        
         
         
 Bag._frozen_type = FrozenBag

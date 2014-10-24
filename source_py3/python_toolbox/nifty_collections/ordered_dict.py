@@ -36,3 +36,8 @@ class OrderedDict(StdlibOrderedDict):
             if key_ == key:
                 return i
         raise RuntimeError
+    
+    @property
+    def reversed(self):
+        '''Get a version of this `OrderedDict` with key order reversed.'''
+        return type(self)(reversed(tuple(self.items())))

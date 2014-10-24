@@ -682,6 +682,28 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
               
 class BaseOrderedBagTestCase(BaseBagTestCase):
     
+    def test_reversed(self):
+        bag = self.bag_type('mississippi')
+        
+        # Cached only for a frozen type:
+        assert (bag.reversed is bag.reversed) == \
+               (bag.reversed.reversed is bag.reversed.reversed) == \
+               isinstance(bag, collections.Hashable)
+        
+        assert bag.reversed == bag.reversed
+        assert bag.reversed.reversed == bag.reversed.reversed
+        
+        assert Bag(bag) == Bag(bag.reversed)
+        assert OrderedBag(bag) != OrderedBag(bag.reversed)
+        
+        assert Bag(bag.elements) == Bag(bag.reversed.elements)
+        assert OrderedBag(bag.elements) != OrderedBag(bag.reversed.elements)
+        assert OrderedBag(bag.elements) == \
+                             OrderedBag(reversed(tuple(bag.reversed.elements)))
+        
+        assert set(bag.keys()) == set(bag.reversed.keys())
+        assert tuple(bag.keys()) == tuple(reversed(tuple(bag.reversed.keys())))
+    
     def test_ordering(self):
         ordered_bag_0 = self.bag_type('ababb')
         ordered_bag_1 = self.bag_type('bbbaa')
@@ -694,10 +716,12 @@ class BaseOrderedBagTestCase(BaseBagTestCase):
         assert ordered_bag_0 != ordered_bag_1
         assert ordered_bag_0 <= ordered_bag_1
         assert ordered_bag_0 >= ordered_bag_1
+        
           
-    def test_reversed(self):
+    def test_builtin_reversed(self):
         bag = self.bag_type('abracadabra')
         assert tuple(reversed(bag)) == tuple(reversed(tuple(bag)))
+
         
     def test_index(self):
         bag = self.bag_type('aaabbc')
@@ -717,6 +741,12 @@ class BaseOrderedBagTestCase(BaseBagTestCase):
           
 class BaseUnorderedBagTestCase(BaseBagTestCase):
     
+    def test_reversed(self):
+        bag = self.bag_type('mississippi')
+        with cute_testing.RaiseAssertor(AttributeError):
+            bag.reversed
+        
+    
     def test_ordering(self):
         bag_0 = self.bag_type('ababb')
         bag_1 = self.bag_type('bbbaa')
@@ -725,7 +755,7 @@ class BaseUnorderedBagTestCase(BaseBagTestCase):
             assert hash(bag_0) == hash(bag_1)
             
             
-    def test_reversed(self):
+    def test_builtin_reversed(self):
         bag = self.bag_type('abracadabra')
         with cute_testing.RaiseAssertor(TypeError):
             reversed(bag)
