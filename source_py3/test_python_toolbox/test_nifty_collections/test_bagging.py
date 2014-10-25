@@ -551,8 +551,8 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         assert bag == self.bag_type('brcdbr')
 
         bag = bag_reference = self.bag_type('abracadabra')
-        bag.update(bag)
-        assert bag == self.bag_type('abracadabra')
+        bag.update(self.bag_type('axy'))
+        assert bag == self.bag_type('abrcdbrxy')
         assert bag is bag_reference
             
     def test_clear(self):

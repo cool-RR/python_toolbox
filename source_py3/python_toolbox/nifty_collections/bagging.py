@@ -47,12 +47,12 @@ def _process_count(count):
     if not math_tools.is_integer(count):
         raise TypeError(
             'You passed %s as a count, while a `Bag` can only handle integer '
-            'counts.' % count
+            'counts.' % repr(count)
         )
     if count < 0:
         raise TypeError(
             "You passed %s as a count, while `Bag` doesn't support negative "
-            "amounts." % count
+            "amounts." % repr(count)
         )
     
     if count == 0:
