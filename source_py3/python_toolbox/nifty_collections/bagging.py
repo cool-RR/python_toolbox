@@ -537,9 +537,6 @@ class _BaseBagMixin:
         )
     
 
-    
-        
-        
 
 class _MutableBagMixin(_BaseBagMixin):
     '''Mixin for a bag that's mutable. (i.e. not frozen.)'''
