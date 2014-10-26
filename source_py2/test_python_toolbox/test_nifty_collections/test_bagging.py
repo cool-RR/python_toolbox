@@ -366,30 +366,30 @@ class BaseBagTestCase(cute_testing.TestCase):
         
         
         
-        def test_get_contained_bags(self):
-            bag = self.bag_type('abracadabra')
-            contained_bags = bag.get_contained_bags()
-            assert len(contained_bags) == 2 ** len('abracadabra')
-            had_full_one = False
-            for contained_bag in contained_bags:
-                assert contained_bag <= bag
-                if contained_bag == bag:
-                    assert had_full_one is False
-                    had_full_one = True
-                else:
-                    assert contained_bag < bag
-                if isinstance(bag, nifty_collections.Ordered):
-                    assert cute_iter_tools.is_sorted(
-                        tuple(contained_bag.items()),
-                        key=tuple(bag.items()).index
-                    )
-                
-            contained_bags_tuple = tuple(contained_bags)
-            assert self.bag_type('arcaba') in contained_bags_tuple
-            assert self.bag_type('db') in contained_bags_tuple
-            assert self.bag_type() in contained_bags_tuple
-            assert self.bag_type('x') not in contained_bags_tuple
+    def test_get_contained_bags(self):
+        bag = self.bag_type('abracadabra')
+        contained_bags = bag.get_contained_bags()
+        assert len(contained_bags) == 6 * 3 * 2 * 2 * 3
+        had_full_one = False
+        for contained_bag in contained_bags:
+            assert contained_bag <= bag
+            if contained_bag == bag:
+                assert had_full_one is False
+                had_full_one = True
+            else:
+                assert contained_bag < bag
+            if isinstance(bag, nifty_collections.Ordered):
+                assert cute_iter_tools.is_sorted(
+                    tuple(contained_bag.keys()),
+                    key=tuple(bag.keys()).index
+                )
             
+        contained_bags_tuple = tuple(contained_bags)
+        assert self.bag_type('abraca') in contained_bags_tuple
+        assert self.bag_type('bd') in contained_bags_tuple
+        assert self.bag_type() in contained_bags_tuple
+        assert self.bag_type('x') not in contained_bags_tuple
+        
         
         
 class BaseMutableBagTestCase(BaseBagTestCase):
@@ -552,8 +552,8 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         assert bag == self.bag_type('brcdbr')
 
         bag = bag_reference = self.bag_type('abracadabra')
-        bag.update(bag)
-        assert bag == self.bag_type('abracadabra')
+        bag.update(self.bag_type('axy'))
+        assert bag == self.bag_type('abrcdbrxy')
         assert bag is bag_reference
             
     def test_clear(self):
