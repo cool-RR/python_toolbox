@@ -1017,6 +1017,7 @@ class FrozenOrderedBag(_OrderedBagMixin, _FrozenBagMixin, _BaseBagMixin,
     need to deal with all the complications of non-numerical counts.
 
     Also, unlike `collections.Counter`:
+    
      -  Items are ordered by insertion order. (Simliarly to
         `collections.OrderedDict`.)
 
