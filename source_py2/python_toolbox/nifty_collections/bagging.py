@@ -923,19 +923,13 @@ class Bag(_MutableBagMixin, _DictDelegator):
     This class provides a lot of methods that `collections.Counter` doesn't;
     among them are a plethora of arithmetic operations (both between bags and
     bags and between bags and integers), comparison methods between bags, and
-    more.
-
-    This is similar to Python's builtin `collections.Counter`, except unlike
-    `collections.Counter`, we don't think of it as a "dict that happens to
-    count objects" but as an object that is absolutely intended for counting
-    objects. This means we do not allow arbitrary values for counts like
-    `collections.Counter` and we don't have to deal with all the complications
-    that follow. Only positive integers are allowed as counts.
+    more. This class is also more restricted than `collections.Counter`; only
+    positive integers may be used as counts (zeros are weeded out), so we don't
+    need to deal with all the complications of non-numerical counts.
     '''
     
     
     
-                
 class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
     '''
     An ordered bag that counts items.
@@ -947,20 +941,15 @@ class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
     
     It can be created from either an iterable like above, or from a `dict`. 
     
-    This is similar to Python's builtin `collections.Counter`, except unlike
-    `collections.Counter`, we don't think of it as a "dict that happens to
-    count objects" but as an object that is absolutely intended for counting
-    objects. This means we do not allow arbitrary values for counts like
-    `collections.Counter` and we don't have to deal with all the complications
-    that follow. Only positive integers are allowed as counts.
-    
     This class provides a lot of methods that `collections.Counter` doesn't;
     among them are a plethora of arithmetic operations (both between bags and
     bags and between bags and integers), comparison methods between bags, and
-    more.
+    more. This class is also more restricted than `collections.Counter`; only
+    positive integers may be used as counts (zeros are weeded out), so we don't
+    need to deal with all the complications of non-numerical counts.
 
-    Also, unlike `collections.Counter`, items have an order. (Simliarly to
-    `collections.OrderedDict`.)
+    Also, unlike `collections.Counter`, items are ordered by insertion order.
+    (Simliarly to `collections.OrderedDict`.)
     '''
     def popitem(self, last=True):
         '''
@@ -996,17 +985,12 @@ class FrozenBag(_BaseBagMixin, _FrozenBagMixin, FrozenDict):
     
     It can be created from either an iterable like above, or from a `dict`. 
     
-    This is similar to Python's builtin `collections.Counter`, except unlike
-    `collections.Counter`, we don't think of it as a "dict that happens to
-    count objects" but as an object that is absolutely intended for counting
-    objects. This means we do not allow arbitrary values for counts like
-    `collections.Counter` and we don't have to deal with all the complications
-    that follow. Only positive integers are allowed as counts.
-    
     This class provides a lot of methods that `collections.Counter` doesn't;
     among them are a plethora of arithmetic operations (both between bags and
     bags and between bags and integers), comparison methods between bags, and
-    more.
+    more. This class is also more restricted than `collections.Counter`; only
+    positive integers may be used as counts (zeros are weeded out), so we don't
+    need to deal with all the complications of non-numerical counts.
     
     Also, unlike `collections.Counter`, it's immutable, therefore it's also
     hashable, and thus it can be used as a key in dicts and sets.
@@ -1027,20 +1011,18 @@ class FrozenOrderedBag(_OrderedBagMixin, _FrozenBagMixin, _BaseBagMixin,
     
     It can be created from either an iterable like above, or from a `dict`. 
     
-    This is similar to Python's builtin `collections.Counter`, except unlike
-    `collections.Counter`, we don't think of it as a "dict that happens to
-    count objects" but as an object that is absolutely intended for counting
-    objects. This means we do not allow arbitrary values for counts like
-    `collections.Counter` and we don't have to deal with all the complications
-    that follow. Only positive integers are allowed as counts.
-    
     This class provides a lot of methods that `collections.Counter` doesn't;
     among them are a plethora of arithmetic operations (both between bags and
     bags and between bags and integers), comparison methods between bags, and
-    more.
+    more. This class is also more restricted than `collections.Counter`; only
+    positive integers may be used as counts (zeros are weeded out), so we don't
+    need to deal with all the complications of non-numerical counts.
 
     Also, unlike `collections.Counter`:
-     - Items have an order. (Simliarly to `collections.OrderedDict`.)
+    
+     -  Items are ordered by insertion order. (Simliarly to
+        `collections.OrderedDict`.)
+
      - It's immutable, therefore it's also hashable, and thus it can be used as
        a key in dicts and sets.
        
