@@ -403,7 +403,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
         if perm_space is None:
             perm_space = self.nominal_perm_space
         return MapSpace(
-            perm_space._coerce_perm,
+            perm_space.coerce_perm,
             nifty_collections.LazyTuple(
                 tuple(perm) for perm in PermSpace(
                     self._perm_sequence,

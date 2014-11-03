@@ -557,6 +557,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         elif self.is_dapplied:
             return self.perm_type(self.undapplied[i], perm_space=self)
             
+        #######################################################################
         elif self.is_degreed:
             if self.is_rapplied:
                 assert not self.is_recurrent and \
@@ -628,6 +629,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             assert wip_i == 0
             return self.perm_type((wip_perm_sequence_dict[k] for k in
                                    self.domain), self)
+        
+        #######################################################################
         elif self.is_recurrent:
             assert not self.is_dapplied and not self.is_degreed and \
                                                              not self.is_sliced
@@ -674,6 +677,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 self
             )
         
+        #######################################################################
         elif self.is_fixed:
             free_values_perm = self._free_values_unsliced_perm_space[i]
             free_values_perm_iterator = iter(free_values_perm)
@@ -687,6 +691,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 self
             )
         
+        #######################################################################
         elif self.is_combination:
             wip_number = self.length - 1 - i
             wip_perm_sequence = []
@@ -706,6 +711,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             return self.perm_type(result, self)
 
         
+        #######################################################################
         else:
             factoradic_number = math_tools.to_factoradic(
                 i * math.factorial(
@@ -781,7 +787,9 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         # At this point we know the permutation contains the correct items, and
         # has the correct degree.
         if perm.is_dapplied: return self.undapplied.index(perm.undapplied)
-        if self.is_degreed:
+        
+        #######################################################################
+        elif self.is_degreed:
             if perm.is_rapplied: return self.unrapplied.index(perm.unrapplied)
             wip_perm_number = 0
             wip_perm_sequence_dict = dict(self.fixed_map)
@@ -803,6 +811,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 
             perm_number = wip_perm_number
             
+        #######################################################################
         elif self.is_recurrent:
             assert not self.is_degreed and not self.is_dapplied
 
@@ -850,6 +859,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 
             perm_number = wip_perm_number
             
+        #######################################################################
         elif self.is_fixed:
             assert not self.is_degreed and not self.is_recurrent
             free_values_perm_sequence = []
@@ -868,6 +878,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             )
             
             
+        #######################################################################
         elif self.is_combination:
             if perm.is_rapplied:
                 return self.unrapplied.index(perm.unrapplied)
@@ -889,8 +900,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 0
             )
               
+        #######################################################################
         else:
-            
             factoradic_number = []
             unused_values = list(self.sequence)
             for i, value in enumerate(perm._perm_sequence):
@@ -903,6 +914,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             ) // math.factorial(self.n_unused_elements)
             
             
+        #######################################################################
+        
         if perm_number not in self.canonical_slice:
             raise ValueError
             
@@ -943,7 +956,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         return super(PermSpace, self).__reduce__(*args, **kwargs)
         
         
-    def _coerce_perm(self, perm):
+    def coerce_perm(self, perm):
         '''Coerce `perm` to be a permutation of this space.'''
         return self.perm_type(perm, self)
     
