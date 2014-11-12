@@ -1028,9 +1028,7 @@ class FrozenOrderedBag(_OrderedBagMixin, _FrozenBagMixin, _BaseBagMixin,
         
     @_BootstrappedCachedProperty
     def reversed(self):
-        '''
-        Get a version of this `FrozenOrderedBag` with key order reversed.
-        '''        
+        '''Get a version of this `FrozenOrderedBag` with key order reversed.'''
         return type(self)(self._dict_type(reversed(tuple(self.items()))))
         
         
