@@ -521,7 +521,7 @@ class _BaseBagMixin:
 
     def get_contained_bags(self):
         '''
-        Get all bags that are subsets of this bags.
+        Get all bags that are subsets of this bag.
         
         This means all bags that have counts identical or smaller for each key.
         '''
@@ -814,7 +814,7 @@ class _FrozenBagMixin:
     _contained_bags = None
     def get_contained_bags(self):
         '''
-        Get all bags that are subsets of this bags.
+        Get all bags that are subsets of this bag.
         
         This means all bags that have counts identical or smaller for each key.
         '''
