@@ -521,10 +521,9 @@ class _BaseBagMixin:
 
     def get_contained_bags(self):
         '''
-        Get all counters that are subsets of this bags.
+        Get all bags that are subsets of this bags.
         
-        This means all counters that have counts identical or smaller for each
-        key.
+        This means all bags that have counts identical or smaller for each key.
         '''
         from python_toolbox import combi
         
@@ -815,10 +814,9 @@ class _FrozenBagMixin:
     _contained_bags = None
     def get_contained_bags(self):
         '''
-        Get all counters that are subsets of this bags.
+        Get all bags that are subsets of this bags.
         
-        This means all counters that have counts identical or smaller for each
-        key.
+        This means all bags that have counts identical or smaller for each key.
         '''
         if self._contained_bags is None:
             self._contained_bags = super().get_contained_bags()
