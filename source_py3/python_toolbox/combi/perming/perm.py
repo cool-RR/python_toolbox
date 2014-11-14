@@ -194,8 +194,21 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         '''
         The inverse of this permutation.
         
-        This means, the permutation such that `perm * ~perm` would be the identity
-        permutation.
+        i.e. the permutation that we need to multiply this permutation by to
+        get the identity permutation.
+        
+        This is also accessible as `~perm`.
+        
+        Example:
+        
+            >>> perm = PermSpace(5)[10]
+            >>> perm
+            <Perm: (0, 2, 4, 1, 3)>
+            >>> ~perm
+            <Perm: (0, 3, 1, 4, 2)>
+            >>> perm * ~perm
+            <Perm: (0, 1, 2, 3, 4)>
+           
         '''
         if self.is_partial:
             raise TypeError("Partial perms don't have an inverse.")
