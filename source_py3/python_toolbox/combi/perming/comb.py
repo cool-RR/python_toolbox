@@ -7,7 +7,7 @@ from .comb_space import CombSpace
         
 class Comb(Perm):
     '''
-    A combination of items from a `CombSpace`
+    A combination of items from a `CombSpace`.
     
     In combinatorics, a combination is like a permutation except with no order.
     In the `combi` package, we implement that by making the items in `Comb` be
