@@ -547,7 +547,7 @@ class _MutableBagMixin(_BaseBagMixin):
             del self[i]
     
     
-    def setdefault(self, key, default):
+    def setdefault(self, key, default=None):
         '''
         Get value of `key`, unless it's zero/missing, if so set to `default`.
         '''
