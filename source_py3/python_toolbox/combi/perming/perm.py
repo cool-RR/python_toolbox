@@ -183,7 +183,18 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         )
         
     def index(self, member):
-        '''Get the index number of `member` in the permutation.'''
+        '''
+        Get the index number of `member` in the permutation.
+        
+        Example:
+        
+            >>> perm = PermSpace(5)[10]
+            >>> perm
+            <Perm: (0, 2, 4, 1, 3)>
+            >>> perm.index(3)
+            4
+        
+        '''
         numerical_index = self._perm_sequence.index(member)
         return self.nominal_perm_space. \
                domain[numerical_index] if self.is_dapplied else numerical_index
