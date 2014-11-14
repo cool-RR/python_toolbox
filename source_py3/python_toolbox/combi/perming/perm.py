@@ -72,7 +72,7 @@ class PermType(abc.ABCMeta):
 class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
            metaclass=PermType):
     '''
-    A permutation of items from a `PermSpace`
+    A permutation of items from a `PermSpace`.
     
     In combinatorics, a permutation is a sequence of items taken from the
     original sequence.
@@ -283,13 +283,13 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         
         This can also be used as `sequence * perm`. Example:
         
-        >>> perm = PermSpace(5)[10]
-        >>> perm
-        <Perm: (0, 2, 4, 1, 3)>
-        >>> perm.apply('growl')
-        'golrw'
-        >>> 'growl' * perm
-        'golrw'
+            >>> perm = PermSpace(5)[10]
+            >>> perm
+            <Perm: (0, 2, 4, 1, 3)>
+            >>> perm.apply('growl')
+            'golrw'
+            >>> 'growl' * perm
+            'golrw'
         
         Specify `result_type` to determine the type of the result returned. If
         `result_type=None`, will use `tuple`, except when `other` is a `str` or
