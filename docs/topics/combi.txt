@@ -6,5 +6,7 @@
 
 .. _topics-combi:
 
-:mod:`combi` - documentation not written
-======================================
+:mod:`combi` - Documentation on Combi site
+==========================================
+
+`Please go to Combi's documentation here <https://combi.readthedocs.org/>`_\ .
