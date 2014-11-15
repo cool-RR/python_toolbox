@@ -72,7 +72,7 @@ class PermType(abc.ABCMeta):
 @functools.total_ordering
 class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
     '''
-    A permutation of items from a `PermSpace`
+    A permutation of items from a `PermSpace`.
     
     In combinatorics, a permutation is a sequence of items taken from the
     original sequence.
@@ -185,7 +185,18 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
         )
         
     def index(self, member):
-        '''Get the index number of `member` in the permutation.'''
+        '''
+        Get the index number of `member` in the permutation.
+        
+        Example:
+        
+            >>> perm = PermSpace(5)[10]
+            >>> perm
+            <Perm: (0, 2, 4, 1, 3)>
+            >>> perm.index(3)
+            4
+        
+        '''
         numerical_index = self._perm_sequence.index(member)
         return self.nominal_perm_space. \
                domain[numerical_index] if self.is_dapplied else numerical_index
@@ -196,8 +207,21 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
         '''
         The inverse of this permutation.
         
-        This means, the permutation such that `perm * ~perm` would be the identity
-        permutation.
+        i.e. the permutation that we need to multiply this permutation by to
+        get the identity permutation.
+        
+        This is also accessible as `~perm`.
+        
+        Example:
+        
+            >>> perm = PermSpace(5)[10]
+            >>> perm
+            <Perm: (0, 2, 4, 1, 3)>
+            >>> ~perm
+            <Perm: (0, 3, 1, 4, 2)>
+            >>> perm * ~perm
+            <Perm: (0, 1, 2, 3, 4)>
+           
         '''
         if self.is_partial:
             raise TypeError("Partial perms don't have an inverse.")

@@ -522,10 +522,9 @@ class _BaseBagMixin(object):
 
     def get_contained_bags(self):
         '''
-        Get all counters that are subsets of this bags.
+        Get all bags that are subsets of this bag.
         
-        This means all counters that have counts identical or smaller for each
-        key.
+        This means all bags that have counts identical or smaller for each key.
         '''
         from python_toolbox import combi
         
@@ -549,7 +548,7 @@ class _MutableBagMixin(_BaseBagMixin):
             del self[i]
     
     
-    def setdefault(self, key, default):
+    def setdefault(self, key, default=None):
         '''
         Get value of `key`, unless it's zero/missing, if so set to `default`.
         '''
@@ -816,10 +815,9 @@ class _FrozenBagMixin(object):
     _contained_bags = None
     def get_contained_bags(self):
         '''
-        Get all counters that are subsets of this bags.
+        Get all bags that are subsets of this bag.
         
-        This means all counters that have counts identical or smaller for each
-        key.
+        This means all bags that have counts identical or smaller for each key.
         '''
         if self._contained_bags is None:
             self._contained_bags = \
@@ -1032,9 +1030,7 @@ class FrozenOrderedBag(_OrderedBagMixin, _FrozenBagMixin, _BaseBagMixin,
         
     @_BootstrappedCachedProperty
     def reversed(self):
-        '''
-        Get a version of this `FrozenOrderedBag` with key order reversed.
-        '''        
+        '''Get a version of this `FrozenOrderedBag` with key order reversed.'''
         return type(self)(self._dict_type(reversed(tuple(self.items()))))
         
         

@@ -20,6 +20,19 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     
     This is similar to `itertools.chain`, except that items can be fetched by
     index number rather than just iteration.
+    
+    Example:
+    
+        >>> chain_space = ChainSpace(('abc', (1, 2, 3)))
+        >>> chain_space
+        <ChainSpace: 3+3>
+        >>> chain_space[4]
+        2
+        >>> tuple(chain_space)
+        ('a', 'b', 'c', 1, 2, 3)
+        >>> chain_space.index(2)
+        4
+    
     '''
     def __init__(self, sequences):
         self.sequences = nifty_collections.LazyTuple(

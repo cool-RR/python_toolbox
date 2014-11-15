@@ -18,6 +18,19 @@ class MapSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     This is similar to Python's builtin `map`, except that it behaves like a
     sequence rather than an iterable. (Though it's also iterable.) You can
     access any item by its index number.
+    
+    Example:
+    
+        >>> map_space = MapSpace(lambda x: x ** 2, range(7))
+        >>> map_space
+        MapSpace(<function <lambda> at 0x00000000030C1510>, range(0, 7))
+        >>> len(map_space)
+        7
+        >>> map_space[3]
+        9
+        >>> tuple(map_space)
+        (0, 1, 4, 9, 16, 25, 36)
+    
     '''    
     def __init__(self, function, sequence):
         
