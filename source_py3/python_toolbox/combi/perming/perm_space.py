@@ -334,9 +334,11 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     {variations.Variation.DEGREED: True,
                      variations.Variation.RECURRENT: True,}
                 )
-            self.degrees = tuple(
+            # The space is degreed; we canonicalize `degrees` into a sorted
+            # tuple.
+            self.degrees = tuple(sorted(
                 degree for degree in degrees if degree in all_degrees
-            )
+            ))
             
         #                                                                     #
         ### Finished figuring out degrees. ####################################
@@ -735,10 +737,14 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     __iter__ = lambda self: (self[i] for i in
                                          sequence_tools.CuteRange(self.length))
     _reduced = property(
-        lambda self: (type(self), self.sequence, self.domain, 
-                      tuple(sorted(self.fixed_map.items())),
-                      self.canonical_slice, self.perm_type)
+        lambda self: (
+            type(self), self.sequence, self.domain, 
+            tuple(sorted(self.fixed_map.items())), self.degrees,
+            self.canonical_slice, self.perm_type
+        )
     )
+    # (No need to include `n_degrees` because it's implied by `domain`. No need
+    # to include `is_combination` because it's implied by `type(self)`.)
              
     __eq__ = lambda self, other: (isinstance(other, PermSpace) and
                                   self._reduced == other._reduced)

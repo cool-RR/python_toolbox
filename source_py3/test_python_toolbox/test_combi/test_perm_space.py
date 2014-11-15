@@ -684,3 +684,64 @@ def test_perm_type():
                                                         not in poker_hand_space
     assert PokerHand(card_comb_sequence, poker_hand_space).stupid_score == \
                                                                 (1, 1, 1, 1, 1)
+    
+    
+def test_variations_make_unequal():
+    
+    class BluePerm(Perm): pass
+    class RedPerm(Perm): pass
+            
+    
+    perm_space = PermSpace(4)
+    
+    assert perm_space == perm_space
+    
+    assert perm_space != perm_space.get_rapplied('meow') != \
+                                                perm_space.get_rapplied('woof')
+    assert perm_space.get_rapplied('meow') == perm_space.get_rapplied('meow')
+    assert perm_space.get_rapplied('woof') == perm_space.get_rapplied('woof')
+    
+    # We're intentionally comparing partial spaces with 1 and 3 elements,
+    # because they have the same length, and we want to be sure that they're
+    # unequal despite of that, and thus that `PermSpace.__eq__` doesn't rely on
+    # length alone but actually checks `n_elements`.
+    assert perm_space != perm_space.get_partialled(1) != \
+                                                   perm_space.get_partialled(3)
+    assert perm_space.get_partialled(1) == perm_space.get_partialled(1)
+    assert perm_space.get_partialled(3) == perm_space.get_partialled(3)
+    
+    assert perm_space != perm_space.combinationed
+    assert perm_space != perm_space.get_dapplied('loud') != \
+                                                perm_space.get_dapplied('blue')
+    assert perm_space.get_dapplied('loud') == perm_space.get_dapplied('loud')
+    assert perm_space.get_dapplied('blue') == perm_space.get_dapplied('blue')
+    
+    assert perm_space != perm_space.get_fixed({1: 2,}) != \
+                                                  perm_space.get_fixed({3: 2,})
+    assert perm_space.get_fixed({1: 2,}) == perm_space.get_fixed({1: 2,})
+    assert perm_space.get_fixed({3: 2,}) == perm_space.get_fixed({3: 2,})
+    
+    # We're intentionally comparing spaces with degrees 1 and 3, because they
+    # have the same length, and we want to be sure that they're unequal despite
+    # of that, and thus that `PermSpace.__eq__` doesn't rely on length alone
+    # but actually checks the degrees.
+    assert perm_space != perm_space.get_degreed(1) != \
+      perm_space.get_degreed(3) != perm_space.get_degreed((1, 3)) != perm_space
+    assert perm_space.get_degreed(2) == perm_space.get_degreed(2)
+    assert perm_space.get_degreed(3) == perm_space.get_degreed(3)
+    assert perm_space.get_degreed((1, 3)) == \
+               perm_space.get_degreed((3, 1)) == perm_space.get_degreed((1, 3))
+    
+    assert perm_space != perm_space[:-1] != perm_space[1:]
+    assert perm_space[:-1] == perm_space[:-1]
+    assert perm_space[1:] == perm_space[1:]
+    
+    assert perm_space != perm_space.get_typed(BluePerm) != \
+                                                  perm_space.get_typed(RedPerm)
+    assert perm_space.get_typed(BluePerm) == perm_space.get_typed(BluePerm)
+    assert perm_space.get_typed(RedPerm) == perm_space.get_typed(RedPerm)
+    
+    
+    
+    
+    
