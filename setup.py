@@ -167,6 +167,11 @@ setuptools.setup(
     packages=get_packages(),
     scripts=['%s/test_python_toolbox/scripts/_test_python_toolbox.py'
                                                               % source_folder],
+    entry_points={
+        'console_scripts': [
+            '_test_python_toolbox = test_python_toolbox:invoke_nose',
+        ],
+    }, 
     long_description=my_long_description,
     license='MIT',
     classifiers=my_classifiers,
