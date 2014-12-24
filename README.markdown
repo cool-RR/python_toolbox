@@ -19,7 +19,9 @@ contains:
 
 Documentation: http://python-toolbox.readthedocs.org   
 
-GitHub: https://github.com/cool-RR/python_toolbox
+Python Toolbox on GitHub: https://github.com/cool-RR/python_toolbox
+
+Python Toolbox on PyPI: https://pypi.python.org/pypi/python_toolbox
 
 The Python Toolbox is released under the MIT license.
 

@@ -102,8 +102,9 @@ backward compatibility would *not* be maintained in this phase.
 
 Documentation: http://python-toolbox.readthedocs.org
 
-GitHub: https://github.com/cool-RR/python_toolbox
+Python Toolbox on GitHub: https://github.com/cool-RR/python_toolbox
 
+Python Toolbox on PyPI: https://pypi.python.org/pypi/python_toolbox
 
 Tests
 =====
