@@ -137,7 +137,7 @@ Make a 1.0 release and start maintaining backward compatibility.
 
 -------------------------------------------------------
 
-Combi was created by Ram Rachum. I provide 
+The Python Toolbox was created by Ram Rachum. I provide 
 `freelance Django/Python development services <https://chipmunkdev.com>`_.
 
 

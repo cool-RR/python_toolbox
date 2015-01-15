@@ -72,7 +72,7 @@ to run the tests.
 
 ------------------------------------------------------------------
 
-Combi was created by Ram Rachum. I provide 
+The Python Toolbox was created by Ram Rachum. I provide 
 [freelance Django/Python development services](https://chipmunkdev.com)
 
 
