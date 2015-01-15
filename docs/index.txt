@@ -32,6 +32,11 @@ Python Toolbox on PyPI: https://pypi.python.org/pypi/python_toolbox
 
 Feel free to fork and send pull requests!
 
+-------------------------------------------------------------------------------
+
+Combi was created by Ram Rachum. I provide 
+`freelance Django/Python development services <https://chipmunkdev.com>`_.
+
 
 
 .. _mailing list: https://groups.google.com/forum/#!forum/python-toolbox

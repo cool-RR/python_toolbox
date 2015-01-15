@@ -69,3 +69,10 @@ installed automatically with the Python Toolbox.
 When `python_toolbox` isn't installed, you may run `nosetests` at the repo root
 to run the tests.
 
+
+------------------------------------------------------------------
+
+Combi was created by Ram Rachum. I provide 
+`freelance Django/Python development services <https://chipmunkdev.com>`_.
+
+
