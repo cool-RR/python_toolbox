@@ -73,6 +73,7 @@ to run the tests.
 ------------------------------------------------------------------
 
 Combi was created by Ram Rachum. I provide 
-`freelance Django/Python development services <https://chipmunkdev.com>`_.
+
+[freelance Django/Python development services](https://chipmunkdev.com)
 
 
