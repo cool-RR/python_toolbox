@@ -73,6 +73,6 @@ to run the tests.
 ------------------------------------------------------------------
 
 The Python Toolbox was created by Ram Rachum. I provide 
-[freelance Django/Python development services](https://chipmunkdev.com)
+[Development services in Python and Django](https://chipmunkdev.com)
 
 

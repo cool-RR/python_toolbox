@@ -35,7 +35,7 @@ Feel free to fork and send pull requests!
 -------------------------------------------------------------------------------
 
 The Python Toolbox was created by Ram Rachum. I provide 
-`freelance Django/Python development services <https://chipmunkdev.com>`_.
+`Development services in Python and Django <https://chipmunkdev.com>`_.
 
 
 
