@@ -47,6 +47,8 @@ def test_various_lengths():
                        ((0, 1, 2, 3), (1, 2, 3, 4), (2, 3, 4, 5), (3, 4, 5, 6))
     assert tuple(iterate_overlapping_subsequences(range(7), length=5)) == \
                             ((0, 1, 2, 3, 4), (1, 2, 3, 4, 5), (2, 3, 4, 5, 6))
+    assert tuple(iterate_overlapping_subsequences(range(7), length=1)) == \
+                                                                tuple(range(7))
     
     assert tuple(iterate_overlapping_subsequences(range(7), length=4,
             wrap_around=True)) == ((0, 1, 2, 3), (1, 2, 3, 4), (2, 3, 4, 5),
@@ -145,7 +147,10 @@ def test_garbage_collection_wrap_around():
     assert_garbage_collected((0, 1, 2, 3, 4, 5, 6))
         
     
-    
+def test_short_iterables():
+    assert tuple(iterate_overlapping_subsequences([1])) == ()
+    assert tuple(iterate_overlapping_subsequences([1], length=7)) == ()
+        
     
             
             
