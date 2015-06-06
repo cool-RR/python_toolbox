@@ -258,7 +258,7 @@ def is_type(thing):
     return isinstance(thing, type)
 
 
-class NonInstatiable:
+class NonInstantiable:
     '''
     Class that can't be instatiated.
     
