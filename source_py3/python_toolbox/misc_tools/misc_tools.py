@@ -307,27 +307,6 @@ def set_attributes(**kwargs):
     return decorator
         
 
-pocket_container = threading.local()
-pocket_container.value = None
-@set_attributes(container=pocket_container)
-def pocket(*args):
-    '''
-    Put something in the pocket, or get the value in the pocket.
-
-    Useful for things like this:
-    
-        if pocket(expensive_computation):
-            result = pocket()
-            # Do something with result...
-
-    The contents of the pocket are thread-local.
-    '''
-    if args:
-        (pocket.container.value,) = args
-    else:
-        return pocket.container.value
-    
-
 _decimal_number_pattern = \
                    re.compile('''^-?(?:(?:[0-9]+(?:.[0-9]*)?)|(?:.[0-9]+))$''')
 def decimal_number_from_string(string):

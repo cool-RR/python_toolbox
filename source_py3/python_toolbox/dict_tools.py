@@ -78,62 +78,6 @@ def fancy_string(d, indent=0):
     return temp2
     
 
-def reverse_with_set_values(d, sort=False):
-    '''
-    Reverse the dict, with the values of the new dict being sets.
-    
-    Example:
-    
-        reverse_with_set_values({1: 2, 3: 4, 'meow': 2}) == \
-                                                       {2: {1, 'meow'}, 4: {3}}
-            
-    Instead of a dict you may also input a tuple in which the first item is an
-    iterable and the second item is either a key function or an attribute name.
-    A dict will be constructed from these and used.
-    
-    If you'd like the result dict to be sorted, pass `sort=True`, and you'll
-    get a sorted `OrderedDict`. You can also specify the sorting key function
-    or attribute name as the `sort` argument.
-    '''
-    ### Pre-processing input: #################################################
-    #                                                                         #
-    if hasattr(d, 'items'): # `d` is a dict
-        fixed_dict = d
-    else: # `d` is not a dict
-        assert cute_iter_tools.is_iterable(d) and len(d) == 2
-        iterable, key_function_or_attribute_name = d
-        assert cute_iter_tools.is_iterable(iterable)
-        key_function = comparison_tools.process_key_function_or_attribute_name(
-            key_function_or_attribute_name
-        )
-        fixed_dict = {key: key_function(key) for key in iterable}
-    #                                                                         #
-    ### Finished pre-processing input. ########################################
-    
-    new_dict = {}
-    for key, value in fixed_dict.items():
-        if value not in new_dict:
-            new_dict[value] = []
-        new_dict[value].append(key)
-    
-    # Making into sets:
-    for key, value in new_dict.copy().items():
-        new_dict[key] = set(value)
-        
-    if sort:
-        from python_toolbox import nifty_collections
-        ordered_dict = nifty_collections.OrderedDict(new_dict)
-        if isinstance(sort, (collections.Callable, str)):
-            key_function = comparison_tools. \
-                                   process_key_function_or_attribute_name(sort)
-        else:
-            assert sort is True
-            key_function = None
-        ordered_dict.sort(key_function)
-        return ordered_dict
-    else:
-        return new_dict
-
 
 def devour_items(d):
     '''Iterator that pops (key, value) pairs from `d` until it's empty.'''
