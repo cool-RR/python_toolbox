@@ -8,6 +8,9 @@ from python_toolbox import sequence_tools
 
 
 class CuteExecutorMixin:
+    '''
+    Coolness is filter and as_completed on both filter and map, blocktododoc
+    '''
     def filter(self, filter_function, iterable, timeout=None,
                as_completed=False):
         '''Get a parallelized version of filter(filter_function, iterable).'''
