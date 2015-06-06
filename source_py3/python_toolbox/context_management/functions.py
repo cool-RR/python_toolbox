@@ -2,7 +2,7 @@
 # This program is distributed under the MIT license.
 
 '''
-This module defines various functions.
+This module defines various functions related to context managers.
 
 See their documentation for more information.
 '''

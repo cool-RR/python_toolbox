@@ -1,12 +1,6 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''
-This module defines the `BlankContextManager` class.
-
-See its documentation for more information.
-'''
-
 from .context_manager import ContextManager
 
 

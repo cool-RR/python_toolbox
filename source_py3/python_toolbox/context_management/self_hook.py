@@ -1,12 +1,6 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''
-This module defines the `SelfHook` class.
-
-See its documentation for more information.
-'''
-
 class SelfHook:
     '''
     Hook that a context manager can yield in order to yield itself.

@@ -153,12 +153,12 @@ class OwnNameDiscoveringDescriptor:
         self.our_name = name
     
         
-    def get_our_name(self, obj, our_type=None):
+    def get_our_name(self, thing, our_type=None):
         if self.our_name is not None:
             return self.our_name
         
         if not our_type:
-            our_type = type(obj)
+            our_type = type(thing)
         (self.our_name,) = (name for name in dir(our_type) if
                             getattr(our_type, name, None) is self)
         

@@ -1,23 +1,13 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''
-This module defines the `Persistent` class.
-
-See its documentation for more information.
-
-
-
-Note: This module is still experimental
-
-todo: need to raise an exception if we're getting pickled with
-an old protocol?
-
-todo: make it polite to other similar classes. Perhaps make it a metaclass?
-'''
 from .copy_modes import DontCopyPersistent
 from python_toolbox import copy_tools
 
+# todo: need to raise an exception if we're getting pickled with
+# an old protocol?
+
+# todo: make it polite to other similar classes. Perhaps make it a metaclass?
 
 __all__ = ['Persistent']
 
