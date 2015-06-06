@@ -53,7 +53,7 @@ def _iterate_overlapping_subsequences(iterable, length, wrap_around):
 
     if length == 1:
         yield from iterable
-        raise StopIteration
+        return
     
     assert length >= 2
     
@@ -69,7 +69,7 @@ def _iterate_overlapping_subsequences(iterable, length, wrap_around):
                 'more than once.'
             )
         else:
-            raise StopIteration
+            return
             
     if wrap_around:
         first_items_except_last = first_items[:-1]
@@ -114,17 +114,17 @@ def _shorten(iterable, length):
 
     if length == infinity:
         yield from iterable
-        raise StopIteration
+        return
     
     assert isinstance(length, int)
 
     if length == 0:
-        raise StopIteration
+        return
     
     for i, thing in enumerate(iterable):
         yield thing
         if i + 1 == length: # Checking `i + 1` to avoid pulling an extra item.
-            raise StopIteration
+            return
         
         
 def enumerate(iterable, reverse_index=False, lazy_tuple=False):
@@ -207,9 +207,10 @@ def _iter_with(iterable, context_manager):
     while True:
         
         with context_manager:
-            next_item = next(iterator)
-            # Recycling `StopIteration` exception. (Assuming the context
-            # manager doesn't have special treatment for it.)
+            try:
+                next_item = next(iterator)
+            except StopIteration:
+                return 
         
         yield next_item
         
@@ -251,7 +252,10 @@ def double_filter(filter_function, iterable, lazy_tuple=False):
             try:
                 yield true_deque.popleft()
             except IndexError:
-                value = next(iterator) # `StopIteration` exception recycled.
+                try:
+                    value = next(iterator)
+                except StopIteration:
+                    return
                 if filter_function(value):
                     yield value
                 else:
@@ -262,7 +266,10 @@ def double_filter(filter_function, iterable, lazy_tuple=False):
             try:
                 yield false_deque.popleft()
             except IndexError:
-                value = next(iterator) # `StopIteration` exception recycled.
+                try:
+                    value = next(iterator)
+                except StopIteration:
+                    return
                 if filter_function(value):
                     true_deque.append(value)
                 else:
@@ -334,7 +341,7 @@ def _fill(iterable, fill_value, fill_value_maker, length):
     
     for i in itertools.count():
         if i >= length:
-            raise StopIteration
+            return
         
         if iterator_exhausted:
             yield fill_value_maker()
@@ -367,7 +374,7 @@ def _call_until_exception(function, exception):
         while True:
             yield function()
     except exceptions:
-        raise StopIteration
+        return
 
     
 def get_single_if_any(iterable, *, 

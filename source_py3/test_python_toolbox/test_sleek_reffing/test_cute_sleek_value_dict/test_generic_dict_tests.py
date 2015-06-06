@@ -231,7 +231,7 @@ class GenericDictTest(unittest2.TestCase):
                             rtn = chr(self.i)
                             self.i += 1
                             return rtn
-                        raise StopIteration
+                        return
                 return BogonIter()
             def __getitem__(self, key):
                 raise Exc
