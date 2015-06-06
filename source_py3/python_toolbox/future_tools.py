@@ -12,14 +12,34 @@ class CuteExecutorMixin:
                as_completed=False):
         '''Get a parallelized version of filter(filter_function, iterable).'''
         
-        sequence = sequence_tools.ensure_iterable_is_sequence(iterable)
-        return (
-            item for (item, keep) in zip(
-                sequence,
-                self.map(filter_function, sequence, timeout=timeout,
-                         as_completed=as_completed)
-            ) if keep
-        )
+        if timeout is not None:
+            end_time = timeout + time.time()
+
+        def make_future(item):
+            future = self.submit(filter_function, item)
+            future._item = item
+            return future
+            
+        futures = tuple(map(make_future, iterable))
+        futures_iterator = concurrent.futures.as_completed(futures) if \
+                                                      as_completed else futures
+
+        # Yield must be hidden in closure so that the futures are submitted
+        # before the first iterator value is required.
+        def result_iterator():
+            try:
+                for future in futures_iterator:
+                    if timeout is None:
+                        result = future.result()
+                    else:
+                        result = future.result(end_time - time.time())
+                    if result:
+                        yield future._item
+            finally:
+                for future in futures:
+                    future.cancel()
+        return result_iterator()
+
 
     def map(self, function, *iterables, timeout=None, as_completed=False):
         '''Get a parallelized version of map(function, iterable).'''
@@ -35,7 +55,7 @@ class CuteExecutorMixin:
         # before the first iterator value is required.
         def result_iterator():
             try:
-                for future in futures:
+                for future in futures_iterator:
                     if timeout is None:
                         yield future.result()
                     else:
