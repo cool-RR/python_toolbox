@@ -25,13 +25,12 @@ class OverridableProperty(OwnNameDiscoveringDescriptor):
         
         You may specify a docstring as `doc`.
         '''
-        OwnNameDiscoveringDescriptor.__init__(name=name)
-        if not attribute_name.startswith('.'):
-            raise Exception("The `attribute_name` must start with a dot to "
-                            "make it clear it's an attribute. %s does not "
-                            "start with a dot." % repr(attribute_name))
+        OwnNameDiscoveringDescriptor.__init__(self, name=name)
         self.getter = fget
         self.__doc__ = doc
+        
+    def _get_overridden_attribute_name(self, thing):
+        return '_%s__%s' % (type(self).__name__, self.get_our_name(thing))
         
         
     def __get__(self, thing, our_type=None):
@@ -39,10 +38,14 @@ class OverridableProperty(OwnNameDiscoveringDescriptor):
             # We're being accessed from the class itself, not from an object
             return self
         else:
-            return self.getter(thing)
+            overridden_attribute_name = self._get_overridden_attribute_name(thing)
+            if hasattr(thing, overridden_attribute_name):
+                return getattr(thing, overridden_attribute_name)
+            else:
+                return self.getter(thing)
         
     def __set__(self, thing, value):
-        setattr(thing, self.get_our_name(thing), value)
+        setattr(thing, self._get_overridden_attribute_name(thing), value)
         
     def __repr__(self):
         return '<%s: %s>' % (type(self).__name__, self.our_name or self.getter)

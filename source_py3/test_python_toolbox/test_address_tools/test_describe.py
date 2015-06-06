@@ -246,7 +246,7 @@ def test_bad_module_name():
 def test_function_in_something():
     '''Test `describe` doesn't fail when describing `{1: sum}`.'''
     if python_toolbox.__version_info__ <= (0, 7, 0, 'release'):
-        raise nose.SkipTest("This test doesn't pass in `python_toolbox`"
+        raise nose.SkipTest("This test doesn't pass in `python_toolbox` "
                             "version 0.7.0 and below.")
     assert describe({1: sum}) == '{1: sum}'
     assert describe((sum, sum, list, chr)) == '(sum, sum, list, chr)'
