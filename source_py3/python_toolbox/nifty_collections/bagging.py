@@ -14,8 +14,8 @@ from python_toolbox import math_tools
 
 from .lazy_tuple import LazyTuple
 from .ordered_dict import OrderedDict
-from .ordered_set import OrderedSet
-from .frozen_dict_and_frozen_ordered_dict import FrozenDict, FrozenOrderedDict
+from .various_ordered_sets import OrderedSet
+from .various_frozen_dicts import FrozenDict, FrozenOrderedDict
 from .abstract import Ordered, DefinitelyUnordered
 
 

@@ -30,7 +30,7 @@ def test():
 def test_sort():
     
     ordered_set = OrderedSet([5, 61, 2, 7, 2])
-    assert ordered_set == {5, 61, 2, 7}
+    assert ordered_set != {5, 61, 2, 7}
     ordered_set.move_to_end(61)
     assert list(ordered_set) == [5, 2, 7, 61]
     ordered_set.sort()
