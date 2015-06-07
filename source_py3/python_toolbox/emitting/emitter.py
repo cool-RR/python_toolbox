@@ -69,9 +69,10 @@ class Emitter:
         from python_toolbox import sequence_tools
 
         inputs = sequence_tools.to_tuple(inputs,
-                                         item_type=collections.Callable)
+                                         item_type=Emitter)
         outputs = sequence_tools.to_tuple(outputs,
-                                          item_type=collections.Callable)
+                                          item_type=(collections.Callable,
+                                                     Emitter))
         
         self._inputs = set()
         '''The emitter's inputs.'''
