@@ -4,6 +4,11 @@
 import collections
 
 from python_toolbox import comparison_tools
+from python_toolbox import context_management
+from python_toolbox import caching
+from python_toolbox import freezing
+
+
 
 KEY, PREV, NEXT = range(3)
 
@@ -16,10 +21,10 @@ class BaseOrderedSet(collections.Set, collections.Sequence):
     ordered by insertion order, but that order can be changed.)
     '''
     
-    def __init__(self, iterable=None):
-        self.clear()
-        if iterable is not None:
-            self |= iterable
+    def __init__(self, iterable=()):
+        self.__clear()
+        for item in iterable:
+            self.__add(item)
 
     def __getitem__(self, index):
         for i, item in enumerate(self):
@@ -34,27 +39,6 @@ class BaseOrderedSet(collections.Set, collections.Sequence):
     def __contains__(self, key):
         return key in self._map
 
-    def add(self, key):
-        '''
-        Add an element to a set.
-    
-        This has no effect if the element is already present.
-        '''
-        if key not in self._map:
-            end = self._end
-            curr = end[PREV]
-            curr[NEXT] = end[PREV] = self._map[key] = [key, curr, end]
-
-    def discard(self, key):
-        """
-        Remove an element from a set if it is a member.
-    
-        If the element is not a member, do nothing.
-        """
-        if key in self._map:        
-            key, prev, next = self._map.pop(key)
-            prev[NEXT] = next
-            next[PREV] = prev
 
     def __iter__(self):
         end = self._end
@@ -82,7 +66,33 @@ class BaseOrderedSet(collections.Set, collections.Sequence):
             len(self) == len(other) and
             tuple(self) == tuple(other)
         )
+    
+    def __clear(self):
+        '''Clear the ordered set, removing all items.'''
+        self._end = [] 
+        self._end += [None, self._end, self._end]
+        self._map = {}
+        
+        
+    def __add(self, key, last=True):
+        '''
+        Add an element to a set.
+    
+        This has no effect if the element is already present.
+        
+        Specify `last=False` to add the item at the start of the ordered set.
+        '''
+        
+        if key not in self._map:
+            end = self._end
+            if last:
+                last = end[PREV]
+                last[NEXT] = end[PREV] = self._map[key] = [key, last, end]
+            else:
+                first = end[NEXT]
+                first[PREV] = end[NEXT] = self._map[key] = [key, end, first]
 
+                
 
 class FrozenOrderedSet(BaseOrderedSet):
     '''
@@ -93,6 +103,7 @@ class FrozenOrderedSet(BaseOrderedSet):
     insertion order, but that order can be changed.)
     '''
 
+
 class OrderedSet(BaseOrderedSet, collections.MutableSet):
     '''
     A `set` with an order.
@@ -101,18 +112,16 @@ class OrderedSet(BaseOrderedSet, collections.MutableSet):
     ordered by insertion order, but that order can be changed.)
     '''
 
-    def move_to_end(self, key):
+    add = BaseOrderedSet._BaseOrderedSet__add
+    clear = BaseOrderedSet._BaseOrderedSet__clear
+
+    def move_to_end(self, key, last=True):
         '''
-        Move an existing element to the end (or beginning if last==False).
-
-        Raises KeyError if the element does not exist.
-        When last=True, acts like a fast version of self[key]=self.pop(key).
-
+        Move an existing element to the end (or start if `last=False`.)
         '''
         # Inefficient implementation until someone cares.
-        if key in self:
-            self.remove(key)
-            self.add(key)
+        self.remove(key)
+        self.add(key, last=last)
             
     
     def sort(self, key=None, reverse=False):
@@ -130,23 +139,7 @@ class OrderedSet(BaseOrderedSet, collections.MutableSet):
         self.clear()
         self |= sorted_members
 
-    def clear(self):
-        self._end = [] 
-        self._end += [None, self._end, self._end]
-        self._map = {}
-        
-        
-    def add(self, key):
-        '''
-        Add an element to a set.
     
-        This has no effect if the element is already present.
-        '''
-        if key not in self._map:
-            end = self._end
-            curr = end[PREV]
-            curr[NEXT] = end[PREV] = self._map[key] = [key, curr, end]
-
     def discard(self, key):
         """
         Remove an element from a set if it is a member.
@@ -170,28 +163,23 @@ class OrderedSet(BaseOrderedSet, collections.MutableSet):
 class EmittingOrderedSet(OrderedSet):
     '''An ordered set that emits to `.emitter` every time it's modified.'''
     
-    def __init__(self, emitter, items=()):
+    def __init__(self, iterable=(), *, emitter=None):
         if emitter:
             from python_toolbox.emitting import Emitter
             assert isinstance(emitter, Emitter)
         self.emitter = emitter
-        OrderedSet.__init__(self, items)
+        OrderedSet.__init__(self, iterable)
 
-        
-    def add(self, key):
+    def add(self, key, last=True):
         '''
         Add an element to a set.
     
         This has no effect if the element is already present.
         '''
         if key not in self._map:
-            end = self._end
-            curr = end[PREV]
-            curr[NEXT] = end[PREV] = self._map[key] = [key, curr, end]
-            if self.emitter:
-                self.emitter.emit()
+            super().add(key, last=last)
+            self._emit()
 
-                
     def discard(self, key):
         '''
         Remove an element from a set if it is a member.
@@ -199,13 +187,30 @@ class EmittingOrderedSet(OrderedSet):
         If the element is not a member, do nothing.
         '''
         if key in self._map:        
-            key, prev, next = self._map.pop(key)
-            prev[NEXT] = next
-            next[PREV] = prev
-            if self.emitter:
-                self.emitter.emit()
-
+            super().discard(key)
+            self._emit()
+                
+    def clear(self):
+        '''Clear the ordered set, removing all items.'''
+        if self:
+            super().clear()
+            self._emit()
                 
     def set_emitter(self, emitter):
         '''Set `emitter` to be emitted with on every modification.'''
         self.emitter = emitter
+        
+    def _emit(self):
+        if (self.emitter is not None) and not self._emitter_freezer.frozen:
+            self.emitter.emit()
+        
+    def move_to_end(self, key, last=True):
+        '''
+        Move an existing element to the end (or start if `last=False`.)
+        '''
+        # Inefficient implementation until someone cares.
+        with self._emitter_freezer:
+            self.remove(key)
+        self.add(key, last=last)
+    
+    _emitter_freezer = freezing.FreezerProperty()

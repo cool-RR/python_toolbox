@@ -65,9 +65,13 @@ class Emitter:
         
         `name` is a string name for the emitter.
         '''
+        
+        from python_toolbox import sequence_tools
 
-        assert cute_iter_tools.is_iterable(inputs) and \
-               cute_iter_tools.is_iterable(outputs)
+        inputs = sequence_tools.to_tuple(inputs,
+                                         item_type=collections.Callable)
+        outputs = sequence_tools.to_tuple(outputs,
+                                          item_type=collections.Callable)
         
         self._inputs = set()
         '''The emitter's inputs.'''

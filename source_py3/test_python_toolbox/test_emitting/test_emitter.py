@@ -8,7 +8,7 @@ from python_toolbox import emitting
 
 def test():
     emitter_1 = emitting.Emitter()
-    emitter_2 = emitting.Emitter(inputs=(emitter_1,))
+    emitter_2 = emitting.Emitter(inputs=emitter_1) # Single item without tuple
     emitter_0 = emitting.Emitter(outputs=(emitter_1,))
 
     @misc_tools.set_attributes(call_counter=0)
