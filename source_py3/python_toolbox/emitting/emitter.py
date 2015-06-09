@@ -48,8 +48,6 @@ class Emitter:
     The callables that you register as outputs are functions that need to be
     called when the original event that caused the `emit` action happens.
     '''
-    # todo: Let user put a single input/output
-    
     
     _is_atomically_pickleable = False
 
@@ -58,12 +56,15 @@ class Emitter:
         '''
         Construct the emitter.
         
-        `inputs` is a list of inputs, all of them must be emitters.
+        `inputs` is an iterable of inputs, all of which must be emitters. (You
+        can also pass in a single input without using an iterable.)
         
-        `outputs` is a list of outputs, they must be either emitters or
-        callables.
+        `outputs` is an iterable of outputs, which may be either emitters or
+        callables. (You can also pass in a single output without using an
+        iterable.)
         
-        `name` is a string name for the emitter.
+        `name` is a string name for the emitter. (Optional, helps with
+        debugging.)
         '''
         
         from python_toolbox import sequence_tools

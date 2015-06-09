@@ -8,13 +8,11 @@ from python_toolbox.logic_tools import all_equivalent
 
 
 def test():
-    '''Test the basic working of `all_equal`.'''
     _check(False)
     _check(True)
 
 
 def _check(assume_transitive):
-    '''Check the basic working of `all_equal` with given `assume_transitive` flag.'''
     assert all_equivalent([1, 1, 1, 1], assume_transitive=assume_transitive)
     assert all_equivalent([1, 1, 1.0, 1], assume_transitive=assume_transitive)
     assert all_equivalent(((1 + 0j), 1, 1.0, 1),

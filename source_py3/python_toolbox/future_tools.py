@@ -1,19 +1,38 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
+'''
+Defines tools related to the `concurrent.futures` standard library package.
+'''
+
 import time
 import concurrent.futures
 
 from python_toolbox import sequence_tools
 
 
-class CuteExecutorMixin:
+class BaseCuteExecutor(concurrent.futures.Executor):
     '''
-    Coolness is filter and as_completed on both filter and map, blocktododoc
+    An executor with extra functionality for `map` and `filter`.
+    
+    This is a subclass of `concurrent.futures.Executor`, which is a manager for
+    parallelizing tasks. What this adds over `concurrent.futures.Executor`:
+
+     - A `.filter` method, which operates like the builtin `filter` except it's
+       parallelized with the executor.
+     - An `as_completed` argument for both `.map` and `.filter`, which makes
+       these methods return results according to the order in which they were
+       computed, and not the order in which they were submitted.
+     
     '''
     def filter(self, filter_function, iterable, timeout=None,
                as_completed=False):
-        '''Get a parallelized version of filter(filter_function, iterable).'''
+        '''
+        Get a parallelized version of `filter(filter_function, iterable)`.
+        
+        Specify `as_completed=False` to get the results that were calculated
+        first to be returned first, instead of using the order of `iterable`.
+        '''
         
         if timeout is not None:
             end_time = timeout + time.time()
@@ -45,7 +64,12 @@ class CuteExecutorMixin:
 
 
     def map(self, function, *iterables, timeout=None, as_completed=False):
-        '''Get a parallelized version of map(function, iterable).'''
+        '''
+        Get a parallelized version of `map(function, iterable)`.
+        
+        Specify `as_completed=False` to get the results that were calculated
+        first to be returned first, instead of using the order of `iterable`.
+        '''
         
         if timeout is not None:
             end_time = timeout + time.time()
@@ -69,10 +93,36 @@ class CuteExecutorMixin:
         return result_iterator()
 
     
-class CuteThreadPoolExecutor(CuteExecutorMixin,
-                             concurrent.futures.ThreadPoolExecutor):
-    pass
+class CuteThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor,
+                             BaseCuteExecutor):
+    '''
+    A thread-pool executor with extra functionality for `map` and `filter`.
+    
+    This is a subclass of `concurrent.futures.ThreadPoolExecutor`, which is a
+    manager for parallelizing tasks to a thread pool. What this adds over
+    `concurrent.futures.ThreadPoolExecutor`:
 
-class CuteProcessPoolExecutor(CuteExecutorMixin,
-                             concurrent.futures.ProcessPoolExecutor):
-    pass
+     - A `.filter` method, which operates like the builtin `filter` except it's
+       parallelized with the executor.
+     - An `as_completed` argument for both `.map` and `.filter`, which makes
+       these methods return results according to the order in which they were
+       computed, and not the order in which they were submitted.
+     
+    '''    
+
+class CuteProcessPoolExecutor(concurrent.futures.ProcessPoolExecutor,
+                              BaseCuteExecutor):
+    '''
+    A process-pool executor with extra functionality for `map` and `filter`.
+    
+    This is a subclass of `concurrent.futures.ThreadPoolExecutor`, which is a
+    manager for parallelizing tasks to a process pool. What this adds over
+    `concurrent.futures.ThreadPoolExecutor`:
+
+     - A `.filter` method, which operates like the builtin `filter` except it's
+       parallelized with the executor.
+     - An `as_completed` argument for both `.map` and `.filter`, which makes
+       these methods return results according to the order in which they were
+       computed, and not the order in which they were submitted.
+     
+    '''
