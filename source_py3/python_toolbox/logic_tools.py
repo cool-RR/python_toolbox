@@ -72,7 +72,6 @@ def get_equivalence_classes(iterable, key=None, container=set,
     
         >>> get_equivalence_classes(range(10), lambda x: x % 3)
         {0: {0, 9, 3, 6}, 1: {1, 4, 7}, 2: {8, 2, 5}}
-        {2: {1, 'meow'}, 4: {3}}
         
     
     Returns a `dict` with keys being the results of the function, and the

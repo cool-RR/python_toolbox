@@ -146,11 +146,11 @@ class OrderedSet(BaseOrderedSet, collections.MutableSet):
 
     
     def discard(self, key):
-        """
+        '''
         Remove an element from a set if it is a member.
     
         If the element is not a member, do nothing.
-        """
+        '''
         if key in self._map:        
             key, prev, next = self._map.pop(key)
             prev[NEXT] = next

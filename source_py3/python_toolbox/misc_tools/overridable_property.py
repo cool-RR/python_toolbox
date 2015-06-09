@@ -8,23 +8,24 @@ from .misc_tools import OwnNameDiscoveringDescriptor
 
 class OverridableProperty(OwnNameDiscoveringDescriptor):
     '''
-    blocktododoc
+    A property which may be overridden.
+    
+    This behaves exactly like the built-in `property`, except if you want to
+    manually override the value of the property, you can. Example:
+    
+        >>> class Thing:
+        ...     cat = OverridableProperty(lambda self: 'meow')
+        ...
+        >>> thing = Thing()
+        >>> thing.cat
+        'meow'
+        >>> thing.cat = 'bark'
+        >>> thing.cat
+        'bark'
+    
     '''
     
     def __init__(self, fget, doc=None, name=None):
-        '''
-        blocktododoc Construct the `ProxyProperty`.
-        
-        `attribute_name` is the name of the attribute that we will proxy,
-        prefixed with a dot, like '.whatever'.
-        
-        You may also refer to a nested attribute of the object rather than a
-        direct one; for example, you can do
-        `ProxyProperty('.whatever.x.height')` and it will access the `.height`
-        attribute of the `.x` attribute of `.whatever`.
-        
-        You may specify a docstring as `doc`.
-        '''
         OwnNameDiscoveringDescriptor.__init__(self, name=name)
         self.getter = fget
         self.__doc__ = doc
