@@ -63,13 +63,14 @@ class BaseCuteExecutor(concurrent.futures.Executor):
         return result_iterator()
 
 
-    def map(self, function, *iterables, timeout=None, as_completed=False):
+    def map(self, function, iterable, timeout=None, as_completed=False):
         '''
         Get a parallelized version of `map(function, iterable)`.
         
         Specify `as_completed=False` to get the results that were calculated
         first to be returned first, instead of using the order of `iterable`.
         '''
+        iterables = (iterable,)
         
         if timeout is not None:
             end_time = timeout + time.time()

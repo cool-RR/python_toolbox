@@ -57,6 +57,7 @@ def _iterate_overlapping_subsequences(iterable, length, wrap_around):
     if length == 1:
         for item in iterable:
             yield item
+        return
     
     assert length >= 2
     
