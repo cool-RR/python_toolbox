@@ -18,8 +18,8 @@ from python_toolbox.sleek_reffing import SleekCallArgs
 infinity = float('inf')
 
 
-class CLEAR_ENTIRE_CACHE:
-    '''Sentinel object for clearing the entire cache'''
+class CLEAR_ENTIRE_CACHE(misc_tools.NonInstantiable):
+    '''Sentinel object for clearing the entire cache.'''
 
 
 def _get_now():

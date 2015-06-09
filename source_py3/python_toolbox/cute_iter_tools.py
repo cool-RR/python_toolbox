@@ -12,12 +12,13 @@ import builtins
 import numbers
 
 from python_toolbox import sequence_tools
+from python_toolbox import misc_tools
 from python_toolbox import math_tools
 
 infinity = float('inf')
 
 
-class _EMPTY_SENTINEL:
+class _EMPTY_SENTINEL(misc_tools.NonInstantiable):
     pass
 
 
@@ -482,7 +483,7 @@ def is_sorted(iterable, *, rising=True, strict=False, key=None):
         return True
         
     
-class _PUSHBACK_SENTINEL:
+class _PUSHBACK_SENTINEL(misc_tools.NonInstantiable):
     '''Sentinel used by `PushbackIterator` to say nothing was pushed back.'''
  
 class PushbackIterator:

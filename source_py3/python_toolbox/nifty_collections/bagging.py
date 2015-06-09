@@ -19,7 +19,7 @@ from .various_frozen_dicts import FrozenDict, FrozenOrderedDict
 from .abstract import Ordered, DefinitelyUnordered
 
 
-class _NO_DEFAULT: 
+class _NO_DEFAULT(misc_tools.NonInstantiable): 
     '''Stand-in value used in `_BaseBagMixin.pop` when no default is wanted.'''
             
 class _ZeroCountAttempted(Exception):
