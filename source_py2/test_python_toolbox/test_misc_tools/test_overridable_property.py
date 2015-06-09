@@ -17,6 +17,6 @@ def test():
     assert a.meow == 'bark bark!'
     assert a.meow == 'bark bark!'
     a.meow = 'Meow indeed, ma chérie.'
-    assert a.meow == 'Meow indeed, ma chérie.'
+    assert a.meow == 'Meow indeed, my love.'
             
             

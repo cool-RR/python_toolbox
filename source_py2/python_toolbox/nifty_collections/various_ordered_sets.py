@@ -8,6 +8,7 @@ import itertools
 from python_toolbox import comparison_tools
 from python_toolbox import context_management
 from python_toolbox import caching
+from python_toolbox import misc_tools
 from python_toolbox import freezing
 
 
@@ -173,7 +174,8 @@ class OrderedSet(BaseOrderedSet, collections.MutableSet):
 class EmittingOrderedSet(OrderedSet):
     '''An ordered set that emits to `.emitter` every time it's modified.'''
     
-    def __init__(self, iterable=(), *, emitter=None):
+    @misc_tools.limit_positional_arguments(2)
+    def __init__(self, iterable=(), emitter=None):
         if emitter:
             from python_toolbox.emitting import Emitter
             assert isinstance(emitter, Emitter)

@@ -11,7 +11,7 @@ from python_toolbox import misc_tools
 from python_toolbox import cute_iter_tools
 
 
-misc_tools.limit_positional_arguments(2)
+@misc_tools.limit_positional_arguments(2)
 def all_equivalent(iterable, relation=operator.eq, assume_reflexive=True,
                    assume_symmetric=True, assume_transitive=True):
     '''
@@ -62,7 +62,7 @@ def all_equivalent(iterable, relation=operator.eq, assume_reflexive=True,
     return all(itertools.starmap(relation, pairs))
 
 
-misc_tools.limit_positional_arguments(3)
+@misc_tools.limit_positional_arguments(3)
 def get_equivalence_classes(iterable, key=None, container=set, 
                             use_ordered_dict=False, sort_ordered_dict=False):
     '''
