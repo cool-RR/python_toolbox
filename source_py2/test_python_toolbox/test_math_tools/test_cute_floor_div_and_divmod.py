@@ -59,11 +59,6 @@ def test_illegal_cases():
             type(raise_assertor_1.exception),
             type(raise_assertor_2.exception),
         ))
-        assert logic_tools.all_equivalent((
-            raise_assertor_0.exception.args,
-            raise_assertor_1.exception.args,
-            raise_assertor_2.exception.args,
-        ))
     
         
 def test_meaningful_cases():
