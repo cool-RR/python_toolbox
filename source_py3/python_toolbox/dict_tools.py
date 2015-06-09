@@ -142,3 +142,31 @@ def get_sorted_values(d, key=None):
     kwargs = {'key': key,} if key is not None else {}
     return get_tuple(d, sorted(d.keys(), **kwargs))
     
+    
+def reverse(d):
+    '''
+    Reverse a `dict`, creating a new `dict` where keys and values are switched.
+    
+    Example:
+    
+        >>> reverse({'one': 1, 'two': 2, 'three': 3})
+        {1: 'one', 2: 'two', 3: 'three'})
+        
+    This function requires that:
+    
+      1. The values will be distinct, i.e. no value will appear more than once.
+      2. All the values be hashable.
+      
+    '''
+    new_d = {}
+    for key, value in d.items():
+        if value in new_d:
+            raise Exception(
+                "Value %s appeared twice! Once with a key of %s and then "
+                "again with a key of %s. This function is intended only for "
+                "dicts with distinct values." % (value, key, new_d[value])
+            )
+        new_d[value] = key
+    return new_d
+            
+    
