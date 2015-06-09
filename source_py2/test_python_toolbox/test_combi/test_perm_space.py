@@ -76,9 +76,11 @@ def test_perm_spaces():
     # Testing hashing: 
     pure_perm_space_dict = {pure_0a: 'a', pure_0b: 'b',
                             pure_0c: 'c', pure_0d: 'd',}
+    (single_value,) = pure_perm_space_dict.values()
     assert len(pure_perm_space_dict) == 1 # They're all the same
     assert pure_perm_space_dict[pure_0a] == pure_perm_space_dict[pure_0b] == \
-          pure_perm_space_dict[pure_0c] == pure_perm_space_dict[pure_0d] == 'd'
+          pure_perm_space_dict[pure_0c] == pure_perm_space_dict[pure_0d] == \
+                                                                   single_value
     
     assert None not in pure_0a # Because, damn.
     assert PermSpace('meow')[0] not in pure_0a
@@ -106,7 +108,8 @@ def test_perm_spaces():
     assert not (first_perm != first_perm)
     assert first_perm == first_perm
     assert first_perm
-    assert {pure_0a[4]: 1, pure_0b[4]: 2, pure_0c[4]: 3,} == {pure_0d[4]: 3,}
+    assert tuple({pure_0a[4]: 1, pure_0b[4]: 2, pure_0c[4]: 3,}.keys()) == \
+                                                                 (pure_0d[4], )
     
     
     assert some_perm.inverse == ~ some_perm

@@ -3,12 +3,12 @@
 
 from python_toolbox import cute_testing
 
-from python_toolbox.misc_tools import NonInstatiable
+from python_toolbox.misc_tools import NonInstantiable
 
 
 def test():
-    class MyNonInstatiable(NonInstatiable):
+    class MyNonInstantiable(NonInstantiable):
         pass
     
     with cute_testing.RaiseAssertor(exception_type=RuntimeError):
-        MyNonInstatiable()
+        MyNonInstantiable()

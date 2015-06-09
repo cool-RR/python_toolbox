@@ -22,7 +22,7 @@ def call_and_check_if_profiled(f):
         
     segments_found = [(segment in output) for segment in segments]
     
-    if not logic_tools.all_equal(segments_found):
+    if not logic_tools.all_equivalent(segments_found):
         raise Exception("Some segments were found, but some weren't; can't "
                         "know if this was a profiled call or not. Possibly "
                         "some of our segments are wrong.")

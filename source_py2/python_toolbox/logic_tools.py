@@ -63,7 +63,7 @@ def all_equivalent(iterable, relation=operator.eq, assume_reflexive=True,
 
 
 misc_tools.limit_positional_arguments(3)
-def get_equivalence_classes(iterable, key=None, container=set,
+def get_equivalence_classes(iterable, key=None, container=set, 
                             use_ordered_dict=False, sort_ordered_dict=False):
     '''
     Divide items in `iterable` to equivalence classes, using the key function.

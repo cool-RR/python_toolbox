@@ -23,7 +23,7 @@ def cute_equal(*items):
     # For testing purposes, we need `nan == nan`, so we use `cute_equal`.
     if all(isinstance(item, numbers.Number) for item in items):
         if all(map(math.isnan, items)): return True
-        else: return logic_tools.all_equal(items)
+        else: return logic_tools.all_equivalent(items)
     else:
         assert all(isinstance(item, tuple) for item in items)
         return all(cute_equal(*sub_items) for sub_items in zip(*items))
@@ -54,13 +54,16 @@ def test_illegal_cases():
             divmod(*illegal_case)
         with cute_testing.RaiseAssertor() as raise_assertor_2:
             cute_floor_div(*illegal_case)
-        assert logic_tools.all_equal((
+        assert logic_tools.all_equivalent((
             type(raise_assertor_0.exception),
             type(raise_assertor_1.exception),
             type(raise_assertor_2.exception),
         ))
-        # (I once had asserts here for exception messages being equal, but it
-        # failed in Pypy so I removed them.)
+        assert logic_tools.all_equivalent((
+            raise_assertor_0.exception.args,
+            raise_assertor_1.exception.args,
+            raise_assertor_2.exception.args,
+        ))
     
         
 def test_meaningful_cases():

@@ -8,7 +8,7 @@ import nose.tools
 from python_toolbox.address_tools import describe, resolve
 
 
-# Class tree we'll try to some resolvings on:
+# Class tree we'll try to do some resolvings on:
 class A(object):
     def method(self):
         pass
