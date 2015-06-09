@@ -10,39 +10,59 @@ import operator
 from python_toolbox import cute_iter_tools
 
 
-def all_equivalent(iterable, relation=operator.eq, *, exhaustive=False):
+def all_equivalent(iterable, relation=operator.eq, *, assume_reflexive=True,
+                   assume_symmetric=True, assume_transitive=True):
     '''
     Return whether all elements in the iterable are equivalent to each other.
     
-    By default "equivalent" means they're equal to each other in Python. You
-    can set a different relation to the `relation` argument, as a function that
-    accepts two arguments and returns whether they're equivalent or not. You
-    can use this, for example, to test if all items are NOT equal by passing in
-    `relation=operator.ne`.
+    By default "equivalent" means they're all equal to each other in Python.
+    You can set a different relation to the `relation` argument, as a function
+    that accepts two arguments and returns whether they're equivalent or not.
+    You can use this, for example, to test if all items are NOT equal by
+    passing in `relation=operator.ne`. You can also define any custom relation
+    you want: `relation=(lambda x, y: x % 7 == y % 7)`.
     
-    If `exhaustive` is set to `False`, it's assumed that the equality relation
-    is transitive, therefore not every member is tested against every other
-    member. So in a list of size `n`, `n-1` equality checks will be made.
+    By default, we assume that the relation we're using is an equivalence
+    relation (see http://en.wikipedia.org/wiki/Equivalence_relation for
+    definition.) This means that we assume the relation is reflexive, symmetric
+    and transitive, so we can do less checks on the elements to save time. You
+    can use `assume_reflexive=False`, `assume_symmetric=False` and
+    `assume_transitive=False` to break any of these assumptions and make this
+    function do more checks that the equivalence holds between any pair of
+    items from the iterable.
+    
+    If `exhaustive` is set to `False`, it's assumed that the
+    equality relation is transitive, therefore not every member is tested
+    against every other member. So in a list of size `n`, `n-1` equality checks
+    will be made.
     
     If `exhaustive` is set to `True`, every member will be checked against
     every other member. So in a list of size `n`, `(n*(n-1))/2` equality checks
     will be made.
     '''
-    # todo: Maybe I should simply check if `len(set(iterable)) == 1`? Will not
-    # work for unhashables.
+    from python_toolbox import sequence_tools
     
-    if exhaustive is True:
-        items = tuple(iterable)
-        if len(items) <= 1:
-            return True
+    if not assume_transitive or not assume_reflexive:
+        iterable = sequence_tools.ensure_iterable_is_sequence(iterable)
+        
+    if assume_transitive:
+        pairs = cute_iter_tools.iterate_overlapping_subsequences(iterable)
+    else:
         from python_toolbox import combi
         pairs = tuple(
-            items * comb for comb in combi.CombSpace(len(items), 2)
+            iterable * comb for comb in combi.CombSpace(len(iterable), 2)
         )
         # Can't feed the items directly to `CombSpace` because they might not
         # be hashable.
-    else: # exhaustive is False
-        pairs = cute_iter_tools.iterate_overlapping_subsequences(iterable)
+        
+    if not assume_symmetric:
+        pairs = itertools.chain(
+            *itertools.starmap(lambda x, y: ((x, y), (y, x)), pairs)
+        )
+    
+    if not assume_reflexive:
+        pairs = itertools.chain(pairs,
+                                zip(iterable, iterable))
         
     return all(itertools.starmap(relation, pairs))
 
