@@ -189,7 +189,7 @@ class EmittingOrderedSet(OrderedSet):
         This has no effect if the element is already present.
         '''
         if key not in self._map:
-            super().add(key, last=last)
+            super(EmittingOrderedSet, self).add(key, last=last)
             self._emit()
 
     def discard(self, key):
@@ -199,13 +199,13 @@ class EmittingOrderedSet(OrderedSet):
         If the element is not a member, do nothing.
         '''
         if key in self._map:        
-            super().discard(key)
+            super(EmittingOrderedSet, self).discard(key)
             self._emit()
                 
     def clear(self):
         '''Clear the ordered set, removing all items.'''
         if self:
-            super().clear()
+            super(EmittingOrderedSet, self).clear()
             self._emit()
                 
     def set_emitter(self, emitter):
