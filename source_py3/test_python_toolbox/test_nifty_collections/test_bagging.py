@@ -453,11 +453,9 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         assert bag == self.bag_type('abracadabra' + 'a' * 5)
         assert bag is bag_reference
 
-        # We only allow floor division on bags, not regular divison, because a
-        # decimal bag is unheard of.
         bag = bag_reference = self.bag_type('abracadabra')
         with cute_testing.RaiseAssertor(TypeError):
-            bag['a'] /= 2
+            bag['a'] /= 2 # Won't work because `bag['a']` happens to be odd.
 
         bag = bag_reference = self.bag_type('abracadabra')
         bag['a'] //= 2
@@ -498,6 +496,12 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         bag *= 2
         assert bag == self.bag_type('abracadabra' * 2)
         assert bag is bag_reference
+
+        # We only allow floor division on bags, not regular divison, because a
+        # decimal bag is unheard of.
+        bag = bag_reference = self.bag_type('abracadabra')
+        with cute_testing.RaiseAssertor(TypeError):
+            bag /= 2
 
         bag = bag_reference = self.bag_type('abracadabra')
         bag //= 2
@@ -626,7 +630,7 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
         with cute_testing.RaiseAssertor(TypeError):
             bag['a'] *= 2
         with cute_testing.RaiseAssertor(TypeError):
-            bag['a'] /= 2
+            bag['a'] /= 2 
         with cute_testing.RaiseAssertor(TypeError):
             bag['a'] //= 2
         with cute_testing.RaiseAssertor(TypeError):
@@ -664,7 +668,7 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
         # decimal bag is unheard of.
         bag = bag_reference
         with cute_testing.RaiseAssertor(TypeError):
-            bag['a'] /= 2
+            bag /= 2
         
         bag = bag_reference
         bag //= 3
