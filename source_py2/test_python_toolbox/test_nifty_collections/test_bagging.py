@@ -321,6 +321,21 @@ class BaseBagTestCase(cute_testing.TestCase):
         assert 3 * bag_1 == self.bag_type('bcc' * 3)
         assert 3 * bag_2 == self.bag_type('cddddd' * 3)
         
+        # We only allow floor division on bags, not regular divison, because a
+        # decimal bag is unheard of.
+        with cute_testing.RaiseAssertor(TypeError):
+            bag_0 / 2
+        with cute_testing.RaiseAssertor(TypeError):
+            bag_1 / 2
+        with cute_testing.RaiseAssertor(TypeError):
+            bag_2 / 2
+        with cute_testing.RaiseAssertor(TypeError):
+            bag_0 / self.bag_type('ab')
+        with cute_testing.RaiseAssertor(TypeError):
+            bag_1 / self.bag_type('ab')
+        with cute_testing.RaiseAssertor(TypeError):
+            bag_2 / self.bag_type('ab')
+        
         assert bag_0 // 2 == self.bag_type('bc')
         assert bag_1 // 2 == self.bag_type('c')
         assert bag_2 // 2 == self.bag_type('dd')
@@ -438,6 +453,12 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         bag['a'] *= 2
         assert bag == self.bag_type('abracadabra' + 'a' * 5)
         assert bag is bag_reference
+
+        # We only allow floor division on bags, not regular divison, because a
+        # decimal bag is unheard of.
+        bag = bag_reference = self.bag_type('abracadabra')
+        with cute_testing.RaiseAssertor(TypeError):
+            bag['a'] /= 2
 
         bag = bag_reference = self.bag_type('abracadabra')
         bag['a'] //= 2
@@ -606,6 +627,8 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
         with cute_testing.RaiseAssertor(TypeError):
             bag['a'] *= 2
         with cute_testing.RaiseAssertor(TypeError):
+            bag['a'] /= 2
+        with cute_testing.RaiseAssertor(TypeError):
             bag['a'] //= 2
         with cute_testing.RaiseAssertor(TypeError):
             bag['a'] %= 2
@@ -637,6 +660,12 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
         bag *= 3
         assert bag == bag_reference + bag_reference + bag_reference
         assert bag is not bag_reference
+        
+        # We only allow floor division on bags, not regular divison, because a
+        # decimal bag is unheard of.
+        bag = bag_reference
+        with cute_testing.RaiseAssertor(TypeError):
+            bag['a'] /= 2
         
         bag = bag_reference
         bag //= 3

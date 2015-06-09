@@ -105,6 +105,19 @@ def test_monkeypatch_cached_property():
     assert a0.meow[0] == a1.meow[0] == A
     
     
+def test_monkeypatch_lambda_property():
+
+    class A(EqualByIdentity):
+        pass
+
+    monkeypatching_tools.monkeypatch(A, 'meow')(
+        property(lambda self: (type(self), 'bark'))
+    )
+    
+    a0 = A()
+    a1 = A()
+    assert a0.meow == a1.meow == (A, 'bark') 
+    
     
 def test_helpful_message_when_forgetting_parentheses():
     '''Test user gets a helpful exception when when forgetting parentheses.'''

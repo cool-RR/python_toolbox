@@ -72,7 +72,7 @@ def test_empty():
     '''Test an empty `LazyTuple`.'''
     def empty_generator():
         if False: yield # (Unreachable `yield` to make this a generator.)
-        raise StopIteration
+        return
     lazy_tuple = LazyTuple(empty_generator())
     assert repr(lazy_tuple) == '<LazyTuple: (...)>'
     
