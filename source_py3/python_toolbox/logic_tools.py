@@ -29,16 +29,9 @@ def all_equivalent(iterable, relation=operator.eq, *, assume_reflexive=True,
     can use `assume_reflexive=False`, `assume_symmetric=False` and
     `assume_transitive=False` to break any of these assumptions and make this
     function do more checks that the equivalence holds between any pair of
-    items from the iterable.
-    
-    If `exhaustive` is set to `False`, it's assumed that the
-    equality relation is transitive, therefore not every member is tested
-    against every other member. So in a list of size `n`, `n-1` equality checks
-    will be made.
-    
-    If `exhaustive` is set to `True`, every member will be checked against
-    every other member. So in a list of size `n`, `(n*(n-1))/2` equality checks
-    will be made.
+    items from the iterable. (The more assumptions you ask to break, the more
+    checks this function does before it concludes that the relation holds
+    between all items.)
     '''
     from python_toolbox import sequence_tools
     
