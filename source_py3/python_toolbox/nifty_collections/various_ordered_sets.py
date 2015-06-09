@@ -2,6 +2,8 @@
 # This program is distributed under the MIT license.
 
 import collections
+import operator
+import itertools
 
 from python_toolbox import comparison_tools
 from python_toolbox import context_management
@@ -61,10 +63,9 @@ class BaseOrderedSet(collections.Set, collections.Sequence):
 
     def __eq__(self, other):
         return (
-            isinstance(other, collections.Set) and
-            isinstance(other, collections.Sequence) and
-            len(self) == len(other) and
-            tuple(self) == tuple(other)
+            (type(self) is type(other)) and
+            (len(self) == len(other)) and 
+            all(itertools.starmap(operator.eq, zip(self, other)))
         )
     
     def __clear(self):
@@ -102,6 +103,10 @@ class FrozenOrderedSet(BaseOrderedSet):
     creation) except items have an order. (By default they're ordered by
     insertion order, but that order can be changed.)
     '''
+    
+    def __hash__(self):
+        return hash((type(self), tuple(self)))
+        
 
 
 class OrderedSet(BaseOrderedSet, collections.MutableSet):
@@ -219,3 +224,16 @@ class EmittingOrderedSet(OrderedSet):
         self.add(key, last=last)
     
     _emitter_freezer = freezing.FreezerProperty()
+    
+    def __eq__(self, other):
+        return (
+            (type(self) is type(other)) and
+            (len(self) == len(other)) and
+            (self.emitter is other.emitter) and 
+            all(itertools.starmap(operator.eq, zip(self, other)))
+        )
+      
+    def get_without_emitter(self):
+        '''Get a version of this ordered set without an emitter attached.'''
+        return OrderedSet(self)
+        

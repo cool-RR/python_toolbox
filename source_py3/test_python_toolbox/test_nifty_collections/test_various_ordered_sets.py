@@ -19,6 +19,12 @@ class BaseOrderedSetTestCase(cute_testing.TestCase):
         assert type(ordered_set | ordered_set) == \
                type(ordered_set & ordered_set) == type(ordered_set)
         
+    def test_bool(self):
+        assert bool(self.ordered_set_type({})) is False
+        assert bool(self.ordered_set_type({0})) is True
+        assert bool(self.ordered_set_type(range(5))) is True
+        
+        
 class BaseMutableOrderedSetTestCase(BaseOrderedSetTestCase):
     __test__ = False
     def test_sort(self):
@@ -91,7 +97,16 @@ class FrozenOrderedSetTestCase(BaseOrderedSetTestCase):
         assert list(frozen_ordered_set) == list(range(4))
           
     def test_hashable(self):
-        1 / 0blocktodo
+        d = {
+            FrozenOrderedSet(range(1)): 1,
+            FrozenOrderedSet(range(2)): 2,
+            FrozenOrderedSet(range(3)): 3,
+        }
+        assert len(d) == 3
+        assert set(d.values()) == {1, 2, 3}
+        assert d[FrozenOrderedSet(range(2))] == 2
+        d[FrozenOrderedSet(range(2))] = 20
+        assert set(d.values()) == {1, 20, 3}
         
 
 class EmittingOrderedSetTestCase(BaseMutableOrderedSetTestCase):
@@ -110,12 +125,14 @@ class EmittingOrderedSetTestCase(BaseMutableOrderedSetTestCase):
         assert times_emitted == [1]
         emitting_ordered_set.discard(17)
         assert times_emitted == [1]
-        assert emitting_ordered_set == OrderedSet(range(8))
+        assert emitting_ordered_set.get_without_emitter() == \
+                                                           OrderedSet(range(8))
         emitting_ordered_set |= (8, 9, 10)
         assert times_emitted == [4]
         emitting_ordered_set |= (8, 9, 10)
         assert times_emitted == [4]
-        assert emitting_ordered_set == OrderedSet(range(11))
+        assert emitting_ordered_set.get_without_emitter() == \
+                                                          OrderedSet(range(11))
         emitting_ordered_set.move_to_end(4)
         assert times_emitted == [5]
         assert tuple(emitting_ordered_set) == \
