@@ -110,7 +110,7 @@ class RaiseAssertor(context_management.ContextManager):
 def assert_same_signature(*callables):
     '''Assert that all the `callables` have the same function signature.'''
     arg_specs = [cute_inspect.getargspec(callable_) for callable_ in callables]
-    if not logic_tools.all_equal(arg_specs, exhaustive=True):
+    if not logic_tools.all_equivalent(arg_specs, assume_transitive=False):
         raise Failure('Not all the callables have the same signature.')
     
     

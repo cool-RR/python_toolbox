@@ -65,7 +65,9 @@ def monkeypatch(monkeypatchee, name=None, override_if_exists=True):
                     "I don't know how to monkeypatch a descriptor onto a "
                     "non-class object."
                 )
-            if not name:
+            if name:
+                name_ = name
+            else:
                 ### Getting name of descriptor: ###############################
                 #                                                             #
                 if isinstance(function, caching.CachedProperty):

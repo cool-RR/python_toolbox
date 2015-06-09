@@ -3,14 +3,14 @@
 
 import math
 
+from python_toolbox import misc_tools
 from python_toolbox import math_tools
 from python_toolbox import cute_iter_tools
-from python_toolbox import misc_tools
 
 infinity = float('inf')
 
 
-class MISSING_ELEMENT(object): 
+class MISSING_ELEMENT(misc_tools.NonInstantiable): 
     '''A placeholder for a missing element used in internal calculations.'''
         
         

@@ -1,9 +1,7 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''This module defines miscellaneous tools.'''
-
-from __future__ import division
+'''This module defines miscellaneous tools that don't fit anywhere else.'''
 
 import operator
 try:
@@ -165,12 +163,12 @@ class OwnNameDiscoveringDescriptor(object):
         self.our_name = name
     
         
-    def get_our_name(self, obj, our_type=None):
+    def get_our_name(self, thing, our_type=None):
         if self.our_name is not None:
             return self.our_name
         
         if not our_type:
-            our_type = type(obj)
+            our_type = type(thing)
         (self.our_name,) = (name for name in dir(our_type) if
                             getattr(our_type, name, None) is self)
         
@@ -269,7 +267,7 @@ def is_type(thing):
     '''Is `thing` a class? Allowing both new-style and old-style classes.'''
     return isinstance(thing, (type, types.ClassType))
 
-class NonInstatiable(object):
+class NonInstantiable(object):
     '''
     Class that can't be instatiated.
     
@@ -317,26 +315,6 @@ def set_attributes(**kwargs):
     return decorator
         
 
-pocket_container = threading.local()
-pocket_container.value = None
-@set_attributes(container=pocket_container)
-def pocket(*args):
-    '''
-    Put something in the pocket, or get the value in the pocket.
-
-    Useful for things like this:
-    
-        if pocket(expensive_computation):
-            result = pocket()
-            # Do something with result...
-
-    The contents of the pocket are thread-local.
-    '''
-    if args:
-        (pocket.container.value,) = args
-    else:
-        return pocket.container.value
-    
 _decimal_number_pattern = \
                    re.compile('''^-?(?:(?:[0-9]+(?:.[0-9]*)?)|(?:.[0-9]+))$''')
 def decimal_number_from_string(string):

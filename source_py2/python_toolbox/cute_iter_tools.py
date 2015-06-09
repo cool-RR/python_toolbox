@@ -20,7 +20,7 @@ from python_toolbox import math_tools
 infinity = float('inf')
 
 
-class _EMPTY_SENTINEL(object):
+class _EMPTY_SENTINEL(misc_tools.NonInstantiable):
     pass
 
 
@@ -72,7 +72,7 @@ def _iterate_overlapping_subsequences(iterable, length, wrap_around):
                 'more than once.'
             )
         else:
-            raise StopIteration
+            return
             
     if wrap_around:
         first_items_except_last = first_items[:-1]
@@ -118,17 +118,17 @@ def _shorten(iterable, length):
     if length == infinity:
         for thing in iterable:
             yield thing
-        raise StopIteration
+        return
     
     assert isinstance(length, int)
 
     if length == 0:
-        raise StopIteration
+        return
     
     for i, thing in enumerate(iterable):
         yield thing
         if i + 1 == length: # Checking `i + 1` to avoid pulling an extra item.
-            raise StopIteration
+            return
         
         
 def enumerate(iterable, reverse_index=False, lazy_tuple=False):
@@ -211,9 +211,10 @@ def _iter_with(iterable, context_manager):
     while True:
         
         with context_manager:
-            next_item = next(iterator)
-            # Recycling `StopIteration` exception. (Assuming the context
-            # manager doesn't have special treatment for it.)
+            try:
+                next_item = next(iterator)
+            except StopIteration:
+                return 
         
         yield next_item
         
@@ -255,7 +256,10 @@ def double_filter(filter_function, iterable, lazy_tuple=False):
             try:
                 yield true_deque.popleft()
             except IndexError:
-                value = next(iterator) # `StopIteration` exception recycled.
+                try:
+                    value = next(iterator)
+                except StopIteration:
+                    return
                 if filter_function(value):
                     yield value
                 else:
@@ -266,7 +270,10 @@ def double_filter(filter_function, iterable, lazy_tuple=False):
             try:
                 yield false_deque.popleft()
             except IndexError:
-                value = next(iterator) # `StopIteration` exception recycled.
+                try:
+                    value = next(iterator)
+                except StopIteration:
+                    return
                 if filter_function(value):
                     true_deque.append(value)
                 else:
@@ -338,7 +345,7 @@ def _fill(iterable, fill_value, fill_value_maker, length):
     
     for i in itertools.count():
         if i >= length:
-            raise StopIteration
+            return
         
         if iterator_exhausted:
             yield fill_value_maker()
@@ -371,8 +378,7 @@ def _call_until_exception(function, exception):
         while True:
             yield function()
     except exceptions:
-        raise StopIteration
-
+        return
 
 @misc_tools.limit_positional_arguments(1)    
 def get_single_if_any(iterable,
@@ -436,7 +442,7 @@ def are_equal(*sequences, **kwargs):
     # Trying cheap comparison:
     if len(sequence_types) == 1 and issubclass(
                                 get_single_if_any(sequence_types), easy_types):
-        return logic_tools.all_equal(sequences)
+        return logic_tools.all_equivalent(sequences)
     
     # If cheap comparison didn't work, trying item-by-item comparison:
     zipped = itertools.izip_longest(*sequences,
@@ -445,7 +451,7 @@ def are_equal(*sequences, **kwargs):
         # No need to explicitly check for `_EMPTY_SENTINEL`, it would just make
         # the following condition `False`, because it's impossible for all
         # values to be the sentinel.
-        if not logic_tools.all_equal(values):
+        if not logic_tools.all_equivalent(values):
             return False
     else:
         return True
@@ -476,14 +482,15 @@ def is_sorted(iterable, rising=True, strict=False, key=None):
                 (False, True): operator.gt,
                 (True, False): operator.le,
                 (True, True): operator.lt,}[(rising, strict)]
-    for first_item, second_item in iterate_overlapping_subsequences(iterable):
-        if not comparer(key(first_item), key(second_item)):
+    for key_of_first_item, key_of_second_item in \
+                          iterate_overlapping_subsequences(map(key, iterable)):
+        if not comparer(key_of_first_item, key_of_second_item):
             return False
     else:
         return True
         
     
-class _PUSHBACK_SENTINEL(object):
+class _PUSHBACK_SENTINEL(misc_tools.NonInstantiable):
     '''Sentinel used by `PushbackIterator` to say nothing was pushed back.'''
  
 class PushbackIterator(object):
@@ -553,7 +560,7 @@ def zip_non_equal(iterables, lazy_tuple=False):
     '''
     from python_toolbox import logic_tools
     iterator = (items for items in zip(*iterables)
-                if not logic_tools.all_equal(items))
+                if not logic_tools.all_equivalent(items))
 
     if lazy_tuple:
         from python_toolbox import nifty_collections

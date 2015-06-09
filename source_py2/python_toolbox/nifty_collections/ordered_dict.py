@@ -1,18 +1,18 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''
-This module defines the `OrderedDict` class.
-
-See its documentation for more information.
-'''
-
 from python_toolbox import comparison_tools
 
 from collections import OrderedDict as StdlibOrderedDict
 
 
 class OrderedDict(StdlibOrderedDict):
+    '''
+    A dictionary with an order.
+    
+    This is a subclass of `collections.OrderedDict` with a couple of
+    improvements.
+    '''
     
     def move_to_end(self, key, last=True):
         '''Move an existing element to the end (or beginning if last==False).

@@ -1,13 +1,7 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''
-This module defines the `ChangeTracker` class.
-
-See its documentation for more information.
-'''
-
-import cPickle
+import pickle
 
 from python_toolbox.nifty_collections import WeakKeyIdentityDict
 

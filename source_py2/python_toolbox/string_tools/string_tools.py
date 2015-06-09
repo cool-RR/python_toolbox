@@ -5,6 +5,7 @@
 
 import sys
 import re
+import itertools
 
 
 def docstring_trim(docstring):
@@ -46,20 +47,18 @@ def get_n_identical_edge_characters(string, character=None, head=True):
     
     Specify `head=False` to search the tail instead of the head.
     '''
+    from python_toolbox import cute_iter_tools
+    
     if not string:
         return 0
-    index = 0 if head is True else -1
-    direction = 1 if head is True else -1
-    if character is None:
-        character = string[index]
-    else:
-        assert isinstance(character, basestring) and len(character) == 1
-    for i, c in enumerate(string[::direction]):
-        if c != character:
-            return i
-    else:
-        return len(string)    
-
+    found_character, character_iterator = next(
+        itertools.groupby(string if head else reversed(string))
+    )
+    if (character is not None) and found_character != character:
+        assert isinstance(character, str) and len(character) == 1
+        return 0
+    return cute_iter_tools.get_length(character_iterator)
+    
 
 def rreplace(s, old, new, count=None):
     '''

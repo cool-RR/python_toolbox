@@ -14,12 +14,12 @@ from python_toolbox import math_tools
 
 from .lazy_tuple import LazyTuple
 from .ordered_dict import OrderedDict
-from .ordered_set import OrderedSet
-from .frozen_dict_and_frozen_ordered_dict import FrozenDict, FrozenOrderedDict
+from .various_ordered_sets import FrozenOrderedSet
+from .various_frozen_dicts import FrozenDict, FrozenOrderedDict
 from .abstract import Ordered, DefinitelyUnordered
 
 
-class _NO_DEFAULT(object): 
+class _NO_DEFAULT(misc_tools.NonInstantiable): 
     '''Stand-in value used in `_BaseBagMixin.pop` when no default is wanted.'''
             
 class _ZeroCountAttempted(Exception):
@@ -236,7 +236,7 @@ class _BaseBagMixin(object):
             return NotImplemented
         return type(self)(self._dict_type(
             (key, max(self[key], other[key]))
-            for key in OrderedSet(self) | OrderedSet(other))
+            for key in FrozenOrderedSet(self) | FrozenOrderedSet(other))
         )
     
     def __and__(self, other):
@@ -256,7 +256,7 @@ class _BaseBagMixin(object):
             return NotImplemented
         return type(self)(self._dict_type(
             (key, min(self[key], other[key]))
-            for key in OrderedSet(self) & OrderedSet(other))
+            for key in FrozenOrderedSet(self) & FrozenOrderedSet(other))
         )
 
 
@@ -277,7 +277,7 @@ class _BaseBagMixin(object):
             return NotImplemented
         return type(self)(self._dict_type(
             (key, self[key] + other[key])
-            for key in OrderedSet(self) | OrderedSet(other))
+            for key in FrozenOrderedSet(self) | FrozenOrderedSet(other))
         )
 
     def __sub__(self, other):

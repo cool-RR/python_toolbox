@@ -1,24 +1,19 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''
-This module defines the `LazyTuple` class.
-
-See its documentation for more information.
-'''
-
 import functools
 import threading
 import collections
 import itertools
 
+from python_toolbox import misc_tools
 from python_toolbox import decorator_tools
 from python_toolbox import comparison_tools
 
 
 infinity = float('inf')
 
-class _SENTINEL(object):
+class _SENTINEL(misc_tools.NonInstantiable):
     '''Sentinel used to detect the end of an iterable.'''
     
 

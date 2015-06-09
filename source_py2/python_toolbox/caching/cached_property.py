@@ -53,15 +53,15 @@ class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
         self.__doc__ = doc or getattr(self.getter, '__doc__', None)
         
         
-    def __get__(self, obj, our_type=None):
+    def __get__(self, thing, our_type=None):
 
-        if obj is None:
+        if thing is None:
             # We're being accessed from the class itself, not from an object
             return self
         
-        value = self.getter(obj)
+        value = self.getter(thing)
         
-        setattr(obj, self.get_our_name(obj, our_type=our_type), value)
+        setattr(thing, self.get_our_name(thing, our_type=our_type), value)
         
         return value
 

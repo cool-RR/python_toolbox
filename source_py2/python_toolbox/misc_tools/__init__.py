@@ -5,4 +5,4 @@
 
 from .misc_tools import *
 from . import name_mangling
-from .proxy_property import ProxyProperty
+from .proxy_property import ProxyPropertyfrom .overridable_property import OverridableProperty

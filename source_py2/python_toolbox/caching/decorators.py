@@ -10,6 +10,7 @@ See its documentation for more details.
 
 import datetime as datetime_module
 
+from python_toolbox import misc_tools
 from python_toolbox import binary_search
 from python_toolbox import decorator_tools
 from python_toolbox.sleek_reffing import SleekCallArgs
@@ -17,8 +18,8 @@ from python_toolbox.sleek_reffing import SleekCallArgs
 infinity = float('inf')
 
 
-class CLEAR_ENTIRE_CACHE(object):
-    '''Sentinel object for clearing the entire cache'''
+class CLEAR_ENTIRE_CACHE(misc_tools.NonInstantiable):
+    '''Sentinel object for clearing the entire cache.'''
 
 
 def _get_now():
@@ -68,8 +69,6 @@ def cache(max_size=infinity, time_to_keep=None):
     # completely argumentless function. so do one for those.
     
     from python_toolbox.nifty_collections import OrderedDict
-    from python_toolbox import misc_tools
-    
     
     if time_to_keep is not None:
         if max_size != infinity:
