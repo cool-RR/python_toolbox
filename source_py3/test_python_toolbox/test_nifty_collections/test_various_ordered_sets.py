@@ -1,8 +1,11 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
+import operator
+
 from python_toolbox import cute_testing
 
+from python_toolbox import logic_tools
 from python_toolbox import emitting
 from python_toolbox.nifty_collections import (OrderedSet, FrozenOrderedSet,
                                               EmittingOrderedSet)
@@ -11,6 +14,11 @@ from python_toolbox.nifty_collections import (OrderedSet, FrozenOrderedSet,
 class BaseOrderedSetTestCase(cute_testing.TestCase):
     __test__ = False
     
+    def test_operations(self):
+        ordered_set = self.ordered_set_type([5, 61, 2, 7, 2])
+        assert type(ordered_set | ordered_set) == \
+               type(ordered_set & ordered_set) == type(ordered_set)
+        
 class BaseMutableOrderedSetTestCase(BaseOrderedSetTestCase):
     __test__ = False
     def test_sort(self):
@@ -46,9 +54,9 @@ class BaseMutableOrderedSetTestCase(BaseOrderedSetTestCase):
         ordered_set.discard('meow')
         ordered_set.discard('meow')
         ordered_set.discard('meow')
+        assert ordered_set | ordered_set == ordered_set
+        assert ordered_set & ordered_set == ordered_set
         
-          
-
 class OrderedSetTestCase(BaseMutableOrderedSetTestCase):
     __test__ = True
     ordered_set_type = OrderedSet
@@ -82,7 +90,9 @@ class FrozenOrderedSetTestCase(BaseOrderedSetTestCase):
             frozen_ordered_set.pop(2)
         assert list(frozen_ordered_set) == list(range(4))
           
-
+    def test_hashable(self):
+        1 / 0blocktodo
+        
 
 class EmittingOrderedSetTestCase(BaseMutableOrderedSetTestCase):
     __test__ = True
@@ -114,4 +124,25 @@ class EmittingOrderedSetTestCase(BaseMutableOrderedSetTestCase):
         
         
 
-        
+    
+def test_operations_on_different_types():
+    x1 = OrderedSet(range(0, 4)) | FrozenOrderedSet(range(2, 6))
+    x2 = OrderedSet(range(0, 4)) & FrozenOrderedSet(range(2, 6))
+    x3 = FrozenOrderedSet(range(0, 4)) | OrderedSet(range(2, 6))
+    x4 = FrozenOrderedSet(range(0, 4)) & OrderedSet(range(2, 6))
+    
+    assert type(x1) == OrderedSet
+    assert type(x2) == OrderedSet
+    assert type(x3) == FrozenOrderedSet
+    assert type(x4) == FrozenOrderedSet
+    
+    assert x1 == OrderedSet(range(0, 6))
+    assert x2 == OrderedSet(range(2, 4))
+    assert x3 == FrozenOrderedSet(range(0, 6))
+    assert x4 == FrozenOrderedSet(range(2, 4))
+    
+    assert logic_tools.all_equivalent((x1, x2, x3, x4),
+                                      relation=operator.ne)
+    
+    
+

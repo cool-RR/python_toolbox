@@ -158,6 +158,11 @@ class OrderedSet(BaseOrderedSet, collections.MutableSet):
         key = next(reversed(self) if last else iter(self))
         self.discard(key)
         return key
+    
+    def get_frozen(self):
+        '''Get a frozen version of this ordered set.'''
+        return FrozenOrderedSet(self)
+        
 
 
 class EmittingOrderedSet(OrderedSet):

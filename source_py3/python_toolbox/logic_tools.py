@@ -4,13 +4,21 @@
 '''This module defines logic-related tools.'''
 
 import collections
+import itertools
+import operator
 
 from python_toolbox import cute_iter_tools
 
 
-def all_equal(iterable, exhaustive=False):
+def all_equivalent(iterable, relation=operator.eq, *, exhaustive=False):
     '''
-    Return whether all elements in the iterable are equal to each other.
+    Return whether all elements in the iterable are equivalent to each other.
+    
+    By default "equivalent" means they're equal to each other in Python. You
+    can set a different relation to the `relation` argument, as a function that
+    accepts two arguments and returns whether they're equivalent or not. You
+    can use this, for example, to test if all items are NOT equal by passing in
+    `relation=operator.ne`.
     
     If `exhaustive` is set to `False`, it's assumed that the equality relation
     is transitive, therefore not every member is tested against every other
@@ -36,7 +44,7 @@ def all_equal(iterable, exhaustive=False):
     else: # exhaustive is False
         pairs = cute_iter_tools.iterate_overlapping_subsequences(iterable)
         
-    return all(a == b for (a, b) in pairs)
+    return all(itertools.starmap(relation, pairs))
 
 
 def get_equivalence_classes(iterable, key=None, container=set,

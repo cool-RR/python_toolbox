@@ -436,7 +436,7 @@ def are_equal(*sequences, easy_types=(sequence_tools.CuteRange,)):
     # Trying cheap comparison:
     if len(sequence_types) == 1 and issubclass(
                                 get_single_if_any(sequence_types), easy_types):
-        return logic_tools.all_equal(sequences)
+        return logic_tools.all_equivalent(sequences)
     
     # If cheap comparison didn't work, trying item-by-item comparison:
     zipped = itertools.zip_longest(*sequences,
@@ -445,7 +445,7 @@ def are_equal(*sequences, easy_types=(sequence_tools.CuteRange,)):
         # No need to explicitly check for `_EMPTY_SENTINEL`, it would just make
         # the following condition `False`, because it's impossible for all
         # values to be the sentinel.
-        if not logic_tools.all_equal(values):
+        if not logic_tools.all_equivalent(values):
             return False
     else:
         return True
@@ -551,7 +551,7 @@ def zip_non_equal(iterables, lazy_tuple=False):
     '''
     from python_toolbox import logic_tools
     iterator = (items for items in zip(*iterables)
-                if not logic_tools.all_equal(items))
+                if not logic_tools.all_equivalent(items))
 
     if lazy_tuple:
         from python_toolbox import nifty_collections
