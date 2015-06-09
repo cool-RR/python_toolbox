@@ -69,6 +69,7 @@ class SortedList(MutableSequence):
         """
         self._len, self._maxes, self._lists, self._index = 0, [], [], []
         self._load, self._twice, self._half = load, load * 2, load >> 1
+        self._offset = 0
 
         if iterable is not None:
             self.update(iterable)
@@ -113,7 +114,7 @@ class SortedList(MutableSequence):
         if len(_lists[pos]) > self._twice:
             _maxes, _load = self._maxes, self._load
             half = _lists[pos][_load:]
-            _lists[pos] = _lists[pos][:_load]
+            del _lists[pos][_load:]
             _maxes[pos] = _lists[pos][-1]
             _maxes.insert(pos + 1, half[-1])
             _lists.insert(pos + 1, half)
@@ -387,29 +388,27 @@ class SortedList(MutableSequence):
         The final index pair from our example is (2, 3) which corresponds to
         index 8 in the sorted list.
         """
-        _len, _lists = self._len, self._lists
-
         if idx < 0:
-            last_len = len(_lists[-1])
+            last_len = len(self._lists[-1])
             if (-idx) <= last_len:
-                return len(_lists) - 1, last_len + idx
-            idx += _len
+                return len(self._lists) - 1, last_len + idx
+            idx += self._len
             if idx < 0:
                 raise IndexError('list index out of range')
-        elif idx >= _len:
+        elif idx >= self._len:
             raise IndexError('list index out of range')
 
-        if idx < len(_lists[0]):
+        if idx < len(self._lists[0]):
             return 0, idx
 
         _index = self._index
 
-        if not len(_index):
+        if not _index:
             self._build_index()
 
         pos = 0
+        child = 1
         len_index = len(_index)
-        child = (pos << 1) + 1
 
         while child < len_index:
             index_child = _index[child]
@@ -777,11 +776,7 @@ class SortedList(MutableSequence):
 
     def __reversed__(self):
         """Create an iterator to traverse the list in reverse."""
-        _lists = self._lists
-        start = len(_lists) - 1
-        iterable = (reversed(_lists[pos])
-                    for pos in range(start, -1, -1))
-        return chain.from_iterable(iterable)
+        return chain.from_iterable(map(reversed, reversed(self._lists)))
 
     def __len__(self):
         """Return the number of elements in the list."""
@@ -807,10 +802,6 @@ class SortedList(MutableSequence):
 
         return self._loc(pos, idx)
 
-    def bisect(self, val):
-        """Same as bisect_right."""
-        return self.bisect_right(val)
-
     def bisect_right(self, val):
         """
         Same as *bisect_left*, but if *val* is already present, the insertion
@@ -829,6 +820,8 @@ class SortedList(MutableSequence):
         idx = bisect_right(self._lists[pos], val)
 
         return self._loc(pos, idx)
+
+    bisect = bisect_right
 
     def count(self, val):
         """Return the number of occurrences of *val* in the list."""
@@ -861,7 +854,7 @@ class SortedList(MutableSequence):
 
     def copy(self):
         """Return a shallow copy of the sorted list."""
-        return SortedList(self, load=self._load)
+        return self.__class__(self, load=self._load)
 
     __copy__ = copy
 
@@ -933,7 +926,7 @@ class SortedList(MutableSequence):
                     child = (child - 1) >> 1
                 _index[0] += len_values
         else:
-            del self._index[:]
+            del _index[:]
 
         self._len += len(values)
 
@@ -1078,7 +1071,7 @@ class SortedList(MutableSequence):
         """
         values = self.as_list()
         values.extend(that)
-        return SortedList(values)
+        return self.__class__(values, load=self._load)
 
     def __iadd__(self, that):
         """
@@ -1094,7 +1087,7 @@ class SortedList(MutableSequence):
         in SortedList.
         """
         values = self.as_list() * that
-        return SortedList(values)
+        return self.__class__(values, load=self._load)
 
     def __imul__(self, that):
         """
@@ -1107,39 +1100,44 @@ class SortedList(MutableSequence):
         return self
 
     def __eq__(self, that):
-        """Compare two iterables for equality."""
+        """Compare two Sequences for equality."""
         return ((self._len == len(that))
                 and all(lhs == rhs for lhs, rhs in zip(self, that)))
 
     def __ne__(self, that):
-        """Compare two iterables for inequality."""
+        """Compare two Sequences for inequality."""
         return ((self._len != len(that))
                 or any(lhs != rhs for lhs, rhs in zip(self, that)))
 
     def __lt__(self, that):
-        """Compare two iterables for less than."""
+        """Compare two Sequences for less than."""
         return ((self._len <= len(that))
                 and all(lhs < rhs for lhs, rhs in zip(self, that)))
 
     def __le__(self, that):
-        """Compare two iterables for less than equal."""
+        """Compare two Sequences for less than equal."""
         return ((self._len <= len(that))
                 and all(lhs <= rhs for lhs, rhs in zip(self, that)))
 
     def __gt__(self, that):
-        """Compare two iterables for greater than."""
+        """Compare two Sequences for greater than."""
         return ((self._len >= len(that))
                 and all(lhs > rhs for lhs, rhs in zip(self, that)))
 
     def __ge__(self, that):
-        """Compare two iterables for greater than equal."""
+        """Compare two Sequences for greater than equal."""
         return ((self._len >= len(that))
                 and all(lhs >= rhs for lhs, rhs in zip(self, that)))
 
     @recursive_repr
     def __repr__(self):
         """Return string representation of SortedList."""
-        return '{0}({1})'.format(self.__class__.__name__, repr(self.as_list()))
+        temp = '{0}({1}, load={2})'
+        return temp.format(
+            self.__class__.__name__,
+            repr(list(self)),
+            repr(self._load)
+        )
 
     def _check(self):
         try:
@@ -1220,9 +1218,14 @@ class SortedList(MutableSequence):
 
             traceback.print_exc(file=sys.stdout)
 
-            print(self._len, self._load, self._half, self._twice)
-            print(self._index)
-            print(self._maxes)
-            print(self._lists)
+            print('len', self._len)
+            print('load', self._load, self._half, self._twice)
+            print('offset', self._offset)
+            print('len_index', len(self._index))
+            print('index', self._index)
+            print('len_maxes', len(self._maxes))
+            print('maxes', self._maxes)
+            print('len_lists', len(self._lists))
+            print('lists', self._lists)
 
             raise
