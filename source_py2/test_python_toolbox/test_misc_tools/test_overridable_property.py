@@ -7,7 +7,7 @@ from python_toolbox.misc_tools import OverridableProperty
 
 
 def test():
-    class A:
+    class A(object):
         @OverridableProperty
         def meow(self):
             return 'bark bark!'
