@@ -22,12 +22,18 @@ class OrderedDict(StdlibOrderedDict):
         When last=True, acts like a fast version of self[key]=self.pop(key).
 
         '''
-        if sys_tools.is_pypy:
-            if last is False:
-                raise NotImplementedError
-            value = self[key]
-            del self[key]
-            self[key] = value
+        try:
+            self.__map
+        except AttributeError: # PyPy
+            if last:
+                self[key] = self.pop(key)
+            else:
+                # Very inefficient implementation for corner case.
+                value = self.pop(key)
+                items = tuple(self.items())
+                self.clear()
+                self[key] = value
+                self.update(items)
             return
         else:
             link = self.__map[key]
