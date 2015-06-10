@@ -1,12 +1,6 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''
-This module defines the `ReentrantContextManager` class.
-
-See its documentation for more information.
-'''
-
 import abc
 
 from python_toolbox import caching

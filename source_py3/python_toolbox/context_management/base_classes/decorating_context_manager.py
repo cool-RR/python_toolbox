@@ -1,13 +1,6 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''
-This module defines the `DecoratingContextManager` class.
-
-See its documentation for more information.
-'''
-
-
 from python_toolbox import decorator_tools
 
 

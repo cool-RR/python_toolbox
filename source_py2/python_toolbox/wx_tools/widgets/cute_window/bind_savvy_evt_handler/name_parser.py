@@ -1,12 +1,6 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-This module defines the `NameParser` class.
-
-See its documentation for more information.
-'''
-
 import abc
 
 from python_toolbox import abc_tools

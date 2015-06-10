@@ -1,12 +1,6 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''
-This module defines the `CursorChanger` class.
-
-See its documentation for more information.
-'''
-
 import wx
 
 from python_toolbox.temp_value_setting import TempValueSetter
