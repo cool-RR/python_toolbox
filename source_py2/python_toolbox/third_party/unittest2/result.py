@@ -6,8 +6,8 @@ import unittest
 from six.moves import StringIO
 import traceback2 as traceback
 
-from unittest2 import util
-from unittest2.compatibility import wraps
+from python_toolbox.third_party.unittest2 import util
+from python_toolbox.third_party.unittest2.compatibility import wraps
 
 __unittest = True
 

@@ -15,13 +15,13 @@ import warnings
 import six
 from six.moves import range
 
-from unittest2 import result
-from unittest2.util import (
+from python_toolbox.third_party.unittest2 import result
+from python_toolbox.third_party.unittest2.util import (
     safe_repr, safe_str, strclass,
     unorderable_list_difference, _common_shorten_repr
 )
 
-from unittest2.compatibility import (
+from python_toolbox.third_party.unittest2.compatibility import (
     wraps, with_context, catch_warnings, raise_from
 )
 

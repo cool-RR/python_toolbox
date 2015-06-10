@@ -10,7 +10,7 @@ import string
 import weakref
 
 import nose
-from python_toolbox.third_party import unittest2
+from python_toolbox.third_party import python_toolbox.third_party.unittest2
 from python_toolbox import sys_tools
 from python_toolbox import gc_tools
 

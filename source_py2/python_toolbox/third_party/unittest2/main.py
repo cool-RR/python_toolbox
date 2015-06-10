@@ -7,9 +7,9 @@ import types
 
 import six
 
-from unittest2 import loader, runner
+from python_toolbox.third_party.unittest2 import loader, runner
 try:
-    from unittest2.signals import installHandler
+    from python_toolbox.third_party.unittest2.signals import installHandler
 except ImportError:
     installHandler = None
 

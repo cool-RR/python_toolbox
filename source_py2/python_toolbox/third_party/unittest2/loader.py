@@ -10,13 +10,13 @@ import warnings
 
 from fnmatch import fnmatch
 
-from unittest2 import case, suite, util
-from unittest2.compatibility import raise_from
+from python_toolbox.third_party.unittest2 import case, suite, util
+from python_toolbox.third_party.unittest2.compatibility import raise_from
 
 try:
     from os.path import relpath
 except ImportError:
-    from unittest2.compatibility import relpath
+    from python_toolbox.third_party.unittest2.compatibility import relpath
 
 __unittest = True
 

@@ -6,10 +6,10 @@ import unittest
 
 from six import u
 
-from unittest2 import result
+from python_toolbox.third_party.unittest2 import result
 
 try:
-    from unittest2.signals import registerResult
+    from python_toolbox.third_party.unittest2.signals import registerResult
 except ImportError:
     def registerResult(_):
         pass

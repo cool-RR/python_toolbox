@@ -5,7 +5,7 @@ import unittest
 
 import six
 
-from unittest2 import case, util
+from python_toolbox.third_party.unittest2 import case, util
 
 __unittest = True
 

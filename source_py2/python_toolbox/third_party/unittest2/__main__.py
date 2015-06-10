@@ -13,7 +13,7 @@ if sys.argv[0].endswith("__main__.py"):
 
 __unittest = True
 
-from unittest2.main import main, TestProgram
+from python_toolbox.third_party.unittest2.main import main, TestProgram
 def main_():
     main(module=None)
 

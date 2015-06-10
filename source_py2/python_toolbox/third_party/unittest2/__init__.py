@@ -5,7 +5,7 @@ unittest2 is a backport of the new features added to the unittest testing
 framework in Python 2.7 and beyond. It is tested to run on Python 2.4 - 2.7.
 
 To use unittest2 instead of unittest simply replace ``import unittest`` with
-``import unittest2``.
+``import python_toolbox.third_party.unittest2``.
 
 
 Copyright (c) 1999-2003 Steve Purcell
@@ -37,22 +37,22 @@ __version__ = '1.0.1'
 __all__.extend(['getTestCaseNames', 'makeSuite', 'findTestCases'])
 
 
-from unittest2.collector import collector
-from unittest2.result import TestResult
-from unittest2.case import (
+from python_toolbox.third_party.unittest2.collector import collector
+from python_toolbox.third_party.unittest2.result import TestResult
+from python_toolbox.third_party.unittest2.case import (
     TestCase, FunctionTestCase, SkipTest, skip, skipIf,
     skipUnless, expectedFailure
 )
-from unittest2.suite import BaseTestSuite, TestSuite
-from unittest2.loader import (
+from python_toolbox.third_party.unittest2.suite import BaseTestSuite, TestSuite
+from python_toolbox.third_party.unittest2.loader import (
     TestLoader, defaultTestLoader, makeSuite, getTestCaseNames,
     findTestCases
 )
-from unittest2.main import TestProgram, main
-from unittest2.runner import TextTestRunner, TextTestResult
+from python_toolbox.third_party.unittest2.main import TestProgram, main
+from python_toolbox.third_party.unittest2.runner import TextTestRunner, TextTestResult
 
 try:
-    from unittest2.signals import (
+    from python_toolbox.third_party.unittest2.signals import (
         installHandler, registerResult, removeResult, removeHandler
     )
 except ImportError:
@@ -80,7 +80,7 @@ def load_tests(loader, tests, pattern):
     # All our tests are in test/ - the test objects found in unittest2 itself
     # are base classes not intended to be executed. This load_tests intercepts
     # discovery to prevent that.
-    import unittest2.test
+    import python_toolbox.third_party.unittest2.test
     result = loader.suiteClass()
     for path in unittest2.test.__path__:
         result.addTests(loader.discover(path, pattern=pattern))
