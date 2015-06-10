@@ -245,7 +245,7 @@ def test_function_in_something():
     '''Test `describe` doesn't fail when describing `{1: sum}`.'''
     raise nose.SkipTest("This test doesn't pass yet.")
     assert describe({1: sum}) == '{1: sum}'
-     describe((sum, sum, list, chr)) == '(sum, sum, list, chr)'
+    describe((sum, sum, list, chr)) == '(sum, sum, list, chr)'
     
 
 def test_function_in_main():
