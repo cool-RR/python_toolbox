@@ -27,8 +27,8 @@ def test_on_locally_defined_class():
     # Testing for locally defined class:
     
     
-raise nose.SkipTest("This test doesn't currently pass because `describe` "
-                    "doesn't support nested classes yet.")
+    raise nose.SkipTest("This test doesn't currently pass because `describe` "
+                        "doesn't support nested classes yet.")
     
     result = describe(A.B)
     assert result == prefix + 'A.B'
