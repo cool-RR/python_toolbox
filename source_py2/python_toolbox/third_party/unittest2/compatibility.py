@@ -2,7 +2,7 @@ import collections
 import os
 import sys
 
-import six
+from python_toolbox.third_party import six
 
 try:
     from functools import wraps

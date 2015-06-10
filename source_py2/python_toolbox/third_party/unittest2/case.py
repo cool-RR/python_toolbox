@@ -12,8 +12,8 @@ import types
 import unittest
 import warnings
 
-import six
-from six.moves import range
+from python_toolbox.third_party import six
+from python_toolbox.third_party.six.moves import range
 
 from python_toolbox.third_party.unittest2 import result
 from python_toolbox.third_party.unittest2.util import (

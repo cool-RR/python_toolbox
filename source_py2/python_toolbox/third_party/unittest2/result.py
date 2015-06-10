@@ -3,8 +3,8 @@
 import sys
 import unittest
 
-from six.moves import StringIO
-import traceback2 as traceback
+from python_toolbox.third_party.six.moves import StringIO
+from python_toolbox.third_party import traceback2 as traceback
 
 from python_toolbox.third_party.unittest2 import util
 from python_toolbox.third_party.unittest2.compatibility import wraps

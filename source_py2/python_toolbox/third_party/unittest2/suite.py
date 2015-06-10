@@ -3,7 +3,7 @@
 import sys
 import unittest
 
-import six
+from python_toolbox.third_party import six
 
 from python_toolbox.third_party.unittest2 import case, util
 

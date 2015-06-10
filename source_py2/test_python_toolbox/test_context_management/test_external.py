@@ -6,7 +6,7 @@
 import sys
 
 import nose
-from python_toolbox.third_party import python_toolbox.third_party.unittest2
+from python_toolbox.third_party import unittest2
 
 import python_toolbox
 from python_toolbox.context_management import (ContextManager,

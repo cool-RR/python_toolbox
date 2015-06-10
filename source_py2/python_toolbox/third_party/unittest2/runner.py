@@ -4,7 +4,7 @@ import sys
 import time
 import unittest
 
-from six import u
+from python_toolbox.third_party.six import u
 
 from python_toolbox.third_party.unittest2 import result
 

@@ -5,7 +5,7 @@ import argparse
 import os
 import types
 
-import six
+from python_toolbox.third_party import six
 
 from python_toolbox.third_party.unittest2 import loader, runner
 try:

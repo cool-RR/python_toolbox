@@ -8,7 +8,7 @@ import pickle
 import abc
 import collections
 import decimal as decimal_module
-from python_toolbox.third_party import python_toolbox.third_party.unittest2
+from python_toolbox.third_party import unittest2
 import copy
 
 import nose
