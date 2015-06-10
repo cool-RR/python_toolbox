@@ -4,31 +4,33 @@ import sys
 import time
 import unittest
 
-from python_toolbox.third_party.unittest2 import result
+from six import u
+
+from unittest2 import result
 
 try:
-    from python_toolbox.third_party.unittest2.signals import registerResult
+    from unittest2.signals import registerResult
 except ImportError:
     def registerResult(_):
         pass
-    
+
 __unittest = True
 
 
 class _WritelnDecorator(object):
     """Used to decorate file-like objects with a handy 'writeln' method"""
-    def __init__(self,stream):
+    def __init__(self, stream):
         self.stream = stream
 
     def __getattr__(self, attr):
         if attr in ('stream', '__getstate__'):
             raise AttributeError(attr)
-        return getattr(self.stream,attr)
+        return getattr(self.stream, attr)
 
     def writeln(self, arg=None):
         if arg:
             self.write(arg)
-        self.write('\n') # text-mode streams translate to \r\n if needed
+        self.write(u('\n')) # text-mode streams translate to \r\n if needed
 
 
 class TextTestResult(result.TestResult):
@@ -36,11 +38,11 @@ class TextTestResult(result.TestResult):
 
     Used by TextTestRunner.
     """
-    separator1 = '=' * 70
-    separator2 = '-' * 70
+    separator1 = u('=' * 70)
+    separator2 = u('-' * 70)
 
     def __init__(self, stream, descriptions, verbosity):
-        super(TextTestResult, self).__init__()
+        super(TextTestResult, self).__init__(stream, descriptions, verbosity)
         self.stream = stream
         self.showAll = verbosity > 1
         self.dots = verbosity == 1
@@ -135,12 +137,19 @@ class TextTestRunner(unittest.TextTestRunner):
     resultclass = TextTestResult
 
     def __init__(self, stream=sys.stderr, descriptions=True, verbosity=1,
-                    failfast=False, buffer=False, resultclass=None):
+                 failfast=False, buffer=False, resultclass=None,
+                 tb_locals=False):
+        """Construct a TextTestRunner.
+
+        Subclasses should accept **kwargs to ensure compatibility as the
+        interface changes.
+        """
         self.stream = _WritelnDecorator(stream)
         self.descriptions = descriptions
         self.verbosity = verbosity
         self.failfast = failfast
         self.buffer = buffer
+        self.tb_locals = tb_locals
         if resultclass is not None:
             self.resultclass = resultclass
 
@@ -152,8 +161,9 @@ class TextTestRunner(unittest.TextTestRunner):
         result = self._makeResult()
         result.failfast = self.failfast
         result.buffer = self.buffer
+        result.tb_locals = self.tb_locals
         registerResult(result)
-        
+
         startTime = time.time()
         startTestRun = getattr(result, 'startTestRun', None)
         if startTestRun is not None:
@@ -171,36 +181,37 @@ class TextTestRunner(unittest.TextTestRunner):
         if hasattr(result, 'separator2'):
             self.stream.writeln(result.separator2)
         run = result.testsRun
-        self.stream.writeln("Ran %d test%s in %.3fs" %
+        self.stream.writeln(u("Ran %d test%s in %.3fs") %
                             (run, run != 1 and "s" or "", timeTaken))
         self.stream.writeln()
-        
+
         expectedFails = unexpectedSuccesses = skipped = 0
         try:
             results = map(len, (result.expectedFailures,
                                 result.unexpectedSuccesses,
                                 result.skipped))
-            expectedFails, unexpectedSuccesses, skipped = results
         except AttributeError:
             pass
+        else:
+            expectedFails, unexpectedSuccesses, skipped = results
         infos = []
         if not result.wasSuccessful():
-            self.stream.write("FAILED")
+            self.stream.write(u("FAILED"))
             failed, errored = map(len, (result.failures, result.errors))
             if failed:
-                infos.append("failures=%d" % failed)
+                infos.append(u("failures=%d") % failed)
             if errored:
-                infos.append("errors=%d" % errored)
+                infos.append(u("errors=%d") % errored)
         else:
-            self.stream.write("OK")
+            self.stream.write(u("OK"))
         if skipped:
-            infos.append("skipped=%d" % skipped)
+            infos.append(u("skipped=%d") % skipped)
         if expectedFails:
-            infos.append("expected failures=%d" % expectedFails)
+            infos.append(u("expected failures=%d") % expectedFails)
         if unexpectedSuccesses:
-            infos.append("unexpected successes=%d" % unexpectedSuccesses)
+            infos.append(u("unexpected successes=%d") % unexpectedSuccesses)
         if infos:
-            self.stream.writeln(" (%s)" % (", ".join(infos),))
+            self.stream.writeln(u(" (%s)") % (u(", ").join(infos),))
         else:
-            self.stream.write("\n")
+            self.stream.write(u("\n"))
         return result
