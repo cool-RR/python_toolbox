@@ -53,78 +53,93 @@ class NO_FILL_VALUE(misc_tools.NonInstantiable):
     '''
 
 
-def partitions(sequence, partition_size=None, n_partitions=None,
-               allow_remainder=True, fill_value=NO_FILL_VALUE):
-    '''
-    Partition `sequence` into equal partitions of size `partition_size`, or
-    determine size automatically given the number of partitions as
-    `n_partitions`.
-
-    If the sequence can't be divided into precisely equal partitions, the last
-    partition will contain less members than all the other partitions.
-
-    Example:
-
-        >>> partitions([0, 1, 2, 3, 4], 2)
-        [[0, 1], [2, 3], [4]]
-
-    (You need to give *either* a `partition_size` *or* an `n_partitions`
-    argument, not both.)
-
-    Specify `allow_remainder=False` to enforce that the all the partition sizes
-    be equal; if there's a remainder while `allow_remainder=False`, an
-    exception will be raised.
-
-    If you want the remainder partition to be of equal size with the other
-    partitions, you can specify `fill_value` as the padding for the last
-    partition. A specified value for `fill_value` implies
-    `allow_remainder=True` and will cause an exception to be raised if
-    specified with `allow_remainder=False`.
-
-    Example:
-
-        >>> partitions([0, 1, 2, 3, 4], 3, fill_value=None)
-        [[0, 1, 2], [3, 4, None]]
-        
-    '''
-
-    sequence_length = len(sequence)
-
-    ### Validating input: #####################################################
-    #                                                                         #
-    if (partition_size is None) == (n_partitions is None):
-        raise Exception('You must specify *either* `partition_size` *or* '
-                        '`n_paritions`.')
-
-    if fill_value is not NO_FILL_VALUE and not allow_remainder:
-        raise ValueError('`fill_value` cannot be specified if '
-                         '`allow_remainder` is `False`.')
-
-    remainder_length = sequence_length % (partition_size if partition_size
-                                          is not None else n_partitions)
-
-    if not allow_remainder and remainder_length > 0:
-        raise Exception("You set `allow_remainder=False`, but there's a "
-                        "reminder of %s left." % remainder_length)
-    #                                                                         #
-    ### Finished validating input. ############################################
-
-    if partition_size is None:
-        partition_size = math_tools.ceil_div(sequence_length, n_partitions)
-    if n_partitions is None:
-        n_partitions = math_tools.ceil_div(sequence_length, partition_size)
-
-    enlarged_length = partition_size * n_partitions
-
-    blocks = [sequence[i : i + partition_size] for i in
-              range(0, enlarged_length, partition_size)]
-
-    if fill_value is not NO_FILL_VALUE and blocks:
-        filler = itertools.repeat(fill_value,
-                                  enlarged_length - sequence_length)
-        blocks[-1].extend(filler)
-
-    return blocks
+    def partitions(sequence, partition_size=None, n_partitions=None,
+                   allow_remainder=True, larger_on_remainder=False,
+                   fill_value=NO_FILL_VALUE):
+        '''
+        Partition `sequence` into equal partitions of size `partition_size`, or
+        determine size automatically given the number of partitions as
+        `n_partitions`.
+    
+        If the sequence can't be divided into precisely equal partitions, the last
+        partition will contain less members than all the other partitions.
+    
+        Example:
+    
+            >>> partitions([0, 1, 2, 3, 4], 2)
+            [[0, 1], [2, 3], [4]]
+    
+        (You need to give *either* a `partition_size` *or* an `n_partitions`
+        argument, not both.)
+    
+        Specify `allow_remainder=False` to enforce that the all the partition sizes
+        be equal; if there's a remainder while `allow_remainder=False`, an
+        exception will be raised.
+    
+        By default, if there's a remainder, the last partition will be smaller than
+        the others. (e.g. a sequence of 7 items, when partitioned into pairs, will
+        have 3 pairs and then a partition with only 1 element.) Specify
+        `larger_on_remainder=True` to make the last partition, in case there is
+        one, be a bigger partition. (e.g. a sequence of a 7 items divided into
+        pairs would result in 2 pairs and one triplet.)
+    
+        If you want the remainder partition to be of equal size with the other
+        partitions, you can specify `fill_value` as the padding for the last
+        partition. A specified value for `fill_value` implies
+        `allow_remainder=True` and will cause an exception to be raised if
+        specified with `allow_remainder=False`.
+    
+        Example:
+    
+            >>> partitions([0, 1, 2, 3, 4], 3, fill_value='meow')
+            [[0, 1, 2], [3, 4, 'meow']]
+    
+        '''
+    
+        sequence_length = len(sequence)
+    
+        ### Validating input: #####################################################
+        #                                                                         #
+        if (partition_size is None) + (n_partitions is None) != 1:
+            raise Exception('You must specify *either* `partition_size` *or* '
+                            '`n_paritions`.')
+    
+        remainder_length = sequence_length % (partition_size if partition_size
+                                              is not None else n_partitions)
+    
+        if not allow_remainder and remainder_length > 0:
+            raise Exception("You set `allow_remainder=False`, but there's a "
+                            "reminder of %s left." % remainder_length)
+        #                                                                         #
+        ### Finished validating input. ############################################
+    
+        if partition_size is None:
+            if larger_on_remainder:
+                partition_size = sequence_length // n_partitions # (Floor div)
+            else:
+                partition_size = math_tools.ceil_div(sequence_length, n_partitions)
+        if n_partitions is None:
+            n_partitions = math_tools.ceil_div(sequence_length, partition_size)
+    
+        enlarged_length = partition_size * n_partitions
+    
+        blocks = [sequence[i : i + partition_size] for i in
+                  range(0, enlarged_length, partition_size)]
+    
+        if enlarged_length > sequence_length: # We have a remainder
+            assert blocks
+            if larger_on_remainder:
+                if len(blocks) >= 2:
+                    small_block_to_append_back = blocks[-1]
+                    del blocks[-1]
+                    blocks[-1] += small_block_to_append_back
+            elif fill_value != NO_FILL_VALUE: # (We use elif because fill is never 
+                                                # done if `larger_on_remainder=True`.)
+                filler = itertools.repeat(fill_value,
+                                          enlarged_length - sequence_length)
+                blocks[-1].extend(filler)
+    
+        return blocks
 
 
 def is_immutable_sequence(thing):
