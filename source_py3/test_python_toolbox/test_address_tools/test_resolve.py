@@ -88,20 +88,6 @@ def test_python_toolbox():
     
     ###########################################################################
     #                                                                         #
-    result_0 = resolve('python_toolbox.persistent.cross_process_persistent.'
-                     'CrossProcessPersistent.personality')
-    result_1 = resolve('persistent.CrossProcessPersistent.personality', 
-                       namespace=python_toolbox)
-    result_2 = resolve('persistent.CrossProcessPersistent.personality',
-                       root=python_toolbox.persistent,
-                       namespace='email') # Namespace is red herring.
-    assert result_0 is result_1 is result_2 is python_toolbox.persistent. \
-                    cross_process_persistent.CrossProcessPersistent.personality
-    #                                                                         #
-    ###########################################################################
-    
-    ###########################################################################
-    #                                                                         #
     result_0 = resolve('caching.cached_property.CachedProperty',
                        root=python_toolbox.caching)
     result_1 = resolve('caching.CachedProperty',
