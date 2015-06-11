@@ -122,7 +122,7 @@ Roadmap
 Present
 -------
 
-Python Toolbox is at version 0.7.0, which is an alpha release. It's being used 
+Python Toolbox is at version 0.8.0, which is an alpha release. It's being used 
 in production every day, but backward compatibility isn't guaranteed yet.
 
 Next tasks
@@ -162,7 +162,7 @@ install_requires = ['setuptools']
 
 setuptools.setup(
     name='python_toolbox',
-    version='0.7.0',
+    version='0.8.0',
     test_suite='nose.collector',
     install_requires=install_requires,
     tests_require=['nose>=1.0.0',
