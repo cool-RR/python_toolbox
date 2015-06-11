@@ -1,9 +1,12 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Testing module for `cute_iter_tools.iterate_overlapping_subsequences`.'''
 
+import collections
+
 from python_toolbox import gc_tools
+from python_toolbox import nifty_collections
 from python_toolbox import cute_testing
 from python_toolbox import sequence_tools
 
@@ -13,8 +16,9 @@ from python_toolbox.cute_iter_tools import iterate_overlapping_subsequences
 def test_length_2():
     
     # `iterate_overlapping_subsequences` returns an iterator, not a sequence:
-    assert not sequence_tools.is_sequence(
-        iterate_overlapping_subsequences(range(4))
+    assert not isinstance(
+        iterate_overlapping_subsequences(list(range(4))),
+        collections.Sequence
     )
                                           
     assert tuple(iterate_overlapping_subsequences(range(4))) == \
@@ -43,6 +47,8 @@ def test_various_lengths():
                        ((0, 1, 2, 3), (1, 2, 3, 4), (2, 3, 4, 5), (3, 4, 5, 6))
     assert tuple(iterate_overlapping_subsequences(xrange(7), length=5)) == \
                             ((0, 1, 2, 3, 4), (1, 2, 3, 4, 5), (2, 3, 4, 5, 6))
+    assert tuple(iterate_overlapping_subsequences(range(7), length=1)) == \
+                                                                tuple(range(7))
     
     assert tuple(iterate_overlapping_subsequences(xrange(7), length=4,
             wrap_around=True)) == ((0, 1, 2, 3), (1, 2, 3, 4), (2, 3, 4, 5),
@@ -51,6 +57,17 @@ def test_various_lengths():
             wrap_around=True)) == ((0, 1, 2, 3, 4), (1, 2, 3, 4, 5),
             (2, 3, 4, 5, 6), (3, 4, 5, 6, 0), (4, 5, 6, 0, 1), (5, 6, 0, 1, 2),
             (6, 0, 1, 2, 3))
+                                          
+           
+def test_lazy_tuple():
+    lazy_tuple = \
+          iterate_overlapping_subsequences(range(7), length=3, lazy_tuple=True)
+    assert isinstance(lazy_tuple, nifty_collections.LazyTuple)
+    assert not lazy_tuple.collected_data
+    
+    assert lazy_tuple == \
+                        ((0, 1, 2), (1, 2, 3), (2, 3, 4), (3, 4, 5), (4, 5, 6))
+    
                                           
            
 def test_garbage_collection():
@@ -130,7 +147,10 @@ def test_garbage_collection_wrap_around():
     assert_garbage_collected((0, 1, 2, 3, 4, 5, 6))
         
     
-    
+def test_short_iterables():
+    assert tuple(iterate_overlapping_subsequences([1])) == ()
+    assert tuple(iterate_overlapping_subsequences([1], length=7)) == ()
+        
     
             
             

@@ -1,10 +1,11 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Testing module for `python_toolbox.cute_iter_tools.shorten`.'''
 
 import nose.tools
 
+from python_toolbox import nifty_collections
 from python_toolbox import cute_iter_tools
 from python_toolbox.cute_iter_tools import shorten
 
@@ -28,6 +29,16 @@ def test():
     assert list(shorten(my_range, infinity)) == my_range
     assert list(shorten(iter(my_range), infinity)) == my_range
 
+    
+def test_lazy_tuple():
+    my_range = [0, 1, 2, 3, 4]
+
+    lazy_tuple = shorten(my_range, 3, lazy_tuple=True)
+    assert isinstance(lazy_tuple, nifty_collections.LazyTuple)
+    assert not lazy_tuple.collected_data
+    
+    assert tuple(lazy_tuple) == (0, 1, 2)
+    
     
 def test_dont_pull_extra_item():
     '''Test that `shorten` doesn't pull an extra member from the iterable.'''

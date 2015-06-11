@@ -1,11 +1,15 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Defines various `sys`-related tools.'''
 
 
 import sys
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 import io
 
 from python_toolbox.context_management import (ContextManager,

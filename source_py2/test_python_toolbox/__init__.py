@@ -1,10 +1,14 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Testing package for `python_toolbox`.'''
 
 import sys
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 
 import nose
 

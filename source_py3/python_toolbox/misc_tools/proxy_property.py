@@ -1,11 +1,7 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''
-This module defines the `ProxyProperty` class.
-
-See its documentation for more information.
-'''
+import re
 
 
 class ProxyProperty:
@@ -56,32 +52,31 @@ class ProxyProperty:
             raise Exception("The `attribute_name` must start with a dot to "
                             "make it clear it's an attribute. %s does not "
                             "start with a dot." % repr(attribute_name))
+        self.getter = self.setter = None
+        exec('def getter(thing): return thing%s' % attribute_name)
+        exec('def setter(thing, value): thing%s = value' % attribute_name)
+        exec('self.getter, self.setter = getter, setter')
         self.attribute_name = attribute_name[1:]
         self.__doc__ = doc
         
         
-    def __get__(self, obj, our_type=None):
-        if obj is None:
+    def __get__(self, thing, our_type=None):
+        if thing is None:
             # We're being accessed from the class itself, not from an object
             return self
         else:
-            if '.' in self.attribute_name:
-                from python_toolbox import address_tools
-                return address_tools.resolve('obj.%s' % self.attribute_name,
-                                             namespace={'obj': obj})
-            else:
-                return getattr(obj, self.attribute_name)
+            return self.getter(thing)
         
-    def __set__(self, obj, value):
-        
-        # todo: should I check if `obj` is `None` and set on class? Same for
+    def __set__(self, thing, value):
+        # todo: should I check if `thing` is `None` and set on class? Same for
         # `__delete__`?
         
-        if '.' in self.attribute_name:
-            from python_toolbox import address_tools
-            left_segment, right_segment = self.attribute_name.rsplit('.', 1)
-            deepest_object = address_tools.resolve('obj.%s' % left_segment,
-                                                   namespace={'obj': obj})
-            setattr(deepest_object, right_segment, value)
-        else:
-            setattr(obj, self.attribute_name, value)
+        return self.setter(thing, value)
+        
+    def __repr__(self):
+        return '<%s: %s%s>' % (
+            type(self).__name__,
+            repr('.%s' % self.attribute_name),
+            ', doc=%s' % repr(self.__doc__) if self.__doc__ else ''
+        )
+        

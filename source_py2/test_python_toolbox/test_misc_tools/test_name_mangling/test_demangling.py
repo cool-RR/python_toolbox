@@ -1,7 +1,5 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
-
-'''Testing module for name demangling.'''
 
 
 from python_toolbox.misc_tools import name_mangling

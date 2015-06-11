@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''
@@ -8,6 +8,7 @@ See its documentation for more information.
 '''
 
 import colorsys
+
 from .persistent import Persistent
 
 
@@ -28,11 +29,13 @@ class Personality:
     '''
     
     def __init__(self, persistent):
-
+        
+        from python_toolbox import human_names
+        # (Importing inside function to avoid importing this heavy module on
+        # general import time.)
+        
         assert isinstance(persistent, Persistent)
         
-        from . import human_names
-
         color_resolution = 100
         
         u = int(persistent._CrossProcessPersistent__uuid)

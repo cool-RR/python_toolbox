@@ -1,7 +1,5 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
-
-'''Testing module for `python_toolbox.misc_tools.is_legal_variable_name`.'''
 
 from python_toolbox.misc_tools import is_legal_ascii_variable_name
 

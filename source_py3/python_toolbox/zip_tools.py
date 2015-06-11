@@ -1,14 +1,18 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Various zip-related tools.'''
 
 
-import contextlib
 import zipfile as zip_module
 import io
+import os
 import re
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 import fnmatch
 
 
@@ -36,10 +40,10 @@ def zip_folder(source_folder, zip_path, ignored_patterns=()):
     
     internal_pure_path = pathlib.PurePath(source_folder.name)
     
-    with zip_module.ZipFile(zip_path, 'w', zip_module.ZIP_DEFLATED) \
+    with zip_module.ZipFile(str(zip_path), 'w', zip_module.ZIP_DEFLATED) \
                                                                    as zip_file:
         
-        for root, subfolders, files in os.walk(source_folder):
+        for root, subfolders, files in os.walk(str(source_folder)):
             root = pathlib.Path(root)
             subfolders = map(pathlib.Path, subfolders)
             files = map(pathlib.Path, files)
@@ -55,7 +59,8 @@ def zip_folder(source_folder, zip_path, ignored_patterns=()):
                 destination_file_path = internal_pure_path / \
                                                         absolute_file_path.name
                 
-                zip_file.write(absolute_file_path, destination_file_path)
+                zip_file.write(str(absolute_file_path),
+                               str(destination_file_path))
                 
                 
 def zip_in_memory(files):

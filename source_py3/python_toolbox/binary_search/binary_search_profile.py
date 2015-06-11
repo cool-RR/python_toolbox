@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''
@@ -7,12 +7,12 @@ Defines the `BinarySearchProfile` class.
 See its documentation for more info.
 '''
 
+from python_toolbox import misc_tools
 
 from .roundings import (Rounding, roundings, LOW, LOW_IF_BOTH,
                         LOW_OTHERWISE_HIGH, HIGH, HIGH_IF_BOTH,
                         HIGH_OTHERWISE_LOW, EXACT, CLOSEST, CLOSEST_IF_BOTH,
                         BOTH)
-
 from .functions import (binary_search, binary_search_by_index,
                         make_both_data_into_preferred_rounding,
                         _binary_search_both)
@@ -27,7 +27,8 @@ class BinarySearchProfile:
     than one time.
     '''
     
-    def __init__(self, sequence, function, value, both=None):
+    def __init__(self, sequence, value, function=misc_tools.identity_function,
+                 *, both=None):
         '''
         Construct a `BinarySearchProfile`.
         
@@ -42,11 +43,8 @@ class BinarySearchProfile:
         '''
 
         if both is None:
-            both = _binary_search_both(sequence, function, value)
+            both = _binary_search_both(sequence, value, function=function)
             
-        if function is None:
-            function = lambda x: x
-        
         self.results = {}
         '''
         `results` is a dict from rounding options to results that were obtained
@@ -54,9 +52,9 @@ class BinarySearchProfile:
         '''
         
         for rounding in roundings:
-            self.results[rounding] = \
-                make_both_data_into_preferred_rounding(both, function, value,
-                                                       rounding)
+            self.results[rounding] = make_both_data_into_preferred_rounding(
+                both, value, function=function, rounding=rounding
+            )
         none_count = list(both).count(None)
         
         self.all_empty = (none_count == 2)

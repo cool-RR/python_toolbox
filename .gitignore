@@ -20,3 +20,5 @@ coverage.xml
 _build
 
 __pycache__
+
+.pylint

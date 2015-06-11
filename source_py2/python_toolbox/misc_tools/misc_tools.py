@@ -1,17 +1,22 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''This module defines miscellaneous tools.'''
-
-from __future__ import division
+'''This module defines miscellaneous tools that don't fit anywhere else.'''
 
 import operator
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 import re
 import math
 import types
+import functools
+import sys
+import threading
 
-from python_toolbox import cute_iter_tools
+from python_toolbox import decorator_tools
 
 
 _email_pattern = re.compile(
@@ -37,6 +42,7 @@ def is_subclass(candidate, base_class):
     not a type. (Python issue 10569.)        
     '''
     # todo: disable ability to use nested iterables.
+    from python_toolbox import cute_iter_tools
     if cute_iter_tools.is_iterable(base_class):
         return any(is_subclass(candidate, single_base_class) for 
                    single_base_class in base_class)
@@ -67,22 +73,6 @@ def get_mro_depth_of_method(type_, method_name):
         
     return deepest_index
 
-
-def frange(start, finish=None, step=1.):
-    '''
-    Make a `list` containing an arithmetic progression of numbers.
-
-    This is an extension of the builtin `range`; it allows using floating point
-    numbers.
-    '''
-    if finish is None:
-        finish, start = start, 0.
-    else:
-        start = float(start)
-
-    count = int(math.ceil(finish - start)/step)
-    return (start + n*step for n in range(count))
-    
 
 def getted_vars(thing, _getattr=getattr):
     '''
@@ -173,12 +163,12 @@ class OwnNameDiscoveringDescriptor(object):
         self.our_name = name
     
         
-    def get_our_name(self, obj, our_type=None):
+    def get_our_name(self, thing, our_type=None):
         if self.our_name is not None:
             return self.our_name
         
         if not our_type:
-            our_type = type(obj)
+            our_type = type(thing)
         (self.our_name,) = (name for name in dir(our_type) if
                             getattr(our_type, name, None) is self)
         
@@ -194,6 +184,8 @@ def find_clear_place_on_circle(circle_points, circle_size=1):
     possible. (Since this is a circle, there's wraparound, e.g. the end of the
     interval connects to the start.)
     '''
+
+    from python_toolbox import cute_iter_tools
 
     # Before starting, taking care of two edge cases:
     if not circle_points:
@@ -275,7 +267,7 @@ def is_type(thing):
     '''Is `thing` a class? Allowing both new-style and old-style classes.'''
     return isinstance(thing, (type, types.ClassType))
 
-class NonInstatiable(object):
+class NonInstantiable(object):
     '''
     Class that can't be instatiated.
     
@@ -301,3 +293,102 @@ def repeat_getattr(thing, query):
     for attribute_name in attribute_names:
         current = getattr(current, attribute_name)
     return current
+
+
+def set_attributes(**kwargs):
+    '''
+    Decorator to set attributes on a function.
+    
+    Example:
+    
+        @set_attributes(meow='frrr')
+        def f():
+            return 'whatever'
+            
+        assert f.meow == 'frrr'
+        
+    '''
+    def decorator(function):
+        for key, value in kwargs.items():
+            setattr(function, key, value)
+        return function
+    return decorator
+        
+
+_decimal_number_pattern = \
+                   re.compile('''^-?(?:(?:[0-9]+(?:.[0-9]*)?)|(?:.[0-9]+))$''')
+def decimal_number_from_string(string):
+    '''
+    Turn a string like '7' or '-32.55' into the corresponding number.
+    
+    Ensures that it was given a number. (This might be more secure than using
+    something like `int` directly.)
+    
+    Uses `int` for ints and `float` for floats.
+    '''
+    if isinstance(string, bytes):
+        string = string.decode()
+    if not isinstance(string, basestring):
+        raise Exception("%s isn't a decimal number." % string)
+    if not _decimal_number_pattern.match(string):
+        raise Exception("%s isn't a decimal number." % string)
+    return float(string) if '.' in string else int(string)
+
+
+
+class AlternativeLengthMixin(object):
+    '''
+    Mixin for sized types that makes it easy to return non-standard lengths.
+    
+    Due to CPython limitation, Python's built-in `__len__` (and its counterpart
+    `len`) can't return really big values or floating point numbers.
+    
+    Classes which need to return such lengths can use this mixin. They'll have
+    to define a property `length` where they return their length, and if
+    someone tries to call `len` on it, then if the length happens to be a
+    number that `len` supports, it'll return that, otherwise it'll show a
+    helpful error message.
+    '''
+    def __len__(self):
+        length = self.length
+        if (length <= sys.maxsize) and isinstance(length, int):
+            return length
+        else:
+            raise OverflowError("Due to CPython limitation, you'll have to "
+                                "use `.length` rather than `len`")
+        
+    def __bool__(self):
+        from python_toolbox import sequence_tools
+        return bool(sequence_tools.get_length(self))
+    
+    __nonzero__ = __bool__
+        
+    
+@decorator_tools.helpful_decorator_builder
+def limit_positional_arguments(n_positional_arguments=0):
+    '''
+    Decorator to limit the number of positional arguments a function takes.
+    
+    This is a poor man's version of the `*` magic argument from Python 3. It's
+    useful when you don't want to let people use some arguments without
+    specifying them as keyword arguments, because if they access them as
+    positional arguments, you can't ever change their order or insert more
+    arguments there because of backward compatibility. 
+    '''
+    def decorator(function):
+        @functools.wraps(function)
+        def inner(*args, **kwargs):
+            if len(args) > n_positional_arguments:
+                raise TypeError('%s takes at most %s positional arguments '
+                                'but %s were given.' % (
+                                    function, n_positional_arguments,
+                                    len(args)
+                                ))
+            else:
+                return function(*args, **kwargs)
+        inner.wrapped = function
+        return inner
+    return decorator
+            
+        
+    

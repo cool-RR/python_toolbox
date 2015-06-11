@@ -1,11 +1,5 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
-
-'''
-Defines the `ReasonedBool` class.
-
-See its documentation for more details.
-'''
 
 
 class ReasonedBool:
@@ -50,4 +44,3 @@ class ReasonedBool:
     
     def __bool__(self):
         return self.value
-    __nonzero__ = __bool__

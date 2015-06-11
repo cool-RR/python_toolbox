@@ -1,21 +1,19 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Module for resolving strings into Python objects.'''
 
 import types
 
-from python_toolbox import import_tools
 from python_toolbox import dict_tools
 from python_toolbox import re_tools
 
-# from . import object_to_string (at bottom of file.)
 from .shared import (_contained_address_pattern, _address_pattern,
                      _get_parent_and_dict_from_namespace)
 
 
 def resolve(string, root=None, namespace={}):
-    '''
+    r'''
     Resolve an address into a Python object. A more powerful version of `eval`.
     
     The main advantage it has over `eval` is that it automatically imports
@@ -90,6 +88,8 @@ def get_object_by_address(address, root=None, namespace={}):
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.
     
+    from python_toolbox import import_tools # Avoiding circular import.
+    
     if not _address_pattern.match(address):
         raise ValueError("'%s' is not a legal address." % address)
     
@@ -105,7 +105,7 @@ def get_object_by_address(address, root=None, namespace={}):
             root = get_object_by_address(root)
         root_short_name = root.__name__.rsplit('.', 1)[-1]
         
-    if namespace:
+    if namespace not in (None, {}):
         # And then for `namespace`:
         if isinstance(namespace, str):
             namespace = get_object_by_address(namespace)
@@ -136,8 +136,8 @@ def get_object_by_address(address, root=None, namespace={}):
         if root and (address == root_short_name):
             return root
     
-        if parent_object:
-                
+        if parent_object is not None:
+    
             if isinstance(parent_object, types.ModuleType) and \
                hasattr(parent_object, '__path__'):
                                 
@@ -166,7 +166,7 @@ def get_object_by_address(address, root=None, namespace={}):
         # `parent_object`. We try this before `namespace_dict` because
         # `parent_object` may have `__getattr__` or similar magic and our
         # object might be found through that:
-        if parent_object and hasattr(parent_object, address):
+        if (parent_object is not None) and hasattr(parent_object, address):
             return getattr(parent_object, address)
         
         # Next is the `namespace_dict`:
@@ -204,5 +204,3 @@ def get_object_by_address(address, root=None, namespace={}):
         #                                                                     #
         ### Finished solving recursively for a composite address. #############
         
-
-from . import object_to_string

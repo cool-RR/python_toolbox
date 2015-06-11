@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Testing module for `python_toolbox.address_tools.resolve`.'''
@@ -8,7 +8,7 @@ import nose.tools
 from python_toolbox.address_tools import describe, resolve
 
 
-# Class tree we'll try to some resolvings on:
+# Class tree we'll try to do some resolvings on:
 class A(object):
     def method(self):
         pass

@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Defines various tools related to importing.'''
@@ -8,7 +8,11 @@ import os.path
 import imp
 import zipimport
 import functools
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 
 from python_toolbox import package_finder
 from python_toolbox import caching

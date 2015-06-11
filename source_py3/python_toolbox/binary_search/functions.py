@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Module for doing a binary search in a sequence.'''
@@ -14,12 +14,16 @@
 # todo: ensure there are no `if variable` checks where we're thinking of None
 # but the variable might be False
 
+from python_toolbox import misc_tools
+
 from .roundings import (Rounding, roundings, LOW, LOW_IF_BOTH,
                         LOW_OTHERWISE_HIGH, HIGH, HIGH_IF_BOTH,
                         HIGH_OTHERWISE_LOW, EXACT, CLOSEST, CLOSEST_IF_BOTH,
                         BOTH)
 
-def binary_search_by_index(sequence, function, value, rounding=CLOSEST):
+def binary_search_by_index(sequence, value,
+                           function=misc_tools.identity_function,
+                           rounding=CLOSEST):
     '''
     Do a binary search, returning answer as index number.
     
@@ -29,15 +33,15 @@ def binary_search_by_index(sequence, function, value, rounding=CLOSEST):
     
     For documentation of rounding options, check `binary_search.roundings`.
     ''' 
-    if function is None:
-        function = lambda x: x
     my_range = range(len(sequence))
     fixed_function = lambda index: function(sequence[index])
-    result = binary_search(my_range, fixed_function, value, rounding)
+    result = binary_search(my_range, value, function=fixed_function,
+                           rounding=rounding)
     return result
 
 
-def _binary_search_both(sequence, function, value):
+def _binary_search_both(sequence, value,
+                        function=misc_tools.identity_function):
     '''
     Do a binary search through a sequence with the `BOTH` rounding.
     
@@ -52,9 +56,6 @@ def _binary_search_both(sequence, function, value):
     
     ### Preparing: ############################################################
     #                                                                         #
-    if function is None:
-        function = lambda x: x
-    
     get = lambda number: function(sequence[number])
 
     low = 0
@@ -88,10 +89,10 @@ def _binary_search_both(sequence, function, value):
         medium = (low + high) // 2
         medium_value = get(medium)
         if medium_value > value:
-            high = medium; high_value = medium_value
+            high, high_value = medium, medium_value
             continue
         if medium_value < value:
-            low = medium; low_value = medium_value
+            low, low_value = medium, medium_value
             continue
         if medium_value == value:
             return (sequence[medium], sequence[medium])
@@ -100,7 +101,8 @@ def _binary_search_both(sequence, function, value):
     
 
 
-def binary_search(sequence, function, value, rounding=CLOSEST):
+def binary_search(sequence, value, function=misc_tools.identity_function,
+                  rounding=CLOSEST):
     '''
     Do a binary search through a sequence.
     
@@ -120,11 +122,13 @@ def binary_search(sequence, function, value, rounding=CLOSEST):
     
     from .binary_search_profile import BinarySearchProfile
     
-    binary_search_profile = BinarySearchProfile(sequence, function, value)
+    binary_search_profile = BinarySearchProfile(sequence, value,
+                                                function=function)
     return binary_search_profile.results[rounding]
 
 
-def make_both_data_into_preferred_rounding(both, function, value, rounding):
+def make_both_data_into_preferred_rounding(
+            both, value, function=misc_tools.identity_function, rounding=BOTH):
     '''
     Convert results gotten using `BOTH` to a different rounding option.
     

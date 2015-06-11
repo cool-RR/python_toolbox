@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Testing module for `python_toolbox.caching.CachedProperty`.'''
@@ -6,18 +6,18 @@
 import nose
 
 from python_toolbox import context_management
+from python_toolbox import misc_tools
 
 from python_toolbox.caching import cache, CachedType, CachedProperty
 
 
+@misc_tools.set_attributes(i=0)
 def counting_func(self):
     '''Return a bigger number every time.'''
-    if not hasattr(counting_func, 'i'):
-        counting_func.i = 0
     try:
         return counting_func.i
     finally:
-        counting_func.i = (counting_func.i + 1)
+        counting_func.i += 1
     
         
 def test():
@@ -34,6 +34,23 @@ def test():
     assert a2.personality == a2.personality == a2.personality 
     
     assert a2.personality == a1.personality + 1
+
+def test_inheritance():
+    class A:
+        personality = CachedProperty(counting_func)
+    
+    class B(A):
+        pass
+    
+    assert isinstance(B.personality, CachedProperty)
+        
+    b1 = B()
+    assert b1.personality == b1.personality == b1.personality
+    
+    b2 = B()
+    assert b2.personality == b2.personality == b2.personality 
+    
+    assert b2.personality == b1.personality + 1
 
 def test_value():
     '''Test `CachedProperty` when giving a value instead of a getter.'''

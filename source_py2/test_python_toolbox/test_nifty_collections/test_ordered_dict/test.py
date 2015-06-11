@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Testing module for `nifty_collections.ordered_dict.OrderedDict`.'''
@@ -40,7 +40,7 @@ def test_sort():
     assert second_ordered_dict == \
                            OrderedDict(((3+1j, 'a'), (1+2j, 'b'), (2+3j, 'c')))
     
-    second_ordered_dict.sort('real', reversed=True)
+    second_ordered_dict.sort('real', reverse=True)
     assert second_ordered_dict == \
                            OrderedDict(((3+1j, 'a'), (2+3j, 'c'), (1+2j, 'b')))
 
@@ -63,12 +63,16 @@ def test_index():
     
     assert ordered_dict.index('meow') == 3
     
-    with cute_testing.RaiseAssertor(KeyError):
+    with cute_testing.RaiseAssertor(ValueError):
         ordered_dict.index('Non-existing key')
         
         
-def test_reversed():
+def test_builtin_reversed():
     '''Test the `OrderedDict.__reversed__` method.'''
     
     ordered_dict = OrderedDict(((1, 'a'), (2, 'b'), (3, 'c')))
-    assert list(reversed(ordered_dict)) == [3, 2, 1]
+    assert list(reversed(ordered_dict)) == [3, 2, 1]    
+def test_reversed():
+    ordered_dict = OrderedDict(((1, 'a'), (2, 'b'), (3, 'c')))
+    assert ordered_dict.reversed == OrderedDict(((3, 'c'), (2, 'b'), (1, 'a')))
+    assert type(ordered_dict.reversed) is type(ordered_dict) is OrderedDict

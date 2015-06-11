@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''
@@ -8,19 +8,18 @@ See its documentation for more details.
 '''
 # todo: examine thread-safety
 
-import functools
 import datetime as datetime_module
 
+from python_toolbox import misc_tools
 from python_toolbox import binary_search
 from python_toolbox import decorator_tools
 from python_toolbox.sleek_reffing import SleekCallArgs
-from python_toolbox.nifty_collections import OrderedDict
 
 infinity = float('inf')
 
 
-class CLEAR_ENTIRE_CACHE(object):
-    '''Sentinel object for clearing the entire cache'''
+class CLEAR_ENTIRE_CACHE(misc_tools.NonInstantiable):
+    '''Sentinel object for clearing the entire cache.'''
 
 
 def _get_now():
@@ -69,6 +68,8 @@ def cache(max_size=infinity, time_to_keep=None):
     # have to go through so much shit. update: probably it will help only for
     # completely argumentless function. so do one for those.
     
+    from python_toolbox.nifty_collections import OrderedDict
+    
     if time_to_keep is not None:
         if max_size != infinity:
             raise NotImplementedError
@@ -93,7 +94,6 @@ def cache(max_size=infinity, time_to_keep=None):
             
             if time_to_keep:
 
-                cache_dict = OrderedDict()
                 sorting_key_function = lambda sleek_call_args: \
                                               cached._cache[sleek_call_args][1]
 
@@ -101,9 +101,9 @@ def cache(max_size=infinity, time_to_keep=None):
                 def remove_expired_entries():
                     almost_cutting_point = \
                                           binary_search.binary_search_by_index(
-                        cached._cache.keys(),
-                        sorting_key_function,
+                        list(cached._cache.keys()),
                         _get_now(), 
+                        sorting_key_function,
                         rounding=binary_search.LOW
                     )
                     if almost_cutting_point is not None:
@@ -111,11 +111,11 @@ def cache(max_size=infinity, time_to_keep=None):
                         for key in cached._cache.keys()[:cutting_point]:
                             del cached._cache[key]
                             
-                        
+                @misc_tools.set_attributes(_cache=OrderedDict())        
                 def cached(function, *args, **kwargs):
                     remove_expired_entries()
                     sleek_call_args = \
-                        SleekCallArgs(cache_dict, function, *args, **kwargs)
+                        SleekCallArgs(cached._cache, function, *args, **kwargs)
                     try:
                         return cached._cache[sleek_call_args][0]
                     except KeyError:
@@ -129,11 +129,10 @@ def cache(max_size=infinity, time_to_keep=None):
                 
             else: # not time_to_keep
                 
-                cache_dict = {}
-    
+                @misc_tools.set_attributes(_cache={})        
                 def cached(function, *args, **kwargs):
                     sleek_call_args = \
-                        SleekCallArgs(cache_dict, function, *args, **kwargs)
+                        SleekCallArgs(cached._cache, function, *args, **kwargs)
                     try:
                         return cached._cache[sleek_call_args]
                     except KeyError:
@@ -143,11 +142,10 @@ def cache(max_size=infinity, time_to_keep=None):
     
         else: # max_size < infinity
             
-            cache_dict = OrderedDict()
-            
+            @misc_tools.set_attributes(_cache=OrderedDict())        
             def cached(function, *args, **kwargs):
                 sleek_call_args = \
-                    SleekCallArgs(cache_dict, function, *args, **kwargs)
+                    SleekCallArgs(cached._cache, function, *args, **kwargs)
                 try:
                     result = cached._cache[sleek_call_args]
                     cached._cache.move_to_end(sleek_call_args)
@@ -159,7 +157,6 @@ def cache(max_size=infinity, time_to_keep=None):
                         cached._cache.popitem(last=False)
                     return value
                     
-        cached._cache = cache_dict
         
         result = decorator_tools.decorator(cached, function)
         

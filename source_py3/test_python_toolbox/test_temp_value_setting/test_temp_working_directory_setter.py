@@ -1,10 +1,14 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Testing `python_toolbox.temp_value_setting.TempWorkingDirectorySetter`.'''
 
 import os
-import pathlib
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
+
 import shutil
 import tempfile
 

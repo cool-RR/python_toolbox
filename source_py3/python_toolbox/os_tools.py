@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Various os-related tools.'''
@@ -6,7 +6,6 @@
 import subprocess
 import sys
 import os.path
-import pathlib
 
 
 def start_file(path):
@@ -29,6 +28,3 @@ def start_file(path):
             "`start_file`." % sys.platform)
     
     
-_is_windows = (os.name == 'nt')
-null_path = pathlib.Path(os.path.devnull)
-path_type = pathlib.WindowsPath if _is_windows else pathlib.PosixPath

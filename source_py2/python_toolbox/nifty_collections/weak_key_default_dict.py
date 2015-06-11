@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''
@@ -8,6 +8,7 @@ See its documentation for more details.
 '''
 # todo: revamp
 
+import collections
 import UserDict
 from weakref import ref
 

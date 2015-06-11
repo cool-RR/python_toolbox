@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Defines various functions for working with queues.'''
@@ -41,7 +41,7 @@ def iterate(queue, block=False, limit_to_original_size=False,
             if _prefetch_if_no_qsize:
                 for item in dump(queue):
                     yield item
-                raise StopIteration
+                return
             raise NotImplementedError(
                 "This platform doesn't support `qsize` for `multiprocessing` "
                 "queues, so you can't iterate on it while limiting to "
@@ -53,13 +53,13 @@ def iterate(queue, block=False, limit_to_original_size=False,
             try:
                 yield queue.get(block=block)
             except queue_module.Empty:
-                raise StopIteration
+                return
     else: # not limit_to_original_size
         while True:
             try:
                 yield queue.get(block=block)
             except queue_module.Empty:
-                raise StopIteration
+                return
 
 
 def get_item(queue, i):

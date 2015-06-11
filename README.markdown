@@ -19,9 +19,9 @@ contains:
 
 Documentation: http://python-toolbox.readthedocs.org   
 
-GitHub: https://github.com/cool-RR/python_toolbox
+Python Toolbox on GitHub: https://github.com/cool-RR/python_toolbox
 
-CI server: https://jenkins.shiningpanda.com/python-toolbox/job/python_toolbox/
+Python Toolbox on PyPI: https://pypi.python.org/pypi/python_toolbox
 
 The Python Toolbox is released under the MIT license.
 
@@ -34,7 +34,7 @@ Please keep in mind that Python Toolbox is still in alpha stage, and that backwa
 
 ## Present ##
 
-Python Toolbox is at version 0.6.5, which is an alpha release. It's being used in production every day, but backward compatibility isn't guaranteed yet.
+Python Toolbox is at version 0.7.0, which is an alpha release. It's being used in production every day, but backward compatibility isn't guaranteed yet.
 
 ## Next tasks ##
 
@@ -68,4 +68,11 @@ installed automatically with the Python Toolbox.
 
 When `python_toolbox` isn't installed, you may run `nosetests` at the repo root
 to run the tests.
+
+
+------------------------------------------------------------------
+
+The Python Toolbox was created by Ram Rachum. I provide 
+[Development services in Python and Django](https://chipmunkdev.com)
+
 

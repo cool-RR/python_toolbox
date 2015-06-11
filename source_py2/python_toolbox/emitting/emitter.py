@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''
@@ -47,8 +47,6 @@ class Emitter(object):
     The callables that you register as outputs are functions that need to be
     called when the original event that caused the `emit` action happens.
     '''
-    # todo: Let user put a single input/output
-    
     
     _is_atomically_pickleable = False
 
@@ -57,16 +55,24 @@ class Emitter(object):
         '''
         Construct the emitter.
         
-        `inputs` is a list of inputs, all of them must be emitters.
+        `inputs` is an iterable of inputs, all of which must be emitters. (You
+        can also pass in a single input without using an iterable.)
         
-        `outputs` is a list of outputs, they must be either emitters or
-        callables.
+        `outputs` is an iterable of outputs, which may be either emitters or
+        callables. (You can also pass in a single output without using an
+        iterable.)
         
-        `name` is a string name for the emitter.
+        `name` is a string name for the emitter. (Optional, helps with
+        debugging.)
         '''
+        
+        from python_toolbox import sequence_tools
 
-        assert cute_iter_tools.is_iterable(inputs) and \
-               cute_iter_tools.is_iterable(outputs)
+        inputs = sequence_tools.to_tuple(inputs,
+                                         item_type=Emitter)
+        outputs = sequence_tools.to_tuple(outputs,
+                                          item_type=(collections.Callable,
+                                                     Emitter))
         
         self._inputs = set()
         '''The emitter's inputs.'''

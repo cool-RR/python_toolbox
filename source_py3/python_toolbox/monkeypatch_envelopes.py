@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Module for monkeypatching our own copy of `envelopes`.'''
@@ -9,7 +9,7 @@ from python_toolbox.third_party import envelopes
 from python_toolbox import monkeypatching_tools
 
 
-@monkeypatching_tools.monkeypatch_method(envelopes.Envelope)
+@monkeypatching_tools.monkeypatch(envelopes.Envelope)
 def add_attachment_from_string(self, file_data, file_name, 
                                mimetype='application/octet-stream'):
     from python_toolbox.third_party.envelopes.envelope import \

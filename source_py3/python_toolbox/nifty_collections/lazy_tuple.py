@@ -1,24 +1,19 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''
-This module defines the `LazyTuple` class.
-
-See its documentation for more information.
-'''
-
+import functools
 import threading
 import collections
+import itertools
 
-from python_toolbox import cute_iter_tools
+from python_toolbox import misc_tools
 from python_toolbox import decorator_tools
 from python_toolbox import comparison_tools
-from python_toolbox import sequence_tools
 
 
 infinity = float('inf')
 
-class _SENTINEL:
+class _SENTINEL(misc_tools.NonInstantiable):
     '''Sentinel used to detect the end of an iterable.'''
     
 
@@ -48,8 +43,9 @@ def _with_lock(method, *args, **kwargs):
     with self.lock:
         return method(*args, **kwargs)
 
-    
-class LazyTuple(collections.Sequence, object):
+
+@functools.total_ordering    
+class LazyTuple(collections.Sequence):
     '''
     A lazy tuple which requests as few values as possible from its iterator.
     
@@ -59,7 +55,7 @@ class LazyTuple(collections.Sequence, object):
     Example:
     
         def my_generator():
-            yield 'hello'; yield 'world'; yield 'have'; yield 'fun'
+            yield from ('hello', 'world', 'have', 'fun')
             
         lazy_tuple = LazyTuple(my_generator())
         
@@ -73,43 +69,56 @@ class LazyTuple(collections.Sequence, object):
     Some actions require exhausting the entire iterator. For example, checking
     the `LazyTuple` length, or doing indexex access with a negative index.
     (e.g. asking for the seventh-to-last element.)
+    
+    If you're passing in an iterator you definitely know to be infinite,
+    specify `definitely_infinite=True`.
     '''
     
-    def __init__(self, iterable):
-        was_given_a_sequence = sequence_tools.is_sequence(iterable) and \
+    def __init__(self, iterable, definitely_infinite=False):
+        was_given_a_sequence = isinstance(iterable, collections.Sequence) and \
                                not isinstance(iterable, LazyTuple)
         
-        self.exhausted = True if was_given_a_sequence else False
-        '''Flag saying whether the internal iterator is totally exhausted.'''
+        self.is_exhausted = True if was_given_a_sequence else False
+        '''Flag saying whether the internal iterator is tobag exhausted.'''
         
-        self.collected_data = list(iterable) if was_given_a_sequence else []
+        self.collected_data = iterable if was_given_a_sequence else []
         '''All the items that were collected from the iterable.'''
         
         self._iterator = None if was_given_a_sequence else iter(iterable)
         '''The internal iterator from which we get data.'''
+        
+        self.definitely_infinite = definitely_infinite
+        '''
+        The iterator is definitely infinite.
+        
+        The iterator might still be infinite if this is `False`, but if it's
+        `True` then it's definitely infinite.
+        '''
         
         self.lock = threading.Lock()
         '''Lock used while exhausting to make `LazyTuple` thread-safe.'''
         
         
     @classmethod
-    def factory(cls, callable):
+    @decorator_tools.helpful_decorator_builder
+    def factory(cls, definitely_infinite=False):
         '''
         Decorator to make generators return a `LazyTuple`.
                 
         Example:
         
-            @LazyTuple.factory
+            @LazyTuple.factory()
             def my_generator():
-                yield 'hello'; yield 'world'; yield 'have'; yield 'fun'
+                yield from ['hello', 'world', 'have', 'fun']
         
         This works on any function that returns an iterator. todo: Make it work
         on iterator classes.
         '''
         
         def inner(function, *args, **kwargs):
-            return cls(callable(*args, **kwargs))
-        return decorator_tools.decorator(inner, callable)
+            return cls(function(*args, **kwargs),
+                       definitely_infinite=definitely_infinite)
+        return decorator_tools.decorator(inner)
         
     
     @property
@@ -127,7 +136,9 @@ class LazyTuple(collections.Sequence, object):
         This will take enough items so we will have `i` items in total,
         including the items we had before.
         '''
-        if self.exhausted:
+        from python_toolbox import sequence_tools
+        
+        if self.is_exhausted:
             return
         
         elif isinstance(i, int) or i == infinity:
@@ -139,14 +150,14 @@ class LazyTuple(collections.Sequence, object):
             # todo: can be smart and figure out if it's an empty slice and then
             # not exhaust.
             
-            (start, stop, step) = sequence_tools.parse_slice(i)
+            canonical_slice = sequence_tools.CanonicalSlice(i)
             
             exhaustion_point = max(
-                _convert_index_to_exhaustion_point(start),
-                _convert_index_to_exhaustion_point(stop)
+                _convert_index_to_exhaustion_point(canonical_slice.start),
+                _convert_index_to_exhaustion_point(canonical_slice.stop)
             )
             
-            if step > 0: # Compensating for excluded last item:
+            if canonical_slice.step > 0: # Compensating for excluded last item:
                 exhaustion_point -= 1
             
         while len(self.collected_data) <= exhaustion_point:
@@ -154,7 +165,7 @@ class LazyTuple(collections.Sequence, object):
                 with self.lock:
                     self.collected_data.append(next(self._iterator))
             except StopIteration:
-                self.exhausted = True
+                self.is_exhausted = True
                 break
            
             
@@ -169,15 +180,19 @@ class LazyTuple(collections.Sequence, object):
             
     
     def __len__(self):
-        self.exhaust()
-        return len(self.collected_data)
+        if self.definitely_infinite:
+            return 0 # Unfortunately infinity isn't supported.
+        else:
+            self.exhaust()
+            return len(self.collected_data)
 
     
     def __eq__(self, other):
+        from python_toolbox import sequence_tools
         if not sequence_tools.is_immutable_sequence(other):
             return False
-        for i, j in cute_iter_tools.izip_longest(self, other,
-                                                 fillvalue=_SENTINEL):
+        for i, j in itertools.zip_longest(self, other,
+                                           fillvalue=_SENTINEL):
             if (i is _SENTINEL) or (j is _SENTINEL):
                 return False
             if i != j:
@@ -190,8 +205,9 @@ class LazyTuple(collections.Sequence, object):
     
     
     def __bool__(self):
-        self.exhaust(0)
-        return bool(self.collected_data)
+        try: next(iter(self))
+        except StopIteration: return False
+        else: return True
 
     
     def __lt__(self, other):
@@ -201,8 +217,8 @@ class LazyTuple(collections.Sequence, object):
             return False
         elif not self and not other:
             return False
-        for a, b in cute_iter_tools.izip_longest(self, other,
-                                                 fillvalue=_SENTINEL):
+        for a, b in itertools.zip_longest(self, other,
+                                           fillvalue=_SENTINEL):
             if a is _SENTINEL:
                 # `self` ran out. Now there can be two cases: (a) `other` ran
                 # out too or (b) `other` didn't run out yet. In case of (a), we
@@ -232,19 +248,14 @@ class LazyTuple(collections.Sequence, object):
             
         The '...' denotes a non-exhausted lazy tuple.
         '''
-        if self.exhausted:
-            inner = ''.join(('(',                             
-                             repr(self.collected_data)[1:-1],
-                             ')'))
+        if self.is_exhausted:
+            inner = repr(self.collected_data)
                              
         else: # not self.exhausted
             if self.collected_data == []:
                 inner = '(...)'
             else: 
-                inner = ''.join(('(',
-                                 repr(self.collected_data)[1:-1],
-                                 ', ...)'))
-            
+                inner = '%s...' % repr(self.collected_data)            
         return '<%s: %s>' % (self.__class__.__name__, inner) 
     
     
@@ -270,12 +281,9 @@ class LazyTuple(collections.Sequence, object):
         
         Note: Hashing the `LazyTuple` will completely exhaust it.
         '''
-        self.exhaust()
-        return hash(tuple(self))
-    
-    
-comparison_tools.total_ordering(LazyTuple)
-
-if hasattr(collections, 'Sequence'):
-    collections.Sequence.register(LazyTuple)
+        if self.definitely_infinite:
+            raise TypeError("An infinite `LazyTuple` isn't hashable.")
+        else:
+            self.exhaust()
+            return hash(tuple(self))
     

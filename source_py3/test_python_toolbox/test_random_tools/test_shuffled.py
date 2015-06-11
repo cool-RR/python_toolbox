@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Testing module for `random_tools.shuffled`.'''
@@ -20,3 +20,6 @@ def test():
     
     # ...And the original list was not changed.
     assert my_range == list(range(50))
+    
+    # Immutable sequences work too:
+    assert set(random_tools.shuffled((1, 2, 3))) == {1, 2, 3}

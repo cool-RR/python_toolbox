@@ -1,11 +1,13 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''
-This module defines various functions.
+This module defines various functions related to context managers.
 
 See their documentation for more information.
 '''
+
+import sys
 
 from .context_manager_type import ContextManagerType
 

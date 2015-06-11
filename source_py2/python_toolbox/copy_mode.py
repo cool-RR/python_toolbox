@@ -1,11 +1,5 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
-
-'''
-This module defines the `CopyMode` class.
-
-See its documentation for more information.
-'''
 
 
 class CopyMode(dict):

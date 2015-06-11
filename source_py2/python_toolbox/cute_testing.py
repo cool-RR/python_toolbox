@@ -1,21 +1,26 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''This module defines tools for testing.'''
 
+import nose
+import sys
+
 from python_toolbox.third_party import unittest2
 
 from python_toolbox import cute_inspect
-from python_toolbox.context_management import ContextManager
+from python_toolbox import context_management
 from python_toolbox.exceptions import CuteException
 from python_toolbox import logic_tools
+from python_toolbox import misc_tools
+
 
 
 class Failure(CuteException, AssertionError):
     '''A test has failed.'''
 
 
-class RaiseAssertor(ContextManager):
+class RaiseAssertor(context_management.ContextManager):
     '''
     Asserts that a certain exception was raised in the suite. You may use a
     snippet of text that must appear in the exception message or a regex that
@@ -81,27 +86,31 @@ class RaiseAssertor(ContextManager):
                 message = exception.args[0]
                 if isinstance(self.text, basestring):
                     if self.text not in message:
-                        raise Failure("A `%s` was raised but %s wasn't in its "
-                                      "message." % (self.exception_type,
-                                      repr(self.text)))
+                        raise Failure(
+                            "A `%s` was raised but %s wasn't in its message." %
+                            (self.exception_type.__name__, repr(self.text))
+                        )
                 else:
                     # It's a regex pattern
                     if not self.text.match(message):
-                        raise Failure("A `%s` was raised but it didn't match "
-                                      "the given regex." % self.exception_type)
+                        raise Failure(
+                            "A `%s` was raised but it didn't match the given "
+                            "regex." % self.exception_type.__name__
+                        )
         except BaseException as different_exception:
             raise Failure(
                 "%s was excpected, but a different exception %s was raised "
-                "instead." % (self.exception_type, type(different_exception))
+                "instead." % (self.exception_type.__name__,
+                              type(different_exception).__name__)
             )
         else:
-            raise Failure("%s wasn't raised." % self.exception_type)
+            raise Failure("%s wasn't raised." % self.exception_type.__name__)
 
                     
 def assert_same_signature(*callables):
     '''Assert that all the `callables` have the same function signature.'''
     arg_specs = [cute_inspect.getargspec(callable_) for callable_ in callables]
-    if not logic_tools.all_equal(arg_specs, exhaustive=True):
+    if not logic_tools.all_equivalent(arg_specs, assume_transitive=False):
         raise Failure('Not all the callables have the same signature.')
     
     
@@ -130,4 +139,18 @@ def assert_polite_wrapper(wrapper, wrapped=None, same_signature=True):
         assert (getattr(wrapper, attribute, None) or _MissingAttribute) == \
                (getattr(wrapped, attribute,  None) or _MissingAttribute)
     assert wrapper.__wrapped__ == wrapped
-    
+        
+class TestCase(unittest2.TestCase, context_management.ContextManager):
+    setUp = misc_tools.ProxyProperty('.setup')
+    tearDown = misc_tools.ProxyProperty('.tear_down')
+    def manage_context(self):
+        yield self
+        
+    def setup(self):
+        return self.__enter__()
+    def tear_down(self):
+        # todo: Should probably do something with exception-swallowing here to
+        # abide with the context manager protocol, but I don't need it yet.
+        return self.__exit__(*sys.exc_info())
+        
+        

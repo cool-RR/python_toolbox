@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''
@@ -53,15 +53,15 @@ class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
         self.__doc__ = doc or getattr(self.getter, '__doc__', None)
         
         
-    def __get__(self, obj, our_type=None):
+    def __get__(self, thing, our_type=None):
 
-        if obj is None:
+        if thing is None:
             # We're being accessed from the class itself, not from an object
             return self
         
-        value = self.getter(obj)
+        value = self.getter(thing)
         
-        setattr(obj, self.get_our_name(obj, our_type=our_type), value)
+        setattr(thing, self.get_our_name(thing, our_type=our_type), value)
         
         return value
 
@@ -74,3 +74,8 @@ class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
             with getattr(self_obj, self.get_our_name(self_obj)):
                 return method_function(self_obj, *args, **kwargs)
         return decorator_tools.decorator(inner, method_function)
+
+
+    def __repr__(self):
+        return '<%s: %s>' % (type(self).__name__, self.our_name or self.getter)
+        

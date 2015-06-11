@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''
@@ -16,6 +16,6 @@ import python_toolbox.version_info
 import python_toolbox.monkeypatch_copy_reg
 import python_toolbox.monkeypatch_envelopes
 
-__version_info__ = python_toolbox.version_info.VersionInfo(0, 6, 5)
+__version_info__ = python_toolbox.version_info.VersionInfo(0, 7, 0)
 __version__ = __version_info__.version_text
 

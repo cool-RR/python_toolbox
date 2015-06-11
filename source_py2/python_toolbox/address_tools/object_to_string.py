@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Module for describing Python objects as strings.'''
@@ -6,7 +6,6 @@
 import types
 import re
 
-from python_toolbox import import_tools
 from python_toolbox import dict_tools
 from python_toolbox import caching
 

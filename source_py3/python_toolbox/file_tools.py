@@ -1,9 +1,11 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Defines various tools related to temporary files.'''
+try:
+    import pathlib
+except:
+    from python_toolbox.third_party import pathlib
 
-import pathlib
 import os
 import re
 
@@ -18,7 +20,7 @@ numbered_name_pattern = re.compile(
 )
 
 def _get_next_path(path):
-    '''
+    r'''
     Get the name that `path` should be renamed to if taken.
     
     For example, "c:\example.ogg" would become "c:\example (1).ogg", while

@@ -1,15 +1,15 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Testing module for `python_toolbox.persistent.CrossProcessPersistent`.'''
 
 import copy
 import pickle
+import itertools
 import abc
 
 import nose
 
-from python_toolbox import cute_iter_tools
 from python_toolbox import cute_testing
 from python_toolbox import import_tools
 from python_toolbox import queue_tools
@@ -42,10 +42,9 @@ def test():
     checkers = [_check_deepcopying, _check_process_passing]
     cross_process_persistent_classes = [A, CrossProcessPersistent]
     
-    yield from cute_iter_tools.product(
-        checkers,
-        cross_process_persistent_classes,
-    )
+    for checker, type_ in itertools.product(checkers,
+                                            cross_process_persistent_classes):
+        checker(type_)
     
         
 def _check_deepcopying(cross_process_persistent_class):
@@ -166,18 +165,19 @@ def test_helpful_warnings_for_old_protocols():
     cross_process_persistents = [A(), CrossProcessPersistent()]
     old_protocols = [0, 1]
     
-    iterator = cute_iter_tools.product(
+    iterator = itertools.product(
         pickle_modules,
         cross_process_persistents,
         old_protocols
     )
     
     for pickle_module, cross_process_persistent, old_protocol in iterator:
-        yield (_check_helpful_warnings_for_old_protocols, 
-               pickle_module,
-               cross_process_persistent,
-               old_protocol)
-            
+        _check_helpful_warnings_for_old_protocols(
+            pickle_module,
+            cross_process_persistent,
+            old_protocol
+        )
+        
     
 def _check_helpful_warnings_for_old_protocols(pickle_module,
                                               cross_process_persistent,

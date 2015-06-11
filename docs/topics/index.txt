@@ -1,5 +1,5 @@
 ..
-   Copyright 2009-2014 Ram Rachum. This work is licensed under a Creative
+   Copyright 2009-2015 Ram Rachum. This work is licensed under a Creative
    Commons Attribution-ShareAlike 3.0 Unported License, with attribution to
    "Ram Rachum at ram.rachum.com" including link. The license may be obtained
    at http://creativecommons.org/licenses/by-sa/3.0/
@@ -22,12 +22,12 @@ explaining what it's good for and the basics of using it.
    
    abc-tools
    address-tools
-   arguments-profile
    binary-search
    caching/index
    change-tracker
    cheat-hashing
    color-tools
+   combi
    comparison-tools
    context-management
    copy-mode
@@ -40,16 +40,18 @@ explaining what it's good for and the basics of using it.
    dict-tools
    emitting
    exceptions
+   file-tools
    freezing
    function-anchoring-type
    gc-tools
+   human-names
    identities
    import-tools
    introspection-tools
+   locking
    logic-tools
    math-tools
    misc-tools
-   monkeypatch-copy-reg
    monkeypatching-tools
    nifty-collections
    os-tools
@@ -58,15 +60,14 @@ explaining what it's good for and the basics of using it.
    persistent
    pickle-tools
    process-priority
-   proxy-property
    queue-tools
    random-tools
    re-tools
-   locking
    reasoned-bool
    rst-tools
+   segment-tools
    sequence-tools
-   sleek-refs
+   sleek-reffing
    string-cataloging
    string-tools
    sys-tools

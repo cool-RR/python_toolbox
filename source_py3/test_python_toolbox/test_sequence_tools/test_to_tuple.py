@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Testing module for `sequence_tools.to_tuple`.'''
@@ -28,6 +28,12 @@ def test_item_type():
     assert to_tuple((7,), item_type=tuple) == ((7,),)
     assert to_tuple((7,), item_type=(tuple, range)) == ((7,),)
     
+    
+def test_none():
+    assert to_tuple(None) == ()
+    assert to_tuple(None, item_type=int) == ()
+    assert to_tuple(None, item_type=list) == ()
+    assert to_tuple(None, item_type=type(None)) == (None,)
     
 def test_item_test():    
     '''Test the `item_test` argument.'''

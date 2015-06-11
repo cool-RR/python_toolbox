@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 '''Defines various tools for creating randomness.'''
@@ -47,6 +47,6 @@ def shuffled(sequence):
         [0, 3, 5, 1, 4, 2]
         
     '''
-    sequence_copy = sequence[:]
+    sequence_copy = list(sequence)
     random.shuffle(sequence_copy)
     return sequence_copy

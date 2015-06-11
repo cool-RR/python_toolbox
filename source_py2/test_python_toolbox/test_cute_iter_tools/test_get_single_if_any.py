@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.
+# Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
 from python_toolbox import cute_testing
@@ -22,4 +22,7 @@ def test_get_single_if_any():
     with cute_testing.RaiseAssertor():
         get_single_if_any('gee')
         
-    assert get_single_if_any('gee', exception_on_multiple=None) == 'g'
+    assert get_single_if_any('gee', exception_on_multiple=False) == 'g'
+    assert get_single_if_any('gee', none_on_multiple=True) is None
+    assert get_single_if_any('gee', none_on_multiple=True,
+                             exception_on_multiple=False) is None
