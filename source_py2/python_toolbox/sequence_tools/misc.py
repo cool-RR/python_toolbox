@@ -52,7 +52,7 @@ class NO_FILL_VALUE(misc_tools.NonInstantiable):
     Sentinel that means: Don't fill last partition with default fill values.
     '''
 
-
+@misc_tools.limit_n_positional_arguments(2)
 def partitions(sequence, partition_size=None, n_partitions=None,
                allow_remainder=True, larger_on_remainder=False,
                fill_value=NO_FILL_VALUE):
@@ -79,8 +79,8 @@ def partitions(sequence, partition_size=None, n_partitions=None,
     By default, if there's a remainder, the last partition will be smaller than
     the others. (e.g. a sequence of 7 items, when partitioned into pairs, will
     have 3 pairs and then a partition with only 1 element.) Specify
-    `larger_on_remainder=True` to make the last partition, in case there is
-    one, be a bigger partition. (e.g. a sequence of a 7 items divided into
+    `larger_on_remainder=True` to make the last partition be a bigger partition
+    in case there's a remainder. (e.g. a sequence of a 7 items divided into
     pairs would result in 2 pairs and one triplet.)
 
     If you want the remainder partition to be of equal size with the other
@@ -96,6 +96,8 @@ def partitions(sequence, partition_size=None, n_partitions=None,
         
     '''
 
+    sequence = ensure_iterable_is_sequence(sequence)
+
     sequence_length = len(sequence)
 
     ### Validating input: #####################################################
@@ -109,24 +111,32 @@ def partitions(sequence, partition_size=None, n_partitions=None,
 
     if not allow_remainder and remainder_length > 0:
         raise Exception("You set `allow_remainder=False`, but there's a "
-                        "reminder of %s left." % remainder_length)
+                        "remainder of %s left." % remainder_length)
     #                                                                         #
     ### Finished validating input. ############################################
 
     if partition_size is None:
+        
+        floored_partition_size, modulo = divmod(sequence_length,
+                                                n_partitions)
+        if modulo:
         if larger_on_remainder:
-            partition_size = sequence_length // n_partitions # (Floor div)
+                partition_size = floored_partition_size
+                n_partitions += 1
+                # Extra partition will be joined into previous partition
         else:
-            partition_size = math_tools.ceil_div(sequence_length, n_partitions)
+                partition_size = floored_partition_size + 1
+        else: # modulo == 0
+            partition_size = floored_partition_size
     if n_partitions is None:
         n_partitions = math_tools.ceil_div(sequence_length, partition_size)
 
-    enlarged_length = partition_size * n_partitions
+    naive_length = partition_size * n_partitions
 
     blocks = [sequence[i : i + partition_size] for i in
-              range(0, enlarged_length, partition_size)]
+              range(0, naive_length, partition_size)]
 
-    if enlarged_length > sequence_length: # We have a remainder
+    if naive_length != sequence_length:
         assert blocks
         if larger_on_remainder:
             if len(blocks) >= 2:
@@ -136,7 +146,7 @@ def partitions(sequence, partition_size=None, n_partitions=None,
         elif fill_value != NO_FILL_VALUE: # (We use elif because fill is never 
                                           # done if `larger_on_remainder=True`.)
             filler = itertools.repeat(fill_value,
-                                      enlarged_length - sequence_length)
+                                      naive_length - sequence_length)
             blocks[-1].extend(filler)
 
     return blocks

@@ -53,7 +53,7 @@ class NO_FILL_VALUE(misc_tools.NonInstantiable):
     '''
 
 
-def partitions(sequence, partition_size=None, n_partitions=None,
+def partitions(sequence, partition_size=None, *, n_partitions=None,
                allow_remainder=True, larger_on_remainder=False,
                fill_value=NO_FILL_VALUE):
     '''

@@ -29,7 +29,7 @@ def test():
 def test_too_many_arguments():
     '''Test `partitions` complains when too many arguments are given.'''
     with cute_testing.RaiseAssertor(text='*either*'):
-        partitions([1, 2, 3], 2, 2)
+        partitions([1, 2, 3], 2, n_partitions=2)
 
 
 def test_allow_remainder():
