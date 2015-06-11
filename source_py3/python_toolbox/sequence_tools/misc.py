@@ -96,7 +96,7 @@ def partitions(sequence, partition_size=None, n_partitions=None,
         raise Exception('You must specify *either* `partition_size` *or* '
                         '`n_paritions`.')
 
-    if fill_value != NO_FILL_VALUE and not allow_remainder:
+    if fill_value is not NO_FILL_VALUE and not allow_remainder:
         raise ValueError('`fill_value` cannot be specified if '
                          '`allow_remainder` is `False`.')
 
@@ -119,7 +119,7 @@ def partitions(sequence, partition_size=None, n_partitions=None,
     blocks = [sequence[i : i + partition_size] for i in
               range(0, enlarged_length, partition_size)]
 
-    if fill_value != NO_FILL_VALUE and blocks:
+    if fill_value is not NO_FILL_VALUE and blocks:
         filler = itertools.repeat(fill_value,
                                   enlarged_length - sequence_length)
         blocks[-1].extend(filler)
