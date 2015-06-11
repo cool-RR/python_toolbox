@@ -3,6 +3,8 @@
 
 '''This module defines miscellaneous tools that don't fit anywhere else.'''
 
+from __future__ import division
+
 import operator
 try:
     import pathlib
