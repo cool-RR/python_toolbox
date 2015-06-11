@@ -51,6 +51,8 @@ def get_packages_and_modules_filenames(root, recursive=False):
     todo: module? really?
     todo: needs testing
     '''
+    
+    from python_toolbox import logic_tools
         
     if isinstance(root, types.ModuleType):
         root_module = root
@@ -87,7 +89,7 @@ def get_packages_and_modules_filenames(root, recursive=False):
         filename: filename.stem for filename in result
     }
     module_name_to_filenames = \
-        dict_tools.reverse_with_set_values(filename_to_module_name)
+        logic_tools.get_equivalence_classes(filename_to_module_name)
     
     for module_name, filenames in module_name_to_filenames.items():
         if len(filenames) <= 1:
