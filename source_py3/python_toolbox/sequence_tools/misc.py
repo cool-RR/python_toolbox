@@ -144,7 +144,7 @@ def partitions(sequence, partition_size=None, *, n_partitions=None,
                 del blocks[-1]
                 blocks[-1] += small_block_to_append_back
         elif fill_value != NO_FILL_VALUE: # (We use elif because fill is never 
-                                            # done if `larger_on_remainder=True`.)
+                                          # done if `larger_on_remainder=True`.)
             filler = itertools.repeat(fill_value,
                                       naive_length - sequence_length)
             blocks[-1].extend(filler)

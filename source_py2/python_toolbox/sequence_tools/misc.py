@@ -52,7 +52,7 @@ class NO_FILL_VALUE(misc_tools.NonInstantiable):
     Sentinel that means: Don't fill last partition with default fill values.
     '''
 
-@misc_tools.limit_n_positional_arguments(2)
+@misc_tools.limit_positional_arguments(2)
 def partitions(sequence, partition_size=None, n_partitions=None,
                allow_remainder=True, larger_on_remainder=False,
                fill_value=NO_FILL_VALUE):
@@ -120,11 +120,11 @@ def partitions(sequence, partition_size=None, n_partitions=None,
         floored_partition_size, modulo = divmod(sequence_length,
                                                 n_partitions)
         if modulo:
-        if larger_on_remainder:
+            if larger_on_remainder:
                 partition_size = floored_partition_size
                 n_partitions += 1
                 # Extra partition will be joined into previous partition
-        else:
+            else:
                 partition_size = floored_partition_size + 1
         else: # modulo == 0
             partition_size = floored_partition_size
