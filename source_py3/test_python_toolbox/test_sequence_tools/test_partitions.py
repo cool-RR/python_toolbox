@@ -101,3 +101,20 @@ def test_fill_value():
     assert partitions(r, 3) == [[0, 1, 2], [3, 4]]
     assert partitions(r, 3, fill_value=None) == [[0, 1, 2], [3, 4, None]]
     assert partitions([], 3, fill_value=None) == []
+
+
+def test_different_types():
+    sequences = (
+        list(range(5)),
+        tuple(range(5)),
+        range(5), #blocktodo on py2 ensure it's xrange
+    )
+    
+    for sequence in sequences:
+        assert partitions(sequence, partition_size=2) == [
+            sequence[:2], sequence[2:4], sequence[4:]
+        ]
+        assert partitions(sequence, partition_size=2,
+                          larger_on_remainder=True) == [
+            sequence[:2], sequence[2:]
+        ]

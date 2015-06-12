@@ -95,6 +95,8 @@ def partitions(sequence, partition_size=None, *, n_partitions=None,
         [[0, 1, 2], [3, 4, 'meow']]
 
     '''
+    
+    from python_toolbox import cute_iter_tools
 
     sequence = ensure_iterable_is_sequence(sequence)
 
@@ -133,23 +135,25 @@ def partitions(sequence, partition_size=None, *, n_partitions=None,
 
     naive_length = partition_size * n_partitions
     
-    blocks = [sequence[i : i + partition_size] for i in
-              range(0, naive_length, partition_size)]
+    cutoff_indices = list(range(0, sequence_length, partition_size)) + [None]
 
     if naive_length != sequence_length:
-        assert blocks
+        assert cutoff_indices
         if larger_on_remainder:
-            if len(blocks) >= 2:
-                small_block_to_append_back = blocks[-1]
-                del blocks[-1]
-                blocks[-1] += small_block_to_append_back
-        elif fill_value != NO_FILL_VALUE: # (We use elif because fill is never 
-                                          # done if `larger_on_remainder=True`.)
+            if len(cutoff_indices) >= 3:
+                del blocks[-2]
+        elif fill_value is not NO_FILL_VALUE: # (We use elif because fill is 
+                                              # never done if
+                                              # `larger_on_remainder=True`.)
             filler = itertools.repeat(fill_value,
                                       naive_length - sequence_length)
             blocks[-1].extend(filler)
 
-    return blocks
+    return [
+        sequence[cutoff_left:cutoff_right] for (cutoff_left, cutoff_right)
+        in cute_iter_tools.iterate_overlapping_subsequences(cutoff_indices)
+    ]
+
 
 
 def is_immutable_sequence(thing):
