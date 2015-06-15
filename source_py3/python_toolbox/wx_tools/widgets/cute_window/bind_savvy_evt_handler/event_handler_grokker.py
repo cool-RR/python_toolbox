@@ -51,7 +51,7 @@ class EventHandlerGrokker(object):
         assert isinstance(evt_handler, wx.EvtHandler)
         event_handler_bound_method = types.MethodType(    
             self.event_handler_self_taking_function,
-            evt_handler,
+            # evt_handler,
             self.evt_handler_type
         )
         if len(self.parsed_words) >= 2:
