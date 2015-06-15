@@ -2,7 +2,7 @@
 # This program is distributed under the MIT license.
 
 
-class CuteBaseTimer(object):
+class CuteBaseTimer:
     '''A base class for timers, allowing easy central stopping.'''    
     __timers = [] # todo: change to weakref list
     

@@ -21,9 +21,8 @@ class CaseStyleType(abc.ABCMeta):
     '''
 
 
-class BaseCaseStyle(object):
+class BaseCaseStyle(metaclass=CaseStyleType):
     '''Base class for case styles.'''
-    __metaclass__ = CaseStyleType
     
     @abc_tools.AbstractStaticMethod
     def parse(name):
@@ -74,7 +73,7 @@ class CamelCase(BaseCaseStyle):
         return words
 
 
-class NameParser(object):
+class NameParser:
     '''
     Parser that parses an event handler name.
     

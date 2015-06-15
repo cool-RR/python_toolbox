@@ -4,7 +4,7 @@
 import wx
 
 
-class Key(object):
+class Key:
     '''A key combination.'''
 
     def __init__(self, key_code, cmd=False, alt=False, shift=False):

@@ -19,7 +19,7 @@ If two floats have a distance of less than FUZZ, we may treat them as identical.
 '''
 
 
-class SnapMap(object):
+class SnapMap:
     '''
     Map for deciding which angle the knob will have when mouse-dragging.
     

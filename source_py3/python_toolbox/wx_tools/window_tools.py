@@ -23,7 +23,7 @@ class WindowFreezer(Freezer):
         self.window.Thaw()
 		
 		
-class FlagRaiser(object): # todo: rename?
+class FlagRaiser: # todo: rename?
     '''When called, raises a flag of a window and then calls some function.'''
     def __init__(self, window, attribute_name=None, function=None, delay=None):
         '''
