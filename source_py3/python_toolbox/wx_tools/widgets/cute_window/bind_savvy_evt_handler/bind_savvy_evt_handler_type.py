@@ -9,7 +9,7 @@ from python_toolbox import dict_tools
 from .event_handler_grokker import EventHandlerGrokker
 
 
-class BindSavvyEvtHandlerType(type):
+class BindSavvyEvtHandlerType(type(wx.EvtHandler)):
     '''
     Metaclass for the `BindSavvyEvtHandler` class.
     
@@ -44,7 +44,8 @@ class BindSavvyEvtHandlerType(type):
                                                             cls.__name__) and
                 callable(value) and
                 getattr(value, '_BindSavvyEvtHandlerType__dont_bind_automatically',
-                        None) is not True
+                        None) is not True,
+            force_dict_type=dict
         )
         '''Dict mapping names to event handling functions.'''
         
