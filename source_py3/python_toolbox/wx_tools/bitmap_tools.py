@@ -26,8 +26,8 @@ def bitmap_from_pkg_resources(package_or_requirement, resource_name):
         my_bitmap = bitmap_from_pkg_resources('whatever.images', 'image.jpg')
     
     '''
-    return wx.BitmapFromImage(
-        wx.ImageFromStream(
+    return wx.Bitmap(
+        wx.Image(
             pkg_resources.resource_stream(package_or_requirement,
                                           resource_name),
             wx.BITMAP_TYPE_ANY
