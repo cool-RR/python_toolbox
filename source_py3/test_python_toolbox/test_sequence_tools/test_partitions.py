@@ -118,3 +118,33 @@ def test_different_types():
                           larger_on_remainder=True) == [
             sequence[:2], sequence[2:]
         ]
+        
+def test_n_partitions():
+    r = list(range(10))
+    with cute_testing.RaiseAssertor(ValueError):
+        partitions(r, n_partitions=0)
+    assert partitions(r, n_partitions=1) == [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]
+    assert partitions(r, n_partitions=2) == [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]]
+    assert partitions(r, n_partitions=3) == \
+                                           [[0, 1, 2, 3], [4, 5, 6,], [7, 8, 9]]
+    assert partitions(r, n_partitions=4) == \
+                                        [[0, 1, 2], [3, 4, 5], [6, 7], [8, 9]]
+    assert partitions(r, n_partitions=5) == \
+                                       [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9]]
+    assert partitions(r, n_partitions=6) == \
+                                     [[0, 1], [2, 3], [4, 5], [6, 7], [8], [9]]
+    assert partitions(r, n_partitions=7) == \
+                                   [[0, 1], [2, 3], [4, 5], [6], [7], [8], [9]]
+    assert partitions(r, n_partitions=8) == \
+                                 [[0, 1], [2, 3], [4], [5], [6], [7], [8], [9]]
+    assert partitions(r, n_partitions=9) == \
+                               [[0, 1], [2], [3], [4], [5], [6], [7], [8], [9]]
+    assert partitions(r, n_partitions=10) == \
+                             [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9]]
+    assert partitions(r, n_partitions=11) == \
+                         [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], []]
+    assert partitions(r, n_partitions=12) == \
+                     [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [], []]
+           
+    # blocktodo: add same batch of tests but with larger_on_remainder
+    

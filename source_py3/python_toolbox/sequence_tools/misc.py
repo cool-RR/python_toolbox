@@ -57,20 +57,24 @@ def partitions(sequence, partition_size=None, *, n_partitions=None,
                allow_remainder=True, larger_on_remainder=False,
                fill_value=NO_FILL_VALUE):
     '''
-    Partition `sequence` into equal partitions of size `partition_size`, or
+    Break `sequence` into partitions.
+    
+    Partitions `sequence` into partitions of size `partition_size`, or
     determine size automatically given the number of partitions as
     `n_partitions`.
 
-    If the sequence can't be divided into precisely equal partitions, the last
-    partition will contain less members than all the other partitions.
+    This function attempts to break the sequence into partitions with an equal
+    number of items; if the sequence can't be divided into precisely equal
+    partitions, the first partitions will have more elements then the
+    partitions that come after them.
 
     Example:
 
         >>> partitions([0, 1, 2, 3, 4], 2)
         [[0, 1], [2, 3], [4]]
 
-    (You need to give *either* a `partition_size` *or* an `n_partitions`
-    argument, not both.)
+    You need to give *either* a `partition_size` *or* an `n_partitions`
+    argument, not both.
 
     Specify `allow_remainder=False` to enforce that the all the partition sizes
     be equal; if there's a remainder while `allow_remainder=False`, an
@@ -101,6 +105,8 @@ def partitions(sequence, partition_size=None, *, n_partitions=None,
     sequence = ensure_iterable_is_sequence(sequence)
 
     sequence_length = len(sequence)
+    if 0 in (n_partitions, partition_size):
+        raise ValueError
 
     ### Validating input: #####################################################
     #                                                                         #
