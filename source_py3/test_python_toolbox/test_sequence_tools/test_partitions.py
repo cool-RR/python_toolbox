@@ -102,3 +102,49 @@ def test_fill_value():
     assert partitions(r, 3, fill_value=None) == [[0, 1, 2], [3, 4, None]]
     assert partitions([], 3, fill_value=None) == []
 
+
+def test_different_types():
+    sequences = (
+        list(range(5)),
+        tuple(range(5)),
+        range(5), #blocktodo on py2 ensure it's xrange
+    )
+    
+    for sequence in sequences:
+        assert partitions(sequence, partition_size=2) == [
+            sequence[:2], sequence[2:4], sequence[4:]
+        ]
+        assert partitions(sequence, partition_size=2,
+                          larger_on_remainder=True) == [
+            sequence[:2], sequence[2:]
+        ]
+        
+def test_n_partitions():
+    r = list(range(10))
+    with cute_testing.RaiseAssertor(ValueError):
+        partitions(r, n_partitions=0)
+    assert partitions(r, n_partitions=1) == [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]
+    assert partitions(r, n_partitions=2) == [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]]
+    assert partitions(r, n_partitions=3) == \
+                                           [[0, 1, 2, 3], [4, 5, 6,], [7, 8, 9]]
+    assert partitions(r, n_partitions=4) == \
+                                        [[0, 1, 2], [3, 4, 5], [6, 7], [8, 9]]
+    assert partitions(r, n_partitions=5) == \
+                                       [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9]]
+    assert partitions(r, n_partitions=6) == \
+                                     [[0, 1], [2, 3], [4, 5], [6, 7], [8], [9]]
+    assert partitions(r, n_partitions=7) == \
+                                   [[0, 1], [2, 3], [4, 5], [6], [7], [8], [9]]
+    assert partitions(r, n_partitions=8) == \
+                                 [[0, 1], [2, 3], [4], [5], [6], [7], [8], [9]]
+    assert partitions(r, n_partitions=9) == \
+                               [[0, 1], [2], [3], [4], [5], [6], [7], [8], [9]]
+    assert partitions(r, n_partitions=10) == \
+                             [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9]]
+    assert partitions(r, n_partitions=11) == \
+                         [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], []]
+    assert partitions(r, n_partitions=12) == \
+                     [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [], []]
+           
+    # blocktodo: add same batch of tests but with larger_on_remainder
+    
