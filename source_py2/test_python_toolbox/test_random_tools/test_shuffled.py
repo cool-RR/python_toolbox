@@ -22,4 +22,4 @@ def test():
     assert my_range == list(range(50))
     
     # Immutable sequences work too:
-    assert set(random_tools.shuffled((1, 2, 3))) == set((1, 2, 3))
+    assert set(random_tools.shuffled((1, 2, 3))) == {1, 2, 3}

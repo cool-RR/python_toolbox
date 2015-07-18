@@ -2,7 +2,7 @@
 # This program is distributed under the MIT license.
 
 from python_toolbox.third_party import enum
-from python_toolbox.third_party import functools
+import functools
 
 from python_toolbox import caching
 

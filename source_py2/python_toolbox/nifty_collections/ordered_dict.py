@@ -4,11 +4,7 @@
 from python_toolbox import sys_tools
 from python_toolbox import comparison_tools
 
-try:
-    from collections import OrderedDict as StdlibOrderedDict
-except ImportError:
-    from python_toolbox.third_party.collections import OrderedDict \
-                                                           as StdlibOrderedDict
+from collections import OrderedDict as StdlibOrderedDict
 
 
 class OrderedDict(StdlibOrderedDict):

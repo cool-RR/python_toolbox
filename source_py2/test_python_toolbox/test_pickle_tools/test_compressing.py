@@ -16,7 +16,7 @@ from python_toolbox import pickle_tools
 my_messy_object = (
     'Whatever',
     {1: 2,}, 
-    set((3, 4)), 
+    {3, 4}, 
     frozenset([3, 4]),
     ((((((((((((())))))))))))),
     u'unicode_too',

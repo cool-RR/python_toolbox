@@ -1,11 +1,10 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
+import functools
 import abc
 import collections
 import numbers
-
-from python_toolbox.third_party import functools
 
 from python_toolbox import misc_tools
 from python_toolbox import nifty_collections

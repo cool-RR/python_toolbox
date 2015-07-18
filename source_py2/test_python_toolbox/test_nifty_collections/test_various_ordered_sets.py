@@ -21,7 +21,7 @@ class BaseOrderedSetTestCase(cute_testing.TestCase):
         
     def test_bool(self):
         assert bool(self.ordered_set_type({})) is False
-        assert bool(self.ordered_set_type(set((0,)))) is True
+        assert bool(self.ordered_set_type({0})) is True
         assert bool(self.ordered_set_type(range(5))) is True
         
         
@@ -29,7 +29,7 @@ class BaseMutableOrderedSetTestCase(BaseOrderedSetTestCase):
     __test__ = False
     def test_sort(self):
         ordered_set = self.ordered_set_type([5, 61, 2, 7, 2])
-        assert ordered_set != set((5, 61, 2, 7))
+        assert ordered_set != {5, 61, 2, 7}
         ordered_set.move_to_end(61)
         assert list(ordered_set) == [5, 2, 7, 61]
         ordered_set.sort()
@@ -103,10 +103,10 @@ class FrozenOrderedSetTestCase(BaseOrderedSetTestCase):
             FrozenOrderedSet(range(3)): 3,
         }
         assert len(d) == 3
-        assert set(d.values()) == set((1, 2, 3))
+        assert set(d.values()) == {1, 2, 3}
         assert d[FrozenOrderedSet(range(2))] == 2
         d[FrozenOrderedSet(range(2))] = 20
-        assert set(d.values()) == set((1, 20, 3))
+        assert set(d.values()) == {1, 20, 3}
         
 
 class EmittingOrderedSetTestCase(BaseMutableOrderedSetTestCase):

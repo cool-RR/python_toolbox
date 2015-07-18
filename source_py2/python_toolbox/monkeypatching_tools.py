@@ -6,7 +6,6 @@
 import collections
 import inspect
 import types
-import sys
 
 from python_toolbox.third_party import funcsigs
 
@@ -76,16 +75,7 @@ def monkeypatch(monkeypatchee, name=None, override_if_exists=True):
                         raise NotImplementedError
                     name_ = function.getter.__name__
                 elif isinstance(function, (classmethod, staticmethod)):
-                    try:
-                        name_ = function.__func__.__name__
-                    except AttributeError:
-                        assert sys.version_info[:2] == (2, 6)
-                        raise NotImplementedError(
-                            "`monkeypatch` can't deal with `staticmethod` "
-                            "and `classmethod` objects in Python 2.6. It "
-                            "works in Python 2.7 and above."
-                        )
-                        
+                    name_ = function.__func__.__name__
                 elif isinstance(function, property):
                     name_ = function.fget.__name__
                 else:
@@ -117,8 +107,6 @@ def change_defaults(function=None, new_defaults={}):
     Can be used both as a straight function and as a decorater to a function to
     be changed.
     '''
-    from python_toolbox import nifty_collections
-    
     def change_defaults_(function_, new_defaults_):
         signature = funcsigs.Signature.from_function(function_)
         defaults = list(function_.__defaults__ or ())
@@ -126,7 +114,7 @@ def change_defaults(function=None, new_defaults={}):
             dict_tools.filter_items(
             signature.parameters,
             lambda name, parameter: parameter.default != funcsigs._empty,
-            force_dict_type=nifty_collections.OrderedDict
+            force_dict_type=collections.OrderedDict
         )
         
         non_existing_arguments = set(new_defaults) - set(defaultful_parameters)

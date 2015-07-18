@@ -20,7 +20,7 @@ def _check(assume_transitive):
     assert all_equivalent([], assume_transitive=assume_transitive)
     assert all_equivalent(iter([1, 1, 1.0, 1]),
                           assume_transitive=assume_transitive)
-    assert all_equivalent(set(('meow',)), assume_transitive=assume_transitive)
+    assert all_equivalent({'meow'}, assume_transitive=assume_transitive)
     assert all_equivalent(['frr', 'frr', 'frr', 'frr'],
                           assume_transitive=assume_transitive)
     
@@ -33,7 +33,7 @@ def _check(assume_transitive):
     assert not all_equivalent(range(7), assume_transitive=assume_transitive)
     assert not all_equivalent(iter([1, 17, 1.0, 1]),
                               assume_transitive=assume_transitive)
-    assert not all_equivalent(set(('meow', 'grr')),
+    assert not all_equivalent({'meow', 'grr'},
                               assume_transitive=assume_transitive)
     assert not all_equivalent(['frr', 'frr', {}, 'frr', 'frr'],
                               assume_transitive=assume_transitive)

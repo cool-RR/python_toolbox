@@ -39,7 +39,7 @@ def test_unhashable():
     '''Test `SleekCallArgs` on unhashable arguments.'''
     sca_dict = {}
     
-    args = ([1, 2], {1: [1, 2]}, set(('a', 1)))
+    args = ([1, 2], {1: [1, 2]}, {'a', 1})
     sca1 = SleekCallArgs(sca_dict, f, *args)
     hash(sca1)
     sca_dict[sca1] = 'meow'
@@ -52,7 +52,7 @@ def test_unhashable():
         'a': {1: 2},
         'b': [
             set(),
-            set((frozenset((3, 4))))
+            {frozenset((3, 4))}
         ]
     }
     sca2 = SleekCallArgs(sca_dict, f, **kwargs)

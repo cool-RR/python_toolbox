@@ -22,12 +22,11 @@ def test():
                                                                      set('123')
     assert set(frozen_ordered_dict.values()) == set('abc')
     assert set(frozen_ordered_dict.items()) == \
-                                     set((('1', 'a'), ('2', 'b'), ('3', 'c'),))
+                                          {('1', 'a'), ('2', 'b'), ('3', 'c'),}
     assert frozen_ordered_dict['1'] == 'a'
     with cute_testing.RaiseAssertor(exception_type=LookupError):
         frozen_ordered_dict['missing value']
-    assert set((frozen_ordered_dict, frozen_ordered_dict)) == \
-                                                    set((frozen_ordered_dict,))
+    assert {frozen_ordered_dict, frozen_ordered_dict} == {frozen_ordered_dict}
     assert {frozen_ordered_dict: frozen_ordered_dict} == \
                                      {frozen_ordered_dict: frozen_ordered_dict}
     assert isinstance(hash(frozen_ordered_dict), int)

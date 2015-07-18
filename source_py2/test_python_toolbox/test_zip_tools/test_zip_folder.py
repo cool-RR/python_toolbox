@@ -37,13 +37,13 @@ def test():
         assert zip_file_path.is_file()
         
         # Got two options here because of PyPy shenanigans:
-        assert result == set((
+        assert result == {
             ('folder_to_zip/some_file.txt', b'hello there!'), 
             ('folder_to_zip/some_other_file.txt', b'hello there again!'), 
-        )) or result == set((
+        } or result == {
             ('folder_to_zip/some_file.txt', 'hello there!'), 
             ('folder_to_zip/some_other_file.txt', 'hello there again!'), 
-        ))
+        }
         
         import gc; gc.collect() # Making PyPy happy.
         

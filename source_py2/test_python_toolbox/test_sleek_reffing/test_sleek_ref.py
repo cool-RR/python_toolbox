@@ -21,7 +21,7 @@ def test_sleek_ref():
     '''Test the basic workings of `SleekRef`.'''
 
     volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
-                       set((1, 2, 3)), (None, 3, {None: 4})]
+                       {1, 2, 3}, (None, 3, {None: 4})]
     unvolatile_things = [__builtins__, type, sum, None]
     # (Used to have `list` here too but Pypy 2.0b choked on it.)
     

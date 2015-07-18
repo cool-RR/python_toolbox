@@ -136,8 +136,7 @@ def test_helpful_message_when_forgetting_parentheses():
         
 
 def test_monkeypatch_staticmethod():
-    if sys.version_info[:2] == (2, 6):
-        raise nose.SkipTest
+
     class A(EqualByIdentity):
         @staticmethod
         def my_static_method(x):
@@ -159,8 +158,6 @@ def test_monkeypatch_staticmethod():
     
     
 def test_monkeypatch_classmethod():
-    if sys.version_info[:2] == (2, 6):
-        raise nose.SkipTest
 
     class A(EqualByIdentity):
         @classmethod
@@ -189,9 +186,6 @@ def test_monkeypatch_classmethod_subclass():
     
     This is useful in Django, that uses its own `classmethod` subclass.
     '''
-    if sys.version_info[:2] == (2, 6):
-        raise nose.SkipTest
-
     class FunkyClassMethod(classmethod):
         is_funky = True
 

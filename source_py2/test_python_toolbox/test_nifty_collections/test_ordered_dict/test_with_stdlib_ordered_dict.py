@@ -8,10 +8,10 @@ import nose
 from python_toolbox import cute_testing
 
 from python_toolbox.nifty_collections.ordered_dict import OrderedDict
-from python_toolbox.nifty_collections.ordered_dict import StdlibOrderedDict
 
 
 def test():
+    from collections import OrderedDict as StdlibOrderedDict
 
     ordered_dict = OrderedDict(((1, 'a'), (2, 'b'), (3, 'c')))
     stdlib_ordered_dict = StdlibOrderedDict(((1, 'a'), (2, 'b'), (3, 'c')))
