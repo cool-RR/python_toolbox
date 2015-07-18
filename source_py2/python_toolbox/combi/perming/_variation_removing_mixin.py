@@ -32,8 +32,8 @@ class _VariationRemovingMixin(object):
         return PermSpace(
             self.sequence_length, n_elements=self.n_elements,
             domain=self.domain, 
-            fixed_map={key: self.sequence.index(value) for
-                       key, value in self.fixed_map.items()},
+            fixed_map=dict((key, self.sequence.index(value)) for
+                       key, value in self.fixed_map.items()), 
             degrees=self.degrees, slice_=self.canonical_slice,
             is_combination=self.is_combination, perm_type=self.perm_type
         )

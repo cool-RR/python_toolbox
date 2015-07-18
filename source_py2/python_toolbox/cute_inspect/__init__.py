@@ -18,7 +18,7 @@ except AttributeError:
         A dict is returned, with keys the function argument names (including the
         names of the * and ** arguments, if any), and values the respective bound
         values from 'positional' and 'named'."""
-        # from inspect import *
+        from inspect import ismethod
         args, varargs, varkw, defaults = getargspec(func)
         f_name = func.__name__
         arg2value = {}

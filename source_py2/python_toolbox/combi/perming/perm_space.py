@@ -273,13 +273,13 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             fixed_map = {}
         if not isinstance(fixed_map, dict):
             if isinstance(fixed_map, collections.Callable):
-                fixed_map = {item: fixed_map(item) for item in self.sequence}
+                fixed_map = dict((item, fixed_map(item)) for item in self.sequence)
             else:
                 fixed_map = dict(fixed_map) 
         if fixed_map:
-            self.fixed_map = {key: value for (key, value) in
-                              fixed_map.items() if (key in self.domain) and
-                              (value in self.sequence)}
+            self.fixed_map = dict((key, value) for (key, value) in
+                                  fixed_map.items() if (key in self.domain) and
+                                  (value in self.sequence))
                 
         else:
             (self.fixed_map, self.free_indices, self.free_keys,
@@ -1005,11 +1005,11 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 # More efficient than removing the element, we filter these out
                 # later.
         
-        shit_set = {misc.MISSING_ELEMENT} | shit_set
+        shit_set = set((misc.MISSING_ELEMENT,)) | shit_set
         sequence = [item for item in sequence if item not in shit_set]
                 
-        fixed_map = {key - len(prefix): value
-                                           for key, value in fixed_map.items()}
+        fixed_map = dict((key - len(prefix), value)
+                                           for key, value in fixed_map.items())
         
         perm_space = cls(
             sequence, n_elements=n_elements, fixed_map=fixed_map, 

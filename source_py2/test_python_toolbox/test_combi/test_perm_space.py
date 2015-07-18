@@ -39,7 +39,7 @@ def test_perm_spaces():
     
     assert cute_iter_tools.are_equal(pure_0a, pure_0b, pure_0c, pure_0d)
     
-    assert set(map(bool, (pure_0a, pure_0b, pure_0c, pure_0d))) == {True}
+    assert set(map(bool, (pure_0a, pure_0b, pure_0c, pure_0d))) == set((True,))
     
     pure_perm_space = pure_0a
     assert pure_0a.is_pure
@@ -141,7 +141,7 @@ def test_perm_spaces():
            (Perm((0, 1, 2, 3)) ** (0)) == (Perm((0, 1, 2, 3)) ** (1)) == \
            (Perm((0, 1, 2, 3)) ** 2) == (Perm((0, 1, 2, 3)) ** 3)
     
-    assert set(map(bool, (pure_0a[4:4], pure_0a[3:2]))) == {False}
+    assert set(map(bool, (pure_0a[4:4], pure_0a[3:2]))) == set((False,))
     assert pure_0a[2:6][1:-1] == pure_0a[3:5]
     assert tuple(pure_0a[2:6][1:-1]) == tuple(pure_0a[3:5])
     assert pure_0a[2:6][1:-1][1] == pure_0a[3:5][1]
@@ -420,7 +420,7 @@ def test_partial_perm_space():
     assert empty_partial_perm_space.length == 0
     assert empty_partial_perm_space.variation_selection == \
            perming.variations.VariationSelection(
-                                        {perming.variations.Variation.PARTIAL})
+                                  set((perming.variations.Variation.PARTIAL,)))
     assert empty_partial_perm_space != PermSpace(5, n_elements=7)
     with cute_testing.RaiseAssertor(IndexError):
         empty_partial_perm_space[0]
@@ -447,7 +447,7 @@ def test_partial_perm_space():
     assert perm_space_3.is_partial and not perm_space_3.is_combination
     assert perm_space_4.is_partial and not perm_space_4.is_combination
     assert set(map(type, (perm_space_0, perm_space_1, perm_space_2,
-                          perm_space_3, perm_space_4))) == {PermSpace}
+                             perm_space_3, perm_space_4))) == set((PermSpace,))
     
     assert not perm_space_5.is_partial and perm_space_5.is_combination
     assert perm_space_6.is_partial and perm_space_6.is_combination
@@ -455,7 +455,7 @@ def test_partial_perm_space():
     assert perm_space_8.is_partial and perm_space_8.is_combination
     assert perm_space_9.is_partial and perm_space_9.is_combination
     assert set(map(type, (perm_space_5, perm_space_6, perm_space_7,
-                          perm_space_8, perm_space_9))) == {CombSpace}
+                             perm_space_8, perm_space_9))) == set((CombSpace,))
     
     assert CombSpace(5, n_elements=2) == perm_space_7
     
@@ -610,7 +610,7 @@ def test_unrecurrented():
     assert unrecurrented_perm_space.length == math_tools.factorial(6)
     perm = unrecurrented_perm_space[100]
     assert all(i in 'abc' for i in perm)
-    assert set(map(perm.index, 'abc')) < {0, 1, 2, 3, 4}
+    assert set(map(perm.index, 'abc')) < set((0, 1, 2, 3, 4))
     assert set(''.join(perm)) == set('abc')
     
     

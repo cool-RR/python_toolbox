@@ -59,12 +59,12 @@ def calculate_length_of_recurrent_perm_space(k, fbb):
     ### Doing phase one, getting all sub-FBBs: ################################
     #                                                                         #
     levels = []
-    current_fbbs = {fbb}
+    current_fbbs = set((fbb,))
     while len(levels) < k and current_fbbs:
         k_ = k - len(levels)
         levels.append(
-            {fbb_: fbb_.get_sub_fbbs_for_one_key_removed()
-             for fbb_ in current_fbbs if (k_, fbb_) not in cache}
+            dict((fbb_, fbb_.get_sub_fbbs_for_one_key_removed())
+             for fbb_ in current_fbbs if (k_, fbb_) not in cache)
         )
         current_fbbs = set(itertools.chain(*levels[-1].values()))
     #                                                                         #
@@ -144,12 +144,12 @@ def calculate_length_of_recurrent_comb_space(k, fbb):
     ### Doing phase one, getting all sub-FBBs: ################################
     #                                                                         #
     levels = []
-    current_fbbs = {fbb}
+    current_fbbs = set((fbb,))
     while len(levels) < k and current_fbbs:
         k_ = k - len(levels)
         levels.append(
-            {fbb_: fbb_.get_sub_fbbs_for_one_key_and_previous_piles_removed()
-             for fbb_ in current_fbbs if (k_, fbb_) not in cache}
+            dict((fbb_, fbb_.get_sub_fbbs_for_one_key_and_previous_piles_removed())
+             for fbb_ in current_fbbs if (k_, fbb_) not in cache)
         )
         current_fbbs = set(itertools.chain(*levels[-1].values()))
     #                                                                         #
