@@ -5,7 +5,7 @@ import abc
 import collections
 import Queue as queue
 import multiprocessing.queues
-import python_toolbox.third_party.ordereddict
+import python_toolbox.third_party.collections
 
 
 ###############################################################################
@@ -29,7 +29,7 @@ try:
 except AttributeError:
     # Python 2.6
     pass
-Ordered.register(python_toolbox.third_party.ordereddict.OrderedDict)
+Ordered.register(python_toolbox.third_party.collections.OrderedDict)
 Ordered.register(collections.deque)
 Ordered.register(queue.Queue)
 Ordered.register(multiprocessing.queues.Queue)
@@ -53,7 +53,7 @@ class DefinitelyUnordered():
             OrderedDict = collections.OrderedDict
         except AttributeError:
             # Python 2.6
-            OrderedDict = python_toolbox.third_party.ordereddict.OrderedDict
+            OrderedDict = python_toolbox.third_party.collections.OrderedDict
         if cls is DefinitelyUnordered and issubclass(type_, OrderedDict):
             return False
         else:
