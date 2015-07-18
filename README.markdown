@@ -70,6 +70,22 @@ When `python_toolbox` isn't installed, you may run `nosetests` at the repo root
 to run the tests.
 
 
+# Included subpackages #
+
+Python Toolbox includes third-party Python packages as subpackages that are used internally. (These are in the `third_party` package.) These are: 
+
+ * `Envelopes` by Tomasz Wójcik and others, MIT license.
+ * `sortedcontainers` by Grant Jenks and others, Apache license 2.0.
+ * `unittest2` by Robert Collins and others, BSD license.
+ * `decorator` by Michele Simionato and others, BSD license.
+ * `pathlib` by Antoine Pitrou and others, MIT license.
+ * `enum` by Ben Finney and others, PSF license.
+ * `funcsigs` by Aaron Iles and others, Apache license 2.0.
+ * `linecache2` by "Testing-cabal" and others, PSF license.
+ * `traceback2` by "Testing-cabal" and others, PSF license.
+ * `six` by Benjamin Peterson and others, MIT license.
+
+
 ------------------------------------------------------------------
 
 The Python Toolbox was created by Ram Rachum. I provide 
