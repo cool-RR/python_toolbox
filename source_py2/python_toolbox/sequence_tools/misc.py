@@ -30,7 +30,8 @@ def are_equal_regardless_of_order(seq1, seq2):
 
     Currently will fail for items that have problems with comparing.
     '''
-    return collections.Counter(seq1) == collections.Counter(seq2)
+    from python_toolbox import nifty_collections
+    return nifty_collections.Bag(seq1) == nifty_collections.Bag(seq2)
 
 
 def flatten(iterable):
@@ -224,9 +225,10 @@ def get_recurrences(sequence):
     
     The values of the dict are the numbers of repititions of each item.    
     '''
+    from python_toolbox import nifty_collections
     return dict(
         (item, n_recurrences) for item, n_recurrences in
-        collections.Counter(sequence).most_common() if n_recurrences >= 2
+        nifty_collections.Bag(sequence).most_common() if n_recurrences >= 2
     )
 
     

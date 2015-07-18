@@ -19,7 +19,7 @@ from ..shared import _is_weakreffable, A, counter
 def test():
     '''Test the basic workings of `CuteSleekValueDict`.'''
     volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
-                       {1, 2, 3}]
+                       set((1, 2, 3))]
     unvolatile_things = [__builtins__, list, type, sum]
     
     # Using len(csvd) as our key; just to guarantee we're not running over an
@@ -56,7 +56,7 @@ def test():
         
 def test_one_by_one():
     volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
-                       {1, 2, 3}]
+                       set((1, 2, 3))]
     unvolatile_things = [__builtins__, list, type, sum]
     
     # Using len(csvd) as our key; just to guarantee we're not running over an
