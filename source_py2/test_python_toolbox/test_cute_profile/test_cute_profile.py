@@ -17,7 +17,7 @@ from .shared import call_and_check_if_profiled
 def func(x, y, z=3):
     '''Function that does some meaningless number-juggling.'''
     sum([1, 2, 3])
-    {1, 2} | {2, 3}
+    set((1, 2)) | set((2, 3))
     return x, y, z
 
 

@@ -20,9 +20,9 @@ def test():
     assert (1, 3, 4) in selection_space
     assert selection_space
     assert repr(selection_space) == '<SelectionSpace: (0, 1, 2, 3, 4)>'
-    assert {SelectionSpace(range(4)), SelectionSpace(range(4)),
-            SelectionSpace(range(5)), SelectionSpace(range(4))} == \
-                           {SelectionSpace(range(4)), SelectionSpace(range(5))}
+    assert set((SelectionSpace(range(4)), SelectionSpace(range(4)),
+            SelectionSpace(range(5)), SelectionSpace(range(4)))) == \
+                      set((SelectionSpace(range(4)), SelectionSpace(range(5))))
     
     assert SelectionSpace(range(5)) == SelectionSpace(range(5))
     assert SelectionSpace(range(5)) != SelectionSpace(range(4))

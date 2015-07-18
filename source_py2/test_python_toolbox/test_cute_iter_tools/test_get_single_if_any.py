@@ -13,7 +13,8 @@ def test_get_single_if_any():
            get_single_if_any('') is None
     
     assert get_single_if_any(('g',)) == get_single_if_any(['g']) == \
-           get_single_if_any({'g'}) == get_single_if_any(iter({'g'})) == \
+           get_single_if_any(set(('g'))) == \
+           get_single_if_any(iter(set(('g', )))) == \
            get_single_if_any('g') == 'g'
 
     with cute_testing.RaiseAssertor():

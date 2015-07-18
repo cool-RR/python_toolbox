@@ -104,8 +104,8 @@ class FrozenBagBag(FrozenBag):
             for i in range(value_of_key_to_reduce):
                 sub_fbbs.append(
                     FrozenBagBag(
-                        {key: (i if key == key_to_reduce else value)
-                               for key, value in sub_fbb_prototype.items()}
+                        dict((key, (i if key == key_to_reduce else value))
+                               for key, value in sub_fbb_prototype.items())
                     )
                 )
         return tuple(sub_fbbs)

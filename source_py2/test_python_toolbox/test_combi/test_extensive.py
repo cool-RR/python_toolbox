@@ -59,8 +59,8 @@ class BrutePermSpace(object):
                                                              len(self.sequence)
         self.domain = (domain or
               sequence_tools.CuteRange(self.sequence_length))[:self.n_elements]
-        self.fixed_map = {key: value for key, value in fixed_map.items() if key
-                          in self.domain}
+        self.fixed_map = dict((key, value) for key, value in fixed_map.items()
+                              if key in self.domain)
         self.degrees = \
                       degrees or sequence_tools.CuteRange(self.sequence_length)
         self.is_combination = is_combination
@@ -174,10 +174,10 @@ def _check_variation_selection(variation_selection, perm_space_type,
         kwargs['is_combination'] = is_combination
         
     if purified_fixed_map != NO_ARGUMENT:
-        kwargs['fixed_map'] = actual_fixed_map = {
-            actual_domain[key]: sequence[value] for key, value
+        kwargs['fixed_map'] = actual_fixed_map = dict(
+            (actual_domain[key], sequence[value]) for key, value
                            in purified_fixed_map.items() if key < len(sequence)
-        }
+        )
     else:
         actual_fixed_map = {}
         
@@ -320,10 +320,10 @@ def _check_variation_selection(variation_selection, perm_space_type,
             else:
                 assert type(perm) == Perm
         
-        if variation_selection.variations <= {
+        if variation_selection.variations <= set((
             perming.variations.Variation.DAPPLIED,
             perming.variations.Variation.RAPPLIED,
-            perming.variations.Variation.COMBINATION,}:
+            perming.variations.Variation.COMBINATION)):
             assert perm.nominal_perm_space == perm_space
         assert perm.nominal_perm_space == \
                                    perm_space._nominal_perm_space_of_perms == \

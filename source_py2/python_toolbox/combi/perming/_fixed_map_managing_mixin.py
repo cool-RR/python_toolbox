@@ -44,8 +44,9 @@ class _FixedMapManagingMixin(object):
         # case of recurrent sequences, we don't want to remove all the sequence
         # items that are in `self.fixed_map.values()` but only as many as there
         # are in `self.fixed_map.values()`.
+        from python_toolbox.nifty_collections import Bag
         free_values = []
-        fixed_counter = collections.Counter(self.fixed_map.values())
+        fixed_counter = Bag(self.fixed_map.values())
         for item in self.sequence:
             if fixed_counter[item]:
                 fixed_counter[item] -= 1
@@ -78,16 +79,16 @@ class _FixedMapManagingMixin(object):
     @caching.CachedProperty
     def _undapplied_fixed_map(self):
         if self.is_dapplied:
-            return {self.domain.index(key): value for key, value
-                    in self.fixed_map.items()}
+            return dict((self.domain.index(key), value) for key, value
+                    in self.fixed_map.items())
         else:
             return self.fixed_map
             
     @caching.CachedProperty
     def _undapplied_unrapplied_fixed_map(self):
         if self.is_dapplied or self.is_rapplied:
-            return {self.domain.index(key): self.sequence.index(value)
-                    for key, value in self.fixed_map.items()}
+            return dict((self.domain.index(key), self.sequence.index(value))
+                    for key, value in self.fixed_map.items())
         else:
             return self.fixed_map
         

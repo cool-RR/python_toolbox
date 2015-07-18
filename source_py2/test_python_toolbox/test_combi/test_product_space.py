@@ -43,7 +43,7 @@ def test():
     # In the following asserts, using `CuteRange` rather than `xrange` because
     # the latter doesn't have a functional `__hash__`.
     
-    assert {
+    assert set((
         ProductSpace(
             (sequence_tools.CuteRange(4),
              sequence_tools.CuteRange(3))
@@ -55,7 +55,7 @@ def test():
         ProductSpace(
             (sequence_tools.CuteRange(3),
              sequence_tools.CuteRange(4))
-        )} == {
+        ))) == set((
             ProductSpace(
                 (sequence_tools.CuteRange(4),
                  sequence_tools.CuteRange(3))
@@ -64,7 +64,7 @@ def test():
                 (sequence_tools.CuteRange(3),
                  sequence_tools.CuteRange(4))
             )
-    }
+    ))
     
     assert ProductSpace(
         (sequence_tools.CuteRange(4),

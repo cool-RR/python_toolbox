@@ -5,6 +5,7 @@
 
 
 import sys
+import contextlib
 try:
     import pathlib
 except:
@@ -51,7 +52,8 @@ class OutputCapturer(ContextManager):
         
     def manage_context(self):
         '''Manage the `OutputCapturer`'s context.'''
-        with self._stdout_temp_setter, self._stderr_temp_setter:
+        with contextlib.nested(self._stdout_temp_setter,
+                               self._stderr_temp_setter):
             yield self
         
     output = property(lambda self: self.string_io.getvalue(),

@@ -18,8 +18,8 @@ def test():
         'du', 'db', 'br', ('d', 'u'), Comb('du', comb_space)
     )
     things_not_in_comb_space = (
-        'dx', 'dub', ('d', 'x'), {'d', 'u', 'b'}, Comb('dux', comb_space),
-        Comb('du', CombSpace('other', 2)), {'d', 'u'}, 'ud', 'rb',
+        'dx', 'dub', ('d', 'x'), set(('d', 'u', 'b')), Comb('dux', comb_space),
+        Comb('du', CombSpace('other', 2)), set(('d', 'u')), 'ud', 'rb',
         Comb('bu', comb_space)
     )
     

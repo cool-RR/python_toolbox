@@ -19,11 +19,12 @@ def test():
     assert len(frozen_dict) == 3
     assert set(frozen_dict) == set(frozen_dict.keys()) == set('123')
     assert set(frozen_dict.values()) == set('abc')
-    assert set(frozen_dict.items()) == {('1', 'a'), ('2', 'b'), ('3', 'c'),}
+    assert set(frozen_dict.items()) == set((('1', 'a'), ('2', 'b'),
+                                            ('3', 'c'),))
     assert frozen_dict['1'] == 'a'
     with cute_testing.RaiseAssertor(exception_type=LookupError):
         frozen_dict['missing value']
-    assert {frozen_dict, frozen_dict} == {frozen_dict}
+    assert set((frozen_dict, frozen_dict)) == set((frozen_dict,))
     assert {frozen_dict: frozen_dict} == {frozen_dict: frozen_dict}
     assert isinstance(hash(frozen_dict), int)
     

@@ -5,6 +5,7 @@ import abc
 import collections
 import Queue as queue
 import multiprocessing.queues
+import python_toolbox.third_party.collections
 
 
 ###############################################################################
@@ -23,7 +24,12 @@ class Ordered():
 
 Ordered.register(bytearray)
 Ordered.register(collections.Sequence)
-Ordered.register(collections.OrderedDict)
+try:
+    Ordered.register(collections.OrderedDict)
+except AttributeError:
+    # Python 2.6
+    pass
+Ordered.register(python_toolbox.third_party.collections.OrderedDict)
 Ordered.register(collections.deque)
 Ordered.register(queue.Queue)
 Ordered.register(multiprocessing.queues.Queue)
@@ -43,8 +49,12 @@ class DefinitelyUnordered():
     
     @classmethod
     def __subclasshook__(cls, type_):
-        if cls is DefinitelyUnordered and \
-                                    issubclass(type_, collections.OrderedDict):
+        try:
+            OrderedDict = collections.OrderedDict
+        except AttributeError:
+            # Python 2.6
+            OrderedDict = python_toolbox.third_party.collections.OrderedDict
+        if cls is DefinitelyUnordered and issubclass(type_, OrderedDict):
             return False
         else:
             return NotImplemented
@@ -54,4 +64,9 @@ DefinitelyUnordered.register(set)
 DefinitelyUnordered.register(frozenset)
 DefinitelyUnordered.register(dict)
 DefinitelyUnordered.register(collections.defaultdict)
-DefinitelyUnordered.register(collections.Counter)
+try:
+    DefinitelyUnordered.register(collections.Counter)
+except AttributeError:
+    # Python 2.6
+    pass
+    

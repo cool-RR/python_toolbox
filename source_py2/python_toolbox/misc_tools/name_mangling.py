@@ -14,7 +14,7 @@ def mangle_attribute_name_if_needed(attribute_name, class_name):
     if ((not attribute_name.startswith('__')) or
         (len(attribute_name) + 2 >= MANGLE_LEN) or
         (attribute_name.endswith('__')) or
-        set(class_name) == {'_'}):
+        set(class_name) == set(('_',))):
         
         return attribute_name
     

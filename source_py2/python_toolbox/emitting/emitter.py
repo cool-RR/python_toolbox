@@ -246,7 +246,8 @@ class Emitter(object):
     
     def _get_emitter_outputs(self):
         '''Get the direct emitter outputs of this emitter.'''
-        return {output for output in self._outputs if isinstance(output, Emitter)}
+        return set((output for output in self._outputs
+                    if isinstance(output, Emitter)))
         
     def get_total_callable_outputs(self):
         '''

@@ -10,7 +10,7 @@ import functools
 import re
 import types
 
-from collections import OrderedDict
+from python_toolbox.nifty_collections import OrderedDict
 
 from .version import __version__
 

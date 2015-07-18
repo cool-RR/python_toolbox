@@ -1,10 +1,10 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-import functools
 import threading
 import collections
 import itertools
+from python_toolbox.third_party import functools
 
 from python_toolbox import misc_tools
 from python_toolbox import decorator_tools
@@ -44,7 +44,7 @@ def _with_lock(method, *args, **kwargs):
         return method(*args, **kwargs)
 
     
-@functools.total_ordering    
+@functools.total_ordering
 class LazyTuple(collections.Sequence):
     '''
     A lazy tuple which requests as few values as possible from its iterator.
