@@ -84,6 +84,8 @@ Python Toolbox includes third-party Python packages as subpackages that are used
  * `linecache2` by "Testing-cabal" and others, PSF license.
  * `traceback2` by "Testing-cabal" and others, PSF license.
  * `six` by Benjamin Peterson and others, MIT license.
+ * `ordereddict` by Raymond Hettinger and others, MIT license.
+ * `functools` by Python-dev and others, PSF license.
 
 
 ------------------------------------------------------------------

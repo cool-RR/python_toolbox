@@ -224,8 +224,10 @@ def get_recurrences(sequence):
     
     The values of the dict are the numbers of repititions of each item.    
     '''
-    return {item: n_recurrences for item, n_recurrences in
-            collections.Counter(sequence).most_common() if n_recurrences >= 2}
+    return dict(
+        (item, n_recurrences) for item, n_recurrences in
+        collections.Counter(sequence).most_common() if n_recurrences >= 2
+    )
 
     
 def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
