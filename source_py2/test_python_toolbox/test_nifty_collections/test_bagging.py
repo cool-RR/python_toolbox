@@ -30,17 +30,21 @@ class BaseBagTestCase(cute_testing.TestCase):
     __metaclass__ = abc.ABCMeta
     __test__ = False
     def test_common(self):
+        try:
+            from collections import Counter
+        except ImportError:
+            # Python 2.6
+            from python_toolbox.third_party.collections import Counter
         bag = self.bag_type('abracadabra')
         if not issubclass(self.bag_type, nifty_collections.Ordered):
-            assert bag == collections.Counter('abracadabra') == \
-                   collections.Counter(bag) == \
-                   self.bag_type(collections.Counter('abracadabra'))
+            assert bag == Counter('abracadabra') == Counter(bag) == \
+                   self.bag_type(Counter('abracadabra'))
         
         assert len(bag) == 5
         assert set(bag) == set(bag.keys()) == set('abracadabra')
-        assert set(bag.values()) == {1, 2, 5}
+        assert set(bag.values()) == set((1, 2, 5))
         assert set(bag.items()) == \
-                             {('a', 5), ('r', 2), ('b', 2), ('c', 1), ('d', 1)}
+                        set((('a', 5), ('r', 2), ('b', 2), ('c', 1), ('d', 1)))
         assert bag['a'] == 5
         assert bag['missing value'] == 0
         assert len(bag) == 5
@@ -52,8 +56,8 @@ class BaseBagTestCase(cute_testing.TestCase):
         assert bag != 7
         
         assert set(bag.most_common()) == set(bag.most_common(len(bag))) == \
-                               set(collections.Counter(bag).most_common()) == \
-                         set(collections.Counter(bag.elements).most_common())
+                                           set(Counter(bag).most_common()) == \
+                                       set(Counter(bag.elements).most_common())
         
         assert bag.most_common(1) == (('a', 5),)
         assert set(bag.most_common(3)) == set((('a', 5), ('b', 2), ('r', 2)))
@@ -224,7 +228,7 @@ class BaseBagTestCase(cute_testing.TestCase):
         
         if issubclass(self.bag_type, collections.Hashable):
             assert hash(bag_0) == hash(bag_1)
-            assert {bag_0, bag_1} == {bag_0} == {bag_1}
+            assert set((bag_0, bag_1)) == set((bag_0,)) == set((bag_0,))
         
         bag_2 = \
          self.bag_type({'a': 0.0, 'b': 2, 'c': decimal_module.Decimal('0.0'),})
@@ -232,7 +236,7 @@ class BaseBagTestCase(cute_testing.TestCase):
         
         if issubclass(self.bag_type, collections.Hashable):
             assert hash(bag_2) == hash(bag_3)
-            assert {bag_2, bag_3} == {bag_2} == {bag_3}
+            assert set((bag_2, bag_3)) == set((bag_2,)) == set((bag_3,))
     
     def test_copy(self):
         class O: pass
@@ -433,7 +437,7 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         assert not isinstance(bag, collections.Hashable)
         assert not issubclass(self.bag_type, collections.Hashable)
         with cute_testing.RaiseAssertor(TypeError):
-            {bag}
+            set((bag,))
         with cute_testing.RaiseAssertor(TypeError):
             {bag: None,}
         with cute_testing.RaiseAssertor(TypeError):
@@ -563,7 +567,7 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         other_key, other_value = bag.popitem()
         assert other_key in 'abracadabra'
         assert bag == self.bag_type([c for c in 'abracadabra'
-                                                 if c not in {key, other_key}])
+                                            if c not in set((key, other_key))])
         assert bag is bag_reference
         if isinstance(bag, nifty_collections.Ordered):
             assert key == 'd'
@@ -616,7 +620,7 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
         bag = self.bag_type('abracadabra')
         assert isinstance(bag, collections.Hashable)
         assert issubclass(self.bag_type, collections.Hashable)
-        assert {bag, bag} == {bag}
+        assert set((bag, bag)) == set((bag,))
         assert {bag: bag} == {bag: bag}
         assert isinstance(hash(bag), int)
     
