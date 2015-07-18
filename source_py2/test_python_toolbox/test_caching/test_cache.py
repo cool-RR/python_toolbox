@@ -114,7 +114,7 @@ def test_unhashable_arguments():
     
     f = cache()(counting_func)
     
-    x = {1, 2}
+    x = set((1, 2))
     
     assert f(x) == f(x)
     
