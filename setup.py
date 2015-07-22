@@ -11,7 +11,7 @@ import sys
 
 ### Confirming correct Python version: ########################################
 #                                                                             #
-if sys.version_info[:2] <= (2, 6):
+if sys.version_info[:2] <= (2, 5):
     raise Exception(
         "You're using Python <= 2.5, but this package requires either Python "
         "2.6/2.7, or 3.3 or above, so you can't use it unless you upgrade "
@@ -122,7 +122,7 @@ Roadmap
 Present
 -------
 
-Python Toolbox is at version 0.9.1, which is an alpha release. It's being used 
+Python Toolbox is at version 0.9.2, which is an alpha release. It's being used 
 in production every day, but backward compatibility isn't guaranteed yet.
 
 Next tasks
@@ -163,7 +163,7 @@ install_requires = ['setuptools']
 
 setuptools.setup(
     name='python_toolbox',
-    version='0.9.1',
+    version='0.9.2',
     test_suite='nose.collector',
     install_requires=install_requires,
     tests_require=['nose>=1.0.0',
