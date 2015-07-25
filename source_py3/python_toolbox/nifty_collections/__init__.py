@@ -12,6 +12,7 @@ from .various_frozen_dicts import FrozenDict, FrozenOrderedDict
 from .bagging import Bag, OrderedBag, FrozenBag, FrozenOrderedBag
 from .frozen_bag_bag import FrozenBagBag
 from .cute_enum import CuteEnum
+from .compressed_list import CompressedList
 
 from .emitting_weak_key_default_dict import EmittingWeakKeyDefaultDict
 
