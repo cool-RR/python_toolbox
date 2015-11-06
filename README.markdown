@@ -63,7 +63,7 @@ It's tested on both CPython and PyPy 2.1.
 
 # Tests #
 
-Test can be run by running the `_test_python_toolbox.py` script that's
+Tests can be run by running the `_test_python_toolbox.py` script that's
 installed automatically with the Python Toolbox.
 
 When `python_toolbox` isn't installed, you may run `nosetests` at the repo root
