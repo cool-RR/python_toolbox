@@ -78,7 +78,8 @@ def idempotentify(context_manager):
             return self._enter_value
                 
             
-        def __exit__(self, exc_type, exc_value, exc_traceback):
+        def __exit__(self, exc_type=None, exc_value=None,
+                     exc_traceback=None):
             if self._entered:
                 exit_value = self.__wrapped__.__exit__(exc_type, exc_value,
                                                        exc_traceback)

@@ -54,7 +54,7 @@ def test_idempotentify():
     assert idempotent_context_manager.__wrapped__.x == 1
     idempotent_context_manager.__exit__(None, None, None)
     assert idempotent_context_manager.__wrapped__.x == 0
-    idempotent_context_manager.__exit__(None, None, None)
+    idempotent_context_manager.__exit__()
     assert idempotent_context_manager.__wrapped__.x == 0
     idempotent_context_manager.__exit__(None, None, None)
     assert idempotent_context_manager.__wrapped__.x == 0
