@@ -35,21 +35,20 @@ deployment and use of Python easy. There's no need to install a C compiler or
 pre-build and distribute custom extensions. Performance is a feature and
 testing has 100% coverage with unit tests and hours of stress.
 
-:copyright: (c) 2014 by Grant Jenks.
+:copyright: (c) 2015 by Grant Jenks.
 :license: Apache 2.0, see LICENSE for more details.
 
 """
 
 __title__ = 'sortedcontainers'
-__version__ = '0.9.5'
-__build__ = 0x000905
+__version__ = '1.4.4'
+__build__ = 0x010404
 __author__ = 'Grant Jenks'
 __license__ = 'Apache 2.0'
-__copyright__ = 'Copyright 2014 Grant Jenks'
+__copyright__ = 'Copyright 2015 Grant Jenks'
 
-from .sortedlist import SortedList
+from .sortedlist import SortedList, SortedListWithKey
 from .sortedset import SortedSet
 from .sorteddict import SortedDict
-from .sortedlistwithkey import SortedListWithKey
 
 __all__ = ['SortedList', 'SortedSet', 'SortedDict', 'SortedListWithKey']
