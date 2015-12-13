@@ -420,7 +420,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 return calculate_length_of_recurrent_perm_space(
                     self.n_elements - len(self.fixed_map),
                     nifty_collections.FrozenBagBag(
-                        collections.Counter(self.free_values).values()
+                        nifty_collections.Bag(self.free_values).values()
                     )                    
                 )
             else:
