@@ -85,4 +85,14 @@ def test_without_pathlib():
     assert not os.path.isdir(file_path)
     
 
+def test_prefix_suffix():
+    with create_temp_folder(prefix='hocus', suffix='pocus') as tf1:
+        assert tf1.name.startswith('hocus')
+        assert tf1.name.endswith('pocus')
 
+def test_dir():
+    with create_temp_folder() as tf1:
+        with create_temp_folder(dir=str(tf1)) as tf2:
+            assert isinstance(tf2, pathlib.Path)
+            assert str(tf2).startswith(str(tf1))
+    
