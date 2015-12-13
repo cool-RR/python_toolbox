@@ -13,6 +13,8 @@ class SomeContextManager(ContextManager):
         self.x += 1
         try:
             yield (self, self)
+        except ZeroDivisionError:
+            pass
         finally:
             self.x -= 1
             
@@ -45,6 +47,13 @@ def test_idempotentify():
     with cute_testing.RaiseAssertor():
         some_context_manager.__exit__(None, None, None)
         
+    with cute_testing.RaiseAssertor(KeyError):
+        with some_context_manager:
+            raise KeyError
+        
+    with some_context_manager:
+        raise ZeroDivisionError
+        
     ###########################################################################
     
         
@@ -73,4 +82,10 @@ def test_idempotentify():
     idempotent_context_manager.__exit__(None, None, None)
     assert idempotent_context_manager.__wrapped__.x == 0
     
+    with cute_testing.RaiseAssertor(KeyError):
+        with idempotent_context_manager:
+            raise KeyError
+        
+    with idempotent_context_manager:
+        raise ZeroDivisionError
         
