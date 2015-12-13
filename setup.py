@@ -97,9 +97,6 @@ contains:
    little tools.
 
    
-Please keep in mind that Python Toolbox is still in alpha stage, and that
-backward compatibility would *not* be maintained in this phase.
-
 Documentation: http://python-toolbox.readthedocs.org
 
 Python Toolbox on GitHub: https://github.com/cool-RR/python_toolbox
@@ -122,8 +119,8 @@ Roadmap
 Present
 -------
 
-Python Toolbox is at version 0.9.2, which is an alpha release. It's being used 
-in production every day, but backward compatibility isn't guaranteed yet.
+Python Toolbox is at version 0.9.2. It's being used in production every day,
+but backward compatibility isn't guaranteed yet.
 
 Next tasks
 ----------
