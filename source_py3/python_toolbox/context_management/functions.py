@@ -63,8 +63,8 @@ def as_idempotent(context_manager):
     `ExitStack` closes. This way you don't risk an exception by having the
     context manager exit twice.
 
-    Note: The value returned by `reentrant_enter` will be returned by all the
-    no-op `__enter__` actions contained in the outermost suite.
+    Note: The first value returned by `__enter__` will be returned by all the
+    subsequent no-op `__enter__` calls.
     '''
     return _IdempotentContextManager(context_manager)
     
@@ -77,8 +77,8 @@ def as_reentrant(context_manager):
     times, and only after it's been exited the same number of times that it has
     been entered will the original `__exit__` method be called.
     
-    Note: The value returned by `reentrant_enter` will be returned by all the
-    no-op `__enter__` actions contained in the outermost suite.
+    Note: The first value returned by `__enter__` will be returned by all the
+    subsequent no-op `__enter__` calls.
     '''
     return _ReentrantContextManager(context_manager)
     
@@ -134,7 +134,9 @@ class _ReentrantContextManager(ContextManager):
     def __exit__(self, exc_type=None, exc_value=None, exc_traceback=None):
         assert self.depth >= 1
         if self.depth == 1:
-            exit_value = self.__exit__(exc_type, exc_value, exc_traceback)
+            exit_value = self.__wrapped__.__exit__(
+                exc_type, exc_value, exc_traceback
+            )
             self._enter_value = None
         else:
             exit_value = None

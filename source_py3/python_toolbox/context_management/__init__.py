@@ -108,10 +108,8 @@ That's it. Inherit all your context managers from `ContextManager` (or decorate
 your generator functions with `ContextManagerType`) to enjoy all these
 benefits.
 
-
-This package also defines a bunch of helpful context manager classes on top of
-`ContextManager`: Those are `BlankContextManager`, `ReentrantContextManager`
-and `DelegatingContextManager`. See these classes' docstrings for more info.
+This package also defines a bunch of helpful classes and modules related to
+context managers. See their docstrings for more info.
 '''
 
 # todo: review the few external tests that I'm skipping.
