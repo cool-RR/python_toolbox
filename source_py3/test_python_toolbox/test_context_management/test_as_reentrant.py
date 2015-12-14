@@ -114,16 +114,14 @@ def test_exception_swallowing():
 
         
 def test_order_of_depth_modification():
-    ''' '''
-     
     depth_log = queue_module.Queue()
     
     class JohnnyContextManager(ContextManager):
         def __enter__(self):
-            depth_log.put(self.depth)
+            depth_log.put(johnny_reentrant_context_manager.depth)
             return self
         def __exit__(self, exc_type, exc_value, exc_traceback):
-            depth_log.put(self.depth)
+            depth_log.put(johnny_reentrant_context_manager.depth)
         
     johnny_reentrant_context_manager = as_reentrant(JohnnyContextManager())
     assert johnny_reentrant_context_manager.depth == 0
