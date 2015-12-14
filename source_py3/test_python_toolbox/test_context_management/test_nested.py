@@ -6,10 +6,11 @@
 from python_toolbox import freezing
 from python_toolbox import cute_testing
 
-from python_toolbox.context_management import (ContextManager, nested,
+from python_toolbox.context_management import (BlankContextManager, nested,
                                                as_reentrant)
 
-get_depth_counting_context_manager = lambda: as_reentrant(ContextManager())
+get_depth_counting_context_manager = \
+                                    lambda: as_reentrant(BlankContextManager())
 
 
 def test_nested():

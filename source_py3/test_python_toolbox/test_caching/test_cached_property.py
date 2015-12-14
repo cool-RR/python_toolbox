@@ -9,9 +9,11 @@ from python_toolbox import context_management
 from python_toolbox import misc_tools
 
 from python_toolbox.caching import cache, CachedType, CachedProperty
-from python_toolbox.context_management import as_idempotent, ContextManager
+from python_toolbox.context_management import (as_idempotent, as_reentrant,
+                                               BlankContextManager)
 
-get_depth_counting_context_manager = lambda: as_reentrant(ContextManager())
+get_depth_counting_context_manager = \
+                                    lambda: as_reentrant(BlankContextManager())
 
 
 @misc_tools.set_attributes(i=0)

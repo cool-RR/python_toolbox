@@ -17,12 +17,12 @@ class DelegateeContextManager(context_management.ContextManager):
         '''The freezer to which we belong.'''
         
 
-    def reentrant_enter(self):
+    def __enter__(self):
         '''Call the freezer's freeze handler.'''
         return self.freezer.freeze_handler()
     
     
-    def reentrant_exit(self, exc_type, exc_value, exc_traceback):
+    def __exit__(self, exc_type, exc_value, exc_traceback):
         '''Call the freezer's thaw handler.'''
         return self.freezer.thaw_handler()
         
