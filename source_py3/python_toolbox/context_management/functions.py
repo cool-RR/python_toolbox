@@ -9,6 +9,8 @@ See their documentation for more information.
 
 import sys
 
+from python_toolbox import caching
+
 from .context_manager_type import ContextManagerType
 from .context_manager import ContextManager
 
@@ -42,8 +44,9 @@ def nested(*managers):
             # have been raised and caught by an exit method
             raise exc[1].with_traceback(exc[2])
     
-    
-def idempotentify(context_manager):
+
+
+def as_idempotent(context_manager):
     '''
     Wrap a context manager so repeated calls to enter and exit will be ignored.
     
@@ -59,33 +62,84 @@ def idempotentify(context_manager):
     `ExitStack`, but you also possibly want to exit it manually before the
     `ExitStack` closes. This way you don't risk an exception by having the
     context manager exit twice.
+
+    Note: The value returned by `reentrant_enter` will be returned by all the
+    no-op `__enter__` actions contained in the outermost suite.
     '''
-    class _IdempotentContextManager:
-        # Not inheriting from `ContextManager` because this class is internal
-        # and not used beyond `idempotentify`, so no need for the extra
-        # baggage.
-        _entered = False
-        _enter_value = None
-        
-        def __init__(self, wrapped_context_manager):
-            self.__wrapped__ = wrapped_context_manager
-            
-        
-        def __enter__(self):
-            if not self._entered:
-                self._enter_value = self.__wrapped__.__enter__()
-                self._entered = True
-            return self._enter_value
-                
-            
-        def __exit__(self, exc_type=None, exc_value=None,
-                     exc_traceback=None):
-            if self._entered:
-                exit_value = self.__wrapped__.__exit__(exc_type, exc_value,
-                                                       exc_traceback)
-                self._entered = False
-                return exit_value
-                
     return _IdempotentContextManager(context_manager)
     
             
+def as_reentrant(context_manager):
+    '''
+    Wrap a context manager to make it reentant.
+    
+    A context manager wrapped with `as_reentrant` could be entered multiple
+    times, and only after it's been exited the same number of times that it has
+    been entered will the original `__exit__` method be called.
+    
+    Note: The value returned by `reentrant_enter` will be returned by all the
+    no-op `__enter__` actions contained in the outermost suite.
+    '''
+    return _ReentrantContextManager(context_manager)
+    
+
+class _IdempotentContextManager(ContextManager):
+    _entered = False
+    _enter_value = None
+    
+    def __init__(self, wrapped_context_manager):
+        self.__wrapped__ = wrapped_context_manager
+        
+    
+    def __enter__(self):
+        if not self._entered:
+            self._enter_value = self.__wrapped__.__enter__()
+            self._entered = True
+        return self._enter_value
+            
+        
+    def __exit__(self, exc_type=None, exc_value=None, exc_traceback=None):
+        if self._entered:
+            exit_value = self.__wrapped__.__exit__(exc_type, exc_value,
+                                                   exc_traceback)
+            self._entered = False
+            self._enter_value = None
+            return exit_value
+
+class _ReentrantContextManager(ContextManager):
+
+    def __init__(self, wrapped_context_manager):
+        self.__wrapped__ = wrapped_context_manager
+        
+    depth = caching.CachedProperty(
+        0,
+        doc='''
+            The number of nested suites that entered this context manager.
+            
+            When the context manager is completely unused, it's `0`. When
+            it's first used, it becomes `1`. When its entered again, it
+            becomes `2`. If it is then exited, it returns to `1`, etc.
+            '''
+    )
+
+    _enter_value = None
+    
+    def __enter__(self):
+        if self.depth == 0:
+            self._enter_value = self.__wrapped__.__enter__()
+        self.depth += 1
+        return self._enter_value
+    
+    
+    def __exit__(self, exc_type=None, exc_value=None, exc_traceback=None):
+        assert self.depth >= 1
+        if self.depth == 1:
+            exit_value = self.__exit__(exc_type, exc_value, exc_traceback)
+            self._enter_value = None
+        else:
+            exit_value = None
+        self.depth -= 1
+        return exit_value
+
+                
+

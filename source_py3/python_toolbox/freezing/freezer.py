@@ -31,11 +31,15 @@ class Freezer(context_management.DelegatingContextManager):
     in the logic of the parent object.
     '''
     
-    delegatee_context_manager = caching.CachedProperty(DelegateeContextManager)
+    delegatee_context_manager = caching.CachedProperty(
+        lambda self: context_management.as_reentrant(DelegateeContextManager)
+    )
     '''The context manager which implements our `__enter__` and `__exit__`.'''
     
     
-    frozen = misc_tools.ProxyProperty('.delegatee_context_manager.depth')
+    frozen = misc_tools.ProxyProperty(
+        '.delegatee_context_manager.__wrapped__.depth'
+    )
     '''
     An integer specifying the freezer's level of frozenness.
     

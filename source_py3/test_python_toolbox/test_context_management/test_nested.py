@@ -6,16 +6,18 @@
 from python_toolbox import freezing
 from python_toolbox import cute_testing
 
-from python_toolbox.context_management import ReentrantContextManager, nested
+from python_toolbox.context_management import (ContextManager, nested,
+                                               as_reentrant)
 
+get_depth_counting_context_manager = lambda: as_reentrant(ContextManager())
 
 
 def test_nested():
     '''Test the basic workings of `nested`.'''
     
-    a = ReentrantContextManager()
-    b = ReentrantContextManager()
-    c = ReentrantContextManager()
+    a = get_depth_counting_context_manager()
+    b = get_depth_counting_context_manager()
+    c = get_depth_counting_context_manager()
     
     with nested(a):
         assert (a.depth, b.depth, c.depth) == (1, 0, 0)

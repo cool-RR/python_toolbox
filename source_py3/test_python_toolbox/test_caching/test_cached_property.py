@@ -9,6 +9,9 @@ from python_toolbox import context_management
 from python_toolbox import misc_tools
 
 from python_toolbox.caching import cache, CachedType, CachedProperty
+from python_toolbox.context_management import as_idempotent, ContextManager
+
+get_depth_counting_context_manager = lambda: as_reentrant(ContextManager())
 
 
 @misc_tools.set_attributes(i=0)
@@ -180,7 +183,7 @@ def test_decorating():
     
     class A:
         reentrant_context_manager = CachedProperty(
-            lambda self: context_management.ReentrantContextManager()
+            lambda self: get_depth_counting_context_manager()
         )
         
         @reentrant_context_manager

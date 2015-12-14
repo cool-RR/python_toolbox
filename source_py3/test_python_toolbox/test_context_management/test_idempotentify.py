@@ -3,7 +3,7 @@
 
 import queue as queue_module
 
-from python_toolbox.context_management import idempotentify, ContextManager
+from python_toolbox.context_management import as_idempotent, ContextManager
 from python_toolbox import cute_testing
 
 
@@ -20,7 +20,7 @@ class SomeContextManager(ContextManager):
             
             
 
-def test_idempotentify():
+def test_as_idempotent():
     some_context_manager = SomeContextManager()
     assert some_context_manager.x == 0
     with some_context_manager as enter_result:
@@ -58,7 +58,7 @@ def test_idempotentify():
     
         
     another_context_manager = SomeContextManager()
-    idempotent_context_manager = idempotentify(another_context_manager)
+    idempotent_context_manager = as_idempotent(another_context_manager)
     
     assert another_context_manager is idempotent_context_manager.__wrapped__
 
