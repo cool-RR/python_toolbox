@@ -8,6 +8,7 @@ See their documentation for more information.
 '''
 
 import sys
+import types
 
 from python_toolbox import caching
 
@@ -44,6 +45,15 @@ def nested(*managers):
             # have been raised and caught by an exit method
             raise exc[1].with_traceback(exc[2])
     
+
+def _wrap_context_manager_or_context_generator(thing, wrapper_factory):
+    if hasattr(type(thing), '__enter__'):
+        # It's a context manager.
+        return wrapper_factory(thing)
+    else:
+        assert isinstance(thing, types.FunctionType)
+        # It's a context generator.
+        
 
 
 def as_idempotent(context_manager):

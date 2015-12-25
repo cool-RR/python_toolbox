@@ -3,7 +3,8 @@
 
 import queue as queue_module
 
-from python_toolbox.context_management import as_reentrant, ContextManager
+from python_toolbox.context_management import (as_reentrant, ContextManager,
+                                               ContextManagerType)
 from python_toolbox import cute_testing
 
 
@@ -149,7 +150,7 @@ def test_order_of_depth_modification():
     # happens *after* `.__wrapped__.__enter__` is called:
     assert depth_log.get(block=False) == 1
     
-def test_decorator():
+def test_decorator_manage_context():
     class Meow(ContextManager):
         n = 0
             
@@ -173,6 +174,83 @@ def test_decorator():
             assert meow.n == 1
         assert meow.n == 1
     assert meow.n == 0
+        
+        
+def test_decorator_class():
+    
+    @as_reentrant
+    class Meow(ContextManager):
+        n = 0
+            
+        def manage_context(self):
+            self.n += 1
+            try:
+                yield
+            finally:
+                self.n -= 1
+                
+            
+    meow = Meow()
+    assert meow.n == 0
+    with meow:
+        assert meow.n == 1
+        with meow:
+            assert meow.n == 1
+            with meow:
+                assert meow.n == 1
+            assert meow.n == 1
+        assert meow.n == 1
+    assert meow.n == 0
+        
+def test_decorator_class_enter_exit():
+    
+    @as_reentrant
+    class Meow(ContextManager):
+        n = 0
+            
+        def __enter__(self):
+            self.n += 1
+            return self
+        
+        def __exit__(self, exc_type, exc_value, exc_traceback):
+            self.n -= 1
+                
+            
+    meow = Meow()
+    assert meow.n == 0
+    with meow:
+        assert meow.n == 1
+        with meow:
+            assert meow.n == 1
+            with meow:
+                assert meow.n == 1
+            assert meow.n == 1
+        assert meow.n == 1
+    assert meow.n == 0
+        
+        
+def test_decorator_decorator():
+    @as_reentrant
+    @ContextManagerType
+    def Meow():
+        Meow.n += 1
+        try:
+            yield
+        finally:
+            Meow.n -= 1
+                
+            
+    meow = Meow()
+    assert Meow.n == 0
+    with meow:
+        assert Meow.n == 1
+        with meow:
+            assert Meow.n == 1
+            with meow:
+                assert Meow.n == 1
+            assert Meow.n == 1
+        assert Meow.n == 1
+    assert Meow.n == 0
         
         
         
