@@ -48,34 +48,6 @@ def nested(*managers):
             raise exc[1].with_traceback(exc[2])
     
 
-def _wrap_context_manager_or_class(thing, wrapper_factory):
-    if hasattr(type(thing), '__enter__'):
-        # It's a context manager.
-        return wrapper_factory(thing)
-    else:
-        assert issubclass(thing, ContextManager)
-        # It's a context manager class.
-        property_name = '__%s_context_manager_%s' % (
-            thing.__name__,
-            ' '.join(random.choice(string.ascii_letters) for _ in range(20))
-        )
-        return type(
-            thing.__name__,
-            (thing,),
-            {
-                property_name: caching.CachedProperty(wrapper_factory),
-                '__enter__':
-                         lambda self: getattr(self, property_name).__enter__(),
-                '__exit__': lambda self, exc_type, exc_value, exc_traceback:
-                        getattr(self, property_name).
-                                  __exit__(exc_type, exc_value, exc_traceback),
-                           
-            }
-        )
-        
-        
-
-
 def as_idempotent(context_manager):
     '''
     Wrap a context manager so repeated calls to enter and exit will be ignored.
@@ -95,9 +67,11 @@ def as_idempotent(context_manager):
 
     Note: The first value returned by `__enter__` will be returned by all the
     subsequent no-op `__enter__` calls.
+    
+    blocktodo: add to docs about different ways of calling, ensure tests
     '''
-    return _wrap_context_manager_or_class(
-        context_manager, _IdempotentContextManager
+    return _IdempotentContextManager._wrap_context_manager_or_class(
+        context_manager, 
     )
     
             
@@ -111,19 +85,66 @@ def as_reentrant(context_manager):
     
     Note: The first value returned by `__enter__` will be returned by all the
     subsequent no-op `__enter__` calls.
+    
+    blocktodo: add to docs about different ways of calling, ensure tests
     '''
-    return _wrap_context_manager_or_class(
-        context_manager, _ReentrantContextManager
+    return _ReentrantContextManager._wrap_context_manager_or_class(
+        context_manager, 
     )
+
+
+class _ContextManagerWrapper(ContextManager):
+    _enter_value = None
+    __wrapped__ = None
+    def __init__(self, wrapped_context_manager):
+        if hasattr(wrapped_context_manager, '__enter__'):
+            self.__wrapped__ = wrapped_context_manager
+            self._wrapped_enter = wrapped_context_manager.__enter__
+            self._wrapped_exit = wrapped_context_manager.__exit__
+        else:
+            self._wrapped_enter, self._wrapped_exit = wrapped_context_manager
+            
+    @classmethod
+    def _wrap_context_manager_or_class(cls, thing):
+        if hasattr(type(thing), '__enter__'):
+            # It's a context manager.
+            return cls(thing)
+        else:
+            assert issubclass(thing, ContextManager)
+            # It's a context manager class.
+            property_name = '__%s_context_manager_%s' % (
+                thing.__name__,
+                ''.join(random.choice(string.ascii_letters) for _ in range(30))
+            )
+            return type(
+                thing.__name__,
+                (thing,),
+                {
+                    property_name: caching.CachedProperty(
+                        lambda self: cls((
+                            lambda: thing.__enter__(self),
+                            lambda exc_type, exc_value, exc_traceback:
+                                thing.__exit__(
+                                    self, exc_type, exc_value, exc_traceback
+                                )
+                        ))
+                    ),
+                    '__enter__':
+                             lambda self: getattr(self, property_name).__enter__(),
+                    '__exit__': lambda self, exc_type, exc_value, exc_traceback:
+                            getattr(self, property_name).
+                                      __exit__(exc_type, exc_value, exc_traceback),
+                               
+                }
+            )
+            
+            
     
 
-class _IdempotentContextManager(ContextManager):
-    _entered = False
-    _enter_value = None
-    
-    def __init__(self, wrapped_context_manager):
-        self.__wrapped__ = wrapped_context_manager
         
+
+class _IdempotentContextManager(_ContextManagerWrapper):
+    _entered = False
     
     def __enter__(self):
         if not self._entered:
@@ -140,11 +161,8 @@ class _IdempotentContextManager(ContextManager):
             self._enter_value = None
             return exit_value
 
-class _ReentrantContextManager(ContextManager):
+class _ReentrantContextManager(_ContextManagerWrapper):
 
-    def __init__(self, wrapped_context_manager):
-        self.__wrapped__ = wrapped_context_manager
-        
     depth = caching.CachedProperty(
         0,
         doc='''
@@ -156,11 +174,10 @@ class _ReentrantContextManager(ContextManager):
             '''
     )
 
-    _enter_value = None
     
     def __enter__(self):
         if self.depth == 0:
-            self._enter_value = self.__wrapped__.__enter__()
+            self._enter_value = self._wrapped_enter()
         self.depth += 1
         return self._enter_value
     
@@ -168,7 +185,7 @@ class _ReentrantContextManager(ContextManager):
     def __exit__(self, exc_type=None, exc_value=None, exc_traceback=None):
         assert self.depth >= 1
         if self.depth == 1:
-            exit_value = self.__wrapped__.__exit__(
+            exit_value = self._wrapped_exit(
                 exc_type, exc_value, exc_traceback
             )
             self._enter_value = None

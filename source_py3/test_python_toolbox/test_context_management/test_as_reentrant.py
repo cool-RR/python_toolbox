@@ -230,27 +230,30 @@ def test_decorator_class_enter_exit():
         
         
 def test_decorator_decorator():
+    
+    counter = {'n': 0,}
+            
     @as_reentrant
     @ContextManagerType
     def Meow():
-        Meow.n += 1
+        counter['n'] += 1
         try:
             yield
         finally:
-            Meow.n -= 1
+            counter['n'] -= 1
                 
             
     meow = Meow()
-    assert Meow.n == 0
+    assert counter['n'] == 0
     with meow:
-        assert Meow.n == 1
+        assert counter['n'] == 1
         with meow:
-            assert Meow.n == 1
+            assert counter['n'] == 1
             with meow:
-                assert Meow.n == 1
-            assert Meow.n == 1
-        assert Meow.n == 1
-    assert Meow.n == 0
+                assert counter['n'] == 1
+            assert counter['n'] == 1
+        assert counter['n'] == 1
+    assert counter['n'] == 0
         
         
         
