@@ -9,6 +9,8 @@ See their documentation for more information.
 
 import sys
 import types
+import string
+import random
 
 from python_toolbox import caching
 
@@ -46,13 +48,31 @@ def nested(*managers):
             raise exc[1].with_traceback(exc[2])
     
 
-def _wrap_context_manager_or_context_generator(thing, wrapper_factory):
+def _wrap_context_manager_or_class(thing, wrapper_factory):
     if hasattr(type(thing), '__enter__'):
         # It's a context manager.
         return wrapper_factory(thing)
     else:
-        assert isinstance(thing, types.FunctionType)
-        # It's a context generator.
+        assert issubclass(thing, ContextManager)
+        # It's a context manager class.
+        property_name = '__%s_context_manager_%s' % (
+            thing.__name__,
+            ' '.join(random.choice(string.ascii_letters) for _ in range(20))
+        )
+        return type(
+            thing.__name__,
+            (thing,),
+            {
+                property_name: caching.CachedProperty(wrapper_factory),
+                '__enter__':
+                         lambda self: getattr(self, property_name).__enter__(),
+                '__exit__': lambda self, exc_type, exc_value, exc_traceback:
+                        getattr(self, property_name).
+                                  __exit__(exc_type, exc_value, exc_traceback),
+                           
+            }
+        )
+        
         
 
 
@@ -76,7 +96,9 @@ def as_idempotent(context_manager):
     Note: The first value returned by `__enter__` will be returned by all the
     subsequent no-op `__enter__` calls.
     '''
-    return _IdempotentContextManager(context_manager)
+    return _wrap_context_manager_or_class(
+        context_manager, _IdempotentContextManager
+    )
     
             
 def as_reentrant(context_manager):
@@ -90,7 +112,9 @@ def as_reentrant(context_manager):
     Note: The first value returned by `__enter__` will be returned by all the
     subsequent no-op `__enter__` calls.
     '''
-    return _ReentrantContextManager(context_manager)
+    return _wrap_context_manager_or_class(
+        context_manager, _ReentrantContextManager
+    )
     
 
 class _IdempotentContextManager(ContextManager):
