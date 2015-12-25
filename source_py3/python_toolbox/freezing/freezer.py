@@ -31,9 +31,7 @@ class Freezer(context_management.DelegatingContextManager):
     in the logic of the parent object.
     '''
     
-    delegatee_context_manager = caching.CachedProperty(
-        lambda self: context_management.as_reentrant(DelegateeContextManager)
-    )
+    delegatee_context_manager = caching.CachedProperty(DelegateeContextManager)
     '''The context manager which implements our `__enter__` and `__exit__`.'''
     
     

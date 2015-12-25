@@ -4,6 +4,7 @@
 from python_toolbox import context_management
 
 
+@context_management.as_reentrant
 class DelegateeContextManager(context_management.ContextManager):
     '''Inner context manager used internally by `Freezer`.'''
     
