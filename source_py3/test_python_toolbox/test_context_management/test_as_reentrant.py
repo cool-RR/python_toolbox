@@ -149,31 +149,6 @@ def test_order_of_depth_modification():
     # `.__wrapped__.__enter__` saw a depth of 1, because the depth decrement
     # happens *after* `.__wrapped__.__enter__` is called:
     assert depth_log.get(block=False) == 1
-    
-# def test_decorator_manage_context():
-    # class Meow(ContextManager):
-        # n = 0
-            
-        # @as_reentrant
-        # def manage_context(self):
-            # self.n += 1
-            # try:
-                # yield
-            # finally:
-                # self.n -= 1
-                
-            
-    # meow = Meow()
-    # assert meow.n == 0
-    # with meow:
-        # assert meow.n == 1
-        # with meow:
-            # assert meow.n == 1
-            # with meow:
-                # assert meow.n == 1
-            # assert meow.n == 1
-        # assert meow.n == 1
-    # assert meow.n == 0
         
         
 def test_decorator_class():
