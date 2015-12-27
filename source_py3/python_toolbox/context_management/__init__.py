@@ -123,6 +123,7 @@ context managers. See their docstrings for more info.
 # that will cause it to be pickled by reference to the decorated function
 
 
+from .abstract_context_manager import AbstractContextManager
 from .context_manager_type_type import ContextManagerTypeType
 from .context_manager_type import ContextManagerType
 from .context_manager import ContextManager

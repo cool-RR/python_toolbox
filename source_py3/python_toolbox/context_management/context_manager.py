@@ -7,12 +7,14 @@ import abc
 
 from python_toolbox import decorator_tools
 
+from .abstract_context_manager import AbstractContextManager
 from .base_classes.decorating_context_manager import DecoratingContextManager
 from .context_manager_type import ContextManagerType
 from .self_hook import SelfHook
 
 
-class ContextManager(DecoratingContextManager, metaclass=ContextManagerType):
+class ContextManager(AbstractContextManager, DecoratingContextManager,
+                     metaclass=ContextManagerType):
     '''
     Allows running preparation code before a given suite and cleanup after.
     

@@ -106,11 +106,11 @@ class _ContextManagerWrapper(ContextManager):
             
     @classmethod
     def _wrap_context_manager_or_class(cls, thing):
-        if hasattr(type(thing), '__enter__'):
-            # It's a context manager.
+        from .abstract_context_manager import AbstractContextManager
+        if isinstance(thing, AbstractContextManager):
             return cls(thing)
         else:
-            assert issubclass(thing, ContextManager)
+            assert issubclass(thing, AbstractContextManager)
             # It's a context manager class.
             property_name = '__%s_context_manager_%s' % (
                 thing.__name__,
