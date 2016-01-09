@@ -266,7 +266,7 @@ class Chmod:
                 number &= ~t
             else:
                 assert operator == '='
-                
+                number = (number & (0o777 - who_mask)) | t
                 
         return Chmod(number)
         
