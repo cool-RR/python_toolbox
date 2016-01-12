@@ -4,4 +4,4 @@
 '''Defines base classes for `ContextManager`.'''
 
 
-from .decorating_context_manager import DecoratingContextManager
+from .decorating_context_manager import _DecoratingContextManagerMixin

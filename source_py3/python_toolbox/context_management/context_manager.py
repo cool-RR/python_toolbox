@@ -8,12 +8,13 @@ import abc
 from python_toolbox import decorator_tools
 
 from .abstract_context_manager import AbstractContextManager
-from .base_classes.decorating_context_manager import DecoratingContextManager
+from .mixins.decorating_context_manager_mixin import \
+                                                 _DecoratingContextManagerMixin
 from .context_manager_type import ContextManagerType
 from .self_hook import SelfHook
 
 
-class ContextManager(AbstractContextManager, DecoratingContextManager,
+class ContextManager(AbstractContextManager, _DecoratingContextManagerMixin,
                      metaclass=ContextManagerType):
     '''
     Allows running preparation code before a given suite and cleanup after.

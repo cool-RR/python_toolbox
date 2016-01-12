@@ -58,8 +58,6 @@ def as_idempotent(context_manager):
         def Meow():
             yield # ...
     
-    blocktodo: add tests for decorating ContextManager class and
-    @ContextManagerType generator.
     '''
     return _IdempotentContextManager._wrap_context_manager_or_class(
         context_manager, 

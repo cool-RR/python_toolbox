@@ -4,7 +4,7 @@
 from python_toolbox import decorator_tools
 
 
-class DecoratingContextManager:
+class _DecoratingContextManagerMixin:
     '''
     Context manager that can decorate a function to use it.
     

@@ -7,7 +7,7 @@ import abc
 
 from python_toolbox import decorator_tools
 
-from .base_classes.decorating_context_manager import DecoratingContextManager
+from .base_classes.decorating_context_manager import _DecoratingContextManagerMixin
 from .context_manager_type import ContextManagerType
 from .self_hook import SelfHook
 
