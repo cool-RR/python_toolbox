@@ -36,7 +36,7 @@ class Freezer(context_management.DelegatingContextManager):
     
     
     frozen = misc_tools.ProxyProperty(
-        '.delegatee_context_manager.__wrapped__.depth'
+        '.delegatee_context_manager.depth'
     )
     '''
     An integer specifying the freezer's level of frozenness.

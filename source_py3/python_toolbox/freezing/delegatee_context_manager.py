@@ -1,6 +1,7 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
+from python_toolbox import misc_tools
 from python_toolbox import context_management
 
 
@@ -27,4 +28,5 @@ class DelegateeContextManager(context_management.ContextManager):
         '''Call the freezer's thaw handler.'''
         return self.freezer.thaw_handler()
         
+    depth = misc_tools.ProxyProperty('.__wrapped__.depth')
     
