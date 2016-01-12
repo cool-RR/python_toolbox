@@ -3,7 +3,8 @@
 
 import queue as queue_module
 
-from python_toolbox.context_management import as_idempotent, ContextManager
+from python_toolbox.context_management import (as_idempotent, ContextManager,
+                                               ContextManagerType)
 from python_toolbox import cute_testing
 
 
@@ -88,4 +89,86 @@ def test_as_idempotent():
         
     with idempotent_context_manager:
         raise ZeroDivisionError
+        
+        
+def test_decorator_class():
+    
+    @as_idempotent
+    class Meow(ContextManager):
+        n = 0
+            
+        def manage_context(self):
+            self.n += 1
+            try:
+                yield
+            finally:
+                self.n -= 1
+                
+            
+    meow = Meow()
+    assert meow.n == 0
+    with meow:
+        assert meow.n == 1
+        with meow:
+            assert meow.n == 1
+            with meow:
+                assert meow.n == 1
+            assert meow.n == 0
+        assert meow.n == 0
+    assert meow.n == 0
+        
+def test_decorator_class_enter_exit():
+    
+    @as_idempotent
+    class Meow(ContextManager):
+        n = 0
+            
+        def __enter__(self):
+            self.n += 1
+            return self
+        
+        def __exit__(self, exc_type, exc_value, exc_traceback):
+            self.n -= 1
+                
+            
+    meow = Meow()
+    assert meow.n == 0
+    with meow:
+        assert meow.n == 1
+        with meow:
+            assert meow.n == 1
+            with meow:
+                assert meow.n == 1
+            assert meow.n == 0
+        assert meow.n == 0
+    assert meow.n == 0
+        
+        
+def test_decorator_decorator():
+    
+    counter = {'n': 0,}
+            
+    @as_idempotent
+    @ContextManagerType
+    def Meow():
+        counter['n'] += 1
+        try:
+            yield
+        finally:
+            counter['n'] -= 1
+                
+            
+    meow = Meow()
+    assert counter['n'] == 0
+    with meow:
+        assert counter['n'] == 1
+        with meow:
+            assert counter['n'] == 1
+            with meow:
+                assert counter['n'] == 1
+            assert counter['n'] == 0
+        assert counter['n'] == 0
+    assert counter['n'] == 0
+        
+        
         

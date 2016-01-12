@@ -196,15 +196,14 @@ class _IdempotentContextManager(_ContextManagerWrapper):
     
     def __enter__(self):
         if not self._entered:
-            self._enter_value = self.__wrapped__.__enter__()
+            self._enter_value = self._wrapped_enter()
             self._entered = True
         return self._enter_value
             
         
     def __exit__(self, exc_type=None, exc_value=None, exc_traceback=None):
         if self._entered:
-            exit_value = self.__wrapped__.__exit__(exc_type, exc_value,
-                                                   exc_traceback)
+            exit_value = self._wrapped_exit(exc_type, exc_value, exc_traceback)
             self._entered = False
             self._enter_value = None
             return exit_value
