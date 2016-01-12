@@ -7,7 +7,7 @@ from python_toolbox.third_party import functools
 from python_toolbox import caching
 
         
-# @orking around Python bug 22506 that would be fixed in Python 3.5:
+# Working around Python bug 22506 that would be fixed in Python 3.5:
 del enum.EnumMeta.__dir__
 # This makes enum members not appear in `dir` but it also prevents other
 # important items from being deleted.

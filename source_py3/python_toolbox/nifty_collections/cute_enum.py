@@ -1,7 +1,22 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-import enum
+try:
+    import enum
+except ImportError:
+    import imp
+    try:
+        imp.find_module('enum')
+    except ImportError:
+        raise Exception(
+            'You don\'t have the standard library Python package `enum`, '
+            'which I guess means you\'re running Python 3.3 or earlier. '
+            'Please either install the backported `enum34` module by running '
+            '`pip install enum34` or upgrade your Python version to 3.4 or '
+            'later.'
+        )
+    else:
+        raise 
 import functools
 
 from python_toolbox import caching
