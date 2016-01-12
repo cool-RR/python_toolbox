@@ -8,8 +8,7 @@ import abc
 from python_toolbox import decorator_tools
 
 from .abstract_context_manager import AbstractContextManager
-from .mixins.decorating_context_manager_mixin import \
-                                                 _DecoratingContextManagerMixin
+from .mixins import _DecoratingContextManagerMixin
 from .context_manager_type import ContextManagerType
 from .self_hook import SelfHook
 
