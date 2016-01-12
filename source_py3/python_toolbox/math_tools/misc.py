@@ -152,3 +152,32 @@ def is_integer(x):
         return False
     return inted_x == x
     
+    
+def cute_round(x, step=1, up=False):
+    '''
+    Round with a chosen step.
+    
+    Examples:
+    
+        >>> cute_round(7.456)
+        7
+        >>> cute_round(7.456, up=True)
+        8
+        >>> cute_round(7.456, step=0.1)
+        7.4
+        >>> cute_round(7.456, step=0.1, up=True)
+        7.5
+        >>> cute_round(7.456, step=0.2)
+        7.4
+        >>> cute_round(7.456, step=0.2, up=True)
+        7.6
+        >>> cute_round(7.456, step=0.01)
+        7.45
+        >>> cute_round(7.456, step=0.01, up=True)
+        7.46
+        
+    '''
+    div, mod = divmod(x, step)
+    return (div + bool(mod and up)) * step
+    
+    
