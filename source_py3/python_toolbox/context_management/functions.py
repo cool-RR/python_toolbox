@@ -178,15 +178,14 @@ class _ContextManagerWrapper(ContextManager):
                     '__exit__': lambda self, exc_type, exc_value, exc_traceback:
                             getattr(self, property_name).
                                       __exit__(exc_type, exc_value, exc_traceback),
+                    '__wrapped__': caching.CachedProperty(
+                        lambda self: getattr(self, property_name)
+                    ),
                                
                 }
             )
             
             
-    
-
-        
-
 class _IdempotentContextManager(_ContextManagerWrapper):
     _entered = False
     
@@ -204,6 +203,7 @@ class _IdempotentContextManager(_ContextManagerWrapper):
             self._entered = False
             self._enter_value = None
             return exit_value
+
 
 class _ReentrantContextManager(_ContextManagerWrapper):
 
