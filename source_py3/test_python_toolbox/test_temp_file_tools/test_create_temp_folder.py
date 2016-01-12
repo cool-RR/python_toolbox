@@ -90,17 +90,9 @@ def test_prefix_suffix():
         assert tf1.name.startswith('hocus')
         assert tf1.name.endswith('pocus')
 
-def test_parent_folder():
+def test_dir():
     with create_temp_folder() as tf1:
-        with create_temp_folder(parent_folder=str(tf1)) as tf2:
+        with create_temp_folder(dir=str(tf1)) as tf2:
             assert isinstance(tf2, pathlib.Path)
             assert str(tf2).startswith(str(tf1))
-    
-def test_chmod():
-    with create_temp_folder(chomd=0o777) as liberal_temp_folder, \
-                   create_temp_folder(chomd=0o000) as conservative_temp_folder:
-        liberal_temp_folder.stat().st_mode & 0o777
-        1 / 0 # blocktodo write this test
-        
-        
     

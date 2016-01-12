@@ -7,9 +7,7 @@ except:
     from python_toolbox.third_party import pathlib
 
 import os
-import functools
 import re
-import operator
 
 from python_toolbox import cute_iter_tools
 from python_toolbox import context_management
@@ -186,94 +184,3 @@ def atomic_create(path, binary=False):
             actual_temp_file_path.unlink()
             
 
-class Chmod:
-    # blocktodo test and doc, include testing __repr__. methods for setting on
-    # file. Say in docs it's static and modification returns a new object.
-    # explode fiel_tools to package and chmod-stuff to module.
-
-    @staticmethod
-    def _get_permissions_from_single_digit(digit):
-        assert 0 <= digit <= 7
-        permissions = set()
-        if digit & 4: permissions.add('r')
-        if digit & 1: permissions.add('w')
-        if digit & 2: permissions.add('x')
-        return frozenset(permissions)
-            
-    @staticmethod
-    def _get_nice_string_from_single_digit(digit):
-        permissions = Chmod._get_permissions_from_single_digit(digit)
-        return '%s%s%s' % (
-            'r' if 'r' in permissions else '-', 
-            'w' if 'w' in permissions else '-', 
-            'x' if 'x' in permissions else '-', 
-        )
-            
-    def __init__(self, path_or_number):
-        if isinstance(path_or_number, int):
-            self._number = path_or_number
-        else:
-            self._number = pathlib.Path(path).stat() & 0o777
-        self._dict = {
-            'u': Chmod._get_permissions_from_single_digit(self & 0o700),
-            'g': Chmod._get_permissions_from_single_digit(self & 0o070),
-            'o': Chmod._get_permissions_from_single_digit(self & 0o007),
-        }
-        self._dict['a'] = functools.reduce(operator.and_, self._dict.values())
-    
-        self.nice_string = ''.join(map(
-            Chmod._get_nice_string_from_single_digit,
-            (self & 0o700, self & 0o070, self & 0o007)
-        ))  
-            
-    __getitem__ = lambda self, key: self._dict[key]
-    
-    def __repr__(self):
-        return '<Chmod %s: %s>' % (oct(self), self.nice_string)
-    
-    def set_to_file(self, path):
-        pathlib.Path(path).chmod(self._number)
-        
-    _pattern = re.compile('^(?P<who>[ugoa]{0,4})(?P<operator>[-+=])(?P<what>['
-                         'rwx]{1,3)$')
-
-    def change(self, s):
-        from python_toolbox import sequence_tools
-        parts = ','.split(s)
-        matches = tuple(map(Chmod._pattern.match, parts))
-        if None in matches:
-            raise Exception('%s not valid.' % repr(s))
-        for match in matches:
-            who, operator, what = match.groups()
-            if sequence_tools.get_recurrences(who):
-                raise Exception('Can\'t repeat here: %s' % match.group(0))
-            if sequence_tools.get_recurrences(what):
-                raise Exception('Can\'t repeat here: %s' % match.group(0))
-        number = self._number
-        for match in matches:
-            who, operator, what = match.groups()
-            who_mask = 0o777 if 'a' in who else (
-                (0o700 * ('u' in who)) + (0o070 * ('g' in who)) +
-                (0o007 * ('o' in who))
-            )
-            what_mask = (0o444 * ('r' in what)) + (0o222 * ('w' in what)) + \
-                                                        (0o111 * ('x' in what))
-            t = who_mask & what_mask
-            
-            if operator == '+':
-                number |= t
-            elif operator == '-':
-                number &= ~t
-            else:
-                assert operator == '='
-                number = (number & (0o777 - who_mask)) | t
-                
-        return Chmod(number)
-        
-    __int__ = lambda self: self._number
-    __and__ = lambda self: self._number & other
-    __or__ = lambda self: self._number | other
-        
-        
-    
-            
