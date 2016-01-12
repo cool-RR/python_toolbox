@@ -30,9 +30,9 @@ class AbstractContextManager(metaclass=abc.ABCMeta):
         if cls is AbstractContextManager:
             return (
                 hasattr(candidate_class, '__enter__') and
-                candidate_class.__enter__ is not none and 
+                candidate_class.__enter__ is not None and 
                 hasattr(candidate_class, '__exit__') and
-                candidate_class.__exit__ is not none 
+                candidate_class.__exit__ is not None 
             )
         else:
             return NotImplemented
