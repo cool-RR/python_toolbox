@@ -160,6 +160,11 @@ class _ContextManagerWrapper(ContextManager):
                 thing.__name__,
                 ''.join(random.choice(string.ascii_letters) for _ in range(30))
             )
+            # We're exposing the wrapped context manager under two names,
+            # `__wrapped__` and a randomly created one. The first one is used
+            # for convenience but we still define the second one to ensure our
+            # mechanism can rely on it even when the `__wrapped__` attribute is
+            # being overridden.
             return type(
                 thing.__name__,
                 (thing,),
