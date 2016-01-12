@@ -109,7 +109,28 @@ def as_reentrant(context_manager):
     Note: The first value returned by `__enter__` will be returned by all the
     subsequent no-op `__enter__` calls.
     
-    blocktodo: add to docs about different ways of calling, ensure tests
+    This can be used when calling an existing context manager:
+    
+        with as_reentrant(some_context_manager):
+            # Now we're reentrant!
+            
+    Or it can be used when defining a context manager to make it reentrant:
+    
+        @as_reentrant
+        class MyContextManager(ContextManager):
+            def __enter__(self):
+                # ...
+            def __exit__(self, exc_type, exc_value, exc_traceback):
+                # ...
+                
+    And also like this... 
+
+    
+        @as_reentrant
+        @ContextManagerType
+        def Meow():
+            yield # ...
+
     '''
     return _ReentrantContextManager._wrap_context_manager_or_class(
         context_manager, 
