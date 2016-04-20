@@ -3,6 +3,9 @@
 
 import numbers
 import math
+import random
+
+from python_toolbox import nifty_collections
 
 
 infinity = float('inf')
@@ -153,12 +156,19 @@ def is_integer(x):
     return inted_x == x
     
     
-def cute_round(x, step=1, up=False):
+class RoundMode(nifty_collections.CuteEnum):
+    CLOSEST_OR_DOWN = 0
+    CLOSEST_OR_UP = 1
+    ALWAYS_DOWN = 2
+    ALWAYS_UP = 3
+    PROBABILISTIC = 4
+
+def cute_round(x, round_mode=RoundMode.CLOSEST_OR_DOWN, *, step=1):
     '''
     Round with a chosen step.
     
     Examples:
-    
+    blocktododoc
         >>> cute_round(7.456)
         7
         >>> cute_round(7.456, up=True)
@@ -178,6 +188,17 @@ def cute_round(x, step=1, up=False):
         
     '''
     div, mod = divmod(x, step)
-    return (div + bool(mod and up)) * step
+    if round_mode == RoundMode.CLOSEST_OR_DOWN:
+        round_up = (mod > 0.5 * step)
+    elif round_mode == RoundMode.CLOSEST_OR_UP:
+        round_up = (mod >= 0.5 * step)
+    elif round_mode == RoundMode.ALWAYS_DOWN:
+        round_up = False
+    elif round_mode == RoundMode.ALWAYS_UP:
+        round_up = True
+    else:
+        assert round_mode == RoundMode.PROBABILISTIC
+        round_up = random.random() < mod / step
+    return (div + round_up) * step
     
     
