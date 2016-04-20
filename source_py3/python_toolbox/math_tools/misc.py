@@ -168,7 +168,7 @@ def cute_round(x, round_mode=RoundMode.CLOSEST_OR_DOWN, *, step=1):
     Round with a chosen step.
     
     Examples:
-    blocktododoc
+    blocktododoc explain the different options, especially probabilistic
         >>> cute_round(7.456)
         7
         >>> cute_round(7.456, up=True)
