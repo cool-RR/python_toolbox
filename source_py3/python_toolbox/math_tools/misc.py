@@ -5,7 +5,7 @@ import numbers
 import math
 import random
 
-from python_toolbox import nifty_collections
+import python_toolbox.cute_enum
 
 
 infinity = float('inf')
@@ -156,7 +156,7 @@ def is_integer(x):
     return inted_x == x
     
     
-class RoundMode(nifty_collections.CuteEnum):
+class RoundMode(python_toolbox.cute_enum.CuteEnum):
     CLOSEST_OR_DOWN = 0
     CLOSEST_OR_UP = 1
     ALWAYS_DOWN = 2
