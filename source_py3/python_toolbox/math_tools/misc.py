@@ -3,6 +3,9 @@
 
 import numbers
 import math
+import random
+
+import python_toolbox.cute_enum
 
 
 infinity = float('inf')
@@ -153,31 +156,69 @@ def is_integer(x):
     return inted_x == x
     
     
-def cute_round(x, step=1, up=False):
+class RoundMode(python_toolbox.cute_enum.CuteEnum):
+    CLOSEST_OR_DOWN = 0
+    CLOSEST_OR_UP = 1
+    ALWAYS_DOWN = 2
+    ALWAYS_UP = 3
+    PROBABILISTIC = 4
+
+def cute_round(x, round_mode=RoundMode.CLOSEST_OR_DOWN, *, step=1):
     '''
-    Round with a chosen step.
+    Round a number, with lots of different options for rounding.
     
-    Examples:
-    
+    Basic usage:
+
         >>> cute_round(7.456)
         7
-        >>> cute_round(7.456, up=True)
-        8
-        >>> cute_round(7.456, step=0.1)
-        7.4
-        >>> cute_round(7.456, step=0.1, up=True)
-        7.5
-        >>> cute_round(7.456, step=0.2)
-        7.4
-        >>> cute_round(7.456, step=0.2, up=True)
-        7.6
-        >>> cute_round(7.456, step=0.01)
-        7.45
-        >>> cute_round(7.456, step=0.01, up=True)
-        7.46
+    
+    The optional `step=1` argument can be changed to change the definition of a
+    round number. e.g., if you set `step=100`, then 1234 will be rounded to
+    1200. `step` doesn't have to be an integer.
+        
+    There are different rounding modes:
+
+        RoundMode.CLOSEST_OR_DOWN
+        
+            Default mode: Round to the closest round number. If we're smack in
+            the middle, like 4.5, round down to 4.
+            
+        RoundMode.CLOSEST_OR_UP
+        
+            Round to the closest round number. If we're smack in the middle,
+            like 4.5, round up to 5.
+
+        RoundMode.ALWAYS_DOWN
+        
+            Always round down. Even 4.99 gets rounded down to 4.
+
+        RoundMode.ALWAYS_UP
+        
+            Always round up. Even 4.01 gets rounded up to 5.
+        
+        RoundMode.PROBABILISTIC
+        
+            Probabilistic round, giving a random result depending on how close
+            the number is to each of the two surrounding round numbers. For
+            example, if you round 4.5 with this mode, you'll get either 4 or 5
+            with an equal probability. If you'll round 4.1 with this mode,
+            there's a 90% chance you'll get 4, and a 10% chance you'll get 5.
+            
         
     '''
+    assert step > 0
     div, mod = divmod(x, step)
-    return (div + bool(mod and up)) * step
+    if round_mode == RoundMode.CLOSEST_OR_DOWN:
+        round_up = (mod > 0.5 * step)
+    elif round_mode == RoundMode.CLOSEST_OR_UP:
+        round_up = (mod >= 0.5 * step)
+    elif round_mode == RoundMode.ALWAYS_DOWN:
+        round_up = False
+    elif round_mode == RoundMode.ALWAYS_UP:
+        round_up = True
+    else:
+        assert round_mode == RoundMode.PROBABILISTIC
+        round_up = random.random() < mod / step
+    return (div + round_up) * step
     
     
