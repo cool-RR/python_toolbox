@@ -359,6 +359,4 @@ def is_subsequence(big_sequence, small_sequence):
                 return True
         
         
-                
-        
     
