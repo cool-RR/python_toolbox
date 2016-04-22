@@ -321,3 +321,44 @@ def divide_to_slices(sequence, n_slices):
                      cute_iter_tools.iterate_overlapping_subsequences(indices)]
 
     
+def is_subsequence(big_sequence, small_sequence):
+    '''
+    Check whether `small_sequence` is a subsequence of `big_sequence`.
+    
+    For example:
+    
+        >>> is_subsequence([1, 2, 3, 4], [2, 3])
+        True
+        >>> is_subsequence([1, 2, 3, 4], [4, 5])
+        False
+        
+    This can be used on any kind of sequence, including tuples, lists and
+    strings.
+    '''
+    from python_toolbox import nifty_collections
+    big_sequence = ensure_iterable_is_sequence(big_sequence,
+                                               allow_unordered=False)
+    small_sequence = ensure_iterable_is_sequence(small_sequence,
+                                                 allow_unordered=False)
+    small_sequence_length = len(small_sequence)
+    last_index_that_subsequence_can_start = \
+                                    len(big_sequence) - len(small_sequence) + 1
+    matches = {}
+    for i, item in enumerate(big_sequence):
+        if matches:
+            new_matches = {}
+            for match_position, match_length in matches.items():
+                if small_sequence[match_length] == item:
+                    new_matches[match_position] = match_length + 1
+            matches = new_matches
+        if (item == small_sequence[0]) and \
+                                   (i < last_index_that_subsequence_can_start):
+            matches[i] = 1
+        for match_position, match_length in matches.items():
+            if match_length == small_sequence_length:
+                return True
+        
+        
+                
+        
+    
