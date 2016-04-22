@@ -27,7 +27,20 @@ def binary_search_by_index(sequence, value,
     '''
     Do a binary search, returning answer as index number.
     
-    Similiar to binary_search (refer to its documentation for more info). The
+    For all rounding options, a return value of None is returned if no matching
+    item is found. (In the case of `rounding=BOTH`, either of the items in the
+    tuple may be `None`)
+    
+    You may optionally pass a key function as `function`, so instead of the
+    objects in `sequence` being compared, their outputs from `function` will be
+    compared. If you do pass in a function, it's assumed that it's strictly
+    rising.
+    
+    Note: This function uses `None` to express its inability to find any
+    matches; therefore, you better not use it on sequences in which None is a
+    possible item.
+    
+    Similiar to `binary_search` (refer to its documentation for more info). The
     difference is that instead of returning a result in terms of sequence
     items, it returns the indexes of these items in the sequence.
     
@@ -45,8 +58,10 @@ def _binary_search_both(sequence, value,
     '''
     Do a binary search through a sequence with the `BOTH` rounding.
     
-    It is assumed that `function` is a strictly monotonic rising function on
-    `sequence`.
+    You may optionally pass a key function as `function`, so instead of the
+    objects in `sequence` being compared, their outputs from `function` will be
+    compared. If you do pass in a function, it's assumed that it's strictly
+    rising.
     
     Note: This function uses `None` to express its inability to find any
     matches; therefore, you better not use it on sequences in which `None` is a
@@ -106,12 +121,14 @@ def binary_search(sequence, value, function=misc_tools.identity_function,
     '''
     Do a binary search through a sequence.
     
-    It is assumed that `function` is a strictly monotonic rising function on
-    `sequence`.
-    
     For all rounding options, a return value of None is returned if no matching
     item is found. (In the case of `rounding=BOTH`, either of the items in the
     tuple may be `None`)
+    
+    You may optionally pass a key function as `function`, so instead of the
+    objects in `sequence` being compared, their outputs from `function` will be
+    compared. If you do pass in a function, it's assumed that it's strictly
+    rising.
     
     Note: This function uses `None` to express its inability to find any
     matches; therefore, you better not use it on sequences in which None is a
