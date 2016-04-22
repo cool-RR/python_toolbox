@@ -14,7 +14,13 @@ from .self_hook import SelfHook
 
 class AbstractContextManager(metaclass=abc.ABCMeta):
     '''
-    blocktodo: add tests
+    A no-frills context manager.
+    
+    This class is used mostly to check whether an object is a context manager:
+    
+        >>> isinstance(threading.Lock(), AbstractContextManager)
+        True
+
     '''
     @abc.abstractmethod
     def __enter__(self):
