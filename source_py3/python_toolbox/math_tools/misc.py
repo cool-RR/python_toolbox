@@ -157,6 +157,12 @@ def is_integer(x):
     
     
 class RoundMode(python_toolbox.cute_enum.CuteEnum):
+    '''
+    A mode that determines how `cute_round` will round.
+    
+    See documentation of `cute_round` for more info about each of the different
+    round modes.
+    '''
     CLOSEST_OR_DOWN = 0
     CLOSEST_OR_UP = 1
     ALWAYS_DOWN = 2

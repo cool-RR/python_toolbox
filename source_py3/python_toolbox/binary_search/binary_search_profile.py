@@ -39,7 +39,6 @@ class BinarySearchProfile:
         objects in `sequence` being compared, their outputs from `function`
         will be compared. If you do pass in a function, it's assumed that it's
         strictly rising.
-
         
         In the `both` argument you may put binary search results (with the BOTH
         rounding option.) This will prevent the constructor from performing the
