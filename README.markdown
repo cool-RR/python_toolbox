@@ -17,7 +17,7 @@ contains:
  - And many, *many* more! The Python Toolbox contains **100+** useful little
    tools.
 
-Documentation: http://python-toolbox.readthedocs.org   
+Documentation: http://python-toolbox.readthedocs.io
 
 Python Toolbox on GitHub: https://github.com/cool-RR/python_toolbox
 
