@@ -9,4 +9,4 @@
 :mod:`combi` - Documentation on Combi site
 ==========================================
 
-`Please go to Combi's documentation here <https://combi.readthedocs.org/>`_\ .
+`Please go to Combi's documentation here <https://combi.readthedocs.io/>`_\ .

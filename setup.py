@@ -100,7 +100,7 @@ contains:
 Please keep in mind that Python Toolbox is still in alpha stage, and that
 backward compatibility would *not* be maintained in this phase.
 
-Documentation: http://python-toolbox.readthedocs.org
+Documentation: http://python-toolbox.readthedocs.io
 
 Python Toolbox on GitHub: https://github.com/cool-RR/python_toolbox
 
