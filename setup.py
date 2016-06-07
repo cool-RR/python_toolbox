@@ -119,7 +119,7 @@ Roadmap
 Present
 -------
 
-Python Toolbox is at version 0.9.2. It's being used in production every day,
+Python Toolbox is at version 0.9.3. It's being used in production every day,
 but backward compatibility isn't guaranteed yet.
 
 Next tasks
@@ -160,7 +160,7 @@ install_requires = ['setuptools']
 
 setuptools.setup(
     name='python_toolbox',
-    version='0.9.2',
+    version='0.9.3',
     test_suite='nose.collector',
     install_requires=install_requires,
     tests_require=['nose>=1.0.0',

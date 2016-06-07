@@ -34,7 +34,7 @@ Backward compatibility is currently *not* maintained. If you're using Python Too
 
 ## Present ##
 
-Python Toolbox is at version 0.9.2. It's being used in production every day, but backward compatibility isn't guaranteed yet.
+Python Toolbox is at version 0.9.3. It's being used in production every day, but backward compatibility isn't guaranteed yet.
 
 ## Next tasks ##
 
