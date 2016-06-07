@@ -17,6 +17,9 @@ import python_toolbox
 
 from python_toolbox.temp_file_tools import create_temp_folder
 
+class MyException(Exception):
+    pass
+        
 
 def test_basic():
     with create_temp_folder() as tf1:
@@ -51,7 +54,25 @@ def test_basic():
     assert not file_path.exists()
     assert not file_path.is_file()
     
-
+def test_exception():
+    try:
+        with create_temp_folder() as tf1:
+            assert isinstance(tf1, pathlib.Path)
+            assert tf1.exists()
+            assert tf1.is_dir()
+            file_path = (tf1 / 'my_file')
+            with file_path.open('w') as my_file:
+                my_file.write('Woo hoo!')
+            
+            assert file_path.exists()
+            assert file_path.is_file()
+            raise MyException
+    except MyException:
+        assert not tf1.exists()
+        assert not tf1.is_dir()
+        assert not file_path.exists()
+        assert not file_path.is_file()
+            
 def test_without_pathlib():
     with create_temp_folder() as tf1:
         assert os.path.exists(str(tf1))
