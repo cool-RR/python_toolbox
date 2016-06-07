@@ -131,4 +131,5 @@ from .self_hook import SelfHook
 
 from .blank_context_manager import BlankContextManager
 from .delegating_context_manager import DelegatingContextManager
-from .functions import nestedfrom .modifiers import as_idempotent, as_reentrant
+from .functions import nested
+from .modifiers import as_idempotent, as_reentrant
