@@ -14,8 +14,8 @@ def almost_equals(x, y):
 
 class CuteRoundTestCase(cute_testing.TestCase):
     def test_closest_or_down(self):
-        full_arg_spec = inspect.getfullargspec(cute_round)
-        assert RoundMode.CLOSEST_OR_DOWN in full_arg_spec.defaults
+        arg_spec = inspect.getargspec(cute_round)
+        assert RoundMode.CLOSEST_OR_DOWN in arg_spec.defaults
                                                           
         assert almost_equals(cute_round(7.456), 7)
         assert almost_equals(cute_round(7.654), 8)

@@ -110,7 +110,7 @@ def test_exception_swallowing():
                 my_set.add(6)
             my_set.add(7)
         my_set.add(8)
-    assert my_set == {0, 1, 2, 3, 4}
+    assert my_set == set((0, 1, 2, 3, 4))
         
 
         

@@ -62,7 +62,8 @@ def test_can_instantiate_when_defining_enter_exit():
         def __exit__(self, exc_type, exc_value, exc_traceback):
             pass
     AnotherContextManager()
-    def test_isinstance_and_issubclass():
+
+def test_isinstance_and_issubclass():
     class Woof(object):
         def __enter__(self):
             return self

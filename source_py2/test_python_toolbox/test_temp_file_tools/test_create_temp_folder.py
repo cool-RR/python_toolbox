@@ -115,8 +115,8 @@ def test_parent_folder():
             assert str(tf2).startswith(str(tf1))
     
 def test_chmod():
-    with create_temp_folder(chmod=0o777) as liberal_temp_folder, \
-                   create_temp_folder(chmod=0o000) as conservative_temp_folder:
+    with (create_temp_folder(chmod=0o777) as liberal_temp_folder,
+                   create_temp_folder(chmod=0o000) as conservative_temp_folder):
         # Doing a very weak test of chmod because not everything is supported
         # on Windows.
         assert (liberal_temp_folder.stat().st_mode & 0o777) > \

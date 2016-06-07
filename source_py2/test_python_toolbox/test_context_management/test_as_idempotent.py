@@ -1,7 +1,7 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
-import queue as queue_module
+import Queue as queue_module
 
 from python_toolbox.context_management import (as_idempotent, ContextManager,
                                                ContextManagerType)
