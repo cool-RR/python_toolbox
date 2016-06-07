@@ -38,7 +38,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'python_toolbox'
-copyright = u'2009-2015, Ram Rachum'
+copyright = u'2009-2017, Ram Rachum'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

@@ -1,4 +1,4 @@
-# Copyright 2009-2015 Ram Rachum.
+# Copyright 2009-2017 Ram Rachum.
 # This program is distributed under the MIT license.
 
 from python_toolbox.path_tools import get_root_path_of_module
