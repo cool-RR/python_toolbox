@@ -85,4 +85,27 @@ def test_without_pathlib():
     assert not os.path.isdir(file_path)
     
 
+def test_prefix_suffix():
+    with create_temp_folder(prefix='hocus', suffix='pocus') as tf1:
+        assert tf1.name.startswith('hocus')
+        assert tf1.name.endswith('pocus')
+
+def test_parent_folder():
+    with create_temp_folder() as tf1:
+        with create_temp_folder(parent_folder=str(tf1)) as tf2:
+            assert isinstance(tf2, pathlib.Path)
+            assert str(tf2).startswith(str(tf1))
+    
+def test_chmod():
+    with create_temp_folder(chmod=0o777) as liberal_temp_folder, \
+                   create_temp_folder(chmod=0o000) as conservative_temp_folder:
+        # Doing a very weak test of chmod because not everything is supported
+        # on Windows.
+        assert (liberal_temp_folder.stat().st_mode & 0o777) > \
+                              (conservative_temp_folder.stat().st_mode & 0o777)
+        
+        # Making `conservative_temp_folder` writeable again so it could be
+        # deleted in cleanup:
+        conservative_temp_folder.chmod(0o777)
+        
 

@@ -39,5 +39,6 @@ def nested(*managers):
             # Don't rely on sys.exc_info() still containing
             # the right information. Another exception may
             # have been raised and caught by an exit method
-            raise exc[0], exc[1], exc[2]
+            raise exc[1].with_traceback(exc[2])
+    
     

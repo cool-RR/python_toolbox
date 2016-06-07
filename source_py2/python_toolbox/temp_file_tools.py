@@ -12,10 +12,13 @@ except:
 
 
 from python_toolbox import context_management 
+from python_toolbox import misc_tools
 
 
 @context_management.ContextManagerType
-def create_temp_folder(suffix='', prefix=tempfile.template):
+@misc_tools.limit_positional_arguments(0)
+def create_temp_folder(prefix=tempfile.template, suffix='',
+                       parent_folder=None, chmod=None):
     '''
     Context manager that creates a temporary folder and deletes it after usage.
     
@@ -35,9 +38,20 @@ def create_temp_folder(suffix='', prefix=tempfile.template):
         # The suite is finished, now it's all cleaned:
         assert not temp_folder.exists()
        
-    Use the `suffix` and `prefix` string arguments to dictate a suffix and/or a
-    prefix to the temporary folder's name in the filesystem.        
+    Use the `prefix` and `suffix` string arguments to dictate a prefix and/or a
+    suffix to the temporary folder's name in the filesystem.
+    
+    If you'd like to set the permissions of the temporary folder, pass them to
+    the optional `chmod` argument, like this:
+    
+        create_temp_folder(chmod=0o550)
+    
     '''
-    temp_folder = pathlib.Path(tempfile.mkdtemp(suffix=suffix, prefix=prefix))
-    yield temp_folder
-    shutil.rmtree(str(temp_folder))
+    temp_folder = pathlib.Path(tempfile.mkdtemp(prefix=prefix, suffix=suffix, 
+                                                dir=parent_folder))
+    try:
+        if chmod is not None:
+            temp_folder.chmod(chmod)
+        yield temp_folder
+    finally:
+        shutil.rmtree(str(temp_folder))

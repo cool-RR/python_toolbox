@@ -4,7 +4,7 @@
 from python_toolbox import sequence_tools
 
 
-class NumberEncoder:
+class NumberEncoder(object):
     '''
     A very simple encoder between lines and strings.
     

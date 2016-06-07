@@ -8,9 +8,9 @@ import sys
 
 import nose
 
-from python_toolbox.context_management import (ContextManager,
-                                                    ContextManagerType,
-                                                    SelfHook)
+from python_toolbox.context_management import (
+    ContextManager, ContextManagerType, SelfHook, AbstractContextManager
+)
 
 def test_abstractness():
     '''
@@ -62,4 +62,28 @@ def test_can_instantiate_when_defining_enter_exit():
         def __exit__(self, exc_type, exc_value, exc_traceback):
             pass
     AnotherContextManager()
+    def test_isinstance_and_issubclass():
+    class Woof(object):
+        def __enter__(self):
+            return self
+    class Meow(object):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
+            return False
+    class Good(Woof, Meow):
+        pass
+    
+    assert not issubclass(object, AbstractContextManager)
+    assert not issubclass(Woof, AbstractContextManager)
+    assert not issubclass(Meow, AbstractContextManager)
+    assert issubclass(Good, AbstractContextManager)
+    
+    assert not isinstance(object(), AbstractContextManager)
+    assert not isinstance(Woof(), AbstractContextManager)
+    assert not isinstance(Meow(), AbstractContextManager)
+    assert isinstance(Good(), AbstractContextManager)
+            
+            
+            
+            
+            
     

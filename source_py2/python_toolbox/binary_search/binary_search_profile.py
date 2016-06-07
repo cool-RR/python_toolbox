@@ -33,9 +33,13 @@ class BinarySearchProfile(object):
         '''
         Construct a `BinarySearchProfile`.
         
-        `sequence` is the sequence through which the search is made. `function`
-        is a strictly monotonic rising function on the sequence. `value` is the
-        wanted value.
+        `sequence` is the sequence through which the search is made. `value` is
+        the wanted value.
+        
+        You may optionally pass a key function as `function`, so instead of the
+        objects in `sequence` being compared, their outputs from `function`
+        will be compared. If you do pass in a function, it's assumed that it's
+        strictly rising.
         
         In the `both` argument you may put binary search results (with the BOTH
         rounding option.) This will prevent the constructor from performing the

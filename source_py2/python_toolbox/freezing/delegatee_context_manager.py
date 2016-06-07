@@ -1,10 +1,12 @@
 # Copyright 2009-2015 Ram Rachum.
 # This program is distributed under the MIT license.
 
+from python_toolbox import misc_tools
 from python_toolbox import context_management
 
 
-class DelegateeContextManager(context_management.ReentrantContextManager):
+@context_management.as_reentrant
+class DelegateeContextManager(context_management.ContextManager):
     '''Inner context manager used internally by `Freezer`.'''
     
     def __init__(self, freezer):
@@ -17,13 +19,14 @@ class DelegateeContextManager(context_management.ReentrantContextManager):
         '''The freezer to which we belong.'''
         
 
-    def reentrant_enter(self):
+    def __enter__(self):
         '''Call the freezer's freeze handler.'''
         return self.freezer.freeze_handler()
     
     
-    def reentrant_exit(self, exc_type, exc_value, exc_traceback):
+    def __exit__(self, exc_type, exc_value, exc_traceback):
         '''Call the freezer's thaw handler.'''
         return self.freezer.thaw_handler()
         
+    depth = misc_tools.ProxyProperty('.__wrapped__.depth')
     

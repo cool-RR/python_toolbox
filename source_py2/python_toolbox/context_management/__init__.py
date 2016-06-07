@@ -108,10 +108,8 @@ That's it. Inherit all your context managers from `ContextManager` (or decorate
 your generator functions with `ContextManagerType`) to enjoy all these
 benefits.
 
-
-This package also defines a bunch of helpful context manager classes on top of
-`ContextManager`: Those are `BlankContextManager`, `ReentrantContextManager`
-and `DelegatingContextManager`. See these classes' docstrings for more info.
+This package also defines a bunch of helpful classes and modules related to
+context managers. See their docstrings for more info.
 '''
 
 # todo: review the few external tests that I'm skipping.
@@ -125,12 +123,12 @@ and `DelegatingContextManager`. See these classes' docstrings for more info.
 # that will cause it to be pickled by reference to the decorated function
 
 
+from .abstract_context_manager import AbstractContextManager
 from .context_manager_type_type import ContextManagerTypeType
 from .context_manager_type import ContextManagerType
 from .context_manager import ContextManager
 from .self_hook import SelfHook
 
 from .blank_context_manager import BlankContextManager
-from .reentrant_context_manager import ReentrantContextManager
 from .delegating_context_manager import DelegatingContextManager
-from .functions import nested
+from .functions import nestedfrom .modifiers import as_idempotent, as_reentrant

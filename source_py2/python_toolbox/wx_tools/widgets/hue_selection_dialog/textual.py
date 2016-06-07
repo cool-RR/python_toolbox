@@ -14,8 +14,6 @@ import wx
 from python_toolbox import freezing
 from python_toolbox import wx_tools
 from python_toolbox.wx_tools.widgets.cute_panel import CutePanel
-from python_toolbox.context_management import ReentrantContextManager
-
 
 def ratio_to_round_degrees(ratio):
     return int(ratio * 360)
@@ -24,18 +22,6 @@ def ratio_to_round_degrees(ratio):
 def degrees_to_ratio(degrees):
     return degrees / 360
 
-
-#class ValueFreezer(ReentrantContextManager):
-    #'''
-    #Freezer for not changing the `Textual`'s text value.
-
-    #Used as a context manager. Anything that happens inside the `with` suite
-    #will not cause the `Textual` to update its text value.
-    
-    #This is useful because when the `Textual`'s value changes, some platforms
-    #automatically select all the text in the `Textual`, which is really
-    #annoying if you're just typing in it.
-    #'''
 
 
 class Textual(CutePanel):
