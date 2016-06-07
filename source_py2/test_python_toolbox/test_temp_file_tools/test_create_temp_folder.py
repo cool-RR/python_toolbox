@@ -17,6 +17,9 @@ import python_toolbox
 
 from python_toolbox.temp_file_tools import create_temp_folder
 
+class MyException(Exception):
+    pass
+
 
 def test_basic():
     with create_temp_folder() as tf1:
