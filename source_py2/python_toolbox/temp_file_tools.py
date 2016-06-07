@@ -7,7 +7,7 @@ import tempfile
 import shutil
 try:
     import pathlib
-except:
+except ImportError:
     from python_toolbox.third_party import pathlib
 
 
