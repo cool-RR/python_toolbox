@@ -62,7 +62,7 @@ def test_exception():
             assert tf1.is_dir()
             file_path = (tf1 / 'my_file')
             with file_path.open('w') as my_file:
-                my_file.write('Woo hoo!')
+                my_file.write(u'Woo hoo!')
             
             assert file_path.exists()
             assert file_path.is_file()
