@@ -354,6 +354,16 @@ class AlternativeLengthMixin:
         return bool(sequence_tools.get_length(self))
         
 def phrase_iterable_in_english(iterable):
+    '''
+    Get a nice textual output for a bunch of items.
+    
+    Example:
+    
+        >>> phrase_iterable_in_english(('foo', 'bar', 'baz))
+        'foo, bar and baz'
+    
+    '''
+    
     from python_toolbox import sequence_tools
     from python_toolbox import combi
     sequence = combi.MapSpace(str, iterable)
