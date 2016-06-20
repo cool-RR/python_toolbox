@@ -87,7 +87,7 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         assert bag
         assert bool(self.bag_type()) is bool(self.bag_type('')) is \
                                         bool(self.bag_type({'d': 0,})) is False
-        if not isinstance(bag, collections.Hashable):
+        if not isinstance(bag, collections.abc.Hashable):
             bag.clear()
             assert bool(bag) is False
             assert not bag
@@ -98,7 +98,7 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         assert bag.n_elements == 4
         assert bag.n_elements == 4 # Testing again because now it's a data 
                                    # attribute.
-        if not isinstance(bag, collections.Hashable):
+        if not isinstance(bag, collections.abc.Hashable):
             bag['x'] = 1
             assert bag.n_elements == 5
             assert bag.n_elements == 5
@@ -108,7 +108,7 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         bag = self.bag_type('meeeow')
         assert bag.frozen_bag_bag == \
                                   nifty_collections.FrozenBagBag({3: 1, 1: 3,})
-        if not isinstance(bag, collections.Hashable):
+        if not isinstance(bag, collections.abc.Hashable):
             bag['o'] += 2
             assert bag.frozen_bag_bag == \
                                   nifty_collections.FrozenBagBag({3: 2, 1: 2,})
@@ -219,7 +219,7 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         bag_1 = self.bag_type()
         assert bag_0 == bag_1
         
-        if issubclass(self.bag_type, collections.Hashable):
+        if issubclass(self.bag_type, collections.abc.Hashable):
             assert hash(bag_0) == hash(bag_1)
             assert {bag_0, bag_1} == {bag_0} == {bag_1}
         
@@ -227,7 +227,7 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
          self.bag_type({'a': 0.0, 'b': 2, 'c': decimal_module.Decimal('0.0'),})
         bag_3 = self.bag_type('bb')
         
-        if issubclass(self.bag_type, collections.Hashable):
+        if issubclass(self.bag_type, collections.abc.Hashable):
             assert hash(bag_2) == hash(bag_3)
             assert {bag_2, bag_3} == {bag_2} == {bag_3}
     
@@ -283,7 +283,7 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         with cute_testing.RaiseAssertor(TypeError): 'foo' ** bag
         with cute_testing.RaiseAssertor(TypeError): divmod(bag, 'foo')
         with cute_testing.RaiseAssertor(TypeError): divmod('foo', bag)
-        if not isinstance(bag, collections.Hashable):
+        if not isinstance(bag, collections.abc.Hashable):
             with cute_testing.RaiseAssertor(TypeError): bag |= 'foo'
             with cute_testing.RaiseAssertor(TypeError): bag &= 'foo'
             with cute_testing.RaiseAssertor(TypeError): bag += 'foo'
@@ -417,7 +417,7 @@ class BaseMutableBagTestCase(BaseBagTestCase):
     def test_get_frozen(self):
         bag = self.bag_type('abracadabra')
         frozen_bag = bag.get_frozen()
-        assert isinstance(frozen_bag, collections.Hashable)
+        assert isinstance(frozen_bag, collections.abc.Hashable)
         if isinstance(bag, nifty_collections.Ordered):
             assert tuple(bag.items()) == tuple(frozen_bag.items())
         else:
@@ -427,8 +427,8 @@ class BaseMutableBagTestCase(BaseBagTestCase):
     
     def test_hash(self):
         bag = self.bag_type('abracadabra')
-        assert not isinstance(bag, collections.Hashable)
-        assert not issubclass(self.bag_type, collections.Hashable)
+        assert not isinstance(bag, collections.abc.Hashable)
+        assert not issubclass(self.bag_type, collections.abc.Hashable)
         with cute_testing.RaiseAssertor(TypeError):
             {bag}
         with cute_testing.RaiseAssertor(TypeError):
@@ -593,7 +593,7 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
     def test_get_mutable(self):
         bag = self.bag_type('abracadabra')
         mutable_bag = bag.get_mutable()
-        assert not isinstance(mutable_bag, collections.Hashable)
+        assert not isinstance(mutable_bag, collections.abc.Hashable)
         if isinstance(bag, nifty_collections.Ordered):
             assert tuple(bag.items()) == tuple(mutable_bag.items())
         else:
@@ -611,8 +611,8 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
     
     def test_hash(self):
         bag = self.bag_type('abracadabra')
-        assert isinstance(bag, collections.Hashable)
-        assert issubclass(self.bag_type, collections.Hashable)
+        assert isinstance(bag, collections.abc.Hashable)
+        assert issubclass(self.bag_type, collections.abc.Hashable)
         assert {bag, bag} == {bag}
         assert {bag: bag} == {bag: bag}
         assert isinstance(hash(bag), int)
@@ -721,7 +721,7 @@ class BaseOrderedBagTestCase(BaseBagTestCase):
         # Cached only for a frozen type:
         assert (bag.reversed is bag.reversed) == \
                (bag.reversed.reversed is bag.reversed.reversed) == \
-               isinstance(bag, collections.Hashable)
+               isinstance(bag, collections.abc.Hashable)
         
         assert bag.reversed == bag.reversed
         assert bag.reversed.reversed == bag.reversed.reversed
@@ -741,10 +741,10 @@ class BaseOrderedBagTestCase(BaseBagTestCase):
         ordered_bag_0 = self.bag_type('ababb')
         ordered_bag_1 = self.bag_type('bbbaa')
         assert ordered_bag_0 == ordered_bag_0
-        if issubclass(self.bag_type, collections.Hashable):
+        if issubclass(self.bag_type, collections.abc.Hashable):
             assert hash(ordered_bag_0) == hash(ordered_bag_0)
         assert ordered_bag_1 == ordered_bag_1
-        if issubclass(self.bag_type, collections.Hashable):
+        if issubclass(self.bag_type, collections.abc.Hashable):
             assert hash(ordered_bag_1) == hash(ordered_bag_1)
         assert ordered_bag_0 != ordered_bag_1
         assert ordered_bag_0 <= ordered_bag_1
@@ -758,7 +758,7 @@ class BaseOrderedBagTestCase(BaseBagTestCase):
         
     def test_index(self):
         bag = self.bag_type('aaabbc')
-        if not isinstance(bag, collections.Hashable):
+        if not isinstance(bag, collections.abc.Hashable):
             bag['d'] = 0
         assert bag.index('a') == 0
         assert bag.index('b') == 1
@@ -784,7 +784,7 @@ class BaseUnorderedBagTestCase(BaseBagTestCase):
         bag_0 = self.bag_type('ababb')
         bag_1 = self.bag_type('bbbaa')
         assert bag_0 == bag_1
-        if issubclass(self.bag_type, collections.Hashable):
+        if issubclass(self.bag_type, collections.abc.Hashable):
             assert hash(bag_0) == hash(bag_1)
             
             
@@ -796,7 +796,7 @@ class BaseUnorderedBagTestCase(BaseBagTestCase):
         
     def test_index(self):
         bag = self.bag_type('aaabbc')
-        if not isinstance(bag, collections.Hashable):
+        if not isinstance(bag, collections.abc.Hashable):
             bag['d'] = 0
         with cute_testing.RaiseAssertor(AttributeError):
             bag.index('a')
