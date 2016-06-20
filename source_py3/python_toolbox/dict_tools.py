@@ -118,17 +118,17 @@ def remove_keys(d, keys_to_remove):
     
     If key doesn't exist, doesn't raise an exception.    
     '''
-    if isinstance(keys_to_remove, collections.Iterable):
+    if isinstance(keys_to_remove, collections.abc.Iterable):
         for key in keys_to_remove:
             try:
                 del d[key]
             except KeyError:
                 pass
     else:
-        if isinstance(keys_to_remove, collections.Container):
+        if isinstance(keys_to_remove, collections.abc.Container):
             filter_function = lambda value: value in keys_to_remove
         else:
-            assert isinstance(keys_to_remove, collections.Callable)
+            assert isinstance(keys_to_remove, collections.abc.Callable)
             filter_function = keys_to_remove
         for key in list(d.keys()):
             if filter_function(key):

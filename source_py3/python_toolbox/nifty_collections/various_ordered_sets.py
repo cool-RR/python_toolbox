@@ -15,7 +15,7 @@ from python_toolbox import freezing
 KEY, PREV, NEXT = range(3)
 
 
-class BaseOrderedSet(collections.Set, collections.Sequence):
+class BaseOrderedSet(collections.abc.Set, collections.abc.Sequence):
     '''
     Base class for `OrderedSet` and `FrozenOrderedSet`, i.e. set with an order.
 
@@ -109,7 +109,7 @@ class FrozenOrderedSet(BaseOrderedSet):
         
 
 
-class OrderedSet(BaseOrderedSet, collections.MutableSet):
+class OrderedSet(BaseOrderedSet, collections.abc.MutableSet):
     '''
     A `set` with an order.
 

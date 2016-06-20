@@ -7,7 +7,7 @@ from python_toolbox import math_tools
 from python_toolbox import sequence_tools
 
         
-class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
+class ProductSpace(sequence_tools.CuteSequenceMixin, collections.abc.Sequence):
     '''
     A product space between sequences.
     
@@ -70,7 +70,7 @@ class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     
     def index(self, given_sequence):
         '''Get the index number of `given_sequence` in this product space.'''
-        if not isinstance(given_sequence, collections.Sequence) or \
+        if not isinstance(given_sequence, collections.abc.Sequence) or \
                                 not len(given_sequence) == len(self.sequences):
             raise ValueError
         

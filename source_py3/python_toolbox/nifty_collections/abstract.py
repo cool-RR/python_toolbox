@@ -20,7 +20,7 @@ class Ordered(metaclass=abc.ABCMeta):
     __slots__ = ()
 
 
-Ordered.register(collections.Sequence)
+Ordered.register(collections.abc.Sequence)
 Ordered.register(collections.OrderedDict)
 Ordered.register(collections.deque)
 Ordered.register(queue.Queue)

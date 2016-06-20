@@ -31,7 +31,7 @@ class _BasePermView(metaclass=abc.ABCMeta):
 
 
 class PermItems(sequence_tools.CuteSequenceMixin, _BasePermView,
-                collections.Sequence):
+                collections.abc.Sequence):
     '''
     A viewer of a perm's items, similar to `dict.items()`.
     
@@ -46,7 +46,7 @@ class PermItems(sequence_tools.CuteSequenceMixin, _BasePermView,
     
 
 class PermAsDictoid(sequence_tools.CuteSequenceMixin, _BasePermView,
-                    collections.Mapping):
+                    collections.abc.Mapping):
     '''A dict-like interface to a `Perm`.'''    
     def __getitem__(self, key):
         return self.perm[key]
@@ -69,7 +69,7 @@ class PermType(abc.ABCMeta):
         
 
 @functools.total_ordering
-class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
+class Perm(sequence_tools.CuteSequenceMixin, collections.abc.Sequence,
            metaclass=PermType):
     '''
     A permutation of items from a `PermSpace`.
@@ -107,7 +107,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         '''
         perm_space = None if perm_space is None \
                                               else PermSpace.coerce(perm_space)
-        assert isinstance(perm_sequence, collections.Iterable)
+        assert isinstance(perm_sequence, collections.abc.Iterable)
         perm_sequence = sequence_tools. \
                            ensure_iterable_is_immutable_sequence(perm_sequence)
         

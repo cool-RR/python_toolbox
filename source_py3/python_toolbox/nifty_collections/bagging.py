@@ -148,7 +148,7 @@ class _BaseBagMixin:
     def __init__(self, iterable={}):
         super().__init__()
         
-        if isinstance(iterable, collections.Mapping):
+        if isinstance(iterable, collections.abc.Mapping):
             for key, value, in iterable.items():
                 try:
                     self._dict[key] = _process_count(value)
@@ -824,7 +824,7 @@ class _FrozenBagMixin:
         
 
 
-class _BaseDictDelegator(collections.MutableMapping):
+class _BaseDictDelegator(collections.abc.MutableMapping):
     '''
     Base class for a dict-like object.
     

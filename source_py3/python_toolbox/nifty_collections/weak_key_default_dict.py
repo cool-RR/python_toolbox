@@ -13,7 +13,7 @@ from weakref import ref
 
 
 #todo: needs testing
-class WeakKeyDefaultDict(collections.MutableMapping):
+class WeakKeyDefaultDict(collections.abc.MutableMapping):
     '''
     A weak key dictionary which can use a default factory.
     

@@ -43,7 +43,7 @@ def _key_dict_to_accelerators(key_dict):
     ### Breaking down key tuples to individual entries: #######################
     #                                                                         #
     for key, id in original_key_dict.items():
-        if isinstance(key, collections.Sequence):
+        if isinstance(key, collections.abc.Sequence):
             key_sequence = key
             for actual_key in key_sequence:
                 key_dict[actual_key] = id

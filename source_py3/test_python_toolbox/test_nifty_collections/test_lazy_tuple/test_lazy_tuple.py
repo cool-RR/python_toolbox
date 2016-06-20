@@ -15,7 +15,7 @@ from python_toolbox import cute_testing
 from python_toolbox.nifty_collections import LazyTuple
 
 
-class SelfAwareUuidIterator(collections.Iterator):
+class SelfAwareUuidIterator(collections.abc.Iterator):
     '''Iterator that gives UUIDs and keeps them all in an internal list.'''
     def __init__(self):
         self.data = []

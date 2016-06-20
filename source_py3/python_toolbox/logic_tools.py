@@ -105,7 +105,7 @@ def get_equivalence_classes(iterable, key=None, container=set, *,
     ### Pre-processing input: #################################################
     #                                                                         #
     if key is None:
-        if isinstance(iterable, collections.Mapping):
+        if isinstance(iterable, collections.abc.Mapping):
             d = iterable
         else:
             try:
@@ -137,7 +137,7 @@ def get_equivalence_classes(iterable, key=None, container=set, *,
         new_dict[key] = container(value)
         
     if sort_ordered_dict:
-        if isinstance(sort_ordered_dict, (collections.Callable, str)):
+        if isinstance(sort_ordered_dict, (collections.abc.Callable, str)):
             key_function = comparison_tools. \
                       process_key_function_or_attribute_name(sort_ordered_dict)
             new_dict.sort(key_function)

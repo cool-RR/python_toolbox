@@ -45,7 +45,7 @@ def _with_lock(method, *args, **kwargs):
 
 
 @functools.total_ordering    
-class LazyTuple(collections.Sequence):
+class LazyTuple(collections.abc.Sequence):
     '''
     A lazy tuple which requests as few values as possible from its iterator.
     
@@ -75,8 +75,10 @@ class LazyTuple(collections.Sequence):
     '''
     
     def __init__(self, iterable, definitely_infinite=False):
-        was_given_a_sequence = isinstance(iterable, collections.Sequence) and \
-                               not isinstance(iterable, LazyTuple)
+        was_given_a_sequence = (
+            isinstance(iterable, collections.abc.Sequence) and
+            not isinstance(iterable, LazyTuple)
+        )
         
         self.is_exhausted = True if was_given_a_sequence else False
         '''Flag saying whether the internal iterator is tobag exhausted.'''

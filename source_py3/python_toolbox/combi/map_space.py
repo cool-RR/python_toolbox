@@ -11,7 +11,7 @@ infinity = float('inf')
 
 
         
-class MapSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
+class MapSpace(sequence_tools.CuteSequenceMixin, collections.abc.Sequence):
     '''
     A space of a function applied to a sequence.
     
