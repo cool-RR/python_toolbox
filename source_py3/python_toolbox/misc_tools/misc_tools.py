@@ -353,3 +353,25 @@ class AlternativeLengthMixin:
         from python_toolbox import sequence_tools
         return bool(sequence_tools.get_length(self))
         
+def phrase_iterable_in_english(iterable):
+    from python_toolbox import sequence_tools
+    from python_toolbox import combi
+    sequence = combi.MapSpace(str, iterable)
+    if len(sequence) == 0:
+        return ''
+    elif len(sequence) == 1:
+        (item,) = sequence
+        return item
+    elif len(sequence) == 2:
+        return ' and '.join(sequence)
+    else:
+        assert len(sequence) >= 3
+        return '%s and %s' % (', '.join(sequence[:-1]), sequence[-1])
+        
+    
+    
+    
+    
+    
+    
+    
