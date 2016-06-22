@@ -18,9 +18,7 @@ from .cached_property import CachedProperty
 class InConstructionMarker:
     @caching.CachedProperty
     def condition(self):
-        import threading
         return threading.Condition()
-        
         
 
 class SelfPlaceholder:
