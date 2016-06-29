@@ -7,8 +7,19 @@ Defines the `CachedType` metaclass.
 See its documentation for more details.
 '''
 
+import threading
+import contextlib
+
 from python_toolbox.sleek_reffing import SleekCallArgs
 
+from .cached_property import CachedProperty
+
+
+class InConstructionMarker:
+    @caching.CachedProperty
+    def condition(self):
+        return threading.Condition()
+        
 
 class SelfPlaceholder:
     '''Placeholder for `self` when storing call-args.''' 
@@ -42,9 +53,11 @@ class CachedType(type):
     '''
     
     def __new__(mcls, *args, **kwargs):
-        result = super().__new__(mcls, *args, **kwargs)
-        result.__cache = {}
-        return result
+        cls = super().__new__(mcls, *args, **kwargs)
+        cls.__cache = {}
+        cls.__quick_lock = threading.Lock()
+        cls.__construction_lock = threading.Lock()
+        return cls
 
     
     def __call__(cls, *args, **kwargs):
@@ -55,8 +68,19 @@ class CachedType(type):
             **kwargs
         )
         try:
-            return cls.__cache[sleek_call_args]
-        except KeyError:
-            cls.__cache[sleek_call_args] = value = \
-                                              super().__call__(*args, **kwargs)
-            return value
+            quick_locked = True
+            cls.__quick_lock.acquire()
+            try:
+                cached_value = cls.__cache[sleek_call_args]
+            except KeyError:
+                cls.__construction_lock.
+                exit_stack.pop_all
+                cls.__cache[sleek_call_args] = _IN_CONSTRUCTION
+                cls.__cache[sleek_call_args] = value = \
+                                                  super().__call__(*args, **kwargs)
+                return value
+        finally:
+            if construction_locked:
+                cls.__construction_lock.release()
+            if quick_locked:
+                cls.__quick_lock.release()
