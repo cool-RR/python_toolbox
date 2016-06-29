@@ -16,9 +16,8 @@ from .cached_property import CachedProperty
 
 
 class InConstructionMarker:
-    @caching.CachedProperty
-    def condition(self):
-        return threading.Condition()
+    def __init__(self):
+        self.lock = threading.Lock()
         
 
 class SelfPlaceholder:
@@ -67,20 +66,26 @@ class CachedType(type):
             *((SelfPlaceholder,) + args),
             **kwargs
         )
-        try:
-            quick_locked = True
+        
+        while True:
             cls.__quick_lock.acquire()
             try:
                 cached_value = cls.__cache[sleek_call_args]
             except KeyError:
-                cls.__construction_lock.
-                exit_stack.pop_all
-                cls.__cache[sleek_call_args] = _IN_CONSTRUCTION
-                cls.__cache[sleek_call_args] = value = \
-                                                  super().__call__(*args, **kwargs)
-                return value
-        finally:
-            if construction_locked:
-                cls.__construction_lock.release()
-            if quick_locked:
+                cls.__cache[sleek_call_args] = in_construction_marker = \
+                                                         InConstructionMarker()
                 cls.__quick_lock.release()
+                with in_construction_marker.lock:
+                    cls.__cache[sleek_call_args] = new_instance = \
+                                              super().__call__(*args, **kwargs)
+                    return new_instance
+            else:
+                if isinstance(cached_value, InConstructionMarker):
+                    in_construction_marker = cached_value
+                    with in_construction_marker.lock:
+                        continue
+                                                  
+                return value
+
+
+
