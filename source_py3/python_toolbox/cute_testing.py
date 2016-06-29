@@ -3,7 +3,6 @@
 
 '''This module defines tools for testing.'''
 
-import nose
 import sys
 
 from python_toolbox.third_party import unittest2
