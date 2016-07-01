@@ -3,6 +3,7 @@
 
 import threading
 
+from python_toolbox import sequence_tools
 from python_toolbox import cute_testing
 
 from python_toolbox.nifty_collections import ConditionList
@@ -77,12 +78,26 @@ def test_threaded():
     # First we're going to calculate the 
     
     expected_log_list = []
-    expected_thread_states = [0] * 10
-    for thread_number_to_advance in timings:
-        expected_thread_state = expected_thread_state[thread_number_to_advance]
-        c.append('')
-        
-
+    milestones_in_the_bank = [set() for _ in range(10)]
+    def get_thread_state(number):
+        for i in range(0, 10):
+            milestones_in_the_bank_for_thread = milestones_in_the_bank[number]
+            if i not in milestones_in_the_bank_for_thread:
+                return i - 1
+        return 9
+            
+    for milestone in milestones_release_order:
+        thread_number = int(milestone[1])
+        milestone_number = int(milestone[3])
+        old_thread_state = get_thread_state(thread_number)
+        milestones_in_the_bank[thread_number].append(milestone_number)
+        new_thread_state = get_thread_state(thread_number)
+        for milestone_accomplished in range(old_thread_state + 1,
+                                             new_thread_state + 1):
+            expected_log_list.append('t%sm%s' %
+                                     (thread_number, milestone_accomplished))
+    assert len(expected_log_list) == 100
+    assert not sequence_tools.get_recurrences(expected_log_list)
     
     # And now, let the show begin!    
     threads = tuple(map(Thread, range(10)))
