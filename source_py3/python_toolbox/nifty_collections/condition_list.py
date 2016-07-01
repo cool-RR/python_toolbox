@@ -49,6 +49,11 @@ class ConditionList(collections.abc.MutableSequence,
         with self.__condition:
             self.__condition.notify_all()
     
+    def wait(self, *, timeout=None):
+        from python_toolbox import sequence_tools
+        with self.__condition:
+            self.__condition.wait(timeout=timeout)
+    
     def wait_for(self, *items, remove=False, timeout=None,
                  extra_predicate=lambda: True):
         from python_toolbox import sequence_tools
@@ -60,10 +65,28 @@ class ConditionList(collections.abc.MutableSequence,
             if remove:
                 sequence_tools.remove_items(items, self.__list)
         
-    def wait(self, *, timeout=None):
+    def wait_for_missing(self, *missing_items, timeout=None,
+                         extra_predicate=lambda: True):
         from python_toolbox import sequence_tools
         with self.__condition:
-            self.__condition.wait(timeout=timeout)
+            self.__condition.wait_for(
+                lambda: (extra_predicate() and
+                         not sequence_tools.is_contained_in(missing_items,
+                                                            self.__list))
+            )
+        
+    def wait_for_empty(self, timeout=None, extra_predicate=lambda: True):
+        from python_toolbox import sequence_tools
+        with self.__condition:
+            self.__condition.wait_for(
+                lambda: (extra_predicate() and not self.__list)
+            )
+            
+    def play_out(self, iterable):
+        for item in iterable:
+            self.append(item)
+            self.wait_for_missing(item)
+        
         
     def __repr__(self):
         return '<%s: %s>' % (type(self).__name__, self.__list)
