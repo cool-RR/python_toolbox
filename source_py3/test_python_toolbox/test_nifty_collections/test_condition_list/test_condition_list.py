@@ -31,12 +31,19 @@ def test():
     
 def test_threaded():
     
-    
     log_list = []
     log_list_lock = threading.RLock()
+    # This `log_list_lock` serves two purposes:
+    # 1. Ensuring no two threads try to write to `log_list` at the same time.
+    #    (Though the GIL might protect from that, I'm not sure, but it's
+    #    implementation detail anyway.)
+    # 2. Ensuring that only one thread runs at a time, so there won't be any 
+    #    race conditions and the log list will be in the expected order. This 
+    #    is done by acquiring this lock between releasing one milestone and the
+    #    next.
+    
     
     c = ConditionList()
-    
     
     class Thread(threading.Thread):
         def __init__(self, number):
@@ -48,22 +55,49 @@ def test_threaded():
                 c.wait_for('t%sm%s' % (self.number, i))
                 with log_list_lock:
                     log_list.append('Thread %s achieved milestone %s')
+                    
+    class ManagementThread(threading.Thread):
+        def __init__(self):
+            super().__init__()
+            
+        def run(self):
+            for i, milestone in enumerate(milestones_release_order):
+                with log_list_lock:
+                    assert len(log_list_lock) == i
+                c.append(milestone)
 
     threads = tuple(map(Thread, range(10)))
+    management_thread = ManagementThread()
     for thread in threads:
         thread.start()
+    management_thread.start()
+    # We're going to let these puppies grind in the background while we
+    # calculate the expected log output.
     
-    timings = [0, 1, 4, 7, 9, 9, 8, 8, 3, 5, 3, 9, 5, 2, 1, 1, 9, 8, 1, 7, 3,
-               4, 9, 4, 5, 0, 1, 0, 9, 5, 0, 5, 4, 4, 5, 9, 3, 9, 2, 3, 8, 7,
-               2, 2, 1, 3, 0, 0, 7, 6, 6, 8, 7, 6, 4, 6, 2, 6, 0, 1, 7, 8, 6,
-               2, 9, 3, 4, 3, 0, 2, 5, 1, 4, 2, 4, 3, 0, 1, 7, 5, 4, 5, 8, 6,
-               5, 2, 8, 6, 1, 2, 6, 6, 3, 0, 7, 7, 9, 8, 7, 8]
+    milestones_release_order = [
+        't6m3', 't9m4', 't1m4', 't1m8', 't6m0', 't7m7', 't4m4', 't5m1', 't8m8',
+        't4m0', 't5m2', 't8m9', 't5m8', 't2m4', 't1m2', 't9m9', 't6m7', 't9m7',
+        't1m9', 't8m3', 't6m8', 't7m5', 't5m4', 't3m6', 't0m5', 't4m2', 't6m9',
+        't9m0', 't9m1', 't6m4', 't8m5', 't0m3', 't3m8', 't0m1', 't4m1', 't4m3',
+        't3m3', 't1m7', 't5m0', 't8m0', 't2m1', 't6m1', 't1m1', 't9m6', 't3m7',
+        't7m8', 't8m4', 't8m6', 't9m5', 't6m6', 't5m3', 't4m9', 't3m5', 't4m8',
+        't0m6', 't3m1', 't0m8', 't5m5', 't4m6', 't3m0', 't7m0', 't2m5', 't5m7',
+        't7m6', 't7m4', 't8m2', 't4m5', 't4m7', 't8m1', 't9m2', 't2m6', 't2m2',
+        't1m6', 't2m3', 't1m5', 't2m8', 't0m0', 't6m2', 't1m3', 't7m1', 't2m0',
+        't3m2', 't3m9', 't2m9', 't7m3', 't0m2', 't2m7', 't8m7', 't7m2', 't1m0',
+        't0m4', 't0m9', 't0m7', 't6m5', 't9m8', 't5m6', 't3m4', 't5m9', 't7m9',
+        't9m3'
+    ]
     # (Generated randomly, keeping static here to ensure reproducible test
     # runs.)
     
+    # First we're going to calculate the 
+    
     expected_log_list = []
     expected_thread_states = [0] * 10
-    for timing in timings:
+    for thread_number_to_advance in timings:
+        expected_thread_state = expected_thread_state[thread_number_to_advance]
+        c.append('')
         
         
         
