@@ -49,16 +49,18 @@ def test_threaded():
         def __init__(self, number):
             super().__init__()
             self.number = number
+            self.busy_condition = threading.Condition()
             
         def run(self):
             thread_started_queue.put(self.number)
             for i in range(10):
-                c.is_waiting = True
                 milestone = 't%sm%s' % (self.number, i)
+                c.is_waiting = True
                 c.wait_for(milestone)
-                c.is_waiting = False
-                with log_list_lock:
-                    log_list.append(milestone)
+                with self.busy_condition:
+                    c.is_waiting = False
+                    with log_list_lock:
+                        log_list.append(milestone)
                     
     
     milestones_release_order = [
@@ -113,15 +115,15 @@ def test_threaded():
     ) == list(range(10))
     
     # And now, let the show begin!
-    threads_finished_advancing = lambda: all([not thread.is_waiting for thread
-                                              in threads])
+    def wait_for_threads_to_advance():
+        for thread in threads:
+            with thread.busy_condition:
+                pass
     for i, milestone in enumerate(milestones_release_order):
         with log_list_lock:
             assert len(log_list) <= i
         c.append(milestone)
-        if not threads_finished_advancing():
-            time.sleep(1)
-            assert threads_finished_advancing()
+        wait_for_threads_to_advance()
         
     # This is the money line right here:
     assert log_list == expected_log_list
