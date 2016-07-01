@@ -119,12 +119,7 @@ def test_threaded():
         thread.start()
     
     # Wait for all the threads to start...
-    assert list(
-        cute_iter_tools.shorten(
-            sorted(queue_tools.iterate(thread_advanced_queue, block=True)), 10
-        )
-    ) == list(range(10))
-    
+    wait_for_threads_to_advance()    
     
     # And now, let the show begin!
     for i, milestone in enumerate(milestones_release_order):
