@@ -3,7 +3,10 @@
 
 import threading
 import time
+import queue as queue_module
 
+from python_toolbox import queue_tools
+from python_toolbox import cute_iter_tools
 from python_toolbox import sequence_tools
 from python_toolbox import cute_testing
 
@@ -38,6 +41,8 @@ def test_threaded():
     
     c = ConditionList()
     
+    thread_started_queue = queue_module.Queue()
+    
     class Thread(threading.Thread):
         is_waiting = False
         
@@ -46,6 +51,7 @@ def test_threaded():
             self.number = number
             
         def run(self):
+            thread_started_queue.put(self.number)
             for i in range(10):
                 c.is_waiting = True
                 milestone = 't%sm%s' % (self.number, i)
@@ -96,10 +102,17 @@ def test_threaded():
     assert len(expected_log_list) == 100
     assert not sequence_tools.get_recurrences(expected_log_list)
     
-    # And now, let the show begin!
+    # Start your engines...
     threads = tuple(map(Thread, range(10)))
     for thread in threads:
         thread.start()
+    
+    # This waits for all the threads to start:
+    assert sorted(
+        cute_iter_tools.shorten(queue_tools.iterate(thread_started_queue), 10)
+    ) == list(range(10))
+    
+    # And now, let the show begin!
     threads_finished_advancing = lambda: all([not thread.is_waiting for thread
                                               in threads])
     for i, milestone in enumerate(milestones_release_order):
