@@ -2,6 +2,7 @@
 # This program is distributed under the MIT license.
 
 import threading
+import time
 
 from python_toolbox import sequence_tools
 from python_toolbox import cute_testing
@@ -34,28 +35,24 @@ def test_threaded():
     
     log_list = []
     log_list_lock = threading.RLock()
-    # This `log_list_lock` serves two purposes:
-    # 1. Ensuring no two threads try to write to `log_list` at the same time.
-    #    (Though the GIL might protect from that, I'm not sure, but it's
-    #    implementation detail anyway.)
-    # 2. Ensuring that only one thread runs at a time, so there won't be any 
-    #    race conditions and the log list will be in the expected order. This 
-    #    is done by acquiring this lock between releasing one milestone and the
-    #    next.
-    
     
     c = ConditionList()
     
     class Thread(threading.Thread):
+        is_waiting = False
+        
         def __init__(self, number):
             super().__init__()
             self.number = number
             
         def run(self):
             for i in range(10):
-                c.wait_for('t%sm%s' % (self.number, i))
+                c.is_waiting = True
+                milestone = 't%sm%s' % (self.number, i)
+                c.wait_for(milestone)
+                c.is_waiting = False
                 with log_list_lock:
-                    log_list.append('Thread %s achieved milestone %s')
+                    log_list.append(milestone)
                     
     
     milestones_release_order = [
@@ -90,7 +87,7 @@ def test_threaded():
         thread_number = int(milestone[1])
         milestone_number = int(milestone[3])
         old_thread_state = get_thread_state(thread_number)
-        milestones_in_the_bank[thread_number].append(milestone_number)
+        milestones_in_the_bank[thread_number].add(milestone_number)
         new_thread_state = get_thread_state(thread_number)
         for milestone_accomplished in range(old_thread_state + 1,
                                              new_thread_state + 1):
@@ -99,14 +96,19 @@ def test_threaded():
     assert len(expected_log_list) == 100
     assert not sequence_tools.get_recurrences(expected_log_list)
     
-    # And now, let the show begin!    
+    # And now, let the show begin!
     threads = tuple(map(Thread, range(10)))
     for thread in threads:
         thread.start()
+    threads_finished_advancing = lambda: all([not thread.is_waiting for thread
+                                              in threads])
     for i, milestone in enumerate(milestones_release_order):
         with log_list_lock:
-            assert len(log_list_lock) == i
+            assert len(log_list) <= i
         c.append(milestone)
+        if not threads_finished_advancing():
+            time.sleep(1)
+            assert threads_finished_advancing()
         
     # This is the money line right here:
     assert log_list == expected_log_list

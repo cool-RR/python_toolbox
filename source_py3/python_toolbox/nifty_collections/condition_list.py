@@ -47,7 +47,7 @@ class ConditionList(collections.abc.MutableSequence):
         with self.__condition:
             self.__condition.notify_all()
     
-    def wait_for(self, *items, remove=True):
+    def wait_for(self, *items, remove=False):
         from python_toolbox import sequence_tools
         with self.__condition:
             self.__condition.wait_for(
