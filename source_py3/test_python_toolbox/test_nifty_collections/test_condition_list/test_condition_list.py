@@ -56,23 +56,6 @@ def test_threaded():
                 with log_list_lock:
                     log_list.append('Thread %s achieved milestone %s')
                     
-    class ManagementThread(threading.Thread):
-        def __init__(self):
-            super().__init__()
-            
-        def run(self):
-            for i, milestone in enumerate(milestones_release_order):
-                with log_list_lock:
-                    assert len(log_list_lock) == i
-                c.append(milestone)
-
-    threads = tuple(map(Thread, range(10)))
-    management_thread = ManagementThread()
-    for thread in threads:
-        thread.start()
-    management_thread.start()
-    # We're going to let these puppies grind in the background while we
-    # calculate the expected log output.
     
     milestones_release_order = [
         't6m3', 't9m4', 't1m4', 't1m8', 't6m0', 't7m7', 't4m4', 't5m1', 't8m8',
@@ -99,8 +82,18 @@ def test_threaded():
         expected_thread_state = expected_thread_state[thread_number_to_advance]
         c.append('')
         
+
+    
+    # And now, let the show begin!    
+    threads = tuple(map(Thread, range(10)))
+    for thread in threads:
+        thread.start()
+    for i, milestone in enumerate(milestones_release_order):
+        with log_list_lock:
+            assert len(log_list_lock) == i
+        c.append(milestone)
         
-        
+    # This is the money line right here:
     assert log_list == expected_log_list
     
     
