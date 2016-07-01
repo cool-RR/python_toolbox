@@ -5,13 +5,14 @@ import threading
 
 import collections.abc
 
+from python_toolbox import context_management
+
 
 class ConditionList(collections.abc.MutableSequence):
     
     def __init__(self, iterable=None):
         self.__list = list(iterable) if iterable is not None else []
         self.__condition = threading.Condition()
-        self.__new_items = []
         
     
     def __setitem__(self, index, value):
@@ -19,11 +20,9 @@ class ConditionList(collections.abc.MutableSequence):
             raise NotImplementedError("Setting a slice isn't implemented yet.")
         assert isinstance(index, int)
         with self.__condition:
-            assert not self.__new_items
             old_value = self.__list[index]
             self.__list[index] = value
             if value != old_value:
-                self.__new_items.append(value)
                 self.__notify_all()
                 
 
@@ -34,10 +33,8 @@ class ConditionList(collections.abc.MutableSequence):
     def insert(self, index, value):
         assert isinstance(index, int)
         with self.__condition:
-            assert not self.__new_items
             self.__list.insert(index, value)
             if value != old_value:
-                self.__new_items.append(value)
                 self.__notify_all()
     
     def __getitem__(self, index):
@@ -50,10 +47,16 @@ class ConditionList(collections.abc.MutableSequence):
             return len(self.__list)
         
         
-    def notify_all(self):
-        pass
+    def __notify_all(self):
+        with self.__condition:
+            self.__condition.notify_all()
     
+    @context_management.ContextManagerType
     def wait_for(self, *items):
-        
+        from python_toolbox import sequence_tools
+        with self.__condition:
+            self.__condition.wait_for(
+                    lambda: sequence_tools.is_contained_in(items, self.__list))
+            yield
         
         

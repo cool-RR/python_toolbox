@@ -359,4 +359,12 @@ def is_subsequence(big_sequence, small_sequence):
                 return True
         
         
+def is_contained_in(iterable, container):
+    desired_items = list(iterable)
+    for item in container:
+        if item in desired_items:
+            desired_items.remove(item)
+            if not desired_items:
+                return True
+    return False
     
