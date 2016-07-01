@@ -8,11 +8,13 @@ import collections.abc
 from python_toolbox import context_management
 
 
-class ConditionList(collections.abc.MutableSequence):
+class ConditionList(collections.abc.MutableSequence,
+                    context_management.DelegatingContextManager):
     
     def __init__(self, iterable=None):
         self.__list = list(iterable) if iterable is not None else []
-        self.__condition = threading.Condition()
+        self.__condition = \
+                         self.delegatee_context_manager = threading.Condition()
         
     
     def __setitem__(self, index, value):
@@ -59,3 +61,4 @@ class ConditionList(collections.abc.MutableSequence):
     def __repr__(self):
         return '<%s: %s>' % (type(self).__name__, self.__list)
         
+    
