@@ -41,7 +41,7 @@ def test_threaded():
     
     c = ConditionList()
     
-    thread_started_queue = queue_module.Queue()
+    thread_advanced_queue = queue_module.Queue()
     
     class Thread(threading.Thread):
         def __init__(self, number):
@@ -49,11 +49,18 @@ def test_threaded():
             self.number = number
             
         def run(self):
-            thread_started_queue.put(self.number)
+            thread_advanced_queue.put(self.number)
             for i in range(10):
                 milestone = 't%sm%s' % (self.number, i)
                 c.is_waiting = True
-                c.wait_for(milestone)
+                c.wait_for(
+                    milestone,
+                    extra_predicate=lambda: (thread_advanced_queue.put(self.number)
+                                             or True)
+                )
+                # (Used an extra predicate above just to let the main thread
+                #  know that we done checked our predicate. This wouldn't be
+                #  needed in real code.)
                 with log_list_lock:
                     log_list.append(milestone)
                     
@@ -99,33 +106,35 @@ def test_threaded():
     assert len(expected_log_list) == 100
     assert not sequence_tools.get_recurrences(expected_log_list)
     
+    def wait_for_threads_to_advance():
+        thread_numbers_we_have_not_seen_yet = set(range(10))
+        while thread_numbers_we_have_not_seen_yet:
+            thread_numbers_we_have_not_seen_yet.discard(
+                thread_advanced_queue.get()
+            )
+    
     # Start your engines...
     threads = tuple(map(Thread, range(10)))
     for thread in threads:
         thread.start()
     
-    # This waits for all the threads to start:
-    assert sorted(
-        cute_iter_tools.shorten(queue_tools.iterate(thread_started_queue), 10)
+    # Wait for all the threads to start...
+    assert list(
+        cute_iter_tools.shorten(
+            sorted(queue_tools.iterate(thread_advanced_queue, block=True)), 10
+        )
     ) == list(range(10))
     
-    time.sleep(1)
     
     # And now, let the show begin!
     for i, milestone in enumerate(milestones_release_order):
         with log_list_lock:
             assert len(log_list) <= i
         c.append(milestone)
-        
-        # Ensure that all threads advanced if they should, by ensuring that the
-        # condition lock is free:
-        with c:
-            pass
+        wait_for_threads_to_advance()
         
     # This is the money line right here:
     assert log_list == expected_log_list
-    
-    
     
     
                 

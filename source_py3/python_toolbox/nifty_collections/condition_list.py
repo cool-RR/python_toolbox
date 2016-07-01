@@ -49,14 +49,21 @@ class ConditionList(collections.abc.MutableSequence,
         with self.__condition:
             self.__condition.notify_all()
     
-    def wait_for(self, *items, remove=False):
+    def wait_for(self, *items, remove=False, timeout=None,
+                 extra_predicate=lambda: True):
         from python_toolbox import sequence_tools
         with self.__condition:
             self.__condition.wait_for(
-                    lambda: sequence_tools.is_contained_in(items, self.__list))
+                lambda: (extra_predicate() and
+                         sequence_tools.is_contained_in(items, self.__list))
+            )
             if remove:
                 sequence_tools.remove_items(items, self.__list)
-            return
+        
+    def wait(self, *, timeout=None):
+        from python_toolbox import sequence_tools
+        with self.__condition:
+            self.__condition.wait(timeout=timeout)
         
     def __repr__(self):
         return '<%s: %s>' % (type(self).__name__, self.__list)
