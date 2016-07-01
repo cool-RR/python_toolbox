@@ -368,3 +368,21 @@ def is_contained_in(iterable, container):
                 return True
     return False
     
+def remove_items(items_to_remove, mutable_sequence, *,
+                 ensure_contained_first=False):
+    assert isinstance(mutable_sequence, collections.abc.MutableSequence)
+    items_to_remove = list(items_to_remove)
+    if ensure_contained_first:
+        assert is_contained_in(items_to_remove, mutable_sequence)
+    for i, item in enumerate(mutable_sequence):
+        try:
+            items_to_remove.remove(item)
+        except ValueError:
+            pass
+        else:
+            del mutable_sequence[i]
+            if not items_to_remove:
+                return
+    raise ValueError('Not all items were found, possibly some items were '
+                     'removed.')
+    

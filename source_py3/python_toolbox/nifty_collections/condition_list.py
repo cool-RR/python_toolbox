@@ -20,10 +20,8 @@ class ConditionList(collections.abc.MutableSequence):
             raise NotImplementedError("Setting a slice isn't implemented yet.")
         assert isinstance(index, int)
         with self.__condition:
-            old_value = self.__list[index]
             self.__list[index] = value
-            if value != old_value:
-                self.__notify_all()
+            self.__notify_all()
                 
 
     def __delitem__(self, index):
@@ -34,15 +32,13 @@ class ConditionList(collections.abc.MutableSequence):
         assert isinstance(index, int)
         with self.__condition:
             self.__list.insert(index, value)
-            if value != old_value:
-                self.__notify_all()
+            self.__notify_all()
     
     def __getitem__(self, index):
         with self.__condition:
             return self.__list[index]
 
-
-    def __len__(self, ):
+    def __len__(self):
         with self.__condition:
             return len(self.__list)
         
@@ -51,12 +47,15 @@ class ConditionList(collections.abc.MutableSequence):
         with self.__condition:
             self.__condition.notify_all()
     
-    @context_management.ContextManagerType
-    def wait_for(self, *items):
+    def wait_for(self, *items, remove=True):
         from python_toolbox import sequence_tools
         with self.__condition:
             self.__condition.wait_for(
                     lambda: sequence_tools.is_contained_in(items, self.__list))
-            yield
+            if remove:
+                sequence_tools.remove_items(items, self.__list)
+            return
         
+    def __repr__(self):
+        return '<%s: %s>' % (type(self).__name__, self.__list)
         
