@@ -80,12 +80,12 @@ class CachedType(type):
                                               super().__call__(*args, **kwargs)
                     return new_instance
             else:
+                cls.__quick_lock.release()
                 if isinstance(cached_value, InConstructionMarker):
                     in_construction_marker = cached_value
                     with in_construction_marker.lock:
                         continue
-                                                  
-                return value
-
+                else:
+                    return cached_value
 
 
