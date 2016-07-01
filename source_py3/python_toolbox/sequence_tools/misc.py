@@ -374,15 +374,19 @@ def remove_items(items_to_remove, mutable_sequence, *,
     items_to_remove = list(items_to_remove)
     if ensure_contained_first:
         assert is_contained_in(items_to_remove, mutable_sequence)
+    indices_to_remove = []
     for i, item in enumerate(mutable_sequence):
         try:
             items_to_remove.remove(item)
         except ValueError:
             pass
         else:
-            del mutable_sequence[i]
+            indices_to_remove.append(i)
             if not items_to_remove:
-                return
-    raise ValueError('Not all items were found, possibly some items were '
-                     'removed.')
+                break
+    else:
+        raise ValueError("Not all items were found, the list wasn't changed.")
+    
+    for i in reversed(indices_to_remove):
+        del mutable_sequence[i]
     

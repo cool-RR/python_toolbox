@@ -119,7 +119,9 @@ def test_thread_safe():
     assert isinstance(tiger_value, Feline)
     assert isinstance(cat_value, Feline)
     
-    condition_list.play_out(['t4go', 't4done'])
+    condition_list.play_out(['t4go'])
+    condition_list.wait_for('t4done', remove=True)
+    assert not condition_list
     
     assert len(cache) == 2
     ((key_1, value_1), (key_2, value_2)) = cache.items()

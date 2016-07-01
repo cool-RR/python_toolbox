@@ -87,7 +87,7 @@ class ConditionList(collections.abc.MutableSequence,
         assert not self
         for item in iterable:
             self.append(item)
-            self.wait_for_empty()
+            self.wait_for_missing(item)
         
         
     def __repr__(self):
