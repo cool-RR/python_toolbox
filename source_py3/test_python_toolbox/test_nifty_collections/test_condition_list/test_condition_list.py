@@ -44,6 +44,7 @@ def test_threaded():
     thread_advanced_queue = queue_module.Queue()
     
     class Thread(threading.Thread):
+        is_done = False
         def __init__(self, number):
             super().__init__()
             self.number = number
@@ -63,6 +64,9 @@ def test_threaded():
                 #  needed in real code.)
                 with log_list_lock:
                     log_list.append(milestone)
+                    
+            self.is_done = True
+            thread_advanced_queue.put(self.number)
                     
     
     milestones_release_order = [
@@ -107,7 +111,8 @@ def test_threaded():
     assert not sequence_tools.get_recurrences(expected_log_list)
     
     def wait_for_threads_to_advance():
-        thread_numbers_we_have_not_seen_yet = set(range(10))
+        thread_numbers_we_have_not_seen_yet = {thread.number for thread in
+                                               threads if not thread.is_done}
         while thread_numbers_we_have_not_seen_yet:
             thread_numbers_we_have_not_seen_yet.discard(
                 thread_advanced_queue.get()

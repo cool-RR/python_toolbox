@@ -25,4 +25,4 @@ class Feline(metaclass=CachedType):
     creation_hook = lambda self: None
     
 def test_thread_safe():
-    f1 =
+    pass # blocktodo use ConditionList
