@@ -109,6 +109,8 @@ def test_threaded():
         cute_iter_tools.shorten(queue_tools.iterate(thread_started_queue), 10)
     ) == list(range(10))
     
+    time.sleep(1)
+    
     # And now, let the show begin!
     for i, milestone in enumerate(milestones_release_order):
         with log_list_lock:
