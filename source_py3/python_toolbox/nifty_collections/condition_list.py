@@ -29,6 +29,7 @@ class ConditionList(collections.abc.MutableSequence,
     def __delitem__(self, index):
         with self.__condition:
             del self.__list[index]
+            self.__notify_all()
 
     def insert(self, index, value):
         assert isinstance(index, int)
@@ -63,7 +64,7 @@ class ConditionList(collections.abc.MutableSequence,
                          sequence_tools.is_contained_in(items, self.__list))
             )
             if remove:
-                sequence_tools.remove_items(items, self.__list)
+                sequence_tools.remove_items(items, self)
         
     def wait_for_missing(self, *missing_items, timeout=None,
                          extra_predicate=lambda: True):
@@ -83,9 +84,10 @@ class ConditionList(collections.abc.MutableSequence,
             )
             
     def play_out(self, iterable):
+        assert not self
         for item in iterable:
             self.append(item)
-            self.wait_for_missing(item)
+            self.wait_for_empty()
         
         
     def __repr__(self):
