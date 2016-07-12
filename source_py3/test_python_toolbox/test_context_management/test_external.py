@@ -3,6 +3,8 @@
 
 '''Tests taken from Python's `contextlib'.'''
 
+from __future__ import generator_stop
+
 import sys
 
 import nose

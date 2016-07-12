@@ -7,6 +7,8 @@ This module defines decorators that modify context managers.
 See their documentation for more information.
 '''
 
+from __future__ import generator_stop
+
 import string
 import random
 

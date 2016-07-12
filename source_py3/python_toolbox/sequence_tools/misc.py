@@ -360,6 +360,12 @@ def is_subsequence(big_sequence, small_sequence):
         
         
 def is_contained_in(iterable, container):
+    '''
+    Check whether all the items in `iterable` are in `container`.
+    
+    Attempts an efficient implementation for the case where container might be
+    big and not optimized for lookups.
+    '''
     desired_items = list(iterable)
     if isinstance(container, collections.abc.Iterable):
         for item in container:
@@ -372,10 +378,16 @@ def is_contained_in(iterable, container):
         return all(item in container for item in iterable)
     
 def remove_items(items_to_remove, mutable_sequence, *,
-                 ensure_contained_first=False):
+                 assert_contained_first=False):
+    '''
+    Remove all the items in `items_to_remove` from `mutable_sequence`.
+    
+    Attempts an efficient implementation for the case where `mutable_sequence`
+    might be big and not optimized for looking up an item and removing it.
+    '''
     assert isinstance(mutable_sequence, collections.abc.MutableSequence)
     items_to_remove = list(items_to_remove)
-    if ensure_contained_first:
+    if assert_contained_first:
         assert is_contained_in(items_to_remove, mutable_sequence)
     indices_to_remove = []
     for i, item in enumerate(mutable_sequence):

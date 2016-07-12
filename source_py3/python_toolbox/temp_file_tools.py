@@ -3,6 +3,8 @@
 
 '''Defines various tools related to temporary files.'''
 
+from __future__ import generator_stop
+
 import tempfile
 import shutil
 try:

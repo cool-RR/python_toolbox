@@ -7,6 +7,8 @@ Defines the `CuteSleekValueDict` class.
 See its documentation for more details.
 '''
 
+from __future__ import generator_stop
+
 import weakref
 import collections
 

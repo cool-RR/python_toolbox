@@ -3,6 +3,8 @@
 
 '''Testing module for various problematic context managers.'''
 
+from __future__ import generator_stop
+
 import nose
 
 from python_toolbox import cute_testing

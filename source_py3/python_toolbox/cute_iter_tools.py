@@ -5,6 +5,8 @@
 # todo: make something like `filter` except it returns first found, or raises
 # exception
 
+from __future__ import generator_stop
+
 import collections
 import operator
 import itertools

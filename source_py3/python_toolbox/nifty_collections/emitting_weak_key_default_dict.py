@@ -7,6 +7,8 @@ Defines the `EmittingWeakKeyDefaultDict` class.
 See its documentation for more details.
 '''
 
+from __future__ import generator_stop
+
 from .weak_key_default_dict import WeakKeyDefaultDict
 
 

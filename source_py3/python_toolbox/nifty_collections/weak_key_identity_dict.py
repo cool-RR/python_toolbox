@@ -8,6 +8,8 @@ See its documentation for more details.
 '''
 # todo: revamp
 
+from __future__ import generator_stop
+
 import weakref
 import collections
 
