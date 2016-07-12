@@ -116,6 +116,12 @@ def test_parent_folder():
         with create_temp_folder(parent_folder=str(tf1)) as tf2:
             assert isinstance(tf2, pathlib.Path)
             assert str(tf2).startswith(str(tf1))
+        
+def test_parent_folder_pathlib():
+    with create_temp_folder() as tf1:
+        with create_temp_folder(parent_folder=tf1) as tf2:
+            assert isinstance(tf2, pathlib.Path)
+            assert str(tf2).startswith(str(tf1))
     
 def test_chmod():
     with create_temp_folder(chmod=0o777) as liberal_temp_folder, \
