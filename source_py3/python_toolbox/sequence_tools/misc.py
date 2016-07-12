@@ -361,12 +361,15 @@ def is_subsequence(big_sequence, small_sequence):
         
 def is_contained_in(iterable, container):
     desired_items = list(iterable)
-    for item in container:
-        if item in desired_items:
-            desired_items.remove(item)
-            if not desired_items:
-                return True
-    return False
+    if isinstance(container, collections.abc.Iterable):
+        for item in container:
+            if item in desired_items:
+                desired_items.remove(item)
+                if not desired_items:
+                    return True
+        return False
+    else:
+        return all(item in container for item in iterable)
     
 def remove_items(items_to_remove, mutable_sequence, *,
                  ensure_contained_first=False):
