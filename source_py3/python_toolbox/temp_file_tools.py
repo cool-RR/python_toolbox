@@ -47,8 +47,13 @@ def create_temp_folder(*, prefix=tempfile.template, suffix='',
         create_temp_folder(chmod=0o550)
     
     '''
-    temp_folder = pathlib.Path(tempfile.mkdtemp(prefix=prefix, suffix=suffix, 
-                                                dir=str(parent_folder)))
+    temp_folder = pathlib.Path(
+        tempfile.mkdtemp(
+            prefix=prefix,
+            suffix=suffix, 
+            dir=str(parent_folder) if parent_folder is not None else None,
+        )
+    )
     try:
         if chmod is not None:
             temp_folder.chmod(chmod)
