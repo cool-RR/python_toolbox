@@ -60,8 +60,8 @@ def all_equivalent(iterable, relation=operator.eq, *, assume_reflexive=True,
     return all(itertools.starmap(relation, pairs))
 
 
-def get_equivalence_classes(iterable, key=None, container=set, *, 
-                            use_ordered_dict=False, sort_ordered_dict=False):
+def get_equivalence_classes(iterable, key=None, *,
+                            big_container=dict, small_container=set):
     '''
     Divide items in `iterable` to equivalence classes, using the key function.
     
@@ -106,32 +106,30 @@ def get_equivalence_classes(iterable, key=None, container=set, *,
     #                                                                         #
     if key is None:
         if isinstance(iterable, collections.abc.Mapping):
-            d = iterable
+            items = d.items()
         else:
-            try:
-                d = dict(iterable)
-            except ValueError:
-                raise Exception(
-                    "You can't put in a non-dict without also supplying a "
-                    "`key` function. We need to know which key to use."
-                )
+            raise Exception(
+                "You can't put in a non-dict without also supplying a "
+                "`key` function. We need to know which key to use."
+            )
     else: # key is not None
         assert cute_iter_tools.is_iterable(iterable)
         key_function = comparison_tools.process_key_function_or_attribute_name(
             key
         )
-        d = {key: key_function(key) for key in iterable}
+        items = ((key, key_function(key)) for key in iterable)
     #                                                                         #
     ### Finished pre-processing input. ########################################
     
-    if use_ordered_dict or sort_ordered_dict:
-        from python_toolbox import nifty_collections
-        new_dict = nifty_collections.OrderedDict()
+    if isinstance(big_container, type):
+        new_dict = big_container()
     else:
-        new_dict = {}
-    for key, value in d.items():
-        new_dict.setdefault(value, []).append(key)
+        assert isinstance(big_container, collections.abc.Mapping)
+        new_dict = big_container
     
+    for key, value in items:
+        new_dict.setdefault(value, []).append(key)
+    1 / 0 i was here
     # Making into desired container:
     for key, value in new_dict.copy().items():
         new_dict[key] = container(value)
