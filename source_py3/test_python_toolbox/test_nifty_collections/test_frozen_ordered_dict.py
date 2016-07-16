@@ -65,3 +65,13 @@ def test_reversed():
                    tuple(reversed(tuple(frozen_ordered_dict.reversed.items())))
     assert type(frozen_ordered_dict.reversed) is type(frozen_ordered_dict) \
                                                            is FrozenOrderedDict
+
+def test_repr():
+    d1 = FrozenOrderedDict(((4, 3), (2, 1)))
+    assert repr(d1) == 'FrozenOrderedDict([(4, 3), (2, 1)])'
+    
+    d2 = FrozenOrderedDict()
+    assert repr(d2) == 'FrozenOrderedDict()'
+    
+    
+    

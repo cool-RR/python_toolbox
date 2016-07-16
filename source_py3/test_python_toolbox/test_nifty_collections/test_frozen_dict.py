@@ -34,3 +34,14 @@ def test():
     assert repr(frozen_dict).startswith('FrozenDict(')
     
     assert pickle.loads(pickle.dumps(frozen_dict)) == frozen_dict
+    
+def test_repr():
+    d1 = FrozenDict(((4, 3), (2, 1)))
+    assert repr(d1) in {'FrozenDict({4: 3, 2: 1})',
+                        'FrozenDict({2: 1, 4: 3})'}
+    
+    d2 = FrozenDict()
+    assert repr(d2) == 'FrozenDict()'
+    
+    
+    

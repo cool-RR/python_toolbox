@@ -42,7 +42,7 @@ class _AbstractFrozenDict(collections.abc.Mapping):
         return self._hash
     
     __repr__ = lambda self: '%s(%s)' % (type(self).__name__,
-                                        repr(self._dict))
+                                        repr(self._dict) if self._dict else '')
     __reduce__ = lambda self: (self.__class__ , (self._dict,))
 
     
@@ -90,3 +90,13 @@ class FrozenOrderedDict(Ordered, _AbstractFrozenDict):
         if self._reversed is None:
             self._reversed = type(self)(reversed(tuple(self.items())))
         return self._reversed
+    
+    def __repr__(self):
+        if self._dict:
+            inner = '[%s]' % ', '.join(
+                '(%s, %s)' % item for item in self._dict.items()
+            )
+        else:
+            inner = ''
+        return '%s(%s)' % (type(self).__name__, inner)
+    
