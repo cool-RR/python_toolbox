@@ -30,43 +30,50 @@ def test_iterable_input():
                                           == {0: {1, 4}, 3: {2+3j}, -6: {5-6j}}
     
     
-def test_ordered_dict_output():
+def test_big_container():
     # Insertion order:
     
-    assert get_equivalence_classes(
-        nifty_collections.OrderedDict(((1, 2), (3, 4), ('meow', 2))),
-        use_ordered_dict=True) == \
-    nifty_collections.OrderedDict([(2, {1, 'meow'}), (4, {3})])
+    assert (
+        get_equivalence_classes(
+            nifty_collections.OrderedDict(((1, 2), (3, 4), ('meow', 2))),
+            big_container=nifty_collections.OrderedDict
+        ) ==
+        get_equivalence_classes(
+            nifty_collections.OrderedDict(((1, 2), (3, 4), ('meow', 2))),
+            big_container=nifty_collections.OrderedDict()
+        ) == nifty_collections.OrderedDict([(2, {1, 'meow'}), (4, {3})])
+    )
+    
+    assert (
+        get_equivalence_classes(
+            nifty_collections.OrderedDict(((1, 2), (3, 4), ('meow', 2))),
+            big_container=dict
+        ) == 
+        get_equivalence_classes(
+            nifty_collections.OrderedDict(((1, 2), (3, 4), ('meow', 2))),
+            big_container={}
+        ) == {2: {1, 'meow'}, 4: {3}}
+    )
     
     assert get_equivalence_classes(
         nifty_collections.OrderedDict((('meow', 2), (1, 2), (3, 4))),
-        use_ordered_dict=True) == \
-    nifty_collections.OrderedDict([(2, {1, 'meow'}), (4, {3})])
+        big_container=nifty_collections.OrderedDict((('foo', 'bar'),))) == \
+    nifty_collections.OrderedDict([('foo', 'bar'), (2, {1, 'meow'}), (4, {3})])
     
     assert get_equivalence_classes(
         nifty_collections.OrderedDict(((3, 4), (1, 2), ('meow', 2))),
-        use_ordered_dict=True) == \
+        big_container=nifty_collections.OrderedDict) == \
     nifty_collections.OrderedDict([(4, {3}), (2, {1, 'meow'})])
     
     assert get_equivalence_classes(
         nifty_collections.OrderedDict(((1, 2), (3, 4), ('meow', 2))),
-        container=tuple, 
-        use_ordered_dict=True) == \
+        small_container=tuple, 
+        big_container=nifty_collections.OrderedDict) == \
     nifty_collections.OrderedDict([(2, (1, 'meow')), (4, (3,))])
     
     assert get_equivalence_classes(
         nifty_collections.OrderedDict((('meow', 2), (1, 2), (3, 4))),
         container=tuple, 
-        use_ordered_dict=True) == \
-    nifty_collections.OrderedDict([(2, ('meow', 1)), (4, (3,))])
-    
-    # Sorting:
-    
-    assert get_equivalence_classes({1: 2, 3: 4, 'meow': 2},
-                                                   sort_ordered_dict=True) == \
-    nifty_collections.OrderedDict([(2, {1, 'meow'}), (4, {3})])
-    
-    assert get_equivalence_classes({1: 2, 3: 4, 'meow': 2},
-                                           sort_ordered_dict=lambda x: -x) == \
-    nifty_collections.OrderedDict([(4, {3}), (2, {1, 'meow'})])
+        big_container=nifty_collections.FrozenOrderedDict) == \
+    nifty_collections.FrozenOrderedDict([(2, ('meow', 1)), (4, (3,))])
     

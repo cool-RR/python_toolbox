@@ -103,20 +103,14 @@ def get_equivalence_classes(iterable, key=None, *,
     `use_ordered_dict=True`.) You can also pass in a sorting key function or
     attribute name as the `sort_ordered_dict` argument.
     '''
-    # blocktodo: Let's try to not build the small container twice (build list
-    # and then feed to small container), instead let's try to make multiple
-    # smart iterators.
-
     from python_toolbox import comparison_tools
     
-    ### Pre-processing input: #################################################
-    #                                                                         #
     assert (isinstance(big_container, collections.abc.Mapping) or
             issubclass(big_container, collections.abc.Mapping))
     assert issubclass(small_container, collections.abc.Iterable)
     if key is None:
         if isinstance(iterable, collections.abc.Mapping):
-            items = d.items()
+            items = iterable.items()
         else:
             raise Exception(
                 "You can't put in a non-dict without also supplying a "
@@ -128,8 +122,6 @@ def get_equivalence_classes(iterable, key=None, *,
             key
         )
         items = ((key, key_function(key)) for key in iterable)
-    #                                                                         #
-    ### Finished pre-processing input. ########################################
     
     if isinstance(big_container, type):
         new_dict = big_container()
@@ -139,22 +131,11 @@ def get_equivalence_classes(iterable, key=None, *,
     
     for key, value in items:
         new_dict.setdefault(value, []).append(key)
-    1 / 0 i was here
-    # Making into desired container:
-    for key, value in new_dict.copy().items():
-        new_dict[key] = container(value)
-        
-    if sort_ordered_dict:
-        if isinstance(sort_ordered_dict, (collections.abc.Callable, str)):
-            key_function = comparison_tools. \
-                      process_key_function_or_attribute_name(sort_ordered_dict)
-            new_dict.sort(key_function)
-        elif sort_ordered_dict is True:
-            new_dict.sort()
-        return new_dict
     
-    else:
-        return new_dict
+    for key, value in tuple(new_dict.items()):
+        new_dict[key] = small_container(value)
+        
+    return new_dict
 
         
       
