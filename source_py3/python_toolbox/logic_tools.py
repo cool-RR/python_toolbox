@@ -65,6 +65,10 @@ def get_equivalence_classes(iterable, key=None, *,
     '''
     Divide items in `iterable` to equivalence classes, using the key function.
     
+    blocktododoc, changed lots of arguments so change docs
+    
+    big_container can be a type or an existing instance, do tests for both
+    
     Each item will be put in a set with all other items that had the same
     result when put through the `key` function.
     
@@ -99,11 +103,17 @@ def get_equivalence_classes(iterable, key=None, *,
     `use_ordered_dict=True`.) You can also pass in a sorting key function or
     attribute name as the `sort_ordered_dict` argument.
     '''
-    
+    # blocktodo: Let's try to not build the small container twice (build list
+    # and then feed to small container), instead let's try to make multiple
+    # smart iterators.
+
     from python_toolbox import comparison_tools
     
     ### Pre-processing input: #################################################
     #                                                                         #
+    assert (isinstance(big_container, collections.abc.Mapping) or
+            issubclass(big_container, collections.abc.Mapping))
+    assert issubclass(small_container, collections.abc.Iterable)
     if key is None:
         if isinstance(iterable, collections.abc.Mapping):
             items = d.items()
