@@ -1,16 +1,13 @@
 # Copyright 2009-2017 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing module for `python_toolbox.sleek_reffing.SleekCallArgs`.'''
-
 import weakref
 
 from python_toolbox import gc_tools
 
-from python_toolbox.sleek_reffing import (SleekCallArgs,
-                                          SleekRef,
-                                          CuteSleekValueDict)
-from .shared import _is_weakreffable, A, counter
+from python_toolbox.function_tools import SleekCallArgs
+from python_toolbox.sleek_reffing import SleekRef, CuteSleekValueDict
+from ..test_sleek_reffing.shared import _is_weakreffable, A, counter
 
 
 def f(*args, **kwargs): pass
