@@ -65,10 +65,6 @@ def get_equivalence_classes(iterable, key=None, *,
     '''
     Divide items in `iterable` to equivalence classes, using the key function.
     
-    blocktododoc, changed lots of arguments so change docs
-    
-    big_container can be a type or an existing instance, do tests for both
-    
     Each item will be put in a set with all other items that had the same
     result when put through the `key` function.
     
@@ -95,18 +91,41 @@ def get_equivalence_classes(iterable, key=None, *,
             >>> get_equivalence_classes({1: 2, 3: 4, 'meow': 2})
             {2: {1, 'meow'}, 4: {3}}
             
+    You can use optional arguments `small_container` and `big_container` to
+    customize the containers used in the result. `big_container` is `dict` by
+    default, but you can use alternative dict types like `OrderedDict`,
+    `defaultdict`, `SortedDict` or any other kind of mapping. Example:
     
-    If you'd like the result to be in an `OrderedDict`, specify
-    `use_ordered_dict=True`, and the items will be ordered according to
-    insertion order. If you'd like that `OrderedDict` to be sorted, pass in
-    `sort_ordered_dict=True`. (It automatically implies
-    `use_ordered_dict=True`.) You can also pass in a sorting key function or
-    attribute name as the `sort_ordered_dict` argument.
+        >>> from python_toolbox.nifty_collections import OrderedDict
+        >>> get_equivalence_classes(range(10), lambda x: x % 3,
+                                    big_container=OrderedDict)
+        OrderedDict([(0, {0, 9, 3, 6}), (1, {1, 4, 7}), (2, {8, 2, 5})])
+    
+    You can pass in either the type of mapping, or an existing instance, and
+    then the existing items will still be there and have the equivalence
+    classes added to them.
+    
+    `small_container` is the container in which the items are put inside the
+    mapping. By default it's `set` but you can specify any other kind of
+    container. If you something like `OrderedSet`, the items will be inserted
+    in the same order that they were in the original `iterable`. Example:
+    
+        >>> get_equivalence_classes(range(10), lambda x: x % 3,
+                                    small_container=tuple)
+        {0: (0, 3, 6, 9), 1: (1, 4, 7), 2: (2, 5, 8)}
+
     '''
     from python_toolbox import comparison_tools
+    from python_toolbox import nifty_collections
     
-    assert (isinstance(big_container, collections.abc.Mapping) or
-            issubclass(big_container, collections.abc.Mapping))
+    if isinstance(big_container, collections.abc.Mapping):
+        big_container_type = type(big_container)
+        big_container_instance = big_container
+    else:
+        big_container_type = big_container
+        big_container_instance = None
+        assert issubclass(big_container_type, collections.abc.Mapping)
+        
     assert issubclass(small_container, collections.abc.Iterable)
     if key is None:
         if isinstance(iterable, collections.abc.Mapping):
@@ -123,20 +142,23 @@ def get_equivalence_classes(iterable, key=None, *,
         )
         items = ((key, key_function(key)) for key in iterable)
     
-    if isinstance(big_container, type):
-        new_dict = big_container()
-    else:
-        assert isinstance(big_container, collections.abc.Mapping)
-        new_dict = big_container
-    
+    # If we know our big container isn't ordered, we can save some performance
+    # and use a dict as our pre-dict, otherwise play it safe and use an ordered
+    # dict.
+    pre_dict = ({} if big_container_type in {dict, collections.defaultdict}
+                else nifty_collections.OrderedDict())
     for key, value in items:
-        new_dict.setdefault(value, []).append(key)
-    
-    for key, value in tuple(new_dict.items()):
-        new_dict[key] = small_container(value)
-        
-    return new_dict
+        pre_dict.setdefault(value, []).append(key)
 
+    if big_container_instance is None:
+        big_container_instance = big_container_type(
+            ((key, small_container(value)) for key, value in pre_dict.items())
+        )
+    else:
+        for key, value in pre_dict.items():
+            big_container_instance[key] = small_container(value)
+        
+    return big_container_instance
         
       
 def logic_max(iterable, relation=lambda a, b: (a >= b)):

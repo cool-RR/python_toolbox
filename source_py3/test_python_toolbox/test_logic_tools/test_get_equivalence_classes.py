@@ -30,9 +30,7 @@ def test_iterable_input():
                                           == {0: {1, 4}, 3: {2+3j}, -6: {5-6j}}
     
     
-def test_big_container():
-    # Insertion order:
-    
+def test_big_container_small_container():
     assert (
         get_equivalence_classes(
             nifty_collections.OrderedDict(((1, 2), (3, 4), ('meow', 2))),
@@ -73,7 +71,7 @@ def test_big_container():
     
     assert get_equivalence_classes(
         nifty_collections.OrderedDict((('meow', 2), (1, 2), (3, 4))),
-        container=tuple, 
+        small_container=tuple, 
         big_container=nifty_collections.FrozenOrderedDict) == \
     nifty_collections.FrozenOrderedDict([(2, ('meow', 1)), (4, (3,))])
     
