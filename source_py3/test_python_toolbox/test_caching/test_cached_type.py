@@ -67,12 +67,12 @@ def test_thread_safe():
     
     condition_list.play_out(['t1go'])
     
-    cache = Feline._CachedType__cache
+    cache = Feline._BaseCachedType__cache
     assert len(cache) == 1
     ((cat_key, cat_value),) = cache.items()
     assert isinstance(cat_value, caching.cached_type.InConstructionMarker)
     assert cat_value.lock.locked()
-    assert not Feline._CachedType__quick_lock.locked()
+    assert not Feline._BaseCachedType__quick_lock.locked()
     
     condition_list.play_out(['t2go'])
     
@@ -84,7 +84,7 @@ def test_thread_safe():
     assert cat_value.lock.locked()
     assert isinstance(tiger_value, caching.cached_type.InConstructionMarker)
     assert tiger_value.lock.locked()
-    assert not Feline._CachedType__quick_lock.locked()
+    assert not Feline._BaseCachedType__quick_lock.locked()
     
     condition_list.play_out(['tiger_creation'])
     condition_list.wait_for('t2done', remove=True)
@@ -96,7 +96,7 @@ def test_thread_safe():
     assert isinstance(tiger_value, Feline)
     assert isinstance(cat_value, caching.cached_type.InConstructionMarker)
     assert cat_value.lock.locked()
-    assert not Feline._CachedType__quick_lock.locked()
+    assert not Feline._BaseCachedType__quick_lock.locked()
     
     condition_list.play_out(['t3go'])
 
@@ -107,7 +107,7 @@ def test_thread_safe():
     assert isinstance(tiger_value, Feline)
     assert isinstance(cat_value, caching.cached_type.InConstructionMarker)
     assert cat_value.lock.locked()
-    assert not Feline._CachedType__quick_lock.locked()
+    assert not Feline._BaseCachedType__quick_lock.locked()
     
     condition_list.play_out(['cat_creation'])
     condition_list.wait_for('t1done', 't3done', remove=True)

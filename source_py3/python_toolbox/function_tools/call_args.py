@@ -5,10 +5,7 @@ import abc
 
 from python_toolbox import cute_inspect
 from python_toolbox import cheat_hashing
-from python_toolbox import nifty_collections
-
-from .sleek_ref import SleekRef
-from .cute_sleek_value_dict import CuteSleekValueDict
+from python_toolbox.sleek_reffing import SleekRef, CuteSleekValueDict
 
 
 class BaseCallArgs(metaclass=abc.ABCMeta):
@@ -57,21 +54,15 @@ class BaseCallArgs(metaclass=abc.ABCMeta):
         call_args = cute_inspect.getcallargs(function, *args, **kwargs)
         del args, kwargs
         
-        self.star_args_refs = []
-        '''Sleekrefs to star-args.'''
+        self.star_args_refs = ()
         
-        if star_args_name:
-            star_args = call_args.pop(star_args_name, None)
-            if star_args:
-                self.star_args_refs = [self.make_ref(star_arg) for
-                                       star_arg in star_args]
+        star_args = call_args.pop(star_args_name, ()) if star_args_name else ()
+        self.star_args_refs = tuple(self.make_ref(star_arg) for
+                                                         star_arg in star_args)
         
-        self.star_kwargs_refs = {}
-        '''Sleerefs to star-kwargs.'''
-        if star_kwargs_name:            
-            star_kwargs = call_args.pop(star_kwargs_name, {})
-            if star_kwargs:
-                self.star_kwargs_refs = self.make_dict(star_kwargs)
+        star_kwargs = (call_args.pop(star_kwargs_name, {}) if
+                                                      star_kwargs_name else {})
+        self.star_kwargs_refs = self.make_dict(star_kwargs)
         
         self.args_refs = self.make_dict(call_args)
         '''Mapping from argument name to value.'''
@@ -116,8 +107,12 @@ class BaseCallArgs(metaclass=abc.ABCMeta):
     
 class CallArgs(BaseCallArgs):
     make_ref = lambda self, thing: thing
-    make_dict = lambda self, items: nifty_collections.FrozenDict(items)
     hash_function = lambda self, thing: hash(thing)
+    def make_dict(self, items):
+        from python_toolbox import nifty_collections
+        return nifty_collections.FrozenDict(items)
+        
+    
 
     args = property(lambda self: self.args_refs)
     '''The arguments.'''

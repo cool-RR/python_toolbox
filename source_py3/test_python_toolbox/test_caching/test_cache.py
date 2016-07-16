@@ -127,19 +127,13 @@ def test_unhashable_arguments():
     assert f(meow=y) == f(1, meow=y)
     
     
-def test_helpful_message_when_forgetting_parentheses():
-    '''Test user gets a helpful exception when when forgetting parentheses.'''
+def test_error_when_forgetting_parentheses():
 
     def confusedly_forget_parentheses():
         @cache
         def f(): pass
         
-    with cute_testing.RaiseAssertor(
-        TypeError,
-        'It seems that you forgot to add parentheses after `@cache` when '
-        'decorating the `f` function.'
-    ):
-        
+    with cute_testing.RaiseAssertor(TypeError,):
         confusedly_forget_parentheses()
     
     
