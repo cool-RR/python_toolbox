@@ -33,6 +33,7 @@ def test_sleek_ref():
             gc_tools.collect()
             assert counter() == count + 2
             nose.tools.assert_raises(SleekRefDied, sleek_ref)
+            # I dieded.
         else:
             count = counter()
             del volatile_thing
