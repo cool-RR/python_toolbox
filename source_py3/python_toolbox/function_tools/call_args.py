@@ -80,6 +80,7 @@ class BaseCallArgs(metaclass=abc.ABCMeta):
         # may change, so we must record the hash now:
         self._hash = self.hash_function(
             (
+                type(self),
                 self.args,
                 self.star_args,
                 self.star_kwargs

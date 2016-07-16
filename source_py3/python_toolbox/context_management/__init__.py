@@ -122,8 +122,6 @@ context managers. See their docstrings for more info.
 # todo: for case of decorated generator, possibly make getstate (or whatever)
 # that will cause it to be pickled by reference to the decorated function
 
-from __future__ import generator_stop
-
 from .abstract_context_manager import AbstractContextManager
 from .context_manager_type_type import ContextManagerTypeType
 from .context_manager_type import ContextManagerType

@@ -1,8 +1,6 @@
 # Copyright 2009-2017 Ram Rachum.
 # This program is distributed under the MIT license.
 
-from __future__ import generator_stop
-
 import queue as queue_module
 
 from python_toolbox.context_management import (as_reentrant, ContextManager,

@@ -3,8 +3,6 @@
 
 '''This module defines tools for testing.'''
 
-from __future__ import generator_stop
-
 import sys
 
 from python_toolbox.third_party import unittest2

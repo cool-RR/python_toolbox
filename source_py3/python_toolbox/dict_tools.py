@@ -3,8 +3,6 @@
 
 '''Defines several functions that may be useful when working with dicts.'''
 
-from __future__ import generator_stop
-
 import collections
 
 from python_toolbox import cute_iter_tools

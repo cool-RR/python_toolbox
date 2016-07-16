@@ -3,8 +3,6 @@
 
 '''Defines various `sys`-related tools.'''
 
-from __future__ import generator_stop
-
 import sys
 try:
     import pathlib

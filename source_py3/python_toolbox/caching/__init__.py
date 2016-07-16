@@ -6,5 +6,5 @@
 # todo: examine thread-safety
 
 from .decorators import cache
-from .cached_type import CachedType
+from .cached_type import CachedType, StrongCachedType
 from .cached_property import CachedProperty

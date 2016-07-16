@@ -3,8 +3,6 @@
 
 from python_toolbox import cute_inspect
 
-from python_toolbox.nifty_collections import OrderedDict
-
 
 def get_default_args_dict(function):
     '''
@@ -17,6 +15,8 @@ def get_default_args_dict(function):
         OrderedDict([('c', 1), ('d', 'meow')])
         
     '''
+    from python_toolbox.nifty_collections import OrderedDict
+    
     arg_spec = cute_inspect.getargspec(function)
     (s_args, s_star_args, s_star_kwargs, s_defaults) = arg_spec
         

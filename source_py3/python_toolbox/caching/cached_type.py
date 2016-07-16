@@ -10,7 +10,7 @@ See its documentation for more details.
 import threading
 import contextlib
 
-from python_toolbox.sleek_reffing import SleekCallArgs
+from python_toolbox.function_tools import CallArgs, SleekCallArgs
 
 from .cached_property import CachedProperty
 
@@ -24,8 +24,9 @@ class SelfPlaceholder:
     '''Placeholder for `self` when storing call-args.''' 
 
 
-class CachedType(type):
+class BaseCachedType(type):
     '''
+    blocktododoc
     A metaclass for sharing instances.
         
     For example, if you have a class like this:
@@ -51,6 +52,8 @@ class CachedType(type):
     (Assuming you don't mind the memory leaks.)
     '''
     
+    _BaseCachedType__call_args_type = None
+    
     def __new__(mcls, *args, **kwargs):
         cls = super().__new__(mcls, *args, **kwargs)
         cls.__cache = {}
@@ -60,7 +63,7 @@ class CachedType(type):
 
     
     def __call__(cls, *args, **kwargs):
-        sleek_call_args = SleekCallArgs(
+        call_args = cls._BaseCachedType__call_args_type(
             cls.__cache,
             cls.__init__,
             *((SelfPlaceholder,) + args),
@@ -70,13 +73,13 @@ class CachedType(type):
         while True:
             cls.__quick_lock.acquire()
             try:
-                cached_value = cls.__cache[sleek_call_args]
+                cached_value = cls.__cache[call_args]
             except KeyError:
-                cls.__cache[sleek_call_args] = in_construction_marker = \
+                cls.__cache[call_args] = in_construction_marker = \
                                                          InConstructionMarker()
                 cls.__quick_lock.release()
                 with in_construction_marker.lock:
-                    cls.__cache[sleek_call_args] = new_instance = \
+                    cls.__cache[call_args] = new_instance = \
                                               super().__call__(*args, **kwargs)
                     return new_instance
             else:
@@ -89,3 +92,12 @@ class CachedType(type):
                     return cached_value
 
 
+class CachedType(BaseCachedType):
+    ''''''
+    _BaseCachedType__call_args_type = CallArgs
+    
+    
+class StrongCachedType(BaseCachedType):
+    ''''''
+    _BaseCachedType__call_args_type = SleekCallArgs
+    

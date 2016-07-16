@@ -3,8 +3,6 @@
 
 '''Testing for `python_toolbox.introspection_tools.get_default_args_dict`.'''
 
-from __future__ import generator_stop
-
 from python_toolbox.function_tools import get_default_args_dict
 from python_toolbox.nifty_collections import OrderedDict
 

@@ -5,8 +5,6 @@
 Defines tools related to the `concurrent.futures` standard library package.
 '''
 
-from __future__ import generator_stop
-
 import time
 import concurrent.futures
 

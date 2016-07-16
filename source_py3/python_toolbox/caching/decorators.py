@@ -13,7 +13,6 @@ import datetime as datetime_module
 from python_toolbox import misc_tools
 from python_toolbox import binary_search
 from python_toolbox import decorator_tools
-from python_toolbox.sleek_reffing import SleekCallArgs
 
 infinity = float('inf')
 
@@ -32,8 +31,9 @@ def _get_now():
 
 
 @decorator_tools.helpful_decorator_builder
-def cache(max_size=infinity, time_to_keep=None):
+def cache(*, max_size=infinity, time_to_keep=None, weakref_when_possible=True):
     '''
+    blocktododoc
     Cache a function, saving results so they won't have to be computed again.
     
     This decorator understands function arguments. For example, it understands
@@ -69,6 +69,9 @@ def cache(max_size=infinity, time_to_keep=None):
     # completely argumentless function. so do one for those.
     
     from python_toolbox.nifty_collections import OrderedDict
+    from python_toolbox.function_tools import CallArgs, SleekCallArgs
+    
+    call_args_type = SleekCallArgs if weakref_when_possible else CallArgs
     
     if time_to_keep is not None:
         if max_size != infinity:
@@ -94,8 +97,8 @@ def cache(max_size=infinity, time_to_keep=None):
             
             if time_to_keep:
 
-                sorting_key_function = lambda sleek_call_args: \
-                                              cached._cache[sleek_call_args][1]
+                sorting_key_function = (lambda call_args:
+                                                   cached._cache[call_args][1])
 
                 
                 def remove_expired_entries():
@@ -114,13 +117,13 @@ def cache(max_size=infinity, time_to_keep=None):
                 @misc_tools.set_attributes(_cache=OrderedDict())        
                 def cached(function, *args, **kwargs):
                     remove_expired_entries()
-                    sleek_call_args = \
-                        SleekCallArgs(cached._cache, function, *args, **kwargs)
+                    call_args = call_args_type(cached._cache, function, *args,
+                                               **kwargs)
                     try:
-                        return cached._cache[sleek_call_args][0]
+                        return cached._cache[call_args][0]
                     except KeyError:
                         value = function(*args, **kwargs)
-                        cached._cache[sleek_call_args] = (
+                        cached._cache[call_args] = (
                             value,
                             _get_now() + time_to_keep
                         )
@@ -131,28 +134,28 @@ def cache(max_size=infinity, time_to_keep=None):
                 
                 @misc_tools.set_attributes(_cache={})        
                 def cached(function, *args, **kwargs):
-                    sleek_call_args = \
-                        SleekCallArgs(cached._cache, function, *args, **kwargs)
+                    call_args = call_args_type(cached._cache, function, *args,
+                                               **kwargs)
                     try:
-                        return cached._cache[sleek_call_args]
+                        return cached._cache[call_args]
                     except KeyError:
-                        cached._cache[sleek_call_args] = value = \
-                              function(*args, **kwargs)
+                        cached._cache[call_args] = value = \
+                                                      function(*args, **kwargs)
                         return value
     
         else: # max_size < infinity
             
             @misc_tools.set_attributes(_cache=OrderedDict())        
             def cached(function, *args, **kwargs):
-                sleek_call_args = \
-                    SleekCallArgs(cached._cache, function, *args, **kwargs)
+                call_args = call_args_type(cached._cache, function, *args,
+                                           **kwargs)
                 try:
-                    result = cached._cache[sleek_call_args]
-                    cached._cache.move_to_end(sleek_call_args)
+                    result = cached._cache[call_args]
+                    cached._cache.move_to_end(call_args)
                     return result
                 except KeyError:
-                    cached._cache[sleek_call_args] = value = \
-                        function(*args, **kwargs)
+                    cached._cache[call_args] = value = \
+                                                      function(*args, **kwargs)
                     if len(cached._cache) > max_size:
                         cached._cache.popitem(last=False)
                     return value
