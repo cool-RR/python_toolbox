@@ -65,6 +65,29 @@ def test_weakref():
     
     assert a_ref() is None
     
+def test_non_weakref():
+    f = cache(weakref_when_possible=False)(counting_func)
+    i was here
+    
+    class A: pass
+    
+    a = A()
+    result = f(a)
+    assert result == f(a) == f(a) == f(a)
+    a_ref = weakref.ref(a)    
+    del a
+    gc_tools.collect()
+    assert a_ref() is None
+    
+    a = A()
+    result = f(meow=a)
+    assert result == f(meow=a) == f(meow=a) == f(meow=a)
+    a_ref = weakref.ref(a)
+    del a
+    gc_tools.collect()
+    
+    assert a_ref() is None
+    
     
 def test_lru():
     '''Test the least-recently-used algorithm for forgetting cached results.'''
