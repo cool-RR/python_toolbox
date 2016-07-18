@@ -50,7 +50,7 @@ def test_weakref():
     
     a = A()
     result = f(a)
-    assert result == f(a) == f(a) == f(a)
+    assert result is f(a) is f(a) is f(a)
     a_ref = weakref.ref(a)    
     del a
     gc_tools.collect()
@@ -58,7 +58,7 @@ def test_weakref():
     
     a = A()
     result = f(meow=a)
-    assert result == f(meow=a) == f(meow=a) == f(meow=a)
+    assert result is f(meow=a) is f(meow=a) is f(meow=a)
     a_ref = weakref.ref(a)
     del a
     gc_tools.collect()
@@ -67,7 +67,6 @@ def test_weakref():
     
 def test_non_weakref():
     f = cache(weakref_when_possible=False)(counting_func)
-    i was here
     
     class A: pass
     
@@ -77,7 +76,8 @@ def test_non_weakref():
     a_ref = weakref.ref(a)    
     del a
     gc_tools.collect()
-    assert a_ref() is None
+    assert a_ref() is not None
+    assert result == f(a_ref()) == f(a_ref()) == f(a_ref())
     
     a = A()
     result = f(meow=a)
@@ -85,8 +85,8 @@ def test_non_weakref():
     a_ref = weakref.ref(a)
     del a
     gc_tools.collect()
-    
-    assert a_ref() is None
+    assert a_ref() is not None
+    assert result == f(meow=a_ref()) == f(meow=a_ref()) == f(meow=a_ref())
     
     
 def test_lru():

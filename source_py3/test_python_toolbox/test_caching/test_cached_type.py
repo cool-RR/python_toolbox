@@ -2,10 +2,12 @@
 # This program is distributed under the MIT license.
 
 import threading
+import weakref
 import uuid as uuid_module
 
+from python_toolbox import gc_tools
 from python_toolbox import caching
-from python_toolbox.caching import CachedType
+from python_toolbox.caching import CachedType, StrongCachedType
 from python_toolbox import nifty_collections
 
         
@@ -137,4 +139,28 @@ def test_thread_safe():
     assert threads[0].cat.uuid == threads[2].cat.uuid
     assert threads[1].tiger is threads[3].tiger
     assert threads[1].tiger.uuid == threads[3].tiger.uuid
+    
+    
+def test_weakref():
+    class Mouse(metaclass=CachedType):
+        def __init__(self, whatever):
+            pass
+    
+    class Cat(metaclass=StrongCachedType):
+        def __init__(self, whatever):
+            pass
+    
+    class A: pass
+    
+    assert Mouse(7) is Mouse(7) is not Mouse(8) is Mouse(8)
+    assert Cat(7) is Cat(7) is not Cat(8) is Cat(8)
+    
+    a = A()
+    a_ref = weakref.ref(a)
+    assert a_ref() is a
+    mouse = Mouse(a)
+    assert mouse is Mouse(a) is Mouse(a) is Mouse(a)
+    del a
+    gc_tools.collect()
+    assert a_ref() is None
     
