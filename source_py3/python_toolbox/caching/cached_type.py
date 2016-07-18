@@ -94,10 +94,10 @@ class BaseCachedType(type):
 
 class CachedType(BaseCachedType):
     ''''''
-    _BaseCachedType__call_args_type = CallArgs
+    _BaseCachedType__call_args_type = SleekCallArgs
     
     
 class StrongCachedType(BaseCachedType):
     ''''''
-    _BaseCachedType__call_args_type = SleekCallArgs
+    _BaseCachedType__call_args_type = CallArgs
     
