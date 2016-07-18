@@ -164,3 +164,14 @@ def test_weakref():
     gc_tools.collect()
     assert a_ref() is None
     
+    a = A()
+    a_ref = weakref.ref(a)
+    assert a_ref() is a
+    cat = Cat(a)
+    assert cat is Cat(a) is Cat(a) is Cat(a)
+    del a
+    gc_tools.collect()
+    assert a_ref() is not None
+    assert cat is Cat(a_ref()) is Cat(a_ref()) is Cat(a_ref())
+    
+    
