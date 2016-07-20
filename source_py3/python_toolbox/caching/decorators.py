@@ -46,14 +46,17 @@ def cache(*, max_size=infinity, time_to_keep=None, weakref_when_possible=True):
     The calls `f(1)` or `f(1, 2)` or `f(b=2, a=1)` are all identical, and a
     cached result saved for one of these calls will be used for the others.
     
-    All the arguments are sleekreffed to prevent memory leaks. Sleekref is a
-    variation of weakref. Sleekref is when you try to weakref an object, but if
-    it's non-weakreffable, like a `list` or a `dict`, you maintain a normal,
-    strong reference to it. (See documentation of
-    `python_toolbox.sleek_reffing` for more details.) Thanks to sleekreffing
-    you can avoid memory leaks when using weakreffable arguments, but if you
-    ever want to use non-weakreffable arguments you are still able to.
-    (Assuming you don't mind the memory leaks.)
+    If `weakref_when_possible=True` (default) all the arguments are sleekreffed
+    to prevent memory leaks. Sleekref is a variation of weakref. Sleekref is
+    when you try to weakref an object, but if it's non-weakreffable, like a
+    `list` or a `dict`, you maintain a normal, strong reference to it. (See
+    documentation of `python_toolbox.sleek_reffing` for more details.) Thanks
+    to sleekreffing you can avoid memory leaks when using weakreffable
+    arguments, but if you ever want to use non-weakreffable arguments you are
+    still able to. (Assuming you don't mind the memory leaks.)
+    
+    If you want to use a non-weakreffing version, pass in 
+    `weakref_when_possible=False`.
     
     You may optionally specify a `max_size` for maximum number of cached
     results to store; old entries are thrown away according to a

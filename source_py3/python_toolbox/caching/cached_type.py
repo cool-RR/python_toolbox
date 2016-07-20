@@ -25,33 +25,6 @@ class SelfPlaceholder:
 
 
 class BaseCachedType(type):
-    '''
-    blocktododoc
-    A metaclass for sharing instances.
-        
-    For example, if you have a class like this:
-    
-        class Grokker(object, metaclass=caching.CachedType):
-            def __init__(self, a, b=2):
-                self.a = a
-                self.b = b
-                
-    Then all the following calls would result in just one instance:
-    
-        Grokker(1) is Grokker(1, 2) is Grokker(b=2, a=1) is Grokker(1, **{})
-    
-    This metaclass understands keyword arguments.
-    
-    All the arguments are sleekreffed to prevent memory leaks. Sleekref is a
-    variation of weakref. Sleekref is when you try to weakref an object, but if
-    it's non-weakreffable, like a `list` or a `dict`, you maintain a normal,
-    strong reference to it. (See documentation of
-    `python_toolbox.sleek_reffing` for more details.) Thanks to sleekreffing
-    you can avoid memory leaks when using weakreffable arguments, but if you
-    ever want to use non-weakreffable arguments you are still able to.
-    (Assuming you don't mind the memory leaks.)
-    '''
-    
     _BaseCachedType__call_args_type = None
     
     def __new__(mcls, *args, **kwargs):
@@ -93,11 +66,55 @@ class BaseCachedType(type):
 
 
 class CachedType(BaseCachedType):
-    ''''''
+    '''
+    A metaclass for sharing instances.
+        
+    For example, if you have a class like this:
+    
+        class Grokker(object, metaclass=caching.CachedType):
+            def __init__(self, a, b=2):
+                self.a = a
+                self.b = b
+                
+    Then all the following calls would result in just one instance:
+    
+        Grokker(1) is Grokker(1, 2) is Grokker(b=2, a=1) is Grokker(1, **{})
+    
+    This metaclass understands keyword arguments.
+    
+    All the arguments are sleekreffed to prevent memory leaks. Sleekref is a
+    variation of weakref. Sleekref is when you try to weakref an object, but if
+    it's non-weakreffable, like a `list` or a `dict`, you maintain a normal,
+    strong reference to it. (See documentation of
+    `python_toolbox.sleek_reffing` for more details.) Thanks to sleekreffing
+    you can avoid memory leaks when using weakreffable arguments, but if you
+    ever want to use non-weakreffable arguments you are still able to.
+    (Assuming you don't mind the memory leaks.)
+    
+    If you want a non-weakreffing version, use `StrongCachedType` instead.
+    '''
     _BaseCachedType__call_args_type = SleekCallArgs
     
     
 class StrongCachedType(BaseCachedType):
-    ''''''
+    '''
+    A metaclass for sharing instances.
+        
+    For example, if you have a class like this:
+    
+        class Grokker(object, metaclass=caching.CachedType):
+            def __init__(self, a, b=2):
+                self.a = a
+                self.b = b
+                
+    Then all the following calls would result in just one instance:
+    
+        Grokker(1) is Grokker(1, 2) is Grokker(b=2, a=1) is Grokker(1, **{})
+    
+    This metaclass understands keyword arguments.
+    
+    The arguments will not be weakreffed. If you want a weakreffing version,
+    use `CachedType` instead.
+    '''
     _BaseCachedType__call_args_type = CallArgs
     

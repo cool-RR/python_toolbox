@@ -5,7 +5,7 @@ import weakref
 
 from python_toolbox import gc_tools
 
-from python_toolbox.function_tools import SleekCallArgs
+from python_toolbox.function_tools import SleekCallArgs, CallArgs
 from python_toolbox.sleek_reffing import SleekRef, CuteSleekValueDict
 from ..test_sleek_reffing.shared import _is_weakreffable, A, counter
 
@@ -14,7 +14,7 @@ def f(*args, **kwargs): pass
 
 
 def test():
-    '''Test the basic workings of `SleekCallArgs`.'''
+    '''Test the basic workings of `SleekCallArgs` and `CallArgs`.'''
     sca_dict = {}
     
     args = (1, 2)
@@ -30,6 +30,22 @@ def test():
     del args
     gc_tools.collect()
     assert len(sca_dict) == 1
+    
+    ca_dict = {}
+    
+    args = (1, 2)
+    ca1 = CallArgs(ca_dict, f, *args)
+    ca_dict[ca1] = 'meow'
+    del args
+    gc_tools.collect()
+    assert len(ca_dict) == 1
+    
+    args = (1, A())
+    ca2 = CallArgs(ca_dict, f, *args)
+    ca_dict[ca2] = 'meow'
+    del args
+    gc_tools.collect()
+    assert len(ca_dict) == 2
     
     
 def test_unhashable():
