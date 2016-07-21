@@ -21,4 +21,4 @@ class Worker(multiprocessing.Process):
 def test():
     pipe_queue = multiprocessing_tools.PipeQueue()
     workers = [Worker(pipe_queue) for _ in range(3)]
-    
+    1 / 0 was here
