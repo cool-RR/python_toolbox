@@ -8,6 +8,7 @@ from python_toolbox import multiprocessing_tools
 
 class Worker(multiprocessing.Process):
     def __init__(self, pipe_queue):
+        multiprocessing.Process.__init__(self)
         self.pipe_queue = pipe_queue
         
     def run(self):
@@ -23,7 +24,7 @@ def test():
     pipe_queue = multiprocessing_tools.PipeQueue()
     workers = [Worker(pipe_queue) for _ in range(3)]
     def get_n_alive_workers():
-        return len([worker.alive() for worker in workers])
+        return len([worker.is_alive() for worker in workers])
     def assert_n_live_workers(n):
         for i in range(5):
             if get_n_alive_workers() == n:
