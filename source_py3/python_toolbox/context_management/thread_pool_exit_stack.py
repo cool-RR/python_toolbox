@@ -2,8 +2,10 @@
 # This program is distributed under the MIT license.
 
 import contextlib
+import threading
 
 from python_toolbox.nifty_collections import CuteEnum
+from python_toolbox import decorator_tools
 
 from .abstract_context_manager import AbstractContextManager
 from .context_manager import ContextManager
@@ -24,10 +26,20 @@ def _get_exiter(exitable):
 
 
 class StackState(CuteEnum):
-    ALIVE = 0
-    EXITING = 1
-    EXITED = 2
+    CREATED = 0
+    ENTERED = 1
+    EXITING = 2
+    EXITED = 3
         
+
+
+@decorator_tools.decorator
+def _with_lock(function, *args, **kwargs):
+    thread_pool_exit_stack = args[0]
+    assert isinstance(thread_pool_exit_stack, ThreadPoolExitStack)
+    with thread_pool_exit_stack._lock:
+        return function(*args, **kwargs)
+    
 
 class ThreadPoolExitStack(ContextManager):
     """
@@ -46,7 +58,8 @@ class ThreadPoolExitStack(ContextManager):
     def __init__(self, *, executor=None, n_threads=None):
         from python_toolbox.future_tools import CuteThreadPoolExecutor
         self._exit_callbacks = deque()
-        self._state = StackState.ALIVE
+        self._lock = threading.RLock()
+        self._state = StackState.CREATED
         if executor is None:
             self._executor = \
                  CuteThreadPoolExecutor(10 if n_threads is None else n_threads)
@@ -55,6 +68,7 @@ class ThreadPoolExitStack(ContextManager):
             assert n_threads is None
             self._executor = executor
 
+    @_with_lock
     def pop_all(self):
         """Preserve the context stack by transferring it to a new instance"""
         new_stack = type(self)()
@@ -62,6 +76,7 @@ class ThreadPoolExitStack(ContextManager):
         self._exit_callbacks = deque()
         return new_stack
 
+    @_with_lock
     def push(self, exit):
         """Registers a callback with the standard __exit__ method signature
 
@@ -82,6 +97,7 @@ class ThreadPoolExitStack(ContextManager):
             self._push_context_manager_exit(exit, exit_method)
         return exit # Allow use as a decorator
 
+    @_with_lock
     def callback(self, callback, *args, **kwds):
         """Registers an arbitrary callback and arguments.
 
@@ -99,7 +115,14 @@ class ThreadPoolExitStack(ContextManager):
         (result,) = self.enter_contexts((context_manager,))
         return result
 
-
+    
+    def __enter_in_thread(self, context_manager):
+        enterer = _get_enterer(context_manager)
+        enter_value = enterer()
+        self.push(_get_exiter(context_manager))
+        return enter_value
+    
+    @_with_lock
     def enter_contexts(self, context_managers):
         """Enters the supplied context manager
 
@@ -108,25 +131,27 @@ class ThreadPoolExitStack(ContextManager):
         """
         from python_toolbox import sequence_tools
         # We look up the special methods on the type to match the with statement
+        if self._state != StackState.ENTERED:
+            raise RuntimeError
         
-        def enter_in_thread(context_manager):
-            enterer = _get_enterer(context_manager)
-            if StackState.
-            enter_value = enterer()
-            self.push(_get_exiter(context_manager))
-            return enter_value
-        
-        return tuple(self._executor.map(enter_in_thread, context_managers))
+        return tuple(
+            self._executor.map(self.enter_in_thread, context_managers)
+        )
 
     def close(self):
         """Immediately unwind the context stack"""
         self.__exit__(None, None, None)
 
+    @_with_lock
     def __enter__(self):
+        if self._state != StackState.CREATED:
+            raise RuntimeError
         return self
 
+    @_with_lock
     def __exit__(self, *exc_details):
-        if self._state != StackState.ALIVE:
+        # blocktodo: add threading here too, to exit concurrently?
+        if self._state != StackState.ENTERED:
             raise RuntimeError
         self._state = StackState.EXITING
         
