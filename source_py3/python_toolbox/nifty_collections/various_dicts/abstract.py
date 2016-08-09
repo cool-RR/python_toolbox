@@ -132,7 +132,49 @@ class _UnorderedDictDelegator(DefinitelyUnordered,
         
     _dict_type = dict
         
+
 class _OrderedDictDelegator(Ordered, _AbstractMappingDelegator):
         
     _dict_type = OrderedDict
+    def __reversed__(self):
+        return reversed(self._dict)
+    
+    def index(self, key):
+        '''Get the index number of `key`.'''
+        if key not in self._dict:
+            raise ValueError
+        for i, key_ in enumerate(self._dict):
+            if key_ == key:
+                return i
+        raise RuntimeError
+    
+
+class _MutableOrderedDictDelegator(_OrderedDictDelegator,
+                                   _AbstractMutableMappingDelegator):
         
+        
+    def sort(self, key=None, reverse=False):
+        '''
+        Sort the items according to their keys, changing the order in-place.
+        
+        The optional `key` argument, (not to be confused with the dictionary
+        keys,) will be passed to the `sorted` function as a key function.
+        '''
+        key_function = \
+                   comparison_tools.process_key_function_or_attribute_name(key)
+        sorted_keys = sorted(self._dict.keys(), key=key_function,
+                             reverse=reverse)
+        for key_ in sorted_keys[1:]:
+            self.move_to_end(key_)
+            
+            
+    def move_to_end(self, key, last=True):
+        '''
+        Move an existing element to the end (or beginning if `last is False`.)
+
+        Raises `KeyError` if the element does not exist.
+        
+        When `last is True`, acts like a fast version of `self[key] =
+        self.pop(key)`.
+        '''
+        self._dict.move_to_end(key, last=last)

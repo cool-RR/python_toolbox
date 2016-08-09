@@ -41,6 +41,22 @@ class DoubleSidedOrderedDict(abstract._OrderedDictDelegator,
                              abstract._AbstractFrozenDict):
     '''blocktododoc'''
     
+            
+    def move_to_end(self, key, last=True):
+        '''
+        Move an existing element to the end (or beginning if `last is False`.)
+
+        Raises `KeyError` if the element does not exist.
+        
+        When `last is True`, acts like a fast version of `self[key] =
+        self.pop(key)`.
+        '''
+        self._assert_valid()
+        value = self._dict[key] # Propagate `KeyError`.
+        self._dict.move_to_end(key, last=last)    
+        self.inverse._dict.move_to_end(value, last=last)
+        self._assert_valid()
+    
 
 class FrozenOrderedDict(Ordered, _AbstractFrozenDict):
     '''
@@ -66,8 +82,7 @@ class FrozenOrderedDict(Ordered, _AbstractFrozenDict):
     # Poor man's caching because we can't import `CachedProperty` due to import
     # loop:
     _reversed = None
-    @property
-    def reversed(self):
+    def __reversed__(self):
         '''
         Get a version of this `FrozenOrderedDict` with key order reversed.
         '''
@@ -85,11 +100,9 @@ class FrozenOrderedDict(Ordered, _AbstractFrozenDict):
         return '%s(%s)' % (type(self).__name__, inner)
     
     
-        
     
+class DoubleSidedFrozenOrderedDict(abstract._OrderedDictDelegator,
+                                   abstract._AbstractDoubleSidedDict,
+                                   abstract._AbstractFrozenDict):
+    '''blocktododoc'''
     
-class DoubleSidedOrderedDict:
-    1 / 0
-    
-class DoubleSidedFrozenOrderedDict:
-    1 / 0
