@@ -98,6 +98,12 @@ class _AbstractMutableDoubleSidedDict(_AbstractDoubleSidedDict,
             )
         
         try:
+            hash(value)
+        except TypeError as hashing_error:
+            raise TypeError('%s is not hashable so it can\'t be used as a '
+                            'value in a double-sided dict.' % value)
+        
+        try:
             existing_value = self[key]
         except KeyError:
             got_existing_value = True
