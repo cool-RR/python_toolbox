@@ -12,13 +12,13 @@ from .ordered_dict import OrderedDict
 from . import abstract
 
 
-class DoubleSidedDict(abstract._AbstractUnorderedDict,
+class DoubleSidedDict(abstract._UnorderedDictDelegator,
                       abstract._AbstractMutableDoubleSidedDict):
     '''
     blocktododoc'''    
     
     
-class FrozenDict(abstract._AbstractUnorderedDict,
+class FrozenDict(abstract._UnorderedDictDelegator,
                  abstract._AbstractFrozenDict):
     '''
     An immutable `dict`.
@@ -28,15 +28,19 @@ class FrozenDict(abstract._AbstractUnorderedDict,
     
     In other words, `FrozenDict` is to `dict` what `frozenset` is to `set`.
     '''    
-    _dict_type = dict
     
 
-OrderedDict = OrderedDict
+class DoubleSidedFrozenDict(abstract._UnorderedDictDelegator,
+                            abstract._AbstractDoubleSidedDict,
+                            abstract._AbstractFrozenDict):
+    '''blocktododoc'''
+    
 
-class DoubleSidedFrozenDict:
-    1 / 0
-
-        
+class DoubleSidedOrderedDict(abstract._OrderedDictDelegator,
+                             abstract._AbstractMutableDoubleSidedDict,
+                             abstract._AbstractFrozenDict):
+    '''blocktododoc'''
+    
 
 class FrozenOrderedDict(Ordered, _AbstractFrozenDict):
     '''

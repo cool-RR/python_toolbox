@@ -80,33 +80,59 @@ class _AbstractDoubleSidedDict(_AbstractMappingDelegator):
 
 class _AbstractMutableDoubleSidedDict(_AbstractDoubleSidedDict,
                                       collections.abc.MutableMapping):
+    
+    def _assert_valid(self):
+        assert len(self._dict) == len(self.inverse._dict)
+    
     def __setitem__(self, key, value):
+        self._assert_valid()
         try:
             existing_key = self.inverse[value]
         except KeyError:
-            self._dict[key] = value
-            self.inverse._dict[value] = key
+            pass
         else:
             raise Exception(
                 "Can't add key %s with value %s because there is already a "
                 "key %s with the same value." % (key, value,
                                                  self.inverse[value]) # blocktodo test
             )
+        
+        try:
+            existing_value = self[key]
+        except KeyError:
+            got_existing_value = True
+        else:
+            got_existing_value = False
+        
+        self._dict[key] = value
+        self.inverse._dict[value] = key
+        if got_existing_value:
+            del self.inverse._dict[existing_value]
+        self._assert_valid()
+        
 
     def __delitem__(self, key):
         value = self[key] # Propagating possible KeyError # blocktodo test
+        self._assert_valid()
         del self._dict[key]
         del self.inverse._dict[value]
+        self._assert_valid()
         
 
     def clear(self):
         'D.clear() -> None.  Remove all items from D.'
+        self._assert_valid()
         self._dict.clear()
         self.inverse._dict.clear()
+        self._assert_valid()
         
 
 class _UnorderedDictDelegator(DefinitelyUnordered,
                               _AbstractMappingDelegator):
         
     _dict_type = dict
+        
+class _OrderedDictDelegator(Ordered, _AbstractMappingDelegator):
+        
+    _dict_type = OrderedDict
         
