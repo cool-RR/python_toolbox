@@ -8,12 +8,18 @@ import itertools
 
 from python_toolbox import comparison_tools
 
-from python_toolbox.nifty_collections.abstract import (Ordered,
-                                                       DefinitelyUnordered)
+from .ordered_dict import OrderedDict
 from . import abstract
 
 
-class FrozenDict(DefinitelyUnordered, abstract.):
+class DoubleSidedDict(abstract._AbstractUnorderedDict,
+                      abstract._AbstractMutableDoubleSidedDict):
+    '''
+    blocktododoc'''    
+    
+    
+class FrozenDict(abstract._AbstractUnorderedDict,
+                 abstract._AbstractFrozenDict):
     '''
     An immutable `dict`.
     
@@ -23,6 +29,13 @@ class FrozenDict(DefinitelyUnordered, abstract.):
     In other words, `FrozenDict` is to `dict` what `frozenset` is to `set`.
     '''    
     _dict_type = dict
+    
+
+OrderedDict = OrderedDict
+
+class DoubleSidedFrozenDict:
+    1 / 0
+
         
 
 class FrozenOrderedDict(Ordered, _AbstractFrozenDict):
@@ -70,8 +83,6 @@ class FrozenOrderedDict(Ordered, _AbstractFrozenDict):
     
         
     
-class DoubleSidedFrozenDict:
-    1 / 0
     
 class DoubleSidedOrderedDict:
     1 / 0

@@ -8,7 +8,8 @@ import itertools
 
 from python_toolbox import comparison_tools
 
-from .abstract import Ordered, DefinitelyUnordered
+from python_toolbox.nifty_collections.abstract import (Ordered,
+                                                       DefinitelyUnordered)
 from .ordered_dict import OrderedDict
 
 
@@ -28,6 +29,15 @@ class _AbstractMappingDelegator(collections.abc.Mapping):
     __repr__ = lambda self: '%s(%s)' % (type(self).__name__,
                                         repr(self._dict) if self._dict else '')
     __reduce__ = lambda self: (self.__class__ , (self._dict,))
+
+
+class _AbstractMutableMappingDelegator(_AbstractMappingDelegator,
+                                       collections.abc.MutableMapping):
+    def __setitem__(self, key, value):
+        self._dict[key] = value
+
+    def __delitem__(self, key):
+        del self._dict[key]
 
 
 class _AbstractFrozenDict(_AbstractMappingDelegator):
@@ -70,7 +80,6 @@ class _AbstractDoubleSidedDict(_AbstractMappingDelegator):
 
 class _AbstractMutableDoubleSidedDict(_AbstractDoubleSidedDict,
                                       collections.abc.MutableMapping):
-    @abstractmethod
     def __setitem__(self, key, value):
         try:
             existing_key = self.inverse[value]
@@ -84,7 +93,6 @@ class _AbstractMutableDoubleSidedDict(_AbstractDoubleSidedDict,
                                                  self.inverse[value]) # blocktodo test
             )
 
-    @abstractmethod
     def __delitem__(self, key):
         value = self[key] # Propagating possible KeyError # blocktodo test
         del self._dict[key]
@@ -97,3 +105,8 @@ class _AbstractMutableDoubleSidedDict(_AbstractDoubleSidedDict,
         self.inverse._dict.clear()
         
 
+class _UnorderedDictDelegator(DefinitelyUnordered,
+                              _AbstractMappingDelegator):
+        
+    _dict_type = dict
+        
