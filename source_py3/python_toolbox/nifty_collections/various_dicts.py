@@ -53,6 +53,7 @@ class _AbstractFrozenDict(_AbstractMappingDelegator):
 class _AbstractDoubleSidedDict(collections.abc.Mapping):
     def __init__(self, *args, **kwargs):
         self._dict = self._dict_type(*args, **kwargs)
+        self.inverse = 
 
     
 class OrderedDict(collections.OrderedDict):
