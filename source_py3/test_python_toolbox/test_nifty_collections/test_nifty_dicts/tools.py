@@ -1,6 +1,10 @@
+# Copyright 2009-2017 Ram Rachum.
+# This program is distributed under the MIT license.
+
+from python_toolbox import math_tools
 from python_toolbox import caching
-from python_toolbox import cute_iter_tools
-from python_toolbox import cute_testing
+from python_toolbox import nifty_collections
+from python_toolbox import sequence_tools
 
 
 @caching.cache()

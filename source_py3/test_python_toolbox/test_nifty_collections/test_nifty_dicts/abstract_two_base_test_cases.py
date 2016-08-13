@@ -35,7 +35,7 @@ class AbstractDoubleNotFrozenDictTestCase(AbstractDoubleDictTestCase,
         inverse = d.inverse
         assert len(d) == len(inverse) == 3
 
-        d[7] == 8
+        d[7] = 8
         assert inverse[8] == 7
         assert len(d) == len(inverse) == 4
         
@@ -46,6 +46,7 @@ class AbstractDoubleNotFrozenDictTestCase(AbstractDoubleDictTestCase,
         d.clear()
         assert len(d) == len(inverse) == 0
         assert '2' not in inverse
+        
 
 
 class AbstractNotDoubleFrozenDictTestCase(AbstractFrozenDictTestCase,

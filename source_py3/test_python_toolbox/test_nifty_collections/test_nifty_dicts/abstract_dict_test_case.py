@@ -36,7 +36,7 @@ class AbstractDictTestCase(cute_testing.TestCase):
         assert d[1] == 2
         assert d[3] == 4
         assert d[5] == 6
-        assert '1' in d
+        assert 1 in d
         assert 'meow' not in d
         with cute_testing.RaiseAssertor(exception_type=KeyError):
             d[7]
@@ -62,14 +62,15 @@ class AbstractDictTestCase(cute_testing.TestCase):
         base_classes = collections.deque(type(self).__bases__)
         while base_classes:
             base_class = base_classes.pop()
-            test_methods_from_base_classes = [
-                getattr(base_class_of_base_class, method) for method in
-                dir(base_class_of_base_class) if method.startswith('test_')
-                for base_class_of_base_class in base_class.__bases__
-            ]
+            test_methods_from_base_classes = sequence_tools.flatten([
+                [getattr(base_class_of_base_class, method) for method in
+                 dir(base_class_of_base_class) if method.startswith('test_')]
+                for base_class_of_base_class in
+                                           (base_class,) + base_class.__bases__
+            ])
             equivalence_classes = logic_tools.get_equivalence_classes(
                 test_methods_from_base_classes, key='__name__'
             )
-            assert set(map(len, equivalence_classes.values())) == 1
-            base_classes.append(base_class.__bases__)
+            assert set(map(len, equivalence_classes.values())) <= {1}
+            base_classes.extend(base_class.__bases__)
         
