@@ -1,6 +1,8 @@
 # Copyright 2009-2017 Ram Rachum.
 # This program is distributed under the MIT license.
 
+import collections.abc
+
 from python_toolbox.third_party import unittest2
 
 import nose
@@ -19,6 +21,9 @@ from python_toolbox.nifty_collections import (
 class _AbstractDictTestCase(cute_testing.TestCase):
     __test__ = False
     d_type = None # Filled in by subclasses
+    
+    def test_mapping_base_class(self):
+        assert issubclass(self.d_type, collections.Mapping)
     
     def test_common(self):
         d = self.d_type(((1, 2), (3, 4), (5, 6)))
@@ -44,18 +49,33 @@ class _AbstractDictTestCase(cute_testing.TestCase):
         
         
 class _AbstractDoubleDictTestCase(_AbstractDictTestCase):
-    pass
-
-
-def test_base_double_dict():
-    from nifty_collections.nifty_dicts.abstract import BaseDoubleDict
-    assert isinstance(DoubleDict(), BaseDoubleDict)
-    assert isinstance(DoubleFrozenDict(), BaseDoubleDict)
-    assert isinstance(DoubleOrderedDict(), BaseDoubleDict)
-    assert isinstance(DoubleFrozenOrderedDict(), BaseDoubleDict)
-    assert not isinstance({}, BaseDoubleDict)
-    assert not isinstance(OrderedDict(), BaseDoubleDict)
-    assert not isinstance(FrozenDict(), BaseDoubleDict)
-    assert not isinstance(FrozenOrderedDict(), BaseDoubleDict)
-    assert not isinstance(["haha I'm not even related"], BaseDoubleDict)
-    
+    def test_double_dict_base_class(self):
+        assert issubclass(
+            self.d_type,
+            nifty_collections.nifty_dicts.abstract.BaseDoubleDict
+        )
+        
+class _AbstractFrozenDictTestCase(_AbstractDictTestCase):
+    def test_frozen_dict_base_class(self):
+        assert issubclass(
+            self.d_type,
+            collections.abc.Hashable
+        )
+        assert not issubclass(
+            self.d_type,
+            collections.abc.MutableMapping
+        )
+class _AbstractOrderedDictTestCase(_AbstractDictTestCase):
+    def test_ordered_dict_base_class(self):
+        assert issubclass(
+            self.d_type,
+            nifty_collections.abstract.Ordered
+        )
+        assert issubclass(
+            self.d_type,
+            nifty_collections.abstract.OrderedMapping
+        )
+        assert not issubclass(
+            self.d_type,
+            nifty_collections.abstract.DefinitelyUnordered
+        )

@@ -28,6 +28,12 @@ Ordered.register(multiprocessing.queues.Queue)
 
 ###############################################################################
 
+class OrderedMapping(Ordered, collections.abc.Mapping):
+    '''blocktododoc'''
+    __slots__ = ()
+        
+###############################################################################
+
 class DefinitelyUnordered(metaclass=abc.ABCMeta):
     '''
     A data structure that does not have a defined order.
