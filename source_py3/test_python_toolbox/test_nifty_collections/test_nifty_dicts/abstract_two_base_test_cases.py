@@ -115,10 +115,10 @@ class AbstractNotFrozenOrderedDictTestCase(AbstractOrderedDictTestCase,
         assert d.index(3) == 2
         assert tuple(d) == (1, 5, 3)
         
-        assert d.index(5) == 2
-        d.move_to_end(5, end=False)
-        assert tuple(d.items()) == ((5, 6), (1, 2), (3, 4))
         assert d.index(5) == 1
+        d.move_to_end(5, last=False)
+        assert tuple(d.items()) == ((5, 6), (1, 2), (3, 4))
+        assert d.index(5) == 0
         assert tuple(d) == (5, 1, 3)
         
     def test_new_item_at_end(self):

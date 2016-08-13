@@ -86,14 +86,14 @@ class DoubleOrderedDictTestCase(AbstractDoubleOrderedDictTestCase,
         old_pairs = tuple(d.items())
         some_other_key, some_other_value = old_pairs[23]
         d.inverse.move_to_end(some_other_value, last=False)
-        assert d.index(some_key) == len
+        assert d.index(some_other_key) == 0
         assert d.inverse.index(some_other_value) == 0
         assert set(d.items()) == set(old_pairs)
         assert tuple(d.items()) != old_pairs
         assert tuple(d.inverse.keys()) == tuple(d.values())
         assert tuple(d.inverse.values()) == tuple(d.keys())
         
-        d['foo'] == 'bar'
+        d['foo'] = 'bar'
         assert len(d) == len(d.inverse) == len(old_pairs) + 1
         assert d.index('foo') == len(d) - 1
         assert d.inverse.index('bar') == len(d) - 1
