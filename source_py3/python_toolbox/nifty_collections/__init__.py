@@ -3,17 +3,18 @@
 
 '''Defines various data types, similarly to the stdlib's `collections`.'''
 
-from .ordered_dict import OrderedDict
 from .various_ordered_sets import OrderedSet, FrozenOrderedSet, EmittingOrderedSet
 from .weak_key_default_dict import WeakKeyDefaultDict
 from .weak_key_identity_dict import WeakKeyIdentityDict
 from .lazy_tuple import LazyTuple
-from .various_frozen_dicts import FrozenDict, FrozenOrderedDict
 from .bagging import Bag, OrderedBag, FrozenBag, FrozenOrderedBag
 from .frozen_bag_bag import FrozenBagBag
 from .condition_list import ConditionList
 from ..cute_enum import CuteEnum
-
 from .emitting_weak_key_default_dict import EmittingWeakKeyDefaultDict
+from .nifty_dicts import (DoubleSidedDict, FrozenDict, OrderedDict,
+                          DoubleSidedFrozenDict, DoubleSidedOrderedDict,
+                          FrozenOrderedDict,
+                          DoubleSidedFrozenOrderedDict)
 
 from .abstract import Ordered, DefinitelyUnordered
