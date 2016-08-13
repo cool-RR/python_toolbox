@@ -8,6 +8,7 @@ from python_toolbox.third_party import unittest2
 import nose
 
 from python_toolbox import sequence_tools
+from python_toolbox import logic_tools
 from python_toolbox import cute_iter_tools
 from python_toolbox import cute_testing
 
@@ -61,14 +62,14 @@ class AbstractDictTestCase(cute_testing.TestCase):
         base_classes = collections.deque(type(self).__bases__)
         while base_classes:
             base_class = base_classes.pop()
-            test_method_names_from_base_classes = [
-                [method for method in dir(base_class_of_base_class)
-                 if method.startswith('test_')]
-                 for base_class_of_base_class in base_class.__bases__
+            test_methods_from_base_classes = [
+                getattr(base_class_of_base_class, method) for method in
+                dir(base_class_of_base_class) if method.startswith('test_')
+                for base_class_of_base_class in base_class.__bases__
             ]
-            all_test_method_names = sequence_tools.flatten(
-                test_method_names_from_base_classes
+            equivalence_classes = logic_tools.get_equivalence_classes(
+                test_methods_from_base_classes, key='__name__'
             )
-            assert not sequence_tools.get_recurrences(all_test_method_names)
+            assert set(map(len, equivalence_classes.values())) == 1
             base_classes.append(base_class.__bases__)
         
