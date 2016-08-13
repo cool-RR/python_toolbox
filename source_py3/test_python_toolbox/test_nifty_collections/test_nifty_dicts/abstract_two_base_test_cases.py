@@ -24,22 +24,22 @@ from abstract_one_base_test_cases import *
 
 
 class AbstractDoubleFrozenDictTestCase(AbstractDoubleDictTestCase, 
-                                        AbstractFrozenDictTestCase):
+                                       AbstractFrozenDictTestCase):
     pass
 
 
 class AbstractDoubleNotFrozenDictTestCase(AbstractDoubleDictTestCase,
-                                           AbstractNotFrozenDictTestCase):
+                                          AbstractNotFrozenDictTestCase):
     pass
 
 
 class AbstractNotDoubleFrozenDictTestCase(AbstractFrozenDictTestCase,
-                                           AbstractNotDoubleDictTestCase):
+                                          AbstractNotDoubleDictTestCase):
     pass
 
 
 class AbstractNotDoubleNotFrozenDictTestCase(AbstractNotDoubleDictTestCase,
-                                              AbstractNotFrozenDictTestCase):
+                                             AbstractNotFrozenDictTestCase):
     pass
 
 
@@ -47,21 +47,21 @@ class AbstractNotDoubleNotFrozenDictTestCase(AbstractNotDoubleDictTestCase,
 
 
 class AbstractDoubleOrderedDictTestCase(AbstractDoubleDictTestCase,
-                                         AbstractOrderedDictTestCase):
+                                        AbstractOrderedDictTestCase):
     pass
 
 class AbstractDoubleNotOrderedDictTestCase(AbstractDoubleDictTestCase,
-                                            AbstractNotOrderedDictTestCase):
+                                           AbstractNotOrderedDictTestCase):
     pass
 
 
 class AbstractNotDoubleOrderedDictTestCase(AbstractOrderedDictTestCase,
-                                            AbstractNotDoubleDictTestCase):
+                                           AbstractNotDoubleDictTestCase):
     pass
 
 
 class AbstractNotDoubleNotOrderedDictTestCase(AbstractNotDoubleDictTestCase,
-                                               AbstractNotOrderedDictTestCase):
+                                              AbstractNotOrderedDictTestCase):
     pass
 
 
@@ -69,22 +69,22 @@ class AbstractNotDoubleNotOrderedDictTestCase(AbstractNotDoubleDictTestCase,
 
 
 class AbstractFrozenOrderedDictTestCase(AbstractFrozenDictTestCase,
-                                         AbstractOrderedDictTestCase):
+                                        AbstractOrderedDictTestCase):
     pass
 
 
 class AbstractFrozenNotOrderedDictTestCase(AbstractFrozenDictTestCase,
-                                            AbstractNotOrderedDictTestCase):
+                                           AbstractNotOrderedDictTestCase):
     pass
 
 
 class AbstractNotFrozenOrderedDictTestCase(AbstractOrderedDictTestCase,
-                                            AbstractNotFrozenDictTestCase):
+                                           AbstractNotFrozenDictTestCase):
     pass
 
 
 class AbstractNotFrozenNotOrderedDictTestCase(AbstractNotFrozenDictTestCase,
-                                               AbstractNotOrderedDictTestCase):
+                                              AbstractNotOrderedDictTestCase):
     pass
 
 

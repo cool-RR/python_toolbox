@@ -110,9 +110,9 @@ class _AbstractMutableDoubleDict(BaseDoubleDict,
         try:
             existing_value = self[key]
         except KeyError:
-            got_existing_value = True
-        else:
             got_existing_value = False
+        else:
+            got_existing_value = True
         
         self._dict[key] = value
         self.inverse._dict[value] = key

@@ -95,6 +95,18 @@ class AbstractFrozenDictTestCase(AbstractDictTestCase):
         d = self.d_type(((1, 2), (3, 4)))
         assert hash(d) == hash(d)
         {d: 7,}
+        
+    def test_frozen(self):
+        d = self.d_type(((1, 2), (3, 4)))
+        with cute_testing.RaiseAssertor(TypeError):
+            d[5] = 6
+        with cute_testing.RaiseAssertor(TypeError):
+            del d[1]
+        assert not hasattr(d, 'setdefault')
+        assert not hasattr(d, 'pop')
+        assert not hasattr(d, 'popitem')
+        assert not hasattr(d, 'update')
+        
 
         
 class AbstractNotFrozenDictTestCase(AbstractDictTestCase):
@@ -114,6 +126,34 @@ class AbstractNotFrozenDictTestCase(AbstractDictTestCase):
             hash(d)
         with cute_testing.RaiseAssertor(TypeError):
             {d: 7,}
+        
+    def test_notfrozen(self):
+        d = self.d_type(((1, 2), (3, 4)))
+        assert len(d) == 2
+
+        d[5] = 6
+        assert len(d) == 3
+
+        del d[5]
+        assert len(d) == 2
+
+        d.setdefault(5, 6)
+        assert len(d) == 3
+
+        value = d.pop(5)
+        assert value == 6
+        assert len(d) == 2
+
+        d[5] = 6
+        assert len(d) == 3
+
+        item = d.popitem()
+        assert item in {(1, 2), (3, 4), (5, 6)}
+        assert item[0] not in d
+        assert len(d) == 2
+
+        d.update({'foo': 'bar',})
+        assert len(d) == 3
         
 
 ###############################################################################
