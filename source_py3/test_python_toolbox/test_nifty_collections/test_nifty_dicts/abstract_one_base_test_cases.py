@@ -28,10 +28,8 @@ def get_pseudo_random_strings(n):
     
     And also they're unique, i.e. no recurrences.
     '''
-    pi_digits = str(math_tools.pi_decimal).split('.')[-1]
-    partitions = sequence_tools.partitions(
-        some_pi_digits, partition_size=5, fill_value=0
-    )
+    some_pi_digits = str(math_tools.pi_decimal).split('.')[-1][:900]
+    partitions = sequence_tools.partitions(some_pi_digits, partition_size=5)
     pseudo_random_numbers = nifty_collections.OrderedSet()
     for partition in partitions:
         if len(pseudo_random_numbers) == n:
@@ -49,7 +47,7 @@ class AbstractDoubleDictTestCase(AbstractDictTestCase):
         )
         
     def test_inverse_basics(self):
-        d = self.d_type(('a', 'b'), ('c', 'd',), ('e', 'f',))
+        d = self.d_type((('a', 'b'), ('c', 'd',), ('e', 'f',)))
         inverse = d.inverse
         
         assert inverse.inverse is d
@@ -61,7 +59,7 @@ class AbstractDoubleDictTestCase(AbstractDictTestCase):
         
     def test_no_value_repeats(self):
         with cute_testing.RaiseAssertor(ValueError):
-            self.d_type(('a', 'b'), ('c', 'd',), ('e', 'b',))
+            self.d_type((('a', 'b'), ('c', 'd',), ('e', 'b',)))
         with cute_testing.RaiseAssertor(ValueError):
             self.d_type(foo=7, bar=7)
         with cute_testing.RaiseAssertor(ValueError):
