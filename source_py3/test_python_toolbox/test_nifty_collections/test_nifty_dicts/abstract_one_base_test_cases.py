@@ -27,6 +27,18 @@ class _AbstractDoubleDictTestCase(_AbstractDictTestCase):
             nifty_collections.nifty_dicts.abstract.BaseDoubleDict
         )
         
+
+class _AbstractNotDoubleDictTestCase(_AbstractDictTestCase):
+    def test_not_double_dict_base_class(self):
+        assert not issubclass(
+            self.d_type,
+            nifty_collections.nifty_dicts.abstract.BaseDoubleDict
+        )
+        
+    
+###############################################################################
+
+        
 class _AbstractFrozenDictTestCase(_AbstractDictTestCase):
     def test_frozen_dict_base_class(self):
         assert issubclass(
@@ -37,7 +49,23 @@ class _AbstractFrozenDictTestCase(_AbstractDictTestCase):
             self.d_type,
             collections.abc.MutableMapping
         )
+
         
+class _AbstractNotFrozenDictTestCase(_AbstractDictTestCase):
+    def test_not_frozen_dict_base_class(self):
+        assert not issubclass(
+            self.d_type,
+            collections.abc.Hashable
+        )
+        assert issubclass(
+            self.d_type,
+            collections.abc.MutableMapping
+        )
+        
+
+###############################################################################
+
+
 class _AbstractOrderedDictTestCase(_AbstractDictTestCase):
     def test_ordered_dict_base_class(self):
         assert issubclass(
@@ -53,24 +81,7 @@ class _AbstractOrderedDictTestCase(_AbstractDictTestCase):
             nifty_collections.abstract.DefinitelyUnordered
         )
 
-class _AbstractNotDoubleDictTestCase(_AbstractDictTestCase):
-    def test_not_double_dict_base_class(self):
-        assert not issubclass(
-            self.d_type,
-            nifty_collections.nifty_dicts.abstract.BaseDoubleDict
-        )
-        
-class _AbstractNotFrozenDictTestCase(_AbstractDictTestCase):
-    def test_not_frozen_dict_base_class(self):
-        assert not issubclass(
-            self.d_type,
-            collections.abc.Hashable
-        )
-        assert issubclass(
-            self.d_type,
-            collections.abc.MutableMapping
-        )
-        
+
 class _AbstractNotOrderedDictTestCase(_AbstractDictTestCase):
     def test_not_ordered_dict_base_class(self):
         assert not issubclass(

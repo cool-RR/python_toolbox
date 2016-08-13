@@ -20,46 +20,21 @@ from python_toolbox.nifty_collections import (
 from .abstract_one_test_cases import * 
 
 
+###############################################################################
+
+
 class _AbstractDoubleFrozenDictTestCase(_AbstractDoubleDictTestCase,
                                         _AbstractFrozenDictTestCase):
     pass
 
 
-class _AbstractDoubleOrderedDictTestCase(_AbstractDoubleDictTestCase,
-                                         _AbstractOrderedDictTestCase):
-    pass
-
 class _AbstractDoubleNotFrozenDictTestCase(_AbstractDoubleDictTestCase,
                                            _AbstractNotFrozenDictTestCase):
     pass
 
-class _AbstractDoubleNotOrderedDictTestCase(_AbstractDoubleDictTestCase,
-                                            _AbstractNotOrderedDictTestCase):
-    pass
 
-
-class _AbstractFrozenOrderedDictTestCase(_AbstractFrozenDictTestCase,
-                                         _AbstractOrderedDictTestCase):
-    pass
-
-
-class _AbstractFrozenNotDoubleDictTestCase(_AbstractFrozenDictTestCase,
+class _AbstractNotDoubleFrozenDictTestCase(_AbstractFrozenDictTestCase,
                                            _AbstractNotDoubleDictTestCase):
-    pass
-
-
-class _AbstractFrozenNotOrderedDictTestCase(_AbstractFrozenDictTestCase,
-                                            _AbstractNotOrderedDictTestCase):
-    pass
-
-
-class _AbstractOrderedNotDoubleDictTestCase(_AbstractOrderedDictTestCase,
-                                            _AbstractNotDoubleDictTestCase):
-    pass
-
-
-class _AbstractOrderedNotFrozenDictTestCase(_AbstractOrderedDictTestCase,
-                                            _AbstractNotFrozenDictTestCase):
     pass
 
 
@@ -68,8 +43,43 @@ class _AbstractNotDoubleNotFrozenDictTestCase(_AbstractNotDoubleDictTestCase,
     pass
 
 
+###############################################################################
+
+
+class _AbstractDoubleOrderedDictTestCase(_AbstractDoubleDictTestCase,
+                                         _AbstractOrderedDictTestCase):
+    pass
+
+class _AbstractDoubleNotOrderedDictTestCase(_AbstractDoubleDictTestCase,
+                                            _AbstractNotOrderedDictTestCase):
+    pass
+
+
+class _AbstractNotDoubleOrderedDictTestCase(_AbstractOrderedDictTestCase,
+                                            _AbstractNotDoubleDictTestCase):
+    pass
+
+
 class _AbstractNotDoubleNotOrderedDictTestCase(_AbstractNotDoubleDictTestCase,
                                                _AbstractNotOrderedDictTestCase):
+    pass
+
+
+###############################################################################
+
+
+class _AbstractFrozenOrderedDictTestCase(_AbstractFrozenDictTestCase,
+                                         _AbstractOrderedDictTestCase):
+    pass
+
+
+class _AbstractFrozenNotOrderedDictTestCase(_AbstractFrozenDictTestCase,
+                                            _AbstractNotOrderedDictTestCase):
+    pass
+
+
+class _AbstractNotFrozenOrderedDictTestCase(_AbstractOrderedDictTestCase,
+                                            _AbstractNotFrozenDictTestCase):
     pass
 
 

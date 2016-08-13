@@ -26,14 +26,14 @@ class DoubleDictTestCase(_AbstractDoubleNotFrozenDictTestCase,
     d_type = DoubleDict
 
 
-class FrozenDictTestCase(_AbstractFrozenNotDoubleDictTestCase,
+class FrozenDictTestCase(_AbstractNotDoubleFrozenDictTestCase,
                          _AbstractFrozenNotOrderedDictTestCase,
                          _AbstractNotDoubleNotOrderedDictTestCase):
     d_type = FrozenDict
 
         
-class OrderedDictTestCase(_AbstractOrderedNotDoubleDictTestCase,
-                          _AbstractOrderedNotFrozenDictTestCase,
+class OrderedDictTestCase(_AbstractNotDoubleOrderedDictTestCase,
+                          _AbstractNotFrozenOrderedDictTestCase,
                           _AbstractNotDoubleNotFrozenDictTestCase):
     d_type = OrderedDict
         
@@ -46,13 +46,13 @@ class DoubleFrozenDictTestCase(_AbstractDoubleFrozenDictTestCase,
         
 class DoubleOrderedDictTestCase(_AbstractDoubleOrderedDictTestCase,
                                 _AbstractDoubleNotFrozenDictTestCase,
-                                _AbstractOrderedNotFrozenDictTestCase):
+                                _AbstractNotFrozenOrderedDictTestCase):
     d_type = DoubleOrderedDict
         
         
 class FrozenOrderedDictTestCase(_AbstractFrozenOrderedDictTestCase,
-                                _AbstractFrozenNotDoubleDictTestCase,
-                                _AbstractOrderedNotDoubleDictTestCase):
+                                _AbstractNotDoubleFrozenDictTestCase,
+                                _AbstractNotDoubleOrderedDictTestCase):
     d_type = FrozenOrderedDict
         
 class DoubleFrozenOrderedDictTestCase(_AbstractDoubleFrozenDictTestCase,
