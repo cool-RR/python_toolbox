@@ -73,8 +73,8 @@ class BaseDoubleDict(_AbstractMappingDelegator):
             internal_inverse = self._dict_type((value, key) for key, value
                                                in self._dict.items())
             if len(internal_inverse) != len(self._dict):
-                raise Exception("There's a repeating value given to the "
-                                "double-sided dict, that is not allowed.") # blocktodo test
+                raise ValueError("There's a repeating value given to the "
+                                 "double-sided dict, that is not allowed.") # blocktodo test
             assert len(internal_inverse) == len(self._dict)
             self.inverse = type(self).__new__(type(self))
             self.inverse._dict = internal_inverse

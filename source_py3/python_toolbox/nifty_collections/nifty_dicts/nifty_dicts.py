@@ -37,8 +37,7 @@ class DoubleFrozenDict(abstract._UnorderedDictDelegator,
     
 
 class DoubleOrderedDict(abstract._OrderedDictDelegator,
-                        abstract._AbstractMutableDoubleDict,
-                        abstract._AbstractFrozenDict):
+                        abstract._AbstractMutableDoubleDict):
     '''blocktododoc'''
     
             

@@ -5,8 +5,10 @@ from python_toolbox import comparison_tools
 
 from collections import OrderedDict as StdlibOrderedDict
 
+from ..abstract import OrderedMapping
 
-class OrderedDict(StdlibOrderedDict):
+
+class OrderedDict(StdlibOrderedDict, OrderedMapping):
     '''
     A dictionary with an order.
     

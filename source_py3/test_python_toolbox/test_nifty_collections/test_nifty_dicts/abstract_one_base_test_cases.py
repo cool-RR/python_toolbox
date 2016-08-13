@@ -27,6 +27,25 @@ class AbstractDoubleDictTestCase(AbstractDictTestCase):
             nifty_collections.nifty_dicts.abstract.BaseDoubleDict
         )
         
+    def test_inverse_basics(self):
+        d = self.d_type(('a', 'b'), ('c', 'd',), ('e', 'f',))
+        inverse = d.inverse
+        
+        assert inverse.inverse is d
+        assert type(inverse) is type(d)
+        assert len(inverse) == len(d)
+        assert dict(inverse) == {'b': 'a', 'd': 'c', 'f': 'e',}
+        assert inverse['b'] == 'a'
+        
+        
+    def test_no_value_repeats(self):
+        with cute_testing.RaiseAssertor(ValueError):
+            self.d_type(('a', 'b'), ('c', 'd',), ('e', 'b',))
+        with cute_testing.RaiseAssertor(ValueError):
+            self.d_type(foo=7, bar=7)
+        with cute_testing.RaiseAssertor(ValueError):
+            self.d_type({1: ('meow',), 2: ('meow',),})
+        
 
 class AbstractNotDoubleDictTestCase(AbstractDictTestCase):
     def test_not_double_dict_base_class(self):
@@ -34,6 +53,9 @@ class AbstractNotDoubleDictTestCase(AbstractDictTestCase):
             self.d_type,
             nifty_collections.nifty_dicts.abstract.BaseDoubleDict
         )
+        
+    def test_no_inverse(self):
+        assert not hasattr(self.d_type(), 'inverse')
         
     
 ###############################################################################
@@ -49,6 +71,11 @@ class AbstractFrozenDictTestCase(AbstractDictTestCase):
             self.d_type,
             collections.abc.MutableMapping
         )
+        
+    def test_hashable(self):
+        d = self.d_type(((1, 2), (3, 4)))
+        assert hash(d) == hash(d)
+        {d: 7,}
 
         
 class AbstractNotFrozenDictTestCase(AbstractDictTestCase):
