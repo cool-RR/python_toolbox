@@ -79,7 +79,7 @@ class _AbstractDoubleDict(_AbstractMappingDelegator):
             
 
 class _AbstractMutableDoubleDict(_AbstractDoubleDict,
-                                      collections.abc.MutableMapping):
+                                 collections.abc.MutableMapping):
     
     def _assert_valid(self):
         assert len(self._dict) == len(self.inverse._dict)

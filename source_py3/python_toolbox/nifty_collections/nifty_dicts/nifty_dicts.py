@@ -13,7 +13,7 @@ from . import abstract
 
 
 class DoubleDict(abstract._UnorderedDictDelegator,
-                      abstract._AbstractMutableDoubleDict):
+                 abstract._AbstractMutableDoubleDict):
     '''
     blocktododoc'''    
     
@@ -31,14 +31,14 @@ class FrozenDict(abstract._UnorderedDictDelegator,
     
 
 class DoubleFrozenDict(abstract._UnorderedDictDelegator,
-                            abstract._AbstractDoubleDict,
-                            abstract._AbstractFrozenDict):
+                       abstract._AbstractDoubleDict,
+                       abstract._AbstractFrozenDict):
     '''blocktododoc'''
     
 
 class DoubleOrderedDict(abstract._OrderedDictDelegator,
-                             abstract._AbstractMutableDoubleDict,
-                             abstract._AbstractFrozenDict):
+                        abstract._AbstractMutableDoubleDict,
+                        abstract._AbstractFrozenDict):
     '''blocktododoc'''
     
             
@@ -102,8 +102,8 @@ class FrozenOrderedDict(Ordered, _AbstractFrozenDict):
     
     
 class DoubleFrozenOrderedDict(abstract._OrderedDictDelegator,
-                                   abstract._AbstractDoubleDict,
-                                   abstract._AbstractFrozenDict):
+                              abstract._AbstractDoubleDict,
+                              abstract._AbstractFrozenDict):
     '''blocktododoc'''
     
     
