@@ -23,68 +23,68 @@ from abstract_one_base_test_cases import *
 ###############################################################################
 
 
-class _AbstractDoubleFrozenDictTestCase(_AbstractDoubleDictTestCase,
-                                        _AbstractFrozenDictTestCase):
+class AbstractDoubleFrozenDictTestCase(AbstractDoubleDictTestCase, 
+                                        AbstractFrozenDictTestCase):
     pass
 
 
-class _AbstractDoubleNotFrozenDictTestCase(_AbstractDoubleDictTestCase,
-                                           _AbstractNotFrozenDictTestCase):
+class AbstractDoubleNotFrozenDictTestCase(AbstractDoubleDictTestCase,
+                                           AbstractNotFrozenDictTestCase):
     pass
 
 
-class _AbstractNotDoubleFrozenDictTestCase(_AbstractFrozenDictTestCase,
-                                           _AbstractNotDoubleDictTestCase):
+class AbstractNotDoubleFrozenDictTestCase(AbstractFrozenDictTestCase,
+                                           AbstractNotDoubleDictTestCase):
     pass
 
 
-class _AbstractNotDoubleNotFrozenDictTestCase(_AbstractNotDoubleDictTestCase,
-                                              _AbstractNotFrozenDictTestCase):
-    pass
-
-
-###############################################################################
-
-
-class _AbstractDoubleOrderedDictTestCase(_AbstractDoubleDictTestCase,
-                                         _AbstractOrderedDictTestCase):
-    pass
-
-class _AbstractDoubleNotOrderedDictTestCase(_AbstractDoubleDictTestCase,
-                                            _AbstractNotOrderedDictTestCase):
-    pass
-
-
-class _AbstractNotDoubleOrderedDictTestCase(_AbstractOrderedDictTestCase,
-                                            _AbstractNotDoubleDictTestCase):
-    pass
-
-
-class _AbstractNotDoubleNotOrderedDictTestCase(_AbstractNotDoubleDictTestCase,
-                                               _AbstractNotOrderedDictTestCase):
+class AbstractNotDoubleNotFrozenDictTestCase(AbstractNotDoubleDictTestCase,
+                                              AbstractNotFrozenDictTestCase):
     pass
 
 
 ###############################################################################
 
 
-class _AbstractFrozenOrderedDictTestCase(_AbstractFrozenDictTestCase,
-                                         _AbstractOrderedDictTestCase):
+class AbstractDoubleOrderedDictTestCase(AbstractDoubleDictTestCase,
+                                         AbstractOrderedDictTestCase):
+    pass
+
+class AbstractDoubleNotOrderedDictTestCase(AbstractDoubleDictTestCase,
+                                            AbstractNotOrderedDictTestCase):
     pass
 
 
-class _AbstractFrozenNotOrderedDictTestCase(_AbstractFrozenDictTestCase,
-                                            _AbstractNotOrderedDictTestCase):
+class AbstractNotDoubleOrderedDictTestCase(AbstractOrderedDictTestCase,
+                                            AbstractNotDoubleDictTestCase):
     pass
 
 
-class _AbstractNotFrozenOrderedDictTestCase(_AbstractOrderedDictTestCase,
-                                            _AbstractNotFrozenDictTestCase):
+class AbstractNotDoubleNotOrderedDictTestCase(AbstractNotDoubleDictTestCase,
+                                               AbstractNotOrderedDictTestCase):
     pass
 
 
-class _AbstractNotFrozenNotOrderedDictTestCase(_AbstractNotFrozenDictTestCase,
-                                               _AbstractNotOrderedDictTestCase):
+###############################################################################
+
+
+class AbstractFrozenOrderedDictTestCase(AbstractFrozenDictTestCase,
+                                         AbstractOrderedDictTestCase):
+    pass
+
+
+class AbstractFrozenNotOrderedDictTestCase(AbstractFrozenDictTestCase,
+                                            AbstractNotOrderedDictTestCase):
+    pass
+
+
+class AbstractNotFrozenOrderedDictTestCase(AbstractOrderedDictTestCase,
+                                            AbstractNotFrozenDictTestCase):
+    pass
+
+
+class AbstractNotFrozenNotOrderedDictTestCase(AbstractNotFrozenDictTestCase,
+                                               AbstractNotOrderedDictTestCase):
     pass
 
 

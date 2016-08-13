@@ -20,50 +20,50 @@ from python_toolbox.nifty_collections import (
 from abstract_two_base_test_cases import * 
 
 
-class DoubleDictTestCase(_AbstractDoubleNotFrozenDictTestCase,
-                         _AbstractDoubleNotOrderedDictTestCase,
-                         _AbstractNotFrozenNotOrderedDictTestCase):
+class DoubleDictTestCase(AbstractDoubleNotFrozenDictTestCase,
+                         AbstractDoubleNotOrderedDictTestCase,
+                         AbstractNotFrozenNotOrderedDictTestCase):
     __test__ = True
     d_type = DoubleDict
 
 
-class FrozenDictTestCase(_AbstractNotDoubleFrozenDictTestCase,
-                         _AbstractFrozenNotOrderedDictTestCase,
-                         _AbstractNotDoubleNotOrderedDictTestCase):
+class FrozenDictTestCase(AbstractNotDoubleFrozenDictTestCase,
+                         AbstractFrozenNotOrderedDictTestCase,
+                         AbstractNotDoubleNotOrderedDictTestCase):
     __test__ = True
     d_type = FrozenDict
 
         
-class OrderedDictTestCase(_AbstractNotDoubleOrderedDictTestCase,
-                          _AbstractNotFrozenOrderedDictTestCase,
-                          _AbstractNotDoubleNotFrozenDictTestCase):
+class OrderedDictTestCase(AbstractNotDoubleOrderedDictTestCase,
+                          AbstractNotFrozenOrderedDictTestCase,
+                          AbstractNotDoubleNotFrozenDictTestCase):
     __test__ = True
     d_type = OrderedDict
         
         
-class DoubleFrozenDictTestCase(_AbstractDoubleFrozenDictTestCase,
-                               _AbstractDoubleNotOrderedDictTestCase,
-                               _AbstractFrozenNotOrderedDictTestCase):
+class DoubleFrozenDictTestCase(AbstractDoubleFrozenDictTestCase,
+                               AbstractDoubleNotOrderedDictTestCase,
+                               AbstractFrozenNotOrderedDictTestCase):
     __test__ = True
     d_type = DoubleFrozenDict
         
         
-class DoubleOrderedDictTestCase(_AbstractDoubleOrderedDictTestCase,
-                                _AbstractDoubleNotFrozenDictTestCase,
-                                _AbstractNotFrozenOrderedDictTestCase):
+class DoubleOrderedDictTestCase(AbstractDoubleOrderedDictTestCase,
+                                AbstractDoubleNotFrozenDictTestCase,
+                                AbstractNotFrozenOrderedDictTestCase):
     __test__ = True
     d_type = DoubleOrderedDict
         
         
-class FrozenOrderedDictTestCase(_AbstractFrozenOrderedDictTestCase,
-                                _AbstractNotDoubleFrozenDictTestCase,
-                                _AbstractNotDoubleOrderedDictTestCase):
+class FrozenOrderedDictTestCase(AbstractFrozenOrderedDictTestCase,
+                                AbstractNotDoubleFrozenDictTestCase,
+                                AbstractNotDoubleOrderedDictTestCase):
     __test__ = True
     d_type = FrozenOrderedDict
         
-class DoubleFrozenOrderedDictTestCase(_AbstractDoubleFrozenDictTestCase,
-                                      _AbstractDoubleOrderedDictTestCase,
-                                      _AbstractFrozenOrderedDictTestCase):
+class DoubleFrozenOrderedDictTestCase(AbstractDoubleFrozenDictTestCase,
+                                      AbstractDoubleOrderedDictTestCase,
+                                      AbstractFrozenOrderedDictTestCase):
     __test__ = True
     d_type = DoubleFrozenOrderedDict
         

@@ -18,7 +18,7 @@ from python_toolbox.nifty_collections import (
 )
 
 
-class _AbstractDictTestCase(cute_testing.TestCase):
+class AbstractDictTestCase(cute_testing.TestCase):
     __test__ = False
     d_type = None # Filled in by subclasses
     

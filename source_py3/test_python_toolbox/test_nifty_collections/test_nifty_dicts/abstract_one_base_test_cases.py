@@ -17,10 +17,10 @@ from python_toolbox.nifty_collections import (
     FrozenOrderedDict, DoubleFrozenOrderedDict
 )
 
-from abstract_dict_test_case import _AbstractDictTestCase
+from abstract_dict_test_case import AbstractDictTestCase
 
 
-class _AbstractDoubleDictTestCase(_AbstractDictTestCase):
+class AbstractDoubleDictTestCase(AbstractDictTestCase):
     def test_double_dict_base_class(self):
         assert issubclass(
             self.d_type,
@@ -28,7 +28,7 @@ class _AbstractDoubleDictTestCase(_AbstractDictTestCase):
         )
         
 
-class _AbstractNotDoubleDictTestCase(_AbstractDictTestCase):
+class AbstractNotDoubleDictTestCase(AbstractDictTestCase):
     def test_not_double_dict_base_class(self):
         assert not issubclass(
             self.d_type,
@@ -39,7 +39,7 @@ class _AbstractNotDoubleDictTestCase(_AbstractDictTestCase):
 ###############################################################################
 
         
-class _AbstractFrozenDictTestCase(_AbstractDictTestCase):
+class AbstractFrozenDictTestCase(AbstractDictTestCase):
     def test_frozen_dict_base_class(self):
         assert issubclass(
             self.d_type,
@@ -51,7 +51,7 @@ class _AbstractFrozenDictTestCase(_AbstractDictTestCase):
         )
 
         
-class _AbstractNotFrozenDictTestCase(_AbstractDictTestCase):
+class AbstractNotFrozenDictTestCase(AbstractDictTestCase):
     def test_not_frozen_dict_base_class(self):
         assert not issubclass(
             self.d_type,
@@ -66,7 +66,7 @@ class _AbstractNotFrozenDictTestCase(_AbstractDictTestCase):
 ###############################################################################
 
 
-class _AbstractOrderedDictTestCase(_AbstractDictTestCase):
+class AbstractOrderedDictTestCase(AbstractDictTestCase):
     def test_ordered_dict_base_class(self):
         assert issubclass(
             self.d_type,
@@ -82,7 +82,7 @@ class _AbstractOrderedDictTestCase(_AbstractDictTestCase):
         )
 
 
-class _AbstractNotOrderedDictTestCase(_AbstractDictTestCase):
+class AbstractNotOrderedDictTestCase(AbstractDictTestCase):
     def test_not_ordered_dict_base_class(self):
         assert not issubclass(
             self.d_type,
