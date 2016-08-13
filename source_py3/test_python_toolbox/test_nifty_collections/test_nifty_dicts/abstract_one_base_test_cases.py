@@ -33,7 +33,7 @@ def get_pseudo_random_strings(n):
     pseudo_random_numbers = nifty_collections.OrderedSet()
     for partition in partitions:
         if len(pseudo_random_numbers) == n:
-            return pseudo_random_numbers
+            return tuple(pseudo_random_numbers)
         pseudo_random_numbers.add(partition)
     else:
         raise RuntimeError('Not enough unique pseudo-random numbers.')
@@ -136,7 +136,7 @@ class AbstractOrderedDictTestCase(AbstractDictTestCase):
         
     def test_ordered_on_long(self):
         pseudo_random_strings = get_pseudo_random_strings(100)
-        pairs = sequence_tools.partitions(pseudo_random_strings, 2)
+        pairs = tuple(sequence_tools.partitions(pseudo_random_strings, 2))
         d = self.d_type(pairs)
         assert len(d) == 50
         assert tuple(d.items()) == pairs
@@ -146,7 +146,7 @@ class AbstractOrderedDictTestCase(AbstractDictTestCase):
             
         assert tuple(zip(d.keys(), d.values())) == pairs
         
-        assert tuple(reversed(d)) == next(zip(*pairs))
+        assert tuple(reversed(d)) == next(zip(*pairs[::-1]))
 
 
 class AbstractNotOrderedDictTestCase(AbstractDictTestCase):
