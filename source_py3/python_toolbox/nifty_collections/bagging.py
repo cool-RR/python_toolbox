@@ -13,7 +13,7 @@ from python_toolbox import misc_tools
 from python_toolbox import math_tools
 
 from .lazy_tuple import LazyTuple
-from .ordered_dict import OrderedDict
+from .nifty_dicts import OrderedDict
 from .various_ordered_sets import FrozenOrderedSet
 from .various_frozen_dicts import FrozenDict, FrozenOrderedDict
 from .abstract import Ordered, DefinitelyUnordered
