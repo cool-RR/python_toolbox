@@ -17,7 +17,7 @@ from python_toolbox.nifty_collections import (
     FrozenOrderedDict, DoubleFrozenOrderedDict
 )
 
-from .abstract_two_test_cases import * 
+from abstract_two_base_test_cases import * 
 
 
 class DoubleDictTestCase(_AbstractDoubleNotFrozenDictTestCase,
