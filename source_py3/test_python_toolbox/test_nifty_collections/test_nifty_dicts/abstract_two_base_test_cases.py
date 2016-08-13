@@ -104,7 +104,33 @@ class AbstractFrozenNotOrderedDictTestCase(AbstractFrozenDictTestCase,
 class AbstractNotFrozenOrderedDictTestCase(AbstractOrderedDictTestCase,
                                            AbstractNotFrozenDictTestCase):
     def test_move_to_end(self):
+        d = self.d_type(((1, 2), (3, 4), (5, 6)))
+        assert tuple(d.items()) == ((1, 2), (3, 4), (5, 6))
+        assert d.index(3) == 1
+        assert tuple(d) == (1, 3, 5)
         
+        d.move_to_end(3)
+        assert tuple(d.items()) == ((1, 2), (5, 6), (3, 4))
+        assert d.index(3) == 2
+        assert tuple(d) == (1, 5, 3)
+        
+        assert d.index(5) == 2
+        d.move_to_end(5, end=False)
+        assert tuple(d.items()) == ((5, 6), (1, 2), (3, 4))
+        assert d.index(5) == 1
+        assert tuple(d) == (5, 1, 3)
+        
+    def test_new_item_at_end(self):
+        d = self.d_type(((1, 2), (5, 6)))
+        d[3] = 4
+        assert tuple(d.items()) == ((1, 2), (5, 6), (3, 4))
+
+    def test_new_item_at_end(self):
+        d = self.d_type(((1, 2), (5, 6), (3, 4)))
+        d.sort()
+        assert tuple(d.items()) == ((1, 2), (3, 4), (5, 6))
+        d.sort(reverse=True)
+        assert tuple(d.items()) == ((5, 6), (3, 4), (1, 2))
 
 
 class AbstractNotFrozenNotOrderedDictTestCase(AbstractNotFrozenDictTestCase,
