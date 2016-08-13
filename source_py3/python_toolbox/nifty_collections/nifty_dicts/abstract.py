@@ -60,7 +60,11 @@ class _AbstractFrozenDict(_AbstractMappingDelegator):
         return self._hash
 
 
-class _AbstractDoubleDict(_AbstractMappingDelegator):
+class BaseDoubleDict(_AbstractMappingDelegator):
+    # This has a different name, and we're exposing it too, so people could do
+    # `isinstance(d, BaseDoubleDict)` and get `True` if it's either a
+    # `DoubleDict`, `DoubleFrozenDict` or `DoubleFrozenOrderedDict` or
+    # `DoubleFrozenOrderedDict`.
     def __init__(self, *args, **kwargs):
         if hasattr(self, '_dict'):
             assert self.inverse.inverse is self
@@ -78,7 +82,7 @@ class _AbstractDoubleDict(_AbstractMappingDelegator):
             self.inverse.__init__()
             
 
-class _AbstractMutableDoubleDict(_AbstractDoubleDict,
+class _AbstractMutableDoubleDict(BaseDoubleDict,
                                  collections.abc.MutableMapping):
     
     def _assert_valid(self):

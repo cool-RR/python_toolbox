@@ -16,7 +16,7 @@ from python_toolbox.nifty_collections import (
 )
 
 
-class BaseDictTestCase(cute_testing.TestCase):
+class _AbstractDictTestCase(cute_testing.TestCase):
     __test__ = False
     d_type = None # Filled in by subclasses
     
@@ -40,5 +40,22 @@ class BaseDictTestCase(cute_testing.TestCase):
         assert d.get(1, 'whatever') == 2
         assert d.get(10, 'whatever') == 'whatever'
         
+        assert d == d.copy() == d.copy()
         
-class (cute_testing.TestCase):
+        
+class _AbstractDoubleDictTestCase(_AbstractDictTestCase):
+    pass
+
+
+def test_base_double_dict():
+    from nifty_collections.nifty_dicts.abstract import BaseDoubleDict
+    assert isinstance(DoubleDict(), BaseDoubleDict)
+    assert isinstance(DoubleFrozenDict(), BaseDoubleDict)
+    assert isinstance(DoubleOrderedDict(), BaseDoubleDict)
+    assert isinstance(DoubleFrozenOrderedDict(), BaseDoubleDict)
+    assert not isinstance({}, BaseDoubleDict)
+    assert not isinstance(OrderedDict(), BaseDoubleDict)
+    assert not isinstance(FrozenDict(), BaseDoubleDict)
+    assert not isinstance(FrozenOrderedDict(), BaseDoubleDict)
+    assert not isinstance(["haha I'm not even related"], BaseDoubleDict)
+    
