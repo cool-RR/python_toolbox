@@ -30,7 +30,21 @@ class AbstractDoubleFrozenDictTestCase(AbstractDoubleDictTestCase,
 
 class AbstractDoubleNotFrozenDictTestCase(AbstractDoubleDictTestCase,
                                           AbstractNotFrozenDictTestCase):
-    pass
+    def test_changing_affects_inverse(self):
+        d = self.d_type(((1, 2), (3, 4), (5, 6)))
+        inverse = d.inverse
+        assert len(d) == len(inverse) == 3
+
+        d[7] == 8
+        assert inverse[8] == 7
+        assert len(d) == len(inverse) == 4
+        
+        del d[3]
+        assert len(d) == len(inverse) == 3
+        assert '4' not in inverse
+        
+        
+        
 
 
 class AbstractNotDoubleFrozenDictTestCase(AbstractFrozenDictTestCase,

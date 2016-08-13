@@ -34,6 +34,8 @@ class AbstractDictTestCase(cute_testing.TestCase):
         assert d[1] == 2
         assert d[3] == 4
         assert d[5] == 6
+        assert '1' in d
+        assert 'meow' not in d
         with cute_testing.RaiseAssertor(exception_type=KeyError):
             d[7]
         with cute_testing.RaiseAssertor(exception_type=KeyError):
