@@ -144,6 +144,12 @@ class AbstractNotFrozenDictTestCase(AbstractDictTestCase):
 
 
 class AbstractOrderedDictTestCase(AbstractDictTestCase):
+    
+    def make_big_dict(self):
+        pseudo_random_strings = get_pseudo_random_strings(100)
+        pairs = tuple(sequence_tools.partitions(pseudo_random_strings, 2))
+        return self.d_type(pairs)
+    
     def test_ordered_dict_base_class(self):
         assert issubclass(
             self.d_type,
@@ -159,9 +165,7 @@ class AbstractOrderedDictTestCase(AbstractDictTestCase):
         )
         
     def test_ordered_on_long(self):
-        pseudo_random_strings = get_pseudo_random_strings(100)
-        pairs = tuple(sequence_tools.partitions(pseudo_random_strings, 2))
-        d = self.d_type(pairs)
+        d = self.make_big_dict()
         assert len(d) == 50
         assert tuple(d.items()) == pairs
         assert d.index(pairs[7][0]) == 7

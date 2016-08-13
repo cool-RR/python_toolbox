@@ -18,7 +18,6 @@ from python_toolbox.nifty_collections import (
 )
 
 from abstract_one_base_test_cases import *
-from tools import get_pseudo_random_strings
 
 
 ###############################################################################
@@ -64,10 +63,14 @@ class AbstractNotDoubleNotFrozenDictTestCase(AbstractNotDoubleDictTestCase,
 
 class AbstractDoubleOrderedDictTestCase(AbstractDoubleDictTestCase,
                                         AbstractOrderedDictTestCase):
-    def test_double_ordered(self):
-        pseudo_random_strings = get_pseudo_random_strings(100)
-        pairs = sequence_tools.partitions(pseudo_random_strings, 2)
-        d = self.d_type(pairs)
+    def test_double_ordered_without_modifying(self):
+        d = self.make_big_dict()
+        assert tuple(d.inverse.keys()) == tuple(d.values())
+        assert tuple(d.inverse.values()) == tuple(d.keys())
+        
+        some_pair = tuple(d.items())[47]
+        assert d.index(some_pair[0]) == 47
+        assert d.inverse.index(some_pair[1]) == 47
         
 
 class AbstractDoubleNotOrderedDictTestCase(AbstractDoubleDictTestCase,
