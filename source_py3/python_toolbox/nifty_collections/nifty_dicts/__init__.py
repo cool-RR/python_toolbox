@@ -1,4 +1,4 @@
-from .nifty_dicts import (DoubleSidedDict, FrozenDict, OrderedDict,
-                          DoubleSidedFrozenDict, DoubleSidedOrderedDict,
+from .nifty_dicts import (DoubleDict, FrozenDict, OrderedDict,
+                          DoubleFrozenDict, DoubleOrderedDict,
                           FrozenOrderedDict,
-                          DoubleSidedFrozenOrderedDict,)
+                          DoubleFrozenOrderedDict,)

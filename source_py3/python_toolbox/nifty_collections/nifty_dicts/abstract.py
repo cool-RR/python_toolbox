@@ -60,7 +60,7 @@ class _AbstractFrozenDict(_AbstractMappingDelegator):
         return self._hash
 
 
-class _AbstractDoubleSidedDict(_AbstractMappingDelegator):
+class _AbstractDoubleDict(_AbstractMappingDelegator):
     def __init__(self, *args, **kwargs):
         if hasattr(self, '_dict'):
             assert self.inverse.inverse is self
@@ -78,7 +78,7 @@ class _AbstractDoubleSidedDict(_AbstractMappingDelegator):
             self.inverse.__init__()
             
 
-class _AbstractMutableDoubleSidedDict(_AbstractDoubleSidedDict,
+class _AbstractMutableDoubleDict(_AbstractDoubleDict,
                                       collections.abc.MutableMapping):
     
     def _assert_valid(self):

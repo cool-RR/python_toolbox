@@ -12,8 +12,8 @@ from .ordered_dict import OrderedDict
 from . import abstract
 
 
-class DoubleSidedDict(abstract._UnorderedDictDelegator,
-                      abstract._AbstractMutableDoubleSidedDict):
+class DoubleDict(abstract._UnorderedDictDelegator,
+                      abstract._AbstractMutableDoubleDict):
     '''
     blocktododoc'''    
     
@@ -30,14 +30,14 @@ class FrozenDict(abstract._UnorderedDictDelegator,
     '''    
     
 
-class DoubleSidedFrozenDict(abstract._UnorderedDictDelegator,
-                            abstract._AbstractDoubleSidedDict,
+class DoubleFrozenDict(abstract._UnorderedDictDelegator,
+                            abstract._AbstractDoubleDict,
                             abstract._AbstractFrozenDict):
     '''blocktododoc'''
     
 
-class DoubleSidedOrderedDict(abstract._OrderedDictDelegator,
-                             abstract._AbstractMutableDoubleSidedDict,
+class DoubleOrderedDict(abstract._OrderedDictDelegator,
+                             abstract._AbstractMutableDoubleDict,
                              abstract._AbstractFrozenDict):
     '''blocktododoc'''
     
@@ -101,8 +101,8 @@ class FrozenOrderedDict(Ordered, _AbstractFrozenDict):
     
     
     
-class DoubleSidedFrozenOrderedDict(abstract._OrderedDictDelegator,
-                                   abstract._AbstractDoubleSidedDict,
+class DoubleFrozenOrderedDict(abstract._OrderedDictDelegator,
+                                   abstract._AbstractDoubleDict,
                                    abstract._AbstractFrozenDict):
     '''blocktododoc'''
     

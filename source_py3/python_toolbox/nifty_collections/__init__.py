@@ -12,9 +12,9 @@ from .frozen_bag_bag import FrozenBagBag
 from .condition_list import ConditionList
 from ..cute_enum import CuteEnum
 from .emitting_weak_key_default_dict import EmittingWeakKeyDefaultDict
-from .nifty_dicts import (DoubleSidedDict, FrozenDict, OrderedDict,
-                          DoubleSidedFrozenDict, DoubleSidedOrderedDict,
+from .nifty_dicts import (DoubleDict, FrozenDict, OrderedDict,
+                          DoubleFrozenDict, DoubleOrderedDict,
                           FrozenOrderedDict,
-                          DoubleSidedFrozenOrderedDict)
+                          DoubleFrozenOrderedDict)
 
 from .abstract import Ordered, DefinitelyUnordered
