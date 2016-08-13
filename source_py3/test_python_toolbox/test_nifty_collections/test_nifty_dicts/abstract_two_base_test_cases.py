@@ -17,71 +17,64 @@ from python_toolbox.nifty_collections import (
     FrozenOrderedDict, DoubleFrozenOrderedDict
 )
 
-from .abstract_one_test_case import * 
+from .abstract_one_test_cases import * 
 
 
-class _AbstractDoubleDictTestCase(_AbstractDictTestCase):
-    def test_double_dict_base_class(self):
-        assert issubclass(
-            self.d_type,
-            nifty_collections.nifty_dicts.abstract.BaseDoubleDict
-        )
-        
-class _AbstractFrozenDictTestCase(_AbstractDictTestCase):
-    def test_frozen_dict_base_class(self):
-        assert issubclass(
-            self.d_type,
-            collections.abc.Hashable
-        )
-        assert not issubclass(
-            self.d_type,
-            collections.abc.MutableMapping
-        )
-        
-class _AbstractOrderedDictTestCase(_AbstractDictTestCase):
-    def test_ordered_dict_base_class(self):
-        assert issubclass(
-            self.d_type,
-            nifty_collections.abstract.Ordered
-        )
-        assert issubclass(
-            self.d_type,
-            nifty_collections.abstract.OrderedMapping
-        )
-        assert not issubclass(
-            self.d_type,
-            nifty_collections.abstract.DefinitelyUnordered
-        )
+class _AbstractDoubleFrozenDictTestCase(_AbstractDoubleDictTestCase,
+                                        _AbstractFrozenDictTestCase):
+    pass
 
-class _AbstractNotDoubleDictTestCase(_AbstractDictTestCase):
-    def test_not_double_dict_base_class(self):
-        assert not issubclass(
-            self.d_type,
-            nifty_collections.nifty_dicts.abstract.BaseDoubleDict
-        )
-        
-class _AbstractNotFrozenDictTestCase(_AbstractDictTestCase):
-    def test_not_frozen_dict_base_class(self):
-        assert not issubclass(
-            self.d_type,
-            collections.abc.Hashable
-        )
-        assert issubclass(
-            self.d_type,
-            collections.abc.MutableMapping
-        )
-        
-class _AbstractNotOrderedDictTestCase(_AbstractDictTestCase):
-    def test_not_ordered_dict_base_class(self):
-        assert not issubclass(
-            self.d_type,
-            nifty_collections.abstract.Ordered
-        )
-        assert not issubclass(
-            self.d_type,
-            nifty_collections.abstract.OrderedMapping
-        )
-        assert issubclass(
-            self.d_type,
-            nifty_collections.abstract.DefinitelyUnordered
-        )
+
+class _AbstractDoubleOrderedDictTestCase(_AbstractDoubleDictTestCase,
+                                         _AbstractOrderedDictTestCase):
+    pass
+
+class _AbstractDoubleNotFrozenDictTestCase(_AbstractDoubleDictTestCase,
+                                           _AbstractNotFrozenDictTestCase):
+    pass
+
+class _AbstractDoubleNotOrderedDictTestCase(_AbstractDoubleDictTestCase,
+                                            _AbstractNotOrderedDictTestCase):
+    pass
+
+
+class _AbstractFrozenOrderedDictTestCase(_AbstractFrozenDictTestCase,
+                                         _AbstractOrderedDictTestCase):
+    pass
+
+
+class _AbstractFrozenNotDoubleDictTestCase(_AbstractFrozenDictTestCase,
+                                           _AbstractNotDoubleDictTestCase):
+    pass
+
+
+class _AbstractFrozenNotOrderedDictTestCase(_AbstractFrozenDictTestCase,
+                                            _AbstractNotOrderedDictTestCase):
+    pass
+
+
+class _AbstractOrderedNotDoubleDictTestCase(_AbstractOrderedDictTestCase,
+                                            _AbstractNotDoubleDictTestCase):
+    pass
+
+
+class _AbstractOrderedNotFrozenDictTestCase(_AbstractOrderedDictTestCase,
+                                            _AbstractNotFrozenDictTestCase):
+    pass
+
+
+class _AbstractNotDoubleNotFrozenDictTestCase(_AbstractNotDoubleDictTestCase,
+                                              _AbstractNotFrozenDictTestCase):
+    pass
+
+
+class _AbstractNotDoubleNotOrderedDictTestCase(_AbstractNotDoubleDictTestCase,
+                                               _AbstractNotOrderedDictTestCase):
+    pass
+
+
+class _AbstractNotFrozenNotOrderedDictTestCase(_AbstractNotFrozenDictTestCase,
+                                               _AbstractNotOrderedDictTestCase):
+    pass
+
+
