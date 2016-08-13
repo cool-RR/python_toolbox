@@ -148,7 +148,11 @@ class AbstractOrderedDictTestCase(AbstractDictTestCase):
     def make_big_dict(self):
         pseudo_random_strings = get_pseudo_random_strings(100)
         pairs = tuple(sequence_tools.partitions(pseudo_random_strings, 2))
-        return self.d_type(pairs)
+        d = self.d_type(pairs)
+        assert len(d) == 50
+        assert tuple(d.items()) == pairs
+        return d
+    
     
     def test_ordered_dict_base_class(self):
         assert issubclass(
@@ -166,15 +170,13 @@ class AbstractOrderedDictTestCase(AbstractDictTestCase):
         
     def test_ordered_on_long(self):
         d = self.make_big_dict()
-        assert len(d) == 50
-        assert tuple(d.items()) == pairs
-        assert d.index(pairs[7][0]) == 7
+        assert d.index(tuple(d.items())[7][0]) == 7
         with cute_testing.RaiseAssertor(ValueError):
             d.index('meow')
             
-        assert tuple(zip(d.keys(), d.values())) == pairs
+        assert tuple(zip(d.keys(), d.values())) == tuple(d.items())
         
-        assert tuple(reversed(d)) == next(zip(*pairs[::-1]))
+        assert tuple(reversed(d)) == next(zip(*tuple(d.items())[::-1]))
 
 
 class AbstractNotOrderedDictTestCase(AbstractDictTestCase):
