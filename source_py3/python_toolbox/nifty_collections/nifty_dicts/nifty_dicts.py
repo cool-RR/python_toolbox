@@ -41,7 +41,22 @@ class DoubleOrderedDict(abstract._OrderedDictDelegator,
     '''blocktododoc'''
     
             
-    def move_to_end(self, key, last=True):
+    def sort(self, *, key=None, reverse=False):
+        '''
+        Sort the items according to their keys, changing the order in-place.
+        
+        The optional `key` argument, (not to be confused with the dictionary
+        keys,) will be passed to the `sorted` function as a key function.
+        '''
+        from python_toolbox import comparison_tools
+        key_function = \
+                   comparison_tools.process_key_function_or_attribute_name(key)
+        sorted_keys = sorted(self.keys(), key=key_function, reverse=reverse)
+        for key_ in sorted_keys[1:]:
+            self.move_to_end(key_)
+        
+    
+    def move_to_end(self, key, *, last=True):
         '''
         Move an existing element to the end (or beginning if `last is False`.)
 

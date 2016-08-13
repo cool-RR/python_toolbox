@@ -16,7 +16,7 @@ class OrderedDict(StdlibOrderedDict, OrderedMapping):
     improvements.
     '''
     
-    def sort(self, key=None, reverse=False):
+    def sort(self, *, key=None, reverse=False):
         '''
         Sort the items according to their keys, changing the order in-place.
         
