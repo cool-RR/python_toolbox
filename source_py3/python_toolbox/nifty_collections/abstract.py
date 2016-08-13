@@ -32,14 +32,8 @@ class OrderedMapping(Ordered, collections.abc.Mapping):
     '''blocktododoc'''
     __slots__ = ()
     
-    @classmethod
-    def __subclasshook__(cls, subclass_candidate):
-        if cls is OrderedMapping:
-            return all(issubclass(subclass_candidate, base_class)
-                       for base_class in cls.__bases__)
-        return NotImplemented
+Ordered.register(collections.OrderedDict)
 
-        
 ###############################################################################
 
 class DefinitelyUnordered(metaclass=abc.ABCMeta):

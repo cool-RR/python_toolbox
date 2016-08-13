@@ -8,7 +8,7 @@ import itertools
 
 from python_toolbox import comparison_tools
 
-from python_toolbox.nifty_collections.abstract import (Ordered,
+from python_toolbox.nifty_collections.abstract import (Ordered, OrderedMapping,
                                                        DefinitelyUnordered)
 from .ordered_dict import OrderedDict
 
@@ -143,7 +143,7 @@ class _UnorderedDictDelegator(DefinitelyUnordered,
     _dict_type = dict
         
 
-class _OrderedDictDelegator(Ordered, _AbstractMappingDelegator):
+class _OrderedDictDelegator(OrderedMapping, _AbstractMappingDelegator):
         
     _dict_type = OrderedDict
     def __reversed__(self):
