@@ -31,6 +31,14 @@ Ordered.register(multiprocessing.queues.Queue)
 class OrderedMapping(Ordered, collections.abc.Mapping):
     '''blocktododoc'''
     __slots__ = ()
+    
+    @classmethod
+    def __subclasshook__(cls, subclass_candidate):
+        if cls is OrderedMapping:
+            return all(issubclass(subclass_candidate, base_class)
+                       for base_class in cls.__mro__)
+        return NotImplemented
+
         
 ###############################################################################
 
