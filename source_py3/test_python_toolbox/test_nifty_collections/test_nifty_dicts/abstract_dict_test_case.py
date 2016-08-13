@@ -7,6 +7,7 @@ from python_toolbox.third_party import unittest2
 
 import nose
 
+from python_toolbox import sequence_tools
 from python_toolbox import cute_iter_tools
 from python_toolbox import cute_testing
 
@@ -53,4 +54,16 @@ class AbstractDictTestCase(cute_testing.TestCase):
         assert tuple(map(set, zip(*d.items()))) == \
                                                (set(d.keys()), set(d.values()))
         
+    def __init__(self, *args, **kwargs):
+        cute_testing.TestCase.__init__(self, *args, **kwargs)
+        
+        # Ensure no overridden test methods so no tests will go ignored:
+        test_method_names_from_all_base_classes = [
+            [method for method in dir(base_class) if method.startswith('test_')
+             for base_class in type(self).__mro__]
+        ]
+        all_test_method_names = sequence_tools.flatten(
+            test_method_names_from_all_base_classes
+        )
+        assert not sequence_tools.get_recurrences(all_test_method_names)
         

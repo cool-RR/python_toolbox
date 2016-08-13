@@ -103,7 +103,8 @@ class AbstractFrozenNotOrderedDictTestCase(AbstractFrozenDictTestCase,
 
 class AbstractNotFrozenOrderedDictTestCase(AbstractOrderedDictTestCase,
                                            AbstractNotFrozenDictTestCase):
-    pass
+    def test_move_to_end(self):
+        
 
 
 class AbstractNotFrozenNotOrderedDictTestCase(AbstractNotFrozenDictTestCase,
