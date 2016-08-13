@@ -48,34 +48,3 @@ class _AbstractDictTestCase(cute_testing.TestCase):
         assert d == d.copy() == d.copy()
         
         
-class _AbstractDoubleDictTestCase(_AbstractDictTestCase):
-    def test_double_dict_base_class(self):
-        assert issubclass(
-            self.d_type,
-            nifty_collections.nifty_dicts.abstract.BaseDoubleDict
-        )
-        
-class _AbstractFrozenDictTestCase(_AbstractDictTestCase):
-    def test_frozen_dict_base_class(self):
-        assert issubclass(
-            self.d_type,
-            collections.abc.Hashable
-        )
-        assert not issubclass(
-            self.d_type,
-            collections.abc.MutableMapping
-        )
-class _AbstractOrderedDictTestCase(_AbstractDictTestCase):
-    def test_ordered_dict_base_class(self):
-        assert issubclass(
-            self.d_type,
-            nifty_collections.abstract.Ordered
-        )
-        assert issubclass(
-            self.d_type,
-            nifty_collections.abstract.OrderedMapping
-        )
-        assert not issubclass(
-            self.d_type,
-            nifty_collections.abstract.DefinitelyUnordered
-        )
