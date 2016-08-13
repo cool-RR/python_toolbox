@@ -58,12 +58,17 @@ class AbstractDictTestCase(cute_testing.TestCase):
         cute_testing.TestCase.__init__(self, *args, **kwargs)
         
         # Ensure no overridden test methods so no tests will go ignored:
-        test_method_names_from_all_base_classes = [
-            [method for method in dir(base_class) if method.startswith('test_')
-             for base_class in type(self).__mro__]
-        ]
-        all_test_method_names = sequence_tools.flatten(
-            test_method_names_from_all_base_classes
-        )
-        assert not sequence_tools.get_recurrences(all_test_method_names)
+        base_classes = collections.deque(type(self).__bases__)
+        while base_classes:
+            base_class = base_classes.pop()
+            test_method_names_from_base_classes = [
+                [method for method in dir(base_class_of_base_class)
+                 if method.startswith('test_')]
+                 for base_class_of_base_class in base_class.__bases__
+            ]
+            all_test_method_names = sequence_tools.flatten(
+                test_method_names_from_base_classes
+            )
+            assert not sequence_tools.get_recurrences(all_test_method_names)
+            base_classes.append(base_class.__bases__)
         
