@@ -58,7 +58,8 @@ class DoubleOrderedDict(abstract._OrderedDictDelegator,
         self._assert_valid()
     
 
-class FrozenOrderedDict(Ordered, _AbstractFrozenDict):
+class FrozenOrderedDict(abstract._OrderedDictDelegator,
+                        abstract._AbstractFrozenDict):
     '''
     An immutable, ordered `dict`.
     
