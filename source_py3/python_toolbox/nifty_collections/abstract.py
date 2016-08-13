@@ -2,7 +2,7 @@
 # This program is distributed under the MIT license.
 
 import abc
-import collections
+import collections.abc
 import queue
 import multiprocessing.queues
 
