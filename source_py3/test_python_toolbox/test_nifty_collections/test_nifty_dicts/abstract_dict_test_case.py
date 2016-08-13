@@ -49,4 +49,8 @@ class AbstractDictTestCase(cute_testing.TestCase):
         
         assert d == d.copy() == d.copy()
         
+        assert set(d) == set(d.keys())
+        assert tuple(map(set, zip(*d.items()))) == \
+                                               (set(d.keys()), set(d.values()))
+        
         

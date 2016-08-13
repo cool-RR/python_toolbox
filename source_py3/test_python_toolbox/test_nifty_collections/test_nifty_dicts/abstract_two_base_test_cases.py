@@ -17,7 +17,8 @@ from python_toolbox.nifty_collections import (
     FrozenOrderedDict, DoubleFrozenOrderedDict
 )
 
-from abstract_one_base_test_cases import * 
+from abstract_one_base_test_cases import *
+from tools import get_pseudo_random_strings
 
 
 ###############################################################################
@@ -43,8 +44,9 @@ class AbstractDoubleNotFrozenDictTestCase(AbstractDoubleDictTestCase,
         assert len(d) == len(inverse) == 3
         assert '4' not in inverse
         
-        
-        
+        d.clear()
+        assert len(d) == len(inverse) == 0
+        assert '2' not in inverse
 
 
 class AbstractNotDoubleFrozenDictTestCase(AbstractFrozenDictTestCase,
@@ -62,7 +64,11 @@ class AbstractNotDoubleNotFrozenDictTestCase(AbstractNotDoubleDictTestCase,
 
 class AbstractDoubleOrderedDictTestCase(AbstractDoubleDictTestCase,
                                         AbstractOrderedDictTestCase):
-    pass
+    def test_double_ordered(self):
+        pseudo_random_strings = get_pseudo_random_strings(100)
+        pairs = sequence_tools.partitions(pseudo_random_strings, 2)
+        d = self.d_type(pairs)
+        
 
 class AbstractDoubleNotOrderedDictTestCase(AbstractDoubleDictTestCase,
                                            AbstractNotOrderedDictTestCase):
