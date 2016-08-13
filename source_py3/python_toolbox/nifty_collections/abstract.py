@@ -36,7 +36,7 @@ class OrderedMapping(Ordered, collections.abc.Mapping):
     def __subclasshook__(cls, subclass_candidate):
         if cls is OrderedMapping:
             return all(issubclass(subclass_candidate, base_class)
-                       for base_class in cls.__mro__)
+                       for base_class in cls.__bases__)
         return NotImplemented
 
         
