@@ -39,3 +39,27 @@ def test():
     assert Flavor[:2] == (Flavor.CHOCOLATE, Flavor.VANILLA)
         
             
+
+def test_comparable_enum_recipe():
+    class ComparableEnum(CuteEnum):
+        def __eq__(self, other):
+            if type(other) == type(self):
+                return self is other
+            elif isinstance(other, str):
+                return self.value == other
+            else:
+                return NotImplemented
+            
+        __str__ = lambda self: self.value
+    
+    class Style(ComparableEnum):
+        ROCK = 'rock'
+        JAZZ = 'jazz'
+        BLUES = 'blues'
+        
+        
+    assert Style.ROCK == Style.ROCK == str(Style.ROCK) == 'rock'
+    assert 'jazz' != Style.ROCK != Style.JAZZ
+    assert Style.ROCK != Style.ROCK.number == 0
+    
+    assert sorted(Style) == [Style.ROCK, Style.JAZZ, Style.BLUES]
