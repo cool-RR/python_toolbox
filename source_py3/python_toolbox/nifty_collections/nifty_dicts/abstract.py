@@ -95,17 +95,17 @@ class _AbstractMutableDoubleDict(BaseDoubleDict,
         except KeyError:
             pass
         else:
-            raise Exception(
+            raise ValueError(
                 "Can't add key %s with value %s because there is already a "
                 "key %s with the same value." % (key, value,
-                                                 self.inverse[value]) # blocktodo test
+                                                 self.inverse[value])
             )
         
         try:
             hash(value)
         except TypeError as hashing_error:
             raise TypeError('%s is not hashable so it can\'t be used as a '
-                            'value in a double-sided dict.' % value)
+                            'value in a double-sided dict.' % value) from hashing_error
         
         try:
             existing_value = self[key]

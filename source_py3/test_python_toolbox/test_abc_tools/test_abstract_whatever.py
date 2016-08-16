@@ -1,14 +1,12 @@
 # Copyright 2009-2017 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing module for `python_toolbox.abc_tools.AbstractStaticMethod`.'''
-
 import sys
 import abc
 
 import nose
 
-from python_toolbox.abc_tools import AbstractStaticMethod
+from python_toolbox.abc_tools import abstract_whatever
 
 
 def test_instantiate_without_subclassing():

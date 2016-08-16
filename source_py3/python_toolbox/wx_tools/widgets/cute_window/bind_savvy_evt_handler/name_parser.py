@@ -24,7 +24,8 @@ class CaseStyleType(abc.ABCMeta):
 class BaseCaseStyle(metaclass=CaseStyleType):
     '''Base class for case styles.'''
     
-    @abc_tools.AbstractStaticMethod
+    @staticmethod
+    @abc.abstractmethod
     def parse(name):
         '''
         Parse a name with the given convention into a tuple of "words".

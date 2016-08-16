@@ -55,6 +55,24 @@ class AbstractDoubleNotFrozenDictTestCase(AbstractDoubleDictTestCase,
         with cute_testing.RaiseAssertor(KeyError):
             del d['woof']
         
+    def test_cant_use_existing_value(self):
+        d = self.d_type(((1, 2), (3, 4), (5, 6)))
+        with cute_testing.RaiseAssertor(ValueError, text='same value'):
+            d['foo'] = 4
+        assert len(d) == 3
+        
+    def test_cant_use_unhashable_value(self):
+        d = self.d_type(((1, 2), (3, 4), (5, 6)))
+        with cute_testing.RaiseAssertor(TypeError, text='not hashable'):
+            d['foo'] = []
+        assert len(d) == 3
+
+
+    def test_change_existing_key(self):
+        d = self.d_type(((1, 2), (3, 4), (5, 6)))
+        d[3] = 'foo'
+        assert dict(d) == {1: 2, 3: 'foo', 5: 6}
+        assert dict(d.inverse) == {2: 1, 'foo': 3, 6: 5}
 
 
 class AbstractNotDoubleFrozenDictTestCase(AbstractFrozenDictTestCase,
