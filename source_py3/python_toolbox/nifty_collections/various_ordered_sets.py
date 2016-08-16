@@ -32,12 +32,36 @@ class BaseOrderedSet(collections.abc.Set, collections.abc.Sequence,
             self.__add(item)
 
     def __getitem__(self, index):
-        for i, item in enumerate(self):
-            if i == index:
-                return item
+        our_length = len(self)
+        if isinstance(index, int):
+            if index < 0:
+                index += our_length
+            if not 0 <= index < our_length:
+                raise IndexError
+            for i, item in enumerate(self):
+                if i == index:
+                    return item
+            else:
+                raise RuntimeError
+        elif isinstance(index, slice):
+            from python_toolbox import sequence_tools
+            canonical_slice = sequence_tools.CanonicalSlice(index, self)
+            if canonical_slice.step > 0 or canonical_slice.step is None:
+                return type(self)(itertools.islice(self, *canonical_slice))
+            else:
+                reversed_slice = (
+                    (None if canonical_slice.start is None else
+                     our_length - 1 - canonical_slice.start),
+                    (None if canonical_slice.stop is None else
+                     our_length - 1 - canonical_slice.stop),
+                    -canonical_slice.step
+                )
+                return type(self)(itertools.islice(reversed(self),
+                                                   *reversed_slice))
+                
         else:
-            raise IndexError
-        
+            raise TypeError
+            
     def __len__(self):
         return len(self._map)
 
@@ -240,3 +264,14 @@ class EmittingOrderedSet(OrderedSet):
         '''Get a version of this ordered set without an emitter attached.'''
         return OrderedSet(self)
         
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            raise Exception(
+                "We won't let you slice an `EmittingOrderedSet` because we "
+                "can't be sure whether you'll want it to use the same "
+                "emitter."
+            )
+        else:
+            return super().__getitem__(index)
+    
+    

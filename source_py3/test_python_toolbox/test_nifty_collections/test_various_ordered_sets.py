@@ -24,6 +24,33 @@ class BaseOrderedSetTestCase(cute_testing.TestCase):
         assert bool(self.ordered_set_type({0})) is True
         assert bool(self.ordered_set_type(range(5))) is True
         
+    def test_getitem(self):
+        s = self.ordered_set_type('abc')
+        assert s[0] == 'a'
+        assert s[1] == 'b'
+        assert s[2] == 'c'
+        assert s[-1] == 'c'
+        assert s[-2] == 'b'
+        assert s[-3] == 'a'
+        with cute_testing.RaiseAssertor(IndexError):
+            s[3]
+        with cute_testing.RaiseAssertor(IndexError):
+            s[-4]
+        with cute_testing.RaiseAssertor(IndexError):
+            s[300]
+        with cute_testing.RaiseAssertor(TypeError):
+            s['foo']
+        if not issubclass(self.ordered_set_type, EmittingOrderedSet):
+            assert self.ordered_set_type(range(10))[7:2:-2] == \
+                   self.ordered_set_type([7, 5, 3])
+            assert s[:] == s
+            assert s[:] is not s
+            assert s[:-1] == self.ordered_set_type('ab')
+            assert s[1:-1] == self.ordered_set_type('b')
+            assert s[-1:1:-1] == self.ordered_set_type('c')
+            assert s[::2] == self.ordered_set_type('ac')
+            assert s[::-2] == self.ordered_set_type('ca')
+            
         
 class BaseMutableOrderedSetTestCase(BaseOrderedSetTestCase):
     __test__ = False
