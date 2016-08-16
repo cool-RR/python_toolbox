@@ -32,7 +32,7 @@ class RaiseAssertor(context_management.ContextManager):
     
     '''
     
-    def __init__(self, exception_type=Exception, text='',
+    def __init__(self, exception_type=Exception, text='', *
                  assert_exact_type=False):
         '''
         Construct the `RaiseAssertor`.

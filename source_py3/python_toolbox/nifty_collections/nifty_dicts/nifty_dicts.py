@@ -122,7 +122,3 @@ class DoubleFrozenOrderedDict(abstract._OrderedDictDelegator,
     '''blocktododoc'''
     
     
-# blocktodo: Do sophisticated tests that iterate over the dict classes, see
-# their attributes (defined in the tests) and do the appropriate tests. For
-# example if a dict is ordered and mutable, we should test .sort and
-# .move_to_end, otherwise we should test these methods don't exist.

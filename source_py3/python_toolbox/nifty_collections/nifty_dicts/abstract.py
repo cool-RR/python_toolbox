@@ -74,7 +74,7 @@ class BaseDoubleDict(_AbstractMappingDelegator):
                                                in self._dict.items())
             if len(internal_inverse) != len(self._dict):
                 raise ValueError("There's a repeating value given to the "
-                                 "double-sided dict, that is not allowed.") # blocktodo test
+                                 "double-sided dict, that is not allowed.")
             assert len(internal_inverse) == len(self._dict)
             self.inverse = type(self).__new__(type(self))
             self.inverse._dict = internal_inverse
@@ -122,7 +122,7 @@ class _AbstractMutableDoubleDict(BaseDoubleDict,
         
 
     def __delitem__(self, key):
-        value = self[key] # Propagating possible KeyError # blocktodo test
+        value = self[key] # Propagating KeyError
         self._assert_valid()
         del self._dict[key]
         del self.inverse._dict[value]
@@ -130,7 +130,6 @@ class _AbstractMutableDoubleDict(BaseDoubleDict,
         
 
     def clear(self):
-        'D.clear() -> None.  Remove all items from D.'
         self._assert_valid()
         self._dict.clear()
         self.inverse._dict.clear()

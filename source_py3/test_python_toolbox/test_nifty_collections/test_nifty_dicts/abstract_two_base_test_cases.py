@@ -47,6 +47,14 @@ class AbstractDoubleNotFrozenDictTestCase(AbstractDoubleDictTestCase,
         assert len(d) == len(inverse) == 0
         assert '2' not in inverse
         
+    def test_del_key_error(self):
+        d = self.d_type(((1, 2), (3, 4), (5, 6)))
+        del d[1]
+        with cute_testing.RaiseAssertor(KeyError):
+            del d[1]
+        with cute_testing.RaiseAssertor(KeyError):
+            del d['woof']
+        
 
 
 class AbstractNotDoubleFrozenDictTestCase(AbstractFrozenDictTestCase,

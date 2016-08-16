@@ -42,11 +42,11 @@ class AbstractDoubleDictTestCase(AbstractDictTestCase):
         
         
     def test_no_value_repeats(self):
-        with cute_testing.RaiseAssertor(ValueError):
+        with cute_testing.RaiseAssertor(ValueError, text='repeating value'):
             self.d_type((('a', 'b'), ('c', 'd',), ('e', 'b',)))
-        with cute_testing.RaiseAssertor(ValueError):
+        with cute_testing.RaiseAssertor(ValueError, text='repeating value'):
             self.d_type(foo=7, bar=7)
-        with cute_testing.RaiseAssertor(ValueError):
+        with cute_testing.RaiseAssertor(ValueError, text='repeating value'):
             self.d_type({1: ('meow',), 2: ('meow',),})
         
 
