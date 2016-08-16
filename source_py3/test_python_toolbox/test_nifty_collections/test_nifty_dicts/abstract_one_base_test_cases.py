@@ -179,7 +179,10 @@ class AbstractOrderedDictTestCase(AbstractDictTestCase):
         assert tuple(reversed(d)) == next(zip(*tuple(d.items())[::-1]))
 
     def test_index(self):
-        d = self.dict_type
+        d = self.d_type(((1, 2), (3, 4)))
+        assert d.index(3)
+        with cute_testing.RaiseAssertor(ValueError):
+            d.index('foo')
         
 
 class AbstractNotOrderedDictTestCase(AbstractDictTestCase):

@@ -92,6 +92,8 @@ class _AbstractMutableDoubleDict(BaseDoubleDict,
         self._assert_valid()
         try:
             existing_key = self.inverse[value]
+        except KeyError:
+            pass
         except TypeError as hashing_error:
             raise TypeError(
                 "%s is not hashable so it can't be used as a value in a "
