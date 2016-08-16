@@ -6,6 +6,6 @@
 import abc
 
 
-def abstract_whatever():
+def abstract_whatever(_=None):
     return abc.abstractmethod(lambda: None)
     

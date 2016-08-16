@@ -2,11 +2,13 @@
 # This program is distributed under the MIT license.
 
 import collections.abc
+import abc
 
 from python_toolbox.third_party import unittest2
 
 import nose
 
+from python_toolbox import abc_tools
 from python_toolbox import sequence_tools
 from python_toolbox import logic_tools
 from python_toolbox import cute_iter_tools
@@ -20,9 +22,9 @@ from python_toolbox.nifty_collections import (
 )
 
 
-class AbstractDictTestCase(cute_testing.TestCase):
+class AbstractDictTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
     __test__ = False
-    d_type = None # Filled in by subclasses
+    d_type = abc_tools.abstract_whatever()
     
     def test_mapping_base_class(self):
         assert issubclass(self.d_type, collections.Mapping)
