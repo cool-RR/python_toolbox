@@ -48,8 +48,7 @@ class DefinitelyUnordered(metaclass=abc.ABCMeta):
     
     @classmethod
     def __subclasshook__(cls, type_):
-        if cls is DefinitelyUnordered and \
-                                    issubclass(type_, collections.OrderedDict):
+        if cls is DefinitelyUnordered and issubclass(type_, Ordered):
             return False
         else:
             return NotImplemented

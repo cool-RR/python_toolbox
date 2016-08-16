@@ -10,12 +10,15 @@ from python_toolbox import context_management
 from python_toolbox import caching
 from python_toolbox import freezing
 
+from . import abstract
+
 
 
 KEY, PREV, NEXT = range(3)
 
 
-class BaseOrderedSet(collections.abc.Set, collections.abc.Sequence):
+class BaseOrderedSet(collections.abc.Set, collections.abc.Sequence,
+                     abstract.Ordered):
     '''
     Base class for `OrderedSet` and `FrozenOrderedSet`, i.e. set with an order.
 
