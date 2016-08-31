@@ -1,6 +1,8 @@
 # Copyright 2009-2017 Ram Rachum.
 # This program is distributed under the MIT license.
 
+import os
+import threading
 import concurrent.futures
 import time
 
@@ -36,5 +38,18 @@ def test():
                                   as_completed=True)) == tuple(range(10))
         
         
-        
-        
+def test_cute_dummy_executor():
+    
+    def foo(i):
+        n = foo.n
+        foo.n += 1
+        return (i, n, os.getpid(), threading.get_ident())
+    foo.n = 0
+    
+    with future_tools.CuteDummyExecutor() as executor:
+        results = tuple(executor.map(foo, range(5)))
+        zipped_results = tuple(zip(*results))
+        assert zipped_results[0] == zipped_results[1] == tuple(range(5))
+        assert len(set(zipped_results[2])) == 1
+        assert len(set(zipped_results[3])) == 1
+    

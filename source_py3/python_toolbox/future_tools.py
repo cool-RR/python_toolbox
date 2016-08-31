@@ -126,3 +126,25 @@ class CuteProcessPoolExecutor(concurrent.futures.ProcessPoolExecutor,
        computed, and not the order in which they were submitted.
      
     '''
+
+class CuteDummyExecutor(BaseCuteExecutor):
+    '''
+    A dummy executor that executes commands synchronously.
+    
+    This is a degenerate executor that simply executes all commands that are
+    fed to it synchronously and immediately, in the same thread as the one it
+    was called from, as if you didn't use an executor at all. 
+    '''
+    
+    def submit(self, fn, *args, **kwargs):
+        future = concurrent.futures.Future()
+        
+        try:
+            result = fn(*args, **kwargs)
+        except BaseException as exception:
+            future.set_exception(exception)
+        else:
+            future.set_result(result)
+        
+        return future
+        

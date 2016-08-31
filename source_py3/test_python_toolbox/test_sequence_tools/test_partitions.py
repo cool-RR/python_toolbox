@@ -102,3 +102,11 @@ def test_fill_value():
     assert partitions(r, 3, fill_value=None) == [[0, 1, 2], [3, 4, None]]
     assert partitions([], 3, fill_value=None) == []
 
+
+def test_whatever():
+    assert partitions(
+        'blablablabadbfbadfb', partition_size=5, fill_value=0
+    ) == [['b', 'l', 'a', 'b', 'l'], ['a', 'b', 'l', 'a', 'b'],
+          ['a', 'd', 'b', 'f', 'b'], ['a', 'd', 'f', 'b', 0]]
+    
+    
