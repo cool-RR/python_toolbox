@@ -10,6 +10,30 @@ from python_toolbox import context_management
 
 class ConditionList(collections.abc.MutableSequence,
                     context_management.DelegatingContextManager):
+    '''
+    Thread synchronization tool.
+    
+    This is a complex tool for synchronizing threads, so let me explain how it
+    works.
+    
+    `ConditionList` is similar to a Python `list`. You can add items to it,
+    view the items in it, change their order, remove items, etc.
+    
+    What makes it different than a normal `list` is that it provides methods
+    `wait_for` and `wait_for_missing` that let you orchestrate threads based on
+    this list.
+    
+    `wait_for` receives a list of items (or just one) and makes the thread
+    block until the `ConditionList` object contains all of these items, and
+    then the thread results. `wait_for_missing` is the opposite, waiting for a
+    specified list of items to *not* be in the `ConditionList`, and only then
+    does the thread resume. (See the docstrings for these functions for more
+    details about the arguments.)
+
+    When is `ConditionList` useful? Maybe you have a thread that's
+    
+    blocktododoc
+    '''
     
     def __init__(self, iterable=None):
         self.__list = list(iterable) if iterable is not None else []
