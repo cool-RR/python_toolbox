@@ -74,5 +74,7 @@ to run the tests.
 
 The Python Toolbox was created by Ram Rachum. I provide 
 [Development services in Python and Django](https://chipmunkdev.com)
+and [give Python workshops](http://pythonworkshops.co/) to teach people
+Python and related topics. ([Hebrew website](http://pythonworkshops.co.il/).)
 
 
