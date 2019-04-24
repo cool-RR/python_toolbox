@@ -73,7 +73,7 @@ def resolve(string, root=None, namespace={}):
     
 
 def get_object_by_address(address, root=None, namespace={}):
-    '''
+    r'''
     Get an object by its address.
     
     For example:

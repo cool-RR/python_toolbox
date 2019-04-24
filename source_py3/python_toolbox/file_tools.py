@@ -48,7 +48,7 @@ def _get_next_path(path):
 
 
 def iterate_file_paths(path):
-    '''
+    r'''
     Iterate over file paths, hoping to find one that's available.
     
     For example, when given "c:\example.ogg", would first yield

@@ -82,7 +82,7 @@ def test_regex():
     '''
     Test using `RaiseAssertor` specifying regex pattern for exception message.
     '''
-    with RaiseAssertor(Exception, re.compile('^123\w*?456$')):
+    with RaiseAssertor(Exception, re.compile(r'^123\w*?456$')):
         raise TypeError('123qwerty456')
     
     with RaiseAssertor(Failure):
@@ -90,7 +90,7 @@ def test_regex():
             raise TypeError('123qwerty456')
         
     with RaiseAssertor(Failure):
-        with RaiseAssertor(OSError, re.compile('^123\w*?456$')):
+        with RaiseAssertor(OSError, re.compile(r'^123\w*?456$')):
             raise SyntaxError('123qwerty456')
         
 

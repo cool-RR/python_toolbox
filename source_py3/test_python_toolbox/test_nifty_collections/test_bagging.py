@@ -72,7 +72,7 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         with cute_testing.RaiseAssertor(TypeError):
             - bag
         
-        assert re.match('^(Frozen)?(Ordered)?Bag\(.*$', repr(bag))
+        assert re.match(r'^(Frozen)?(Ordered)?Bag\(.*$', repr(bag))
         
         assert bag.copy() == bag
         
