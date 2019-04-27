@@ -687,8 +687,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 tuple(
                     (self._undapplied_fixed_map[m] if
                      (m in self.fixed_indices) else
-                     next(free_values_perm_iterator))
-                                       for m in range(self.sequence_length)
+                     next(free_values_perm_iterator)) for m in self.indices
                 ),
                 self
             )
