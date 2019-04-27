@@ -148,7 +148,7 @@ class _BaseBagMixin:
     def __init__(self, iterable={}):
         super().__init__()
 
-        if isinstance(iterable, collections.Mapping):
+        if isinstance(iterable, collections.abc.Mapping):
             for key, value, in iterable.items():
                 try:
                     self._dict[key] = _process_count(value)

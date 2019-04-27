@@ -105,7 +105,7 @@ def get_equivalence_classes(iterable, key=None, container=set, *,
     ### Pre-processing input: #################################################
     #                                                                         #
     if key is None:
-        if isinstance(iterable, collections.Mapping):
+        if isinstance(iterable, collections.abc.Mapping):
             d = iterable
         else:
             try:

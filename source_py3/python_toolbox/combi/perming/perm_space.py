@@ -59,7 +59,7 @@ class PermSpaceType(abc.ABCMeta):
 
 class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 _FixedMapManagingMixin, sequence_tools.CuteSequenceMixin,
-                collections.Sequence, metaclass=PermSpaceType):
+                collections.abc.Sequence, metaclass=PermSpaceType):
     '''
     A space of permutations on a sequence.
 

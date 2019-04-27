@@ -14,7 +14,7 @@ infinity = float('inf')
 
 
 
-class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
+class ChainSpace(sequence_tools.CuteSequenceMixin, collections.abc.Sequence):
     '''
     A space of sequences chained together.
 

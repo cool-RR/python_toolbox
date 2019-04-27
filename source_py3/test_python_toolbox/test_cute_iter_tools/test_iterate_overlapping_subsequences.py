@@ -18,7 +18,7 @@ def test_length_2():
     # `iterate_overlapping_subsequences` returns an iterator, not a sequence:
     assert not isinstance(
         iterate_overlapping_subsequences(list(range(4))),
-        collections.Sequence
+        collections.abc.Sequence
     )
 
     assert tuple(iterate_overlapping_subsequences(list(range(4)))) == \

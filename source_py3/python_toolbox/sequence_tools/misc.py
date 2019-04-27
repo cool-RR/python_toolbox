@@ -155,8 +155,8 @@ def partitions(sequence, partition_size=None, *, n_partitions=None,
 
 def is_immutable_sequence(thing):
     '''Is `thing` an immutable sequence, like `tuple`?'''
-    return isinstance(thing, collections.Sequence) and not \
-                                 isinstance(thing, collections.MutableSequence)
+    return isinstance(thing, collections.abc.Sequence) and not \
+                             isinstance(thing, collections.abc.MutableSequence)
 
 
 
@@ -192,7 +192,7 @@ def to_tuple(single_or_sequence, item_type=None, item_test=None):
         actual_item_test = None
 
     if actual_item_test is None:
-        if isinstance(single_or_sequence, collections.Sequence):
+        if isinstance(single_or_sequence, collections.abc.Sequence):
             return tuple(single_or_sequence)
         elif single_or_sequence is None:
             return tuple()
@@ -245,9 +245,9 @@ def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
     if not allow_unordered and \
                    isinstance(iterable, nifty_collections.DefinitelyUnordered):
         raise UnorderedIterableException
-    if isinstance(iterable, collections.MutableSequence) or \
+    if isinstance(iterable, collections.abc.MutableSequence) or \
        isinstance(iterable, unallowed_types) or \
-       not isinstance(iterable, collections.Sequence):
+       not isinstance(iterable, collections.abc.Sequence):
         return default_type(iterable)
     else:
         return iterable
@@ -266,7 +266,7 @@ def ensure_iterable_is_sequence(iterable, default_type=tuple,
     assert isinstance(iterable, collections.Iterable)
     if not allow_unordered and isinstance(iterable, (set, frozenset)):
         raise UnorderedIterableException
-    if isinstance(iterable, collections.Sequence) and \
+    if isinstance(iterable, collections.abc.Sequence) and \
        not isinstance(iterable, unallowed_types):
         return iterable
     else:
@@ -285,7 +285,7 @@ class CuteSequenceMixin(misc_tools.AlternativeLengthMixin):
 
 
 
-class CuteSequence(CuteSequenceMixin, collections.Sequence):
+class CuteSequence(CuteSequenceMixin, collections.abc.Sequence):
     '''A sequence type that adds extra functionality.'''
 
 

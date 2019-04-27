@@ -7,7 +7,7 @@ from python_toolbox import sequence_tools
 
 
 class SelectionSpace(sequence_tools.CuteSequenceMixin,
-                     collections.Sequence):
+                     collections.abc.Sequence):
     '''
     Space of possible selections of any number of items from `sequence`.
 

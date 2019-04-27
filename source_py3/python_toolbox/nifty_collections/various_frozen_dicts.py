@@ -10,7 +10,7 @@ from .abstract import Ordered, DefinitelyUnordered
 from .ordered_dict import OrderedDict
 
 
-class _AbstractFrozenDict(collections.Mapping):
+class _AbstractFrozenDict(collections.abc.Mapping):
     _hash = None # Overridden by instance when calculating hash.
 
     def __init__(self, *args, **kwargs):
@@ -70,9 +70,9 @@ class FrozenOrderedDict(Ordered, _AbstractFrozenDict):
 
     def __eq__(self, other):
         if isinstance(other, (OrderedDict, FrozenOrderedDict)):
-            return collections.Mapping.__eq__(self, other) and \
+            return collections.abc.Mapping.__eq__(self, other) and \
                                              all(map(operator.eq, self, other))
-        return collections.Mapping.__eq__(self, other)
+        return collections.abc.Mapping.__eq__(self, other)
 
     __hash__ = _AbstractFrozenDict.__hash__
     # (Gotta manually carry `__hash__` over from the base class because setting
