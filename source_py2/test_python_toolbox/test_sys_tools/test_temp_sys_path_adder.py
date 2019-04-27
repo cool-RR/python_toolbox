@@ -15,8 +15,8 @@ def test_single():
     with TempSysPathAdder(other_path):
         assert other_path in sys.path
     assert other_path not in sys.path
-    
-    
+
+
 def test_multiple():
     '''Test using `TempSysPathAdder` to add multiple paths.'''
     other_paths = ['wf43f3_4f', 'argaer\\5g_']
@@ -27,4 +27,3 @@ def test_multiple():
             assert other_path in sys.path
     for other_path in other_paths:
         assert other_path not in sys.path
-    

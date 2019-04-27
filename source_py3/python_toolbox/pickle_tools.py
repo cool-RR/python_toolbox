@@ -7,7 +7,7 @@
 import zlib
 import pickle as pickle_module
 
- 
+
 def compickle(thing):
     '''Pickle `thing` and compress it using `zlib`.'''
     return zlib.compress(pickle_module.dumps(thing, protocol=2))

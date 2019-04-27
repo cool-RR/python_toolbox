@@ -17,14 +17,14 @@ def _is_weakreffable(thing):
     else:
         return True
 
-    
+
 class A(object):
     '''A class with a static method.'''
     @staticmethod
     def s():
         pass
 
-    
+
 @misc_tools.set_attributes(count=0)
 def counter(*args, **kwargs):
     '''Function that returns a higher number every time it's called.'''

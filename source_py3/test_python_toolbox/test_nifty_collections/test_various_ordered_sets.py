@@ -13,18 +13,18 @@ from python_toolbox.nifty_collections import (OrderedSet, FrozenOrderedSet,
 
 class BaseOrderedSetTestCase(cute_testing.TestCase):
     __test__ = False
-    
+
     def test_operations(self):
         ordered_set = self.ordered_set_type([5, 61, 2, 7, 2])
         assert type(ordered_set | ordered_set) == \
                type(ordered_set & ordered_set) == type(ordered_set)
-        
+
     def test_bool(self):
         assert bool(self.ordered_set_type({})) is False
         assert bool(self.ordered_set_type({0})) is True
         assert bool(self.ordered_set_type(range(5))) is True
-        
-        
+
+
 class BaseMutableOrderedSetTestCase(BaseOrderedSetTestCase):
     __test__ = False
     def test_sort(self):
@@ -36,11 +36,11 @@ class BaseMutableOrderedSetTestCase(BaseOrderedSetTestCase):
         assert list(ordered_set) == [2, 5, 7, 61]
         ordered_set.sort(key=lambda x: -x, reverse=True)
         assert list(ordered_set) == [2, 5, 7, 61]
-        
+
     def test_mutable(self):
-        
+
         ordered_set = self.ordered_set_type(range(4))
-        
+
         assert list(ordered_set) == list(range(4))
         assert len(ordered_set) == 4
         assert 1 in ordered_set
@@ -62,7 +62,7 @@ class BaseMutableOrderedSetTestCase(BaseOrderedSetTestCase):
         ordered_set.discard('meow')
         assert ordered_set | ordered_set == ordered_set
         assert ordered_set & ordered_set == ordered_set
-        
+
 class OrderedSetTestCase(BaseMutableOrderedSetTestCase):
     __test__ = True
     ordered_set_type = OrderedSet
@@ -72,9 +72,9 @@ class FrozenOrderedSetTestCase(BaseOrderedSetTestCase):
     ordered_set_type = FrozenOrderedSet
 
     def test_frozen(self):
-        
+
         frozen_ordered_set = self.ordered_set_type(range(4))
-        
+
         assert list(frozen_ordered_set) == list(range(4))
         assert len(frozen_ordered_set) == 4
         assert 1 in frozen_ordered_set
@@ -95,7 +95,7 @@ class FrozenOrderedSetTestCase(BaseOrderedSetTestCase):
         with cute_testing.RaiseAssertor(AttributeError):
             frozen_ordered_set.pop(2)
         assert list(frozen_ordered_set) == list(range(4))
-          
+
     def test_hashable(self):
         d = {
             FrozenOrderedSet(range(1)): 1,
@@ -107,7 +107,7 @@ class FrozenOrderedSetTestCase(BaseOrderedSetTestCase):
         assert d[FrozenOrderedSet(range(2))] == 2
         d[FrozenOrderedSet(range(2))] = 20
         assert set(d.values()) == {1, 20, 3}
-        
+
 
 class EmittingOrderedSetTestCase(BaseMutableOrderedSetTestCase):
     __test__ = True
@@ -137,29 +137,29 @@ class EmittingOrderedSetTestCase(BaseMutableOrderedSetTestCase):
         assert times_emitted == [5]
         assert tuple(emitting_ordered_set) == \
                                              (0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 4)
-        
-        
-        
 
-    
+
+
+
+
 def test_operations_on_different_types():
     x1 = OrderedSet(range(0, 4)) | FrozenOrderedSet(range(2, 6))
     x2 = OrderedSet(range(0, 4)) & FrozenOrderedSet(range(2, 6))
     x3 = FrozenOrderedSet(range(0, 4)) | OrderedSet(range(2, 6))
     x4 = FrozenOrderedSet(range(0, 4)) & OrderedSet(range(2, 6))
-    
+
     assert type(x1) == OrderedSet
     assert type(x2) == OrderedSet
     assert type(x3) == FrozenOrderedSet
     assert type(x4) == FrozenOrderedSet
-    
+
     assert x1 == OrderedSet(range(0, 6))
     assert x2 == OrderedSet(range(2, 4))
     assert x3 == FrozenOrderedSet(range(0, 6))
     assert x4 == FrozenOrderedSet(range(2, 4))
-    
+
     assert logic_tools.all_equivalent((x1, x2, x3, x4),
                                       relation=operator.ne)
-    
-    
+
+
 

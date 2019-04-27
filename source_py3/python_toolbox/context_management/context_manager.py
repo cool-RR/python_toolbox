@@ -17,29 +17,29 @@ class ContextManager(AbstractContextManager, _DecoratingContextManagerMixin,
                      metaclass=ContextManagerType):
     '''
     Allows running preparation code before a given suite and cleanup after.
-    
+
     To make a context manager, use `ContextManager` as a base class and either
     (a) define `__enter__` and `__exit__` methods or (b) define a
     `manage_context` method that returns a generator. An alternative way to
     create a context manager is to define a generator function and decorate it
     with `ContextManagerType`.
-    
+
     In any case, the resulting context manager could be called either with the
     `with` keyword or by using it as a decorator to a function.
-                
+
     For more details, see documentation of the containing module,
     `python_toolbox.context_manager`.
     '''
-    
+
     @abc.abstractmethod
     def __enter__(self):
         '''Prepare for suite execution.'''
 
-    
+
     @abc.abstractmethod
     def __exit__(self, exc_type, exc_value, exc_traceback):
         '''Cleanup after suite execution.'''
-    
+
 
     def __init_lone_manage_context(self, *args, **kwargs):
         '''
@@ -48,46 +48,46 @@ class ContextManager(AbstractContextManager, _DecoratingContextManagerMixin,
         self._ContextManager__args = args
         self._ContextManager__kwargs = kwargs
         self._ContextManager__generators = []
-    
-    
+
+
     def __enter_using_manage_context(self):
         '''
         Prepare for suite execution.
-        
+
         This is used as `__enter__` for context managers that use a
         `manage_context` function.
         '''
         if not hasattr(self, '_ContextManager__generators'):
             self._ContextManager__generators = []
-        
+
         new_generator = self.manage_context(
             *getattr(self, '_ContextManager__args', ()),
             **getattr(self, '_ContextManager__kwargs', {})
         )
         assert isinstance(new_generator, types.GeneratorType)
         self._ContextManager__generators.append(new_generator)
-        
-        
+
+
         try:
             generator_return_value = next(new_generator)
             return self if (generator_return_value is SelfHook) else \
                    generator_return_value
-        
+
         except StopIteration:
             raise RuntimeError("The generator didn't yield even one time; it "
                                "must yield one time exactly.")
-    
-        
+
+
     def __exit_using_manage_context(self, exc_type, exc_value, exc_traceback):
         '''
         Cleanup after suite execution.
-        
+
         This is used as `__exit__` for context managers that use a
         `manage_context` function.
         '''
         generator = self._ContextManager__generators.pop()
         assert isinstance(generator, types.GeneratorType)
-        
+
         if exc_type is None:
             try:
                 next(generator)

@@ -26,7 +26,7 @@ def test():
         '685929638952175999932299156089414639761565182862536979208272237582511'
         '85210916864000000000000000000000000 * 208755412068>'
     )
-    
+
     assert product_space
     assert not ProductSpace(((),))
     assert not ProductSpace(((), {}))
@@ -38,16 +38,15 @@ def test():
         product_space[-product_space.length - 1]
     with cute_testing.RaiseAssertor(IndexError):
         product_space[-product_space.length - 100]
-    
+
     assert {ProductSpace((range(4), range(3))),
             ProductSpace((range(4), range(3))),
             ProductSpace((range(3), range(4)))} == {
-                ProductSpace((range(4), range(3))), 
+                ProductSpace((range(4), range(3))),
                 ProductSpace((range(3), range(4)))
             }
-    
+
     assert ProductSpace((range(4), range(3))) == \
                                              ProductSpace((range(4), range(3)))
     assert ProductSpace((range(4), range(3))) != \
                                              ProductSpace((range(3), range(4)))
-    

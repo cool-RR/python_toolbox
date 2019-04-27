@@ -12,32 +12,32 @@ def test():
     assert logic_max(set(range(5))) == [4]
     assert logic_max(iter(range(6))) == [5]
     assert logic_max(tuple(range(10))) == [9]
-    
+
     class FunkyString(object):
         def __init__(self, string):
             self.string = string
-            
+
         def __ge__(self, other):
             assert isinstance(other, FunkyString)
             return other.string in self.string
-        
+
         def __eq__(self, other):
             assert isinstance(other, FunkyString)
             return other.string == self.string
-        
+
     assert logic_max(
         [FunkyString('meow'),
          FunkyString('meow frr'),
          FunkyString('ow')]
     ) == [FunkyString('meow frr')]
-    
+
     assert logic_max(
         [FunkyString('meow'),
          FunkyString('meow frr'),
          FunkyString('ow'),
          FunkyString('Stanislav')]
     ) == []
-    
+
     assert logic_max(
         [FunkyString('meow'),
          FunkyString('meow frr'),
@@ -45,7 +45,7 @@ def test():
          FunkyString('meow frr')]
     ) == [FunkyString('meow frr'), FunkyString('meow frr'),]
 
-    
+
     class FunkyInt(object):
         def __init__(self, number):
             self.number = number
@@ -54,7 +54,7 @@ def test():
         def __eq__(self, other):
             assert isinstance(other, FunkyInt)
             return other.number == self.number
-        
+
     assert logic_max(
         [FunkyInt(7),
          FunkyInt(13),

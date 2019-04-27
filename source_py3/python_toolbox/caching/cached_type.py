@@ -11,26 +11,26 @@ from python_toolbox.sleek_reffing import SleekCallArgs
 
 
 class SelfPlaceholder:
-    '''Placeholder for `self` when storing call-args.''' 
+    '''Placeholder for `self` when storing call-args.'''
 
 
 class CachedType(type):
     '''
     A metaclass for sharing instances.
-        
+
     For example, if you have a class like this:
-    
+
         class Grokker(object, metaclass=caching.CachedType):
             def __init__(self, a, b=2):
                 self.a = a
                 self.b = b
-                
+
     Then all the following calls would result in just one instance:
-    
+
         Grokker(1) is Grokker(1, 2) is Grokker(b=2, a=1) is Grokker(1, **{})
-    
+
     This metaclass understands keyword arguments.
-    
+
     All the arguments are sleekreffed to prevent memory leaks. Sleekref is a
     variation of weakref. Sleekref is when you try to weakref an object, but if
     it's non-weakreffable, like a `list` or a `dict`, you maintain a normal,
@@ -40,13 +40,13 @@ class CachedType(type):
     ever want to use non-weakreffable arguments you are still able to.
     (Assuming you don't mind the memory leaks.)
     '''
-    
+
     def __new__(mcls, *args, **kwargs):
         result = super().__new__(mcls, *args, **kwargs)
         result.__cache = {}
         return result
 
-    
+
     def __call__(cls, *args, **kwargs):
         sleek_call_args = SleekCallArgs(
             cls.__cache,

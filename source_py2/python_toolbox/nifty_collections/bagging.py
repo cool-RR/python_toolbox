@@ -19,28 +19,28 @@ from .various_frozen_dicts import FrozenDict, FrozenOrderedDict
 from .abstract import Ordered, DefinitelyUnordered
 
 
-class _NO_DEFAULT(misc_tools.NonInstantiable): 
+class _NO_DEFAULT(misc_tools.NonInstantiable):
     '''Stand-in value used in `_BaseBagMixin.pop` when no default is wanted.'''
-            
+
 class _ZeroCountAttempted(Exception):
     '''
     An attempt was made to add a value with a count of zero to a bag.
-    
+
     This exception is used only internally for flow control; it'll be caught
     internally and the zero item would be silently removed.
-    '''        
-    
+    '''
+
 def _count_elements_slow(mapping, iterable):
     '''Put elements from `iterable` into `mapping`.'''
     mapping_get = mapping.get
     for element in iterable:
         mapping[element] = mapping_get(element, 0) + 1
-        
+
 try:
     from _collections import _count_elements
 except ImportError:
     _count_elements = _count_elements_slow
-        
+
 
 def _process_count(count):
     '''Process a count of an item to ensure it's a positive `int`.'''
@@ -54,48 +54,48 @@ def _process_count(count):
             "You passed %s as a count, while `Bag` doesn't support negative "
             "amounts." % repr(count)
         )
-    
+
     if count == 0:
         raise _ZeroCountAttempted
-    
+
     return int(count)
-    
-    
+
+
 class _BootstrappedCachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
     '''
     A property that is calculated only once for an object, and then cached.
-    
+
     This is redefined here in `bagging.py`, in addition to having it defined in
     `python_toolbox.caching`, because we can't import the canonical
     `CachedProperty` from there because of an import loop.
-    
+
     Usage:
-    
+
         class MyObject:
-        
+
             # ... Regular definitions here
-        
+
             def _get_personality(self):
                 print('Calculating personality...')
                 time.sleep(5) # Time consuming process that creates personality
                 return 'Nice person'
-        
+
             personality = _BootstrappedCachedProperty(_get_personality)
-            
+
     You can also put in a value as the first argument if you'd like to have it
     returned instead of using a getter. (It can be a tobag static value like
     `0`). If this value happens to be a callable but you'd still like it to be
     used as a static value, use `force_value_not_getter=True`.
-    '''    
+    '''
     def __init__(self, getter_or_value, doc=None, name=None,
                  force_value_not_getter=False):
         '''
         Construct the cached property.
-        
+
         `getter_or_value` may be either a function that takes the parent object
         and returns the value of the property, or the value of the property
         itself, (as long as it's not a callable.)
-        
+
         You may optionally pass in the name that this property has in the
         class; this will save a bit of processing later.
         '''
@@ -105,21 +105,21 @@ class _BootstrappedCachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
         else:
             self.getter = lambda thing: getter_or_value
         self.__doc__ = doc or getattr(self.getter, '__doc__', None)
-        
-        
+
+
     def __get__(self, obj, our_type=None):
 
         if obj is None:
             # We're being accessed from the class itself, not from an object
             return self
-        
+
         value = self.getter(obj)
-        
+
         setattr(obj, self.get_our_name(obj, our_type=our_type), value)
-        
+
         return value
 
-    
+
     def __call__(self, method_function):
         '''
         Decorate method to use value of `CachedProperty` as a context manager.
@@ -133,21 +133,21 @@ class _BootstrappedCachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
 
     def __repr__(self):
         return '<%s: %s>' % (type(self).__name__, self.our_name or self.getter)
-            
+
 
 class _BaseBagMixin(object):
     '''
     Mixin for `FrozenBag` and `FrozenOrderedBag`.
-    
+
     Most of the bag functionality is implemented here, with a few finishing
     touches in the classes that inherit from this. This mixin is used both for
     ordered, unordered, frozen and mutable bags, so only the methods that are
     general to all of them are implemented here.
     '''
-    
+
     def __init__(self, iterable={}):
         super(_BaseBagMixin, self).__init__()
-        
+
         if isinstance(iterable, collections.Mapping):
             for key, value, in iterable.items():
                 try:
@@ -163,7 +163,7 @@ class _BaseBagMixin(object):
     def most_common(self, n=None):
         '''
         List the `n` most common elements and their counts, sorted.
-        
+
         Results are sorted from the most common to the least. If `n is None`,
         then list all element counts.
 
@@ -185,36 +185,36 @@ class _BaseBagMixin(object):
             >>> c = Bag('ABCABC')
             >>> tuple(c.elements)
             ('A', 'B', 'A', 'B', 'C', 'C')
-    
+
         '''
         return itertools.chain.from_iterable(
             itertools.starmap(itertools.repeat, self.items())
         )
-    
+
     def __contains__(self, item):
         return (self[item] >= 1)
-    
+
     n_elements = property(
-        lambda self: sum(self.values()), 
+        lambda self: sum(self.values()),
         doc='''Number of total elements in the bag.'''
     )
-    
+
     @property
     def frozen_bag_bag(self):
         '''
         A `FrozenBagBag` of this bag.
-        
+
         This means, a bag where `3: 4` means "The original bag has 4 different
         keys with a value of 3."
 
         Example:
-        
+
             >>> bag = Bag('abracadabra')
             >>> bag
             Bag({'b': 2, 'r': 2, 'a': 5, 'd': 1, 'c': 1})
             >>> bag.frozen_bag_bag
             FrozenBagBag({1: 2, 2: 2, 5: 1})
-        
+
         '''
         from .frozen_bag_bag import FrozenBagBag
         return FrozenBagBag(self.values())
@@ -222,15 +222,15 @@ class _BaseBagMixin(object):
     def __or__(self, other):
         '''
         Make a union bag of these two bags.
-        
+
         The new bag will have, for each key, the higher of the two amounts for
         that key in the two original bags.
-        
+
         Example:
-        
+
             >>> Bag('abbb') | Bag('bcc')
             Bag({'b': 3, 'c': 2, 'a': 1})
-            
+
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
@@ -238,19 +238,19 @@ class _BaseBagMixin(object):
             (key, max(self[key], other[key]))
             for key in FrozenOrderedSet(self) | FrozenOrderedSet(other))
         )
-    
+
     def __and__(self, other):
         '''
         Make an intersection bag of these two bags.
-        
+
         The new bag will have, for each key, the lower of the two amounts for
         that key in the two original bags.
-        
+
         Example:
-        
+
             >>> Bag('abbb') & Bag('bcc')
             Bag({'b': 1,})
-            
+
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
@@ -263,15 +263,15 @@ class _BaseBagMixin(object):
     def __add__(self, other):
         '''
         Make a sum bag of these two bags.
-        
+
         The new bag will have, for each key, the sum of the two amounts for
         that key in each of the two original bags.
-        
+
         Example:
-        
+
             >>> Bag('abbb') + Bag('bcc')
             Bag({'b': 4, 'c': 2, 'a': 1})
-            
+
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
@@ -283,7 +283,7 @@ class _BaseBagMixin(object):
     def __sub__(self, other):
         '''
         Get the subtraction of one bag from another.
-        
+
         This creates a new bag which has the items of the first bag minus the
         items of the second one. Negative counts are truncated to zero: If
         there are any items in the second bag that are more than the items in
@@ -302,24 +302,24 @@ class _BaseBagMixin(object):
             return NotImplemented
         return type(self)(self._dict_type((key, count * other) for
                                           key, count in self.items()))
-    
+
     __rmul__ = lambda self, other: self * other
-    
+
     def __floordiv__(self, other):
         '''
         Do a floor-division `self // other`.
-        
+
         `other` can be either an integer or a bag.
-        
+
         If `other` is an integer, the result will be the biggest bag possible
         so that `result * other <= self`.
-        
+
         If `other` is a bag, the result will be the maximum number of times you
         can put `other` inside of `self` without having it surpass `self` for
         any key. (Or in other words, the biggest integer possible so that
         `result * other <= self`.)
         '''
-        
+
         if math_tools.is_integer(other):
             return (
                 type(self)(self._dict_type((key, count // other) for
@@ -340,22 +340,22 @@ class _BaseBagMixin(object):
                 raise ZeroDivisionError
         else:
             return NotImplemented
-        
+
     def __mod__(self, other):
         '''
         Do a modulo `self % other`.
-        
+
         `other` can be either an integer or a bag.
-        
+
         If `other` is an integer, the result will be a bag with `% other` done
         on the count of every item from `self`. Or you can also think of it as
         `self - (self // other)`, which happens to be the same bag.
-        
+
         If `other` is a bag, the result will be the bag that's left when you
         subtract as many copies of `other` from this bag, until you can't
         subtract without truncating some keys. Or in other words, it's `self -
         (self // other)`.
-        '''        
+        '''
         if math_tools.is_integer(other):
             return (
                 type(self)(self._dict_type((key, count % other) for
@@ -365,17 +365,17 @@ class _BaseBagMixin(object):
             return divmod(self, other)[1]
         else:
             return NotImplemented
-        
+
     def __divmod__(self, other):
         '''
         Get `(self // other, self % other)`.
-        
+
         If `other` is an integer, the first item of the result will be the
         biggest bag possible so that `result * other <= self`. The second item
         will be a bag with `% other` done on the count of every item from
         `self`, or you can also think of it as `self - (self // other)`, which
         happens to be the same bag.
-        
+
         If `other` is a bag, the first item of the result will be the maximum
         number of times you can put `other` inside of `self` without having it
         surpass `self` for any key. (Or in other words, the biggest integer
@@ -385,19 +385,19 @@ class _BaseBagMixin(object):
         if math_tools.is_integer(other):
             return (
                 type(self)(self._dict_type((key, count // other) for
-                                           key, count in self.items())), 
+                                           key, count in self.items())),
                 type(self)(self._dict_type((key, count % other) for
-                                           key, count in self.items())), 
+                                           key, count in self.items())),
             )
         elif isinstance(other, _BaseBagMixin):
-            
+
             floordiv_result = self // other
             mod_result = type(self)(
                 self._dict_type((key, count - other[key] * floordiv_result) for
                                 key, count in self.items())
             )
             return (floordiv_result, mod_result)
-            
+
         else:
             return NotImplemented
 
@@ -416,7 +416,7 @@ class _BaseBagMixin(object):
 
     __bool__ = lambda self: any(True for element in self.elements)
     __nonzero__ = __bool__
-    
+
     ###########################################################################
     ### Defining comparison methods: ##########################################
     #                                                                         #
@@ -425,15 +425,15 @@ class _BaseBagMixin(object):
     # ==) while we, in `FrozenOrderedBag`, don't have that hold because ==
     # takes the items' order into account. Yes, my intelligence and sense of
     # alertness know no bounds.
-    
+
     def __lt__(self, other):
         '''
         `self` is a strictly smaller bag than `other`.
-        
+
         That means that for every key in `self`, its count in `other` is bigger
         or equal than in `self`-- And there's at least one key for which the
         count in `other` is strictly bigger.
-        
+
         Or in other words: `set(self.elements) < set(other.elements)`.
         '''
         if not isinstance(other, _BaseBagMixin):
@@ -446,17 +446,17 @@ class _BaseBagMixin(object):
             elif self[element] < other[element]:
                 found_strict_difference = True
         return found_strict_difference
-    
+
     def __gt__(self, other):
         '''
         `self` is a strictly bigger bag than `other`.
-        
+
         That means that for every key in `other`, its count in `other` is smaller
         or equal than in `self`-- And there's at least one key for which the
         count in `other` is strictly smaller.
-        
+
         Or in other words: `set(self.elements) > set(other.elements)`.
-        '''        
+        '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         found_strict_difference = False # Until challenged.
@@ -467,14 +467,14 @@ class _BaseBagMixin(object):
             elif self[element] > other[element]:
                 found_strict_difference = True
         return found_strict_difference
-  
+
     def __le__(self, other):
         '''
         `self` is smaller or equal to `other`.
-        
+
         That means that for every key in `self`, its count in `other` is bigger
         or equal than in `self`.
-        
+
         Or in other words: `set(self.elements) <= set(other.elements)`.
         '''
         if not isinstance(other, _BaseBagMixin):
@@ -483,16 +483,16 @@ class _BaseBagMixin(object):
             if count > other[element]:
                 return False
         return True
-    
+
     def __ge__(self, other):
         '''
         `self` is bigger or equal to `other`.
-        
+
         That means that for every key in `other`, its count in `other` is bigger
         or equal than in `self`.
-        
+
         Or in other words: `set(self.elements) >= set(other.elements)`.
-        '''        
+        '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         all_elements = set(other) | set(self)
@@ -503,7 +503,7 @@ class _BaseBagMixin(object):
     #                                                                         #
     ### Finished defining comparison methods. #################################
     ###########################################################################
-    
+
     def __repr__(self):
         if not self:
             return '%s()' % type(self).__name__
@@ -514,40 +514,40 @@ class _BaseBagMixin(object):
 
     __deepcopy__ = lambda self, memo: type(self)(
                                                copy.deepcopy(self._dict, memo))
-    
+
     def __reversed__(self):
         # Gets overridden in `_OrderedBagMixin`.
         raise TypeError("Can't reverse an unordered bag.")
-    
+
 
     def get_contained_bags(self):
         '''
         Get all bags that are subsets of this bag.
-        
+
         This means all bags that have counts identical or smaller for each key.
         '''
         from python_toolbox import combi
-        
+
         keys, amounts = zip(*((key, amount) for key, amount in self.items()))
-        
+
         return combi.MapSpace(
             lambda amounts_tuple:
                          type(self)(self._dict_type(zip(keys, amounts_tuple))),
             combi.ProductSpace(map(lambda amount: range(amount+1), amounts))
         )
-    
 
-    
+
+
 class _MutableBagMixin(_BaseBagMixin):
     '''Mixin for a bag that's mutable. (i.e. not frozen.)'''
-    
+
     def __setitem__(self, i, count):
         try:
             super(_MutableBagMixin, self).__setitem__(i, _process_count(count))
         except _ZeroCountAttempted:
             del self[i]
-    
-    
+
+
     def setdefault(self, key, default=None):
         '''
         Get value of `key`, unless it's zero/missing, if so set to `default`.
@@ -569,11 +569,11 @@ class _MutableBagMixin(_BaseBagMixin):
             del self._dict[key]
         except KeyError:
             pass
-        
+
     def pop(self, key, default=_NO_DEFAULT):
         '''
         Remove `key` from the bag, returning its value.
-        
+
         If `key` is missing and `default` is given, returns `default`.
         '''
         value = self[key]
@@ -586,69 +586,69 @@ class _MutableBagMixin(_BaseBagMixin):
     def __ior__(self, other):
         '''
         Make this bag into a union bag of this bag and `other`.
-        
+
         After the operation, this bag will have, for each key, the higher of
         the two amounts for that key in the two original bags.
-        
+
             >>> bag = Bag('abbb')
             >>> bag |= Bag('bcc')
             >>> bag
             Bag({'b': 3, 'c': 2, 'a': 1})
-            
+
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         for key, other_count in tuple(other.items()):
             self[key] = max(self[key], other_count)
         return self
-            
-    
+
+
     def __iand__(self, other):
         '''
         Make this bag into an intersection bag of this bag and `other`.
-        
+
         After the operation, this bag will have, for each key, the lower of the
         two amounts for that key in the two original bags.
-        
+
             >>> bag = Bag('abbb')
             >>> bag &= Bag('bcc')
             >>> bag
             Bag({'b': 1,})
-            
+
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         for key, count in tuple(self.items()):
             self[key] = min(count, other[key])
         return self
-            
+
 
     def __iadd__(self, other):
         '''
         Make this bag into a sum bag of this bag and `other`.
-        
+
         After the operation, this bag will have, for each key, the sum of the
         two amounts for that key in each of the two original bags.
-        
+
         Example:
-        
+
             >>> bag = Bag('abbb')
             >>> bag += Bag('bcc')
             >>> bag
             Bag({'b': 4, 'c': 2, 'a': 1})
-            
-        '''        
+
+        '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         for key, other_count in tuple(other.items()):
             self[key] += other_count
         return self
-            
+
 
     def __isub__(self, other):
         '''
         Subtract `other` from this bag.
-        
+
         This reduces the count of each key in this bag by its count in `other`.
         Negative counts are truncated to zero: If there are any items in the
         second bag that are more than the items in the first bag, the result
@@ -668,19 +668,19 @@ class _MutableBagMixin(_BaseBagMixin):
         for key in tuple(self):
             self[key] *= other
         return self
-            
-            
+
+
     def __ifloordiv__(self, other):
         '''
         Make this bag into a floor-division `self // other`.
-        
+
         `other` can be either an integer or a bag.
-        
+
         If `other` is an integer, this bag will have all its counts
         floor-divided by `other`. (You can also think of it as: This bag will
         become the biggest bag possible so that if you multiply it by `other`,
         it'll still be smaller or equal to its old `self`.)
-        
+
         If `other` is a bag, the result will be the maximum number of times you
         can put `other` inside of `self` without having it surpass `self` for
         any key. (Or in other words, the biggest integer possible so that
@@ -693,18 +693,18 @@ class _MutableBagMixin(_BaseBagMixin):
         for key in tuple(self):
             self[key] //= other
         return self
-            
-        
+
+
     def __imod__(self, other):
         '''
         Make this bag int a modulo `self % other`.
-        
+
         `other` can be either an integer or a bag.
-        
+
         If `other` is an integer, the result will have all its counts modulo-ed
         by `other`. Or you can also think of it as becoming the bag `self -
         (self // other)`, which happens to be the same bag.
-        
+
         If `other` is a bag, the result will be the bag that's left when you
         subtract as many copies of `other` from this bag, until you can't
         subtract without truncating some keys. Or in other words, it's `self -
@@ -722,7 +722,7 @@ class _MutableBagMixin(_BaseBagMixin):
             return self
         else:
             return NotImplemented
-            
+
 
     def __ipow__(self, other, modulo=None):
         '''Raise each count in this bag to the power of `other`.'''
@@ -731,32 +731,32 @@ class _MutableBagMixin(_BaseBagMixin):
         for key in tuple(self):
             self[key] = pow(self[key], other, modulo)
         return self
-    
+
     def popitem(self):
         '''
         Pop an item from this bag, returning `(key, count)` and removing it.
         '''
         return self._dict.popitem()
-    
+
     def get_frozen(self):
         '''Get a frozen version of this bag.'''
         return self._frozen_type(self)
-     
+
 
 class _OrderedBagMixin(Ordered):
     '''
     Mixin for a bag that's ordered.
-    
+
     Items will be ordered according to insertion order. In every interface
     where items from this bag are iterated on, they will be returned by their
     order.
     '''
     __reversed__ = lambda self: reversed(self._dict)
-    
+
     def __eq__(self, other):
         '''
         Is this bag equal to `other`?
-        
+
         Order *does* count, so if `other` has a different order, the result
         will be `False`.
         '''
@@ -768,44 +768,44 @@ class _OrderedBagMixin(Ordered):
                 return False
         else:
             return True
-        
+
     index = misc_tools.ProxyProperty(
         '._dict.index',
         doc='Get the index number of a key in the bag.'
     )
-        
-        
+
+
 class _FrozenBagMixin(object):
     '''Mixin for a bag that's frozen. (i.e. can't be changed, is hashable.)'''
-    
+
     # Some properties are redefined here to be cached, since the bag is frozen
     # and they can't change anyway, so why not cache them.
-    
+
     n_elements = _BootstrappedCachedProperty(
         lambda self: sum(self.values()),
         doc='''Number of total elements in the bag.'''
     )
-    
+
     @_BootstrappedCachedProperty
     def frozen_bag_bag(self):
         '''
         A `FrozenBagBag` of this bag.
-        
+
         This means, a bag where `3: 4` means "The original bag has 4 different
         keys with a value of 3."
 
         Example:
-        
+
             >>> bag = Bag('abracadabra')
             >>> bag
             Bag({'b': 2, 'r': 2, 'a': 5, 'd': 1, 'c': 1})
             >>> bag.frozen_bag_bag
             FrozenBagBag({1: 2, 2: 2, 5: 1})
-        
+
         '''
         from .frozen_bag_bag import FrozenBagBag
         return FrozenBagBag(self.values())
-        
+
     def get_mutable(self):
         '''Get a mutable version of this bag.'''
         return self._mutable_type(self)
@@ -816,20 +816,20 @@ class _FrozenBagMixin(object):
     def get_contained_bags(self):
         '''
         Get all bags that are subsets of this bag.
-        
+
         This means all bags that have counts identical or smaller for each key.
         '''
         if self._contained_bags is None:
             self._contained_bags = \
                               super(_FrozenBagMixin, self).get_contained_bags()
         return self._contained_bags
-        
+
 
 
 class _BaseDictDelegator(collections.MutableMapping):
     '''
     Base class for a dict-like object.
-    
+
     It has its `dict` functionality delegated to `self._dict` which actually
     implements the `dict` functionality. Subclasses override `_dict_type` to
     determine the type of `dict` to use. (Regular or ordered.)
@@ -878,10 +878,10 @@ class _BaseDictDelegator(collections.MutableMapping):
 class _OrderedDictDelegator(Ordered, _BaseDictDelegator):
     '''
     An `OrderedDict`-like object.
-    
+
     It has its `OrderedDict` functionality delegated to `self._dict` which is
     an actual `OrderedDict`.
-    '''    
+    '''
     _dict_type = OrderedDict
     index = misc_tools.ProxyProperty(
         '._dict.index',
@@ -899,25 +899,25 @@ class _OrderedDictDelegator(Ordered, _BaseDictDelegator):
 class _DictDelegator(DefinitelyUnordered, _BaseDictDelegator):
     '''
     A `dict`-like object.
-    
+
     It has its `dict` functionality delegated to `self._dict` which is an
     actual `dict`.
-    '''    
-    
+    '''
+
     _dict_type = dict
 
-                
+
 class Bag(_MutableBagMixin, _DictDelegator):
     '''
     A bag that counts items.
-    
+
     This is a mapping between items and their count:
-    
+
         >>> Bag('aaabcbc')
         Bag({'a': 3, 'b': 2, 'c': 2})
-    
-    It can be created from either an iterable like above, or from a `dict`. 
-    
+
+    It can be created from either an iterable like above, or from a `dict`.
+
     This class provides a lot of methods that `collections.Counter` doesn't;
     among them are a plethora of arithmetic operations (both between bags and
     bags and between bags and integers), comparison methods between bags, and
@@ -925,20 +925,20 @@ class Bag(_MutableBagMixin, _DictDelegator):
     positive integers may be used as counts (zeros are weeded out), so we don't
     need to deal with all the complications of non-numerical counts.
     '''
-    
-    
-    
+
+
+
 class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
     '''
     An ordered bag that counts items.
-    
+
     This is a ordered mapping between items and their count:
-    
+
         >>> OrderedBag('aaabcbc')
         OrderedBag((('a', 3), ('b', 2), ('c', 2)))
-    
-    It can be created from either an iterable like above, or from a `dict`. 
-    
+
+    It can be created from either an iterable like above, or from a `dict`.
+
     This class provides a lot of methods that `collections.Counter` doesn't;
     among them are a plethora of arithmetic operations (both between bags and
     bags and between bags and integers), comparison methods between bags, and
@@ -952,10 +952,10 @@ class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
     def popitem(self, last=True):
         '''
         Pop an item from this bag, returning `(key, count)` and removing it.
-        
+
         By default, the item will be popped from the end. Pass `last=False` to
         pop from the start.
-        '''        
+        '''
         return self._dict.popitem(last=last)
     move_to_end = misc_tools.ProxyProperty(
         '._dict.move_to_end',
@@ -965,50 +965,50 @@ class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
         '._dict.sort',
         doc='Sort the keys in this bag. (With optional `key` function.)'
     )
-    
+
     @property
     def reversed(self):
         '''Get a version of this `OrderedBag` with key order reversed.'''
         return type(self)(self._dict_type(reversed(tuple(self.items()))))
-    
-                
+
+
 class FrozenBag(_BaseBagMixin, _FrozenBagMixin, FrozenDict):
     '''
     An immutable bag that counts items.
-    
+
     This is an immutable mapping between items and their count:
-    
+
         >>> FrozenBag('aaabcbc')
         FrozenBag({'a': 3, 'b': 2, 'c': 2})
-    
-    It can be created from either an iterable like above, or from a `dict`. 
-    
+
+    It can be created from either an iterable like above, or from a `dict`.
+
     This class provides a lot of methods that `collections.Counter` doesn't;
     among them are a plethora of arithmetic operations (both between bags and
     bags and between bags and integers), comparison methods between bags, and
     more. This class is also more restricted than `collections.Counter`; only
     positive integers may be used as counts (zeros are weeded out), so we don't
     need to deal with all the complications of non-numerical counts.
-    
+
     Also, unlike `collections.Counter`, it's immutable, therefore it's also
     hashable, and thus it can be used as a key in dicts and sets.
     '''
     def __hash__(self):
         return hash((type(self), frozenset(self.items())))
-      
-                
+
+
 class FrozenOrderedBag(_OrderedBagMixin, _FrozenBagMixin, _BaseBagMixin,
                        FrozenOrderedDict):
     '''
     An immutable, ordered bag that counts items.
-    
+
     This is an ordered mapping between items and their count:
-    
+
         >>> FrozenOrderedBag('aaabcbc')
         FrozenOrderedBag((('a', 3), ('b', 2), ('c', 2)))
-    
-    It can be created from either an iterable like above, or from a `dict`. 
-    
+
+    It can be created from either an iterable like above, or from a `dict`.
+
     This class provides a lot of methods that `collections.Counter` doesn't;
     among them are a plethora of arithmetic operations (both between bags and
     bags and between bags and integers), comparison methods between bags, and
@@ -1017,24 +1017,24 @@ class FrozenOrderedBag(_OrderedBagMixin, _FrozenBagMixin, _BaseBagMixin,
     need to deal with all the complications of non-numerical counts.
 
     Also, unlike `collections.Counter`:
-    
+
      -  Items are ordered by insertion order. (Simliarly to
         `collections.OrderedDict`.)
 
      - It's immutable, therefore it's also hashable, and thus it can be used as
        a key in dicts and sets.
-       
+
     '''
     def __hash__(self):
         return hash((type(self), tuple(self.items())))
-        
+
     @_BootstrappedCachedProperty
     def reversed(self):
         '''Get a version of this `FrozenOrderedBag` with key order reversed.'''
         return type(self)(self._dict_type(reversed(tuple(self.items()))))
-        
-        
-        
+
+
+
 Bag._frozen_type = FrozenBag
 OrderedBag._frozen_type = FrozenOrderedBag
 FrozenBag._mutable_type = Bag

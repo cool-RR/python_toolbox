@@ -19,7 +19,7 @@ def _get_icon_bitmap_from_shell32_dll(index_number, size):
     assert is_win
 
     import win32api
-    
+
     width, height = size
     shell32_dll = win32api.GetModuleFileName(
         win32api.GetModuleHandle('shell32.dll')

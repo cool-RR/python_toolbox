@@ -28,5 +28,5 @@ def test_as_decorator():
     assert sys.getrecursionlimit() == old_recursion_limit
     f()
     assert sys.getrecursionlimit() == old_recursion_limit
-    
+
     cute_testing.assert_polite_wrapper(f)

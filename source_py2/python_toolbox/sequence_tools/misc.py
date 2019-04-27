@@ -25,7 +25,7 @@ class UnorderedIterableException(Exception):
 def are_equal_regardless_of_order(seq1, seq2):
     '''
     Do `seq1` and `seq2` contain the same elements, same number of times?
-    
+
     Disregards order of elements.
 
     Currently will fail for items that have problems with comparing.
@@ -40,7 +40,7 @@ def flatten(iterable):
 
     For example, `flatten([[1, 2], [3], [4, 'meow']]) == [1, 2, 3, 4, 'meow']`.
     '''
-    # If that ain't a damn clever implementation, I don't know what is. 
+    # If that ain't a damn clever implementation, I don't know what is.
     iterator = iter(iterable)
     try:
         return sum(iterator, next(iterator))
@@ -94,7 +94,7 @@ def partitions(sequence, partition_size=None, n_partitions=None,
 
         >>> partitions([0, 1, 2, 3, 4], 3, fill_value='meow')
         [[0, 1, 2], [3, 4, 'meow']]
-        
+
     '''
 
     sequence = ensure_iterable_is_sequence(sequence)
@@ -117,7 +117,7 @@ def partitions(sequence, partition_size=None, n_partitions=None,
     ### Finished validating input. ############################################
 
     if partition_size is None:
-        
+
         floored_partition_size, modulo = divmod(sequence_length,
                                                 n_partitions)
         if modulo:
@@ -144,7 +144,7 @@ def partitions(sequence, partition_size=None, n_partitions=None,
                 small_block_to_append_back = blocks[-1]
                 del blocks[-1]
                 blocks[-1] += small_block_to_append_back
-        elif fill_value != NO_FILL_VALUE: # (We use elif because fill is never 
+        elif fill_value != NO_FILL_VALUE: # (We use elif because fill is never
                                           # done if `larger_on_remainder=True`.)
             filler = itertools.repeat(fill_value,
                                       naive_length - sequence_length)
@@ -176,7 +176,7 @@ def to_tuple(single_or_sequence, item_type=None, item_test=None):
     which is the type of the items, or alternatively `item_test` which is a
     callable that takes an object and returns whether it's a valid item. These
     are necessary only when your items might be sequences themselves.
-    
+
     You may optionally put multiple types in `item_type`, and each object would
     be required to match to at least one of them.
     '''
@@ -210,7 +210,7 @@ def to_tuple(single_or_sequence, item_type=None, item_test=None):
 def pop_until(sequence, condition=bool):
     '''
     Look for item in `sequence` that passes `condition`, popping away others.
-    
+
     When sequence is empty, propagates the `IndexError`.
     '''
     from python_toolbox import cute_iter_tools
@@ -222,8 +222,8 @@ def pop_until(sequence, condition=bool):
 def get_recurrences(sequence):
     '''
     Get a `dict` of all items that repeat at least twice.
-    
-    The values of the dict are the numbers of repititions of each item.    
+
+    The values of the dict are the numbers of repititions of each item.
     '''
     from python_toolbox import nifty_collections
     return dict(
@@ -231,13 +231,13 @@ def get_recurrences(sequence):
         nifty_collections.Bag(sequence).most_common() if n_recurrences >= 2
     )
 
-    
+
 def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
                                           unallowed_types=(),
                                           allow_unordered=True):
     '''
     Return a version of `iterable` that is an immutable sequence.
-    
+
     If `iterable` is already an immutable sequence, it returns it as is;
     otherwise, it makes it into a `tuple`, or into any other data type
     specified in `default_type`.
@@ -255,12 +255,12 @@ def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
         return iterable
 
 
-def ensure_iterable_is_sequence(iterable, default_type=tuple, 
-                                unallowed_types=(bytes,), 
+def ensure_iterable_is_sequence(iterable, default_type=tuple,
+                                unallowed_types=(bytes,),
                                 allow_unordered=True):
     '''
     Return a version of `iterable` that is a sequence.
-    
+
     If `iterable` is already a sequence, it returns it as is; otherwise, it
     makes it into a `tuple`, or into any other data type specified in
     `default_type`.
@@ -284,9 +284,9 @@ class CuteSequenceMixin(misc_tools.AlternativeLengthMixin):
         try: self.index(item)
         except ValueError: return False
         else: return True
-    
-        
-    
+
+
+
 class CuteSequence(CuteSequenceMixin, collections.Sequence):
     '''A sequence type that adds extra functionality.'''
 
@@ -294,23 +294,23 @@ class CuteSequence(CuteSequenceMixin, collections.Sequence):
 def get_length(sequence):
     '''Get the length of a sequence.'''
     return sequence.length if hasattr(sequence, 'length') else len(sequence)
-        
-        
+
+
 def divide_to_slices(sequence, n_slices):
     '''
     Divide a sequence to slices.
-    
+
     Example:
-    
+
         >>> divide_to_slices(range(10), 3)
         [range(0, 4), range(4, 7), range(7, 10)]
-        
+
     '''
     from python_toolbox import cute_iter_tools
-    
+
     assert isinstance(n_slices, numbers.Integral)
     assert n_slices >= 1
-    
+
     sequence_length = get_length(sequence)
     base_slice_length, remainder = divmod(sequence_length, n_slices)
     indices = [0]
@@ -321,18 +321,18 @@ def divide_to_slices(sequence, n_slices):
     assert indices[-1] == sequence_length
     return [sequence[x:y] for x, y in
                      cute_iter_tools.iterate_overlapping_subsequences(indices)]
-        
+
 def is_subsequence(big_sequence, small_sequence):
     '''
     Check whether `small_sequence` is a subsequence of `big_sequence`.
-    
+
     For example:
-    
+
         >>> is_subsequence([1, 2, 3, 4], [2, 3])
         True
         >>> is_subsequence([1, 2, 3, 4], [4, 5])
         False
-        
+
     This can be used on any kind of sequence, including tuples, lists and
     strings.
     '''
@@ -358,6 +358,5 @@ def is_subsequence(big_sequence, small_sequence):
         for match_position, match_length in matches.items():
             if match_length == small_sequence_length:
                 return True
-        
-        
-    
+
+

@@ -22,12 +22,12 @@ def test():
         Comb('du', CombSpace('other', 2)), set(('d', 'u')), 'ud', 'rb',
         Comb('bu', comb_space)
     )
-    
+
     for thing in things_in_comb_space:
         assert thing in comb_space
     for thing in things_not_in_comb_space:
         assert thing not in comb_space
-    
+
     assert comb_space.n_unused_elements == 4
     assert comb_space.index('du') == 0
     assert comb_space.index('er') == comb_space.length - 1
@@ -48,7 +48,7 @@ def test():
     assert comb_space.free_indices == comb_space.free_keys == \
                                                     sequence_tools.CuteRange(2)
     assert comb_space.free_values == 'dumber'
-    
+
     comb = comb_space[7]
     assert type(comb.uncombinationed) is Perm
     assert tuple(comb) == tuple(comb.uncombinationed)
@@ -57,16 +57,16 @@ def test():
     assert repr(comb_space) == '''<CombSpace: 'dumber', n_elements=2>'''
     assert repr(CombSpace(tuple(range(50, 0, -1)), 3)) == \
      '''<CombSpace: (50, 49, 48, 47, 46, 45, 44, 43, 42 ... ), n_elements=3>'''
-    
-    
-    
-    
+
+
+
+
 def test_unrecurrented():
     recurrent_comb_space = CombSpace('abcabc', 3)
     assert 'abc' in recurrent_comb_space
     assert 'aba' in recurrent_comb_space
     assert 'bcb' in recurrent_comb_space
-    assert 'bbc' not in recurrent_comb_space # Because 'bcb' precedes it. 
+    assert 'bbc' not in recurrent_comb_space # Because 'bcb' precedes it.
     unrecurrented_comb_space = recurrent_comb_space.unrecurrented
     assert 6 * 5 * 4 // 3 // 2 == unrecurrented_comb_space.length > \
            recurrent_comb_space.length == 7
@@ -77,5 +77,5 @@ def test_unrecurrented():
         assert comb[0] in 'abc'
         comb.unrapplied
         assert unrecurrented_comb_space.index(comb) == i
-        
-        
+
+

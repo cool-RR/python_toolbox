@@ -10,9 +10,9 @@ def test():
               '_', '__', '___']
     illegals = ['1dgfads', 'aga`fdg', '-haeth', '4gag5h+sdfh.', '.afdg',
                 'fdga"adfg', 'afdga afd']
-    
+
     for legal in legals:
         assert is_legal_ascii_variable_name(legal)
-    
+
     for illegal in illegals:
         assert not is_legal_ascii_variable_name(illegal)

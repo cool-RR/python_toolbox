@@ -8,6 +8,6 @@ def test():
     assert is_subclass(object, object)
     assert is_subclass(object, (object, str))
     assert not is_subclass(object, str)
-    
+
     assert not is_subclass(7, object)
     assert not is_subclass('meow', object)

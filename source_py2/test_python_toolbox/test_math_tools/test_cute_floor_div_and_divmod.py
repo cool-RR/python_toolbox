@@ -59,17 +59,17 @@ def test_illegal_cases():
             type(raise_assertor_1.exception),
             type(raise_assertor_2.exception),
         ))
-    
-        
+
+
 def test_meaningful_cases():
     if sys_tools.is_pypy:
         # todo: When version of Pypy with bug 1873 is released, remove this
         # skipping.
         raise nose.SkipTest
     meaningful_cases = (
-        (infinity, 3), (infinity, 300.5), (infinity, -3), (infinity, -300.5), 
-        (-infinity, 3), (-infinity, 300.5), (-infinity, -3), (-infinity, -300.5), 
-        (3, infinity), (3, -infinity), (-3, infinity), (-3, -infinity), 
+        (infinity, 3), (infinity, 300.5), (infinity, -3), (infinity, -300.5),
+        (-infinity, 3), (-infinity, 300.5), (-infinity, -3), (-infinity, -300.5),
+        (3, infinity), (3, -infinity), (-3, infinity), (-3, -infinity),
         (300.5, infinity), (300.5, -infinity),
                                        (-300.5, infinity), (-300.5, -infinity),
         (0, infinity), (0, -infinity),
@@ -84,6 +84,5 @@ def test_meaningful_cases():
                           (meaningful_numerator / meaningful_denominator)) or \
         (0 <= ((meaningful_numerator / meaningful_denominator)
                                                           - cute_quotient) < 1)
-        
 
-    
+

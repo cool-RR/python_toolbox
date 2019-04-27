@@ -14,7 +14,7 @@ infinity = float('inf')
 
 def test():
     '''Test basic workings of `is_iterable`.'''
-    
+
     iterables = [
         [1, 2, 3],
         (1, 2),
@@ -24,7 +24,7 @@ def test():
         'asdfasdf',
         ''
     ]
-    
+
     non_iterables = [
         dict,
         list,
@@ -35,9 +35,9 @@ def test():
         Exception,
         lambda x: x
     ]
-    
+
     for iterable in iterables:
         assert is_iterable(iterable)
-        
+
     for non_iterable in non_iterables:
         assert not is_iterable(non_iterable)

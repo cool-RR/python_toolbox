@@ -21,8 +21,8 @@ segment_to_cropped_segment = {
 }
 
 bad_segments = (
-    (0, 5), 
-    (0, 7), 
+    (0, 5),
+    (0, 7),
     (23, 25),
     (10 ** 10, 10 ** 11)
 )
@@ -34,5 +34,4 @@ def test():
     for bad_segment in bad_segments:
         with cute_testing.RaiseAssertor():
             cropped_segment(segment, base_segment)
-    
-    
+

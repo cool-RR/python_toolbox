@@ -236,7 +236,7 @@ class TestContextDecorator(unittest2.TestCase):
 
 
     def test_contextdecorator_as_mixin(self):
-        
+
         class somecontext(object):
             started = False
             exc = None

@@ -25,7 +25,7 @@ class CLEAR_ENTIRE_CACHE(misc_tools.NonInstantiable):
 def _get_now():
     '''
     Get the current datetime.
-    
+
     This is specified as a function to make testing easier.
     '''
     return datetime_module.datetime.now()
@@ -35,17 +35,17 @@ def _get_now():
 def cache(max_size=infinity, time_to_keep=None):
     '''
     Cache a function, saving results so they won't have to be computed again.
-    
+
     This decorator understands function arguments. For example, it understands
     that for a function like this:
 
         @cache()
         def f(a, b=2):
             return whatever
-            
+
     The calls `f(1)` or `f(1, 2)` or `f(b=2, a=1)` are all identical, and a
     cached result saved for one of these calls will be used for the others.
-    
+
     All the arguments are sleekreffed to prevent memory leaks. Sleekref is a
     variation of weakref. Sleekref is when you try to weakref an object, but if
     it's non-weakreffable, like a `list` or a `dict`, you maintain a normal,
@@ -54,11 +54,11 @@ def cache(max_size=infinity, time_to_keep=None):
     you can avoid memory leaks when using weakreffable arguments, but if you
     ever want to use non-weakreffable arguments you are still able to.
     (Assuming you don't mind the memory leaks.)
-    
+
     You may optionally specify a `max_size` for maximum number of cached
     results to store; old entries are thrown away according to a
     least-recently-used alogrithm. (Often abbreivated LRU.)
-    
+
     You may optionally specific a `time_to_keep`, which is a time period after
     which a cache entry will expire. (Pass in either a `timedelta` object or
     keyword arguments to create one.)
@@ -67,9 +67,9 @@ def cache(max_size=infinity, time_to_keep=None):
     # compile a function accordingly, so functions with a simple argspec won't
     # have to go through so much shit. update: probably it will help only for
     # completely argumentless function. so do one for those.
-    
+
     from python_toolbox.nifty_collections import OrderedDict
-    
+
     if time_to_keep is not None:
         if max_size != infinity:
             raise NotImplementedError
@@ -83,26 +83,26 @@ def cache(max_size=infinity, time_to_keep=None):
                     '`timedelta` object.'
                 )
         assert isinstance(time_to_keep, datetime_module.timedelta)
-        
+
 
     def decorator(function):
-        
+
         # In case we're being given a function that is already cached:
         if getattr(function, 'is_cached', False): return function
-        
+
         if max_size == infinity:
-            
+
             if time_to_keep:
 
                 sorting_key_function = lambda sleek_call_args: \
                                               cached._cache[sleek_call_args][1]
 
-                
+
                 def remove_expired_entries():
                     almost_cutting_point = \
                                           binary_search.binary_search_by_index(
                         list(cached._cache.keys()),
-                        _get_now(), 
+                        _get_now(),
                         sorting_key_function,
                         rounding=binary_search.LOW
                     )
@@ -110,8 +110,8 @@ def cache(max_size=infinity, time_to_keep=None):
                         cutting_point = almost_cutting_point + 1
                         for key in list(cached._cache.keys())[:cutting_point]:
                             del cached._cache[key]
-                            
-                @misc_tools.set_attributes(_cache=OrderedDict())        
+
+                @misc_tools.set_attributes(_cache=OrderedDict())
                 def cached(function, *args, **kwargs):
                     remove_expired_entries()
                     sleek_call_args = \
@@ -126,10 +126,10 @@ def cache(max_size=infinity, time_to_keep=None):
                         )
                         cached._cache.sort(key=sorting_key_function)
                         return value
-                
+
             else: # not time_to_keep
-                
-                @misc_tools.set_attributes(_cache={})        
+
+                @misc_tools.set_attributes(_cache={})
                 def cached(function, *args, **kwargs):
                     sleek_call_args = \
                         SleekCallArgs(cached._cache, function, *args, **kwargs)
@@ -139,10 +139,10 @@ def cache(max_size=infinity, time_to_keep=None):
                         cached._cache[sleek_call_args] = value = \
                               function(*args, **kwargs)
                         return value
-    
+
         else: # max_size < infinity
-            
-            @misc_tools.set_attributes(_cache=OrderedDict())        
+
+            @misc_tools.set_attributes(_cache=OrderedDict())
             def cached(function, *args, **kwargs):
                 sleek_call_args = \
                     SleekCallArgs(cached._cache, function, *args, **kwargs)
@@ -156,10 +156,10 @@ def cache(max_size=infinity, time_to_keep=None):
                     if len(cached._cache) > max_size:
                         cached._cache.popitem(last=False)
                     return value
-                    
-        
+
+
         result = decorator_tools.decorator(cached, function)
-        
+
         def cache_clear(key=CLEAR_ENTIRE_CACHE):
             if key is CLEAR_ENTIRE_CACHE:
                 cached._cache.clear()
@@ -168,11 +168,11 @@ def cache(max_size=infinity, time_to_keep=None):
                     del cached._cache[key]
                 except KeyError:
                     pass
-                
+
         result.cache_clear = cache_clear
-        
+
         result.is_cached = True
-        
+
         return result
-        
+
     return decorator

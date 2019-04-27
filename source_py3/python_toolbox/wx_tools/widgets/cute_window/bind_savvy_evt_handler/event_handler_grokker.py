@@ -13,12 +13,12 @@ from .event_codes import get_event_codes_of_component, get_event_code_from_name
 
 class EventHandlerGrokker(object):
     '''Wraps an event handling function and figures out what to bind it to.'''
-    
+
     def __init__(self, name, event_handler_self_taking_function,
                  evt_handler_type):
         '''
         Construct the `EventHandlerGrokker`.
-        
+
         `name` is the name of the event handling function.
         `event_handler_self_taking_function` is the function itself, as proper
         function. (i.e. taking two arguments `self` and `event`.)
@@ -28,15 +28,15 @@ class EventHandlerGrokker(object):
             name,
             evt_handler_type.__name__
         )
-        
+
         self.name = name
-        
+
         self.event_handler_self_taking_function = \
             event_handler_self_taking_function
-        
+
         self.evt_handler_type = evt_handler_type
-        
-        
+
+
     parsed_words = caching.CachedProperty(
         lambda self: self.evt_handler_type. \
                                    _BindSavvyEvtHandlerType__name_parser.parse(
@@ -46,10 +46,10 @@ class EventHandlerGrokker(object):
         doc=''' '''
     )
 
-    
+
     def bind(self, evt_handler):
         assert isinstance(evt_handler, wx.EvtHandler)
-        event_handler_bound_method = types.MethodType(    
+        event_handler_bound_method = types.MethodType(
             self.event_handler_self_taking_function,
             evt_handler,
         )
@@ -73,15 +73,14 @@ class EventHandlerGrokker(object):
                     event_handler_bound_method,
                     source=component
                 )
-                
+
         else:
             evt_handler.Bind(
                 get_event_code_from_name(last_word,
                                          self.evt_handler_type),
                 event_handler_bound_method,
             )
-                
-            
-        
-        
-        
+
+
+
+

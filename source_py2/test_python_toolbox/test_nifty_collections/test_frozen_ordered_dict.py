@@ -31,24 +31,24 @@ def test():
     assert {frozen_ordered_dict: frozen_ordered_dict} == \
                                      {frozen_ordered_dict: frozen_ordered_dict}
     assert isinstance(hash(frozen_ordered_dict), int)
-    
+
     assert frozen_ordered_dict.copy({'meow': 'frrr'}) == \
            frozen_ordered_dict.copy(meow='frrr') == \
            FrozenOrderedDict((('1', 'a'), ('2', 'b'), ('3', 'c'),
                               ('meow', 'frrr')))
-    
+
     assert repr(frozen_ordered_dict).startswith('FrozenOrderedDict(')
-    
+
     assert pickle.loads(pickle.dumps(frozen_ordered_dict)) == \
-                                                            frozen_ordered_dict    
+                                                            frozen_ordered_dict
 def test_reversed():
 
     frozen_ordered_dict = \
                         FrozenOrderedDict((('1', 'a'), ('2', 'b'), ('3', 'c')))
-    
+
     assert frozen_ordered_dict.reversed == \
                         FrozenOrderedDict((('3', 'c'), ('2', 'b'), ('1', 'a')))
-    
+
     assert frozen_ordered_dict.reversed is frozen_ordered_dict.reversed
     assert frozen_ordered_dict.reversed == frozen_ordered_dict.reversed
     assert frozen_ordered_dict.reversed.reversed is \
@@ -58,7 +58,7 @@ def test_reversed():
     assert frozen_ordered_dict.reversed.reversed == frozen_ordered_dict
     assert frozen_ordered_dict.reversed.reversed.reversed == \
                                                    frozen_ordered_dict.reversed
-    
+
     assert set(frozen_ordered_dict.items()) == \
                                       set(frozen_ordered_dict.reversed.items())
     assert tuple(frozen_ordered_dict.items()) == \

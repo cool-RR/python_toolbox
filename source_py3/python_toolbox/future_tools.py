@@ -14,7 +14,7 @@ from python_toolbox import sequence_tools
 class BaseCuteExecutor(concurrent.futures.Executor):
     '''
     An executor with extra functionality for `map` and `filter`.
-    
+
     This is a subclass of `concurrent.futures.Executor`, which is a manager for
     parallelizing tasks. What this adds over `concurrent.futures.Executor`:
 
@@ -23,17 +23,17 @@ class BaseCuteExecutor(concurrent.futures.Executor):
      - An `as_completed` argument for both `.map` and `.filter`, which makes
        these methods return results according to the order in which they were
        computed, and not the order in which they were submitted.
-     
+
     '''
     def filter(self, filter_function, iterable, timeout=None,
                as_completed=False):
         '''
         Get a parallelized version of `filter(filter_function, iterable)`.
-        
+
         Specify `as_completed=False` to get the results that were calculated
         first to be returned first, instead of using the order of `iterable`.
         '''
-        
+
         if timeout is not None:
             end_time = timeout + time.time()
 
@@ -41,7 +41,7 @@ class BaseCuteExecutor(concurrent.futures.Executor):
             future = self.submit(filter_function, item)
             future._item = item
             return future
-            
+
         futures = tuple(map(make_future, iterable))
         futures_iterator = concurrent.futures.as_completed(futures) if \
                                                       as_completed else futures
@@ -66,11 +66,11 @@ class BaseCuteExecutor(concurrent.futures.Executor):
     def map(self, function, *iterables, timeout=None, as_completed=False):
         '''
         Get a parallelized version of `map(function, iterable)`.
-        
+
         Specify `as_completed=False` to get the results that were calculated
         first to be returned first, instead of using the order of `iterable`.
         '''
-        
+
         if timeout is not None:
             end_time = timeout + time.time()
 
@@ -92,12 +92,12 @@ class BaseCuteExecutor(concurrent.futures.Executor):
                     future.cancel()
         return result_iterator()
 
-    
+
 class CuteThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor,
                              BaseCuteExecutor):
     '''
     A thread-pool executor with extra functionality for `map` and `filter`.
-    
+
     This is a subclass of `concurrent.futures.ThreadPoolExecutor`, which is a
     manager for parallelizing tasks to a thread pool. What this adds over
     `concurrent.futures.ThreadPoolExecutor`:
@@ -107,14 +107,14 @@ class CuteThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor,
      - An `as_completed` argument for both `.map` and `.filter`, which makes
        these methods return results according to the order in which they were
        computed, and not the order in which they were submitted.
-     
-    '''    
+
+    '''
 
 class CuteProcessPoolExecutor(concurrent.futures.ProcessPoolExecutor,
                               BaseCuteExecutor):
     '''
     A process-pool executor with extra functionality for `map` and `filter`.
-    
+
     This is a subclass of `concurrent.futures.ThreadPoolExecutor`, which is a
     manager for parallelizing tasks to a process pool. What this adds over
     `concurrent.futures.ThreadPoolExecutor`:
@@ -124,5 +124,5 @@ class CuteProcessPoolExecutor(concurrent.futures.ProcessPoolExecutor,
      - An `as_completed` argument for both `.map` and `.filter`, which makes
        these methods return results according to the order in which they were
        computed, and not the order in which they were submitted.
-     
+
     '''

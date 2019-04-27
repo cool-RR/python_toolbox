@@ -13,35 +13,35 @@ from . import name_parser
 class BindSavvyEvtHandler(wx.EvtHandler):
     '''
     Event handler type that allows binding events automatically by method name.
-    
+
     Use the `.bind_event_handlers` method to bind event handlers by name.
-    
+
     Some of this class's functionality is in its metaclass; see documentation
     of `BindSavvyEvtHandlerType`'s methods and attributes for more details.
     '''
-    
+
     __metaclass__ = BindSavvyEvtHandlerType
-    
-    
+
+
     _BindSavvyEvtHandlerType__name_parser = name_parser.NameParser(
         (name_parser.LowerCase,),
         n_preceding_underscores_possibilities=(1,)
     )
     '''
     Name parser used by this event handler class for parsing event handlers.
-    
+
     Override this with a different instance of `NameParser` in order to use a
     different naming convention for event handlers.
     '''
-    
+
     def bind_event_handlers(self, cls):
         '''
         Look for event-handling methods on `cls` and bind events to them.
-        
+
         For example, a method with a name of `_on_key_down` will be bound to
         `wx.EVT_KEY_DOWN`, while a method with a name of `_on_ok_button` will
         be bound to a `wx.EVT_BUTTON` event sent from `self.ok_button`.
-        
+
         `cls` should usually be the class in whose `__init__` method the
         `bind_event_handlers` function is being called.
         '''
@@ -53,5 +53,4 @@ class BindSavvyEvtHandler(wx.EvtHandler):
             cls._BindSavvyEvtHandlerType__event_handler_grokkers
         for event_handler_grokker in event_handler_grokkers:
             event_handler_grokker.bind(self)
-        
-        
+

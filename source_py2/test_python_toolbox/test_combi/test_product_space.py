@@ -27,7 +27,7 @@ def test():
         '685929638952175999932299156089414639761565182862536979208272237582511'
         '85210916864000000000000000000000000 * 208755412068>'
     )
-    
+
     assert product_space
     assert not ProductSpace(((),))
     assert not ProductSpace(((), {}))
@@ -39,10 +39,10 @@ def test():
         product_space[-product_space.length - 1]
     with cute_testing.RaiseAssertor(IndexError):
         product_space[-product_space.length - 100]
-    
+
     # In the following asserts, using `CuteRange` rather than `xrange` because
     # the latter doesn't have a functional `__hash__`.
-    
+
     assert set((
         ProductSpace(
             (sequence_tools.CuteRange(4),
@@ -59,13 +59,13 @@ def test():
             ProductSpace(
                 (sequence_tools.CuteRange(4),
                  sequence_tools.CuteRange(3))
-            ), 
+            ),
             ProductSpace(
                 (sequence_tools.CuteRange(3),
                  sequence_tools.CuteRange(4))
             )
     ))
-    
+
     assert ProductSpace(
         (sequence_tools.CuteRange(4),
          sequence_tools.CuteRange(3))
@@ -73,7 +73,7 @@ def test():
             (sequence_tools.CuteRange(4),
              sequence_tools.CuteRange(3))
         )
-    
+
     assert ProductSpace(
         (sequence_tools.CuteRange(4),
          sequence_tools.CuteRange(3))) != \
@@ -81,4 +81,3 @@ def test():
                (sequence_tools.CuteRange(3),
                 sequence_tools.CuteRange(4))
            )
-    

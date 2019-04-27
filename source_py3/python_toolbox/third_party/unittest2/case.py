@@ -24,7 +24,7 @@ else:
     class SkipTest(Exception):
         """
         Raise this exception in a test to skip it.
-    
+
         Usually you can use TestResult.skip() or one of the skipping decorators
         instead of raising this directly.
         """
@@ -143,20 +143,20 @@ class _AssertRaisesContext(object):
 
 
 class _TypeEqualityDict(object):
-    
+
     def __init__(self, testcase):
         self.testcase = testcase
         self._store = {}
-    
+
     def __setitem__(self, key, value):
         self._store[key] = value
-    
+
     def __getitem__(self, key):
         value = self._store[key]
         if isinstance(value, str):
             return getattr(self.testcase, value)
         return value
-    
+
     def get(self, key, default=None):
         if key in self._store:
             return self[key]

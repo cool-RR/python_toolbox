@@ -10,7 +10,7 @@ import re
 def camel_case_to_space_case(s):
     '''
     Convert a string from camelcase to spacecase.
-    
+
     Example: camelcase_to_underscore('HelloWorld') == 'Hello world'
     '''
     if s == '': return s
@@ -21,11 +21,11 @@ def camel_case_to_space_case(s):
 def camel_case_to_lower_case(s):
     '''
     Convert a string from camel-case to lower-case.
-    
-    Example: 
-    
+
+    Example:
+
         camel_case_to_lower_case('HelloWorld') == 'hello_world'
-        
+
     '''
     return re.sub('(((?<=[a-z])[A-Z])|([A-Z](?![A-Z]|$)))', '_\\1', s). \
            lower().strip('_')
@@ -34,11 +34,11 @@ def camel_case_to_lower_case(s):
 def lower_case_to_camel_case(s):
     '''
     Convert a string from lower-case to camel-case.
-    
-    Example: 
-    
+
+    Example:
+
         camel_case_to_lower_case('hello_world') == 'HelloWorld'
-        
+
     '''
     s = s.capitalize()
     while '_' in s:
@@ -50,11 +50,11 @@ def lower_case_to_camel_case(s):
 def camel_case_to_upper_case(s):
     '''
     Convert a string from camel-case to upper-case.
-    
-    Example: 
-    
+
+    Example:
+
         camel_case_to_lower_case('HelloWorld') == 'HELLO_WORLD'
-        
+
     '''
     return camel_case_to_lower_case(s).upper()
 
@@ -62,10 +62,10 @@ def camel_case_to_upper_case(s):
 def upper_case_to_camel_case(s):
     '''
     Convert a string from upper-case to camel-case.
-    
-    Example: 
-    
+
+    Example:
+
         camel_case_to_lower_case('HELLO_WORLD') == 'HelloWorld'
-        
+
     '''
     return lower_case_to_camel_case(s.lower())

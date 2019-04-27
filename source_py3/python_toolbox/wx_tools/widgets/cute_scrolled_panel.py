@@ -8,6 +8,5 @@ from python_toolbox.wx_tools.widgets.cute_panel import CutePanel
 
 class CuteScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel, CutePanel):
     '''
-    
+
     '''
-    

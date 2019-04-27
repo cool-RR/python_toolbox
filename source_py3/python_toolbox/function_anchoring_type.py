@@ -16,28 +16,28 @@ from python_toolbox import misc_tools
 class FunctionAnchoringType(type):
     '''
     Metaclass for working around Python's problems with pickling functions.
-    
+
     Python has a hard time pickling functions that are not at module level,
     because when unpickling them, Python looks for them only on the module
     level.
-    
+
     What we do in this function is create a reference to each of the class's
     functions on the module level. We call this "anchoring." Note that we're
     only anchoring the *functions*, not the *methods*. Methods *can* be pickled
     by Python, but plain functions, like those created by `staticmethod`,
     cannot.
-    
+
     This workaround is hacky, yes, but it seems like the best solution until
     Python learns how to pickle non-module-level functions.
     '''
     def __new__(mcls, name, bases, namespace_dict):
         my_type = super().__new__(mcls, name, bases, namespace_dict)
-        
+
         # We want the type's `vars`, but we want them "getted," and not in a
         # `dict`, so we'll get method objects instead of plain functions.
         my_getted_vars = misc_tools.getted_vars(my_type)
         # Repeat after me: "Getted, not dict."
-        
+
         functions_to_anchor = [value for key, value in my_getted_vars.items()
                                if isinstance(value, types.FunctionType) and not
                                misc_tools.is_magic_variable_name(key)]
@@ -45,7 +45,7 @@ class FunctionAnchoringType(type):
             module_name = function.__module__
             module = sys.modules[module_name]
             function_name = function.__name__
-            
+
             # Since this metaclass is a hacky enough solution as it is, let's
             # be careful and ensure no object is already defined by the same
             # name in the module level: (todotest)
@@ -63,5 +63,4 @@ class FunctionAnchoringType(type):
                                     "anchor function." % \
                                     (module_name, function_name))
         return my_type
-                    
-    
+

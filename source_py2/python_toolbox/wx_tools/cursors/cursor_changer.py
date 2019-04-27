@@ -11,7 +11,7 @@ class CursorChanger(TempValueSetter):
     def __init__(self, window, cursor):
         '''
         Construct the `CursorChanger`.
-        
+
         `cursor` may be either a `wx.Cursor` object or a constant like
         `wx.CURSOR_BULLSEYE`.
         '''

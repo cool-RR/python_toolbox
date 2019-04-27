@@ -14,7 +14,7 @@ def cheat_hash_object(thing):
     except Exception:
         return id(thing)
 
-    
+
 def cheat_hash_set(my_set):
     '''Cheat-hash a `set`.'''
     hashables = set()
@@ -26,13 +26,13 @@ def cheat_hash_set(my_set):
             unhashables.add(thing)
         else:
             hashables.add(thing)
-            
+
     return hash(
         (
             frozenset(hashables),
             tuple(sorted(cheat_hash(thing) for thing in unhashables))
         )
-    )    
+    )
 
 
 def cheat_hash_sequence(my_sequence):
@@ -46,13 +46,13 @@ def cheat_hash_sequence(my_sequence):
             unhashables.append(thing)
         else:
             hashables.append(thing)
-            
+
     return hash(
         (
             tuple(hashables),
             tuple(cheat_hash(thing) for thing in unhashables)
         )
-    )    
+    )
 
 
 def cheat_hash_dict(my_dict):
@@ -66,7 +66,7 @@ def cheat_hash_dict(my_dict):
             unhashable_items.append((key, value))
         else:
             hashable_items.append((key, value))
-            
+
     return hash(
         (
             tuple(sorted(hashable_items)),

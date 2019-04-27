@@ -16,6 +16,5 @@ class CuteHyperlinkCtrl(wx.HyperlinkCtrl, CuteControl):
             self, parent=parent, id=id, label=label, url=url, pos=pos,
             size=size, style=style, name=name
         )
-        
-    
-    
+
+

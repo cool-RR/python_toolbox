@@ -9,12 +9,12 @@ from .cute_window import CuteWindow
 class CuteTopLevelWindow(wx.TopLevelWindow, CuteWindow):
     '''
     An improved `wx.TopLevelWindow`.
-    
+
     The advantages of this class over `wx.TopLevelWindow`:
-    
+
       - A good background color.
       - Advantages given by `CuteWindow`
-    
+
     '''
     def __init__(self, *args, **kwargs):
         self.set_good_background_color()

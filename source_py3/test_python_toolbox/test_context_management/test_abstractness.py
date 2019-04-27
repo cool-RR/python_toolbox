@@ -16,27 +16,27 @@ def test_abstractness():
     '''
     A non-abstract-overriding `ContextManager` subclass can't be instantiated.
     '''
-    
+
     class EmptyContextManager(ContextManager):
         pass
 
     class EnterlessContextManager(ContextManager):
         def __exit__(self, exc_type, exc_value, exc_traceback):
             pass
-        
+
     class ExitlessContextManager(ContextManager):
         def __enter__(self):
             pass
-        
+
     def f():
         EmptyContextManager()
-    
+
     def g():
         EnterlessContextManager()
-    
+
     def h():
         ExitlessContextManager()
-         
+
     nose.tools.assert_raises(TypeError, f)
     nose.tools.assert_raises(TypeError, g)
     nose.tools.assert_raises(TypeError, h)
@@ -72,19 +72,18 @@ def test_isinstance_and_issubclass():
             return False
     class Good(Woof, Meow):
         pass
-    
+
     assert not issubclass(object, AbstractContextManager)
     assert not issubclass(Woof, AbstractContextManager)
     assert not issubclass(Meow, AbstractContextManager)
     assert issubclass(Good, AbstractContextManager)
-    
+
     assert not isinstance(object(), AbstractContextManager)
     assert not isinstance(Woof(), AbstractContextManager)
     assert not isinstance(Meow(), AbstractContextManager)
     assert isinstance(Good(), AbstractContextManager)
-            
-            
-            
-            
-            
-    
+
+
+
+
+

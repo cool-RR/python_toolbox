@@ -11,13 +11,13 @@ _length_of_recurrent_perm_space_cache = {}
 def calculate_length_of_recurrent_perm_space(k, fbb):
     '''
     Calculate the length of a recurrent `PermSpace`.
-    
+
     `k` is the `n_elements` of the space, i.e. the length of each perm. `fbb`
     is the space's `FrozenBagBag`, meaning a bag where each key is the number
     of recurrences of an item and each count is the number of different items
     that have this number of recurrences. (See documentation of `FrozenBagBag`
     for more info.)
-    
+
     It's assumed that the space is not a `CombSpace`, it's not fixed, not
     degreed and not sliced.
     '''
@@ -35,7 +35,7 @@ def calculate_length_of_recurrent_perm_space(k, fbb):
         return fbb.n_elements
     #                                                                         #
     ### Finished checking for edge cases. #####################################
-    
+
     try:
         return cache[(k, fbb)]
     except KeyError:
@@ -55,7 +55,7 @@ def calculate_length_of_recurrent_perm_space(k, fbb):
     # complex, each FBB will be solved using the solutions of its sub-FBB.
     # Every solution will be stored in the global cache.
 
-    
+
     ### Doing phase one, getting all sub-FBBs: ################################
     #                                                                         #
     levels = []
@@ -69,7 +69,7 @@ def calculate_length_of_recurrent_perm_space(k, fbb):
         current_fbbs = set(itertools.chain(*levels[-1].values()))
     #                                                                         #
     ### Finished doing phase one, getting all sub-FBBs. #######################
-    
+
     ### Doing phase two, solving FBBs from trivial to complex: ################
     #                                                                         #
     for k_, level in enumerate(reversed(levels), (k - len(levels) + 1)):
@@ -84,10 +84,10 @@ def calculate_length_of_recurrent_perm_space(k, fbb):
                 )
     #                                                                         #
     ### Finished doing phase two, solving FBBs from trivial to complex. #######
-    
+
     return cache[(k, fbb)]
-        
-    
+
+
 
 
 ###############################################################################
@@ -97,13 +97,13 @@ _length_of_recurrent_comb_space_cache = {}
 def calculate_length_of_recurrent_comb_space(k, fbb):
     '''
     Calculate the length of a recurrent `CombSpace`.
-    
+
     `k` is the `n_elements` of the space, i.e. the length of each perm. `fbb`
     is the space's `FrozenBagBag`, meaning a bag where each key is the number
     of recurrences of an item and each count is the number of different items
     that have this number of recurrences. (See documentation of `FrozenBagBag`
     for more info.)
-    
+
     It's assumed that the space is not fixed, not degreed and not sliced.
     '''
     cache = _length_of_recurrent_comb_space_cache
@@ -125,7 +125,7 @@ def calculate_length_of_recurrent_comb_space(k, fbb):
         return cache[(k, fbb)]
     except KeyError:
         pass
-    
+
     # This is a 2-phase algorithm, similar to recursion but not really
     # recursion since we don't want to abuse the stack.
     #
@@ -140,7 +140,7 @@ def calculate_length_of_recurrent_comb_space(k, fbb):
     # complex, each FBB will be solved using the solutions of its sub-FBB.
     # Every solution will be stored in the global cache.
 
-    
+
     ### Doing phase one, getting all sub-FBBs: ################################
     #                                                                         #
     levels = []
@@ -154,7 +154,7 @@ def calculate_length_of_recurrent_comb_space(k, fbb):
         current_fbbs = set(itertools.chain(*levels[-1].values()))
     #                                                                         #
     ### Finished doing phase one, getting all sub-FBBs. #######################
-        
+
     ### Doing phase two, solving FBBs from trivial to complex: ################
     #                                                                         #
     for k_, level in enumerate(reversed(levels), (k - len(levels) + 1)):
@@ -168,8 +168,8 @@ def calculate_length_of_recurrent_comb_space(k, fbb):
                 )
     #                                                                         #
     ### Finished doing phase two, solving FBBs from trivial to complex. #######
-    
+
     return cache[(k, fbb)]
-        
-    
-            
+
+
+

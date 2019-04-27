@@ -15,7 +15,7 @@ class Object(object):
 
 
 def test():
-    
+
     class A(object):
         y = 'y'
         def __init__(self):
@@ -23,7 +23,7 @@ def test():
             self.obj = Object()
             self.obj.z = 'z'
             self.uuid = uuid.uuid4()
-            
+
         x_proxy = ProxyProperty('.x')
         y_proxy = ProxyProperty(
             '.y',
@@ -35,16 +35,16 @@ def test():
             'Object-specific UUID.'
         )
         nonexistant_proxy = ProxyProperty('.whatevs')
-        
+
     assert isinstance(A.x_proxy, ProxyProperty)
     assert isinstance(A.y_proxy, ProxyProperty)
     assert isinstance(A.z_proxy, ProxyProperty)
     assert isinstance(A.uuid_proxy, ProxyProperty)
     assert isinstance(A.nonexistant_proxy, ProxyProperty)
-    
+
     a0 = A()
     a1 = A()
-    
+
     assert a0.x_proxy == a1.x_proxy == 'x'
     assert a0.y_proxy == a1.y_proxy == 'y'
     assert a0.z_proxy == a1.z_proxy == 'z'
@@ -55,15 +55,15 @@ def test():
         a0.nonexistant_proxy
     with cute_testing.RaiseAssertor(AttributeError):
         a1.nonexistant_proxy
-        
+
     ### Setting proxy-properties to different values: #########################
     #                                                                         #
     a0.x_proxy = 7
     assert a0.x_proxy == 7 != a1.x_proxy == 'x'
-        
+
     a0.y_proxy = 'meow'
     assert a0.y_proxy == 'meow' != a1.y_proxy == 'y'
-        
+
     a0.z_proxy = [1, 2, 3]
     assert a0.z_proxy == [1, 2, 3] != a1.z_proxy == 'z'
     #                                                                         #
@@ -76,7 +76,7 @@ def test():
 
 def test_dot():
     '''Text that `ProxyProperty` complains when there's no prefixing dot.'''
-    
+
     with cute_testing.RaiseAssertor(text="The `attribute_name` must start "
                                     "with a dot to make it clear it's an "
                                     "attribute. 'y' does not start with a "
@@ -84,5 +84,4 @@ def test_dot():
         class A(object):
             y = 'y'
             x = ProxyProperty('y')
-            
-    
+

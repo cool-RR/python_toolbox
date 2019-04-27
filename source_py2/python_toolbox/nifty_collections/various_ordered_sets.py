@@ -23,7 +23,7 @@ class BaseOrderedSet(collections.Set, collections.Sequence):
     This behaves like a `set` except items have an order. (By default they're
     ordered by insertion order, but that order can be changed.)
     '''
-    
+
     def __init__(self, iterable=()):
         self.__clear()
         for item in iterable:
@@ -35,7 +35,7 @@ class BaseOrderedSet(collections.Set, collections.Sequence):
                 return item
         else:
             raise IndexError
-        
+
     def __len__(self):
         return len(self._map)
 
@@ -65,26 +65,26 @@ class BaseOrderedSet(collections.Set, collections.Sequence):
     def __eq__(self, other):
         return (
             (type(self) is type(other)) and
-            (len(self) == len(other)) and 
+            (len(self) == len(other)) and
             all(itertools.starmap(operator.eq, zip(self, other)))
         )
-    
+
     def __clear(self):
         '''Clear the ordered set, removing all items.'''
-        self._end = [] 
+        self._end = []
         self._end += [None, self._end, self._end]
         self._map = {}
-        
-        
+
+
     def __add(self, key, last=True):
         '''
         Add an element to a set.
-    
+
         This has no effect if the element is already present.
-        
+
         Specify `last=False` to add the item at the start of the ordered set.
         '''
-        
+
         if key not in self._map:
             end = self._end
             if last:
@@ -94,7 +94,7 @@ class BaseOrderedSet(collections.Set, collections.Sequence):
                 first = end[NEXT]
                 first[PREV] = end[NEXT] = self._map[key] = [key, end, first]
 
-                
+
 
 class FrozenOrderedSet(BaseOrderedSet):
     '''
@@ -104,10 +104,10 @@ class FrozenOrderedSet(BaseOrderedSet):
     creation) except items have an order. (By default they're ordered by
     insertion order, but that order can be changed.)
     '''
-    
+
     def __hash__(self):
         return hash((type(self), tuple(self)))
-        
+
 
 
 class OrderedSet(BaseOrderedSet, collections.MutableSet):
@@ -128,12 +128,12 @@ class OrderedSet(BaseOrderedSet, collections.MutableSet):
         # Inefficient implementation until someone cares.
         self.remove(key)
         self.add(key, last=last)
-            
-    
+
+
     def sort(self, key=None, reverse=False):
         '''
         Sort the items according to their keys, changing the order in-place.
-        
+
         The optional `key` argument will be passed to the `sorted` function as
         a key function.
         '''
@@ -141,18 +141,18 @@ class OrderedSet(BaseOrderedSet, collections.MutableSet):
         key_function = \
                    comparison_tools.process_key_function_or_attribute_name(key)
         sorted_members = sorted(tuple(self), key=key_function, reverse=reverse)
-        
+
         self.clear()
         self |= sorted_members
 
-    
+
     def discard(self, key):
         '''
         Remove an element from a set if it is a member.
-    
+
         If the element is not a member, do nothing.
         '''
-        if key in self._map:        
+        if key in self._map:
             key, prev, next = self._map.pop(key)
             prev[NEXT] = next
             next[PREV] = prev
@@ -164,16 +164,16 @@ class OrderedSet(BaseOrderedSet, collections.MutableSet):
         key = next(reversed(self) if last else iter(self))
         self.discard(key)
         return key
-    
+
     def get_frozen(self):
         '''Get a frozen version of this ordered set.'''
         return FrozenOrderedSet(self)
-        
+
 
 
 class EmittingOrderedSet(OrderedSet):
     '''An ordered set that emits to `.emitter` every time it's modified.'''
-    
+
     @misc_tools.limit_positional_arguments(2)
     def __init__(self, iterable=(), emitter=None):
         if emitter:
@@ -185,7 +185,7 @@ class EmittingOrderedSet(OrderedSet):
     def add(self, key, last=True):
         '''
         Add an element to a set.
-    
+
         This has no effect if the element is already present.
         '''
         if key not in self._map:
@@ -195,27 +195,27 @@ class EmittingOrderedSet(OrderedSet):
     def discard(self, key):
         '''
         Remove an element from a set if it is a member.
-        
+
         If the element is not a member, do nothing.
         '''
-        if key in self._map:        
+        if key in self._map:
             super(EmittingOrderedSet, self).discard(key)
             self._emit()
-                
+
     def clear(self):
         '''Clear the ordered set, removing all items.'''
         if self:
             super(EmittingOrderedSet, self).clear()
             self._emit()
-                
+
     def set_emitter(self, emitter):
         '''Set `emitter` to be emitted with on every modification.'''
         self.emitter = emitter
-        
+
     def _emit(self):
         if (self.emitter is not None) and not self._emitter_freezer.frozen:
             self.emitter.emit()
-        
+
     def move_to_end(self, key, last=True):
         '''
         Move an existing element to the end (or start if `last=False`.)
@@ -224,18 +224,17 @@ class EmittingOrderedSet(OrderedSet):
         with self._emitter_freezer:
             self.remove(key)
         self.add(key, last=last)
-    
+
     _emitter_freezer = freezing.FreezerProperty()
-    
+
     def __eq__(self, other):
         return (
             (type(self) is type(other)) and
             (len(self) == len(other)) and
-            (self.emitter is other.emitter) and 
+            (self.emitter is other.emitter) and
             all(itertools.starmap(operator.eq, zip(self, other)))
         )
-      
+
     def get_without_emitter(self):
         '''Get a version of this ordered set without an emitter attached.'''
         return OrderedSet(self)
-        

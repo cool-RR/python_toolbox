@@ -34,7 +34,7 @@ def get_path_of_package(package):
 def get_root_path_of_module(module):
     '''
     Get the root path of a module.
-    
+
     This is the path that should be in `sys.path` for the module to be
     importable. Note that this would give the same answer for
     `my_package.my_sub_package.my_module` as for `my_package`; it only cares
@@ -51,7 +51,7 @@ def get_root_path_of_module(module):
     else:
         # It's a one-file module, not a package.
         result = path_of_root_module.parent.absolute()
-    
+
     assert result in list(map(pathlib.Path.absolute,
                               map(pathlib.Path, sys.path)))
     return result

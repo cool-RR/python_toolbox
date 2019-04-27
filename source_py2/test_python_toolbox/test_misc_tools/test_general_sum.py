@@ -9,6 +9,6 @@ def test():
     assert general_sum((1, 2, 3, 4)) == 10
     assert general_sum(('abra', 'ca', 'dabra')) == 'abracadabra'
     assert general_sum(((0, 1), (0, 2), (0, 3))) == (0, 1, 0, 2, 0, 3)
-    
+
     assert general_sum(((0, 1), (0, 2), (0, 3)), start=(9,)) == (9, 0, 1, 0,
                                                                  2, 0, 3)

@@ -38,54 +38,54 @@ def make_bitmap(lightness=1, saturation=1):
     bitmap = wx.EmptyBitmap(BIG_LENGTH, BIG_LENGTH)
     assert isinstance(bitmap, wx.Bitmap)
     dc = wx.MemoryDC(bitmap)
-    
+
     dc.SetBrush(wx_tools.colors.get_background_brush())
     dc.SetPen(wx.TRANSPARENT_PEN)
     dc.DrawRectangle(-5, -5, BIG_LENGTH + 10, BIG_LENGTH + 10)
-    
-    center_x = center_y = BIG_LENGTH // 2 
+
+    center_x = center_y = BIG_LENGTH // 2
     background_color_rgb = wx_tools.colors.wx_color_to_rgb(
         wx_tools.colors.get_background_color()
     )
-    
+
     for x, y in cute_iter_tools.product(xrange(BIG_LENGTH),
                                         xrange(BIG_LENGTH)):
-        
+
         # This is a big loop so the code is optimized to keep it fast.
-        
+
         rx, ry = (x - center_x), (y - center_y)
         distance = (rx ** 2 + ry ** 2) ** 0.5
-        
+
         if (SMALL_RADIUS - AA_THICKNESS) <= distance <= \
            (BIG_RADIUS + AA_THICKNESS):
-            
+
             angle = -math.atan2(rx, ry)
             hue = (angle + math.pi) / two_pi
             rgb = colorsys.hls_to_rgb(hue, lightness, saturation)
-            
+
             if abs(distance - RADIUS) > HALF_THICKNESS:
-                
+
                 # This pixel requires some anti-aliasing.
-                
+
                 if distance < RADIUS:
                     aa_distance = SMALL_RADIUS - distance
                 else: # distance > RADIUS
                     aa_distance = distance - BIG_RADIUS
-                
+
                 aa_ratio = aa_distance / AA_THICKNESS
-                
+
                 rgb = color_tools.mix_rgb(
                     aa_ratio,
                     background_color_rgb,
                     rgb
                 )
-                
+
             color = wx_tools.colors.rgb_to_wx_color(rgb)
             pen = wx.Pen(color)
             dc.SetPen(pen)
-            
+
             dc.DrawPoint(x, y)
-        
+
     return bitmap
 
 
@@ -118,30 +118,30 @@ class Wheel(CutePanel):
             dashes=[2, 2]
         )
         self._cursor_set_to_bullseye = False
-        
+
         self.bind_event_handlers(Wheel)
-        
+
 
     @property
     def angle(self):
         '''Current angle of hue marker. (In radians.)'''
         return ((self.hue - 0.25) * 2 * math.pi)
-        
-        
+
+
     def update(self):
         '''If hue changed, show new hue.'''
         if self.hue != self.hue_selection_dialog.hue:
             self.hue = self.hue_selection_dialog.hue
             self.Refresh()
-            
-    
+
+
     def nudge_hue(self, direction=1, amount=0.005):
         assert direction in (-1, 1)
         self.hue_selection_dialog.setter(
             (self.hue_selection_dialog.getter() + direction * amount) % 1
         )
-        
-            
+
+
     ###########################################################################
     ### Event handlers: #######################################################
     #                                                                         #
@@ -153,7 +153,7 @@ class Wheel(CutePanel):
         wx_tools.keyboard.Key(wx.WXK_UP, cmd=True):
             lambda self: self.nudge_hue(direction=1, amount=0.02),
         wx_tools.keyboard.Key(wx.WXK_DOWN, cmd=True):
-            lambda self: self.nudge_hue(direction=-1, amount=0.02),    
+            lambda self: self.nudge_hue(direction=-1, amount=0.02),
         # Handling dialog-closing here because wxPython doesn't
         # automatically pass Enter to the dialog itself
         wx_tools.keyboard.Key(wx.WXK_RETURN):
@@ -161,7 +161,7 @@ class Wheel(CutePanel):
         wx_tools.keyboard.Key(wx.WXK_NUMPAD_ENTER):
             lambda self: self.hue_selection_dialog.EndModal(wx.ID_OK)
     }
-            
+
     def _on_key_down(self, event):
         key = wx_tools.keyboard.Key.get_from_key_event(event)
         try:
@@ -171,18 +171,18 @@ class Wheel(CutePanel):
                 event.Skip()
         else:
             return handler(self)
-            
-            
+
+
     def _on_set_focus(self, event):
         event.Skip()
         self.Refresh()
-        
+
 
     def _on_kill_focus(self, event):
         event.Skip()
         self.Refresh()
-        
-        
+
+
     def _on_paint(self, event):
 
         ### Preparing: ########################################################
@@ -190,11 +190,11 @@ class Wheel(CutePanel):
         gc = wx.GraphicsContext.Create(dc)
         assert isinstance(gc, wx.GraphicsContext)
         #######################################################################
-                    
+
         ### Drawing wheel: ####################################################
         dc.DrawBitmap(self.bitmap, 0, 0)
         #######################################################################
-        
+
         ### Drawing indicator for selected hue: ###############################
         gc.SetPen(self._indicator_pen)
         center_x, center_y = BIG_LENGTH // 2, BIG_LENGTH // 2
@@ -202,7 +202,7 @@ class Wheel(CutePanel):
         gc.DrawRectangle(SMALL_RADIUS - 1, -2,
                          (BIG_RADIUS - SMALL_RADIUS) + 1, 4)
         #######################################################################
-        
+
         ### Drawing focus rectangle if has focus: #############################
         if self.has_focus():
             gc.SetPen(self._focus_pen)
@@ -211,45 +211,44 @@ class Wheel(CutePanel):
         #######################################################################
 
         ######################### Finished drawing. ###########################
-        
-                
-        
+
+
+
     def _on_mouse_events(self, event):
-        
-        center_x = center_y = BIG_LENGTH // 2 
+
+        center_x = center_y = BIG_LENGTH // 2
         x, y = event.GetPosition()
         distance = ((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5
         inside_wheel = (SMALL_RADIUS <= distance <= BIG_RADIUS)
 
-        
+
         if inside_wheel and not self._cursor_set_to_bullseye:
-            
+
             self.SetCursor(wx.StockCursor(wx.CURSOR_BULLSEYE))
             self._cursor_set_to_bullseye = True
-            
+
         elif not inside_wheel and not self.HasCapture() and \
              self._cursor_set_to_bullseye:
-            
+
             self.SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
             self._cursor_set_to_bullseye = False
 
         if event.LeftIsDown() or event.LeftDown():
-            self.SetFocus()            
-            
+            self.SetFocus()
+
         if event.LeftIsDown():
             if inside_wheel and not self.HasCapture():
                 self.CaptureMouse()
-                
+
             if self.HasCapture():
                 angle = -math.atan2((x - center_x), (y - center_y))
                 hue = (angle + math.pi) / (math.pi * 2)
                 self.hue_selection_dialog.setter(hue)
-                
-            
+
+
         else: # Left mouse button is up
             if self.HasCapture():
                 self.ReleaseMouse()
     #                                                                         #
     ### Finished event handlers. ##############################################
     ###########################################################################
-                

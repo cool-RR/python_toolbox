@@ -20,5 +20,4 @@ def deepcopy_as_simple_object(thing, memo=None):
     for (name, subthing) in vars(thing).items():
         new_thing.__dict__[name] = copy.deepcopy(subthing, memo)
     return new_thing
-        
-    
+

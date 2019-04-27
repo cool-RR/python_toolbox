@@ -78,7 +78,7 @@ def test_larger_on_remainder():
            [(0, 1, 2, 3), (4, 5, 6, 7, 8)]
     assert partitions(tuple(r), n_partitions=3, larger_on_remainder=True) == \
            [(0, 1, 2), (3, 4, 5), (6, 7, 8)]
-    
+
     assert partitions([1], 1, larger_on_remainder=True) == \
            partitions([1], 2, larger_on_remainder=True) == \
            partitions([1], n_partitions=1, larger_on_remainder=True) == \
@@ -87,11 +87,11 @@ def test_larger_on_remainder():
            partitions([1], 1000, larger_on_remainder=True) == \
            partitions([1], 1000, larger_on_remainder=True, fill_value='meow') == \
            [[1]]
-    
+
     with cute_testing.RaiseAssertor(text='remainder of 1'):
         partitions([1], 1000, larger_on_remainder=True, allow_remainder=False,
                    fill_value='meow')
-        
+
 
 
 def test_fill_value():

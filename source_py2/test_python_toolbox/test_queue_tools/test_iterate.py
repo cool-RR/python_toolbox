@@ -11,7 +11,7 @@ from python_toolbox import queue_tools
 
 
 def test():
-    '''Test `iterate`.'''    
+    '''Test `iterate`.'''
     queue = queue_module.Queue()
     queue.put(1)
     queue.put(2)

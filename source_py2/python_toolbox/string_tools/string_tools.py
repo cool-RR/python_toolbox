@@ -31,24 +31,24 @@ def docstring_trim(docstring):
         trimmed.pop()
     while trimmed and not trimmed[0]:
         trimmed.pop(0)
-        
+
     return '\n'.join(trimmed)
 
 
 def get_n_identical_edge_characters(string, character=None, head=True):
     '''
     Get the number of identical characters at `string`'s head.
-    
+
     For example, the result for 'qqqwe' would be `3`, while the result for
     'meow' will be `1`.
-    
+
     Specify `character` to only consider that character; if a different
     character is found at the head, `0` will be returned.
-    
+
     Specify `head=False` to search the tail instead of the head.
     '''
     from python_toolbox import cute_iter_tools
-    
+
     if not string:
         return 0
     found_character, character_iterator = next(
@@ -58,14 +58,13 @@ def get_n_identical_edge_characters(string, character=None, head=True):
         assert isinstance(character, str) and len(character) == 1
         return 0
     return cute_iter_tools.get_length(character_iterator)
-    
+
 
 def rreplace(s, old, new, count=None):
     '''
     Replace instances of `old` in `s` with `new`, starting from the right.
-    
+
     This function is to `str.replace` what `str.rsplit` is to `str.split`.
     '''
     return new.join(s.rsplit(old, count) if count is not None
                     else s.rsplit(old))
-    

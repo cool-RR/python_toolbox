@@ -15,9 +15,9 @@ class _VariationRemovingMixin:
         lambda self: PermSpace(len(self.sequence)),
         doc='''A purified version of this `PermSpace`.'''
     )
-    
+
     ###########################################################################
-    
+
     @caching.CachedProperty
     def unrapplied(self):
         '''A version of this `PermSpace` without a custom range.'''
@@ -31,13 +31,13 @@ class _VariationRemovingMixin:
             )
         return PermSpace(
             self.sequence_length, n_elements=self.n_elements,
-            domain=self.domain, 
+            domain=self.domain,
             fixed_map={key: self.sequence.index(value) for
                        key, value in self.fixed_map.items()},
             degrees=self.degrees, slice_=self.canonical_slice,
             is_combination=self.is_combination, perm_type=self.perm_type
         )
-    
+
     @caching.CachedProperty
     def unrecurrented(self):
         '''A version of this `PermSpace` with no recurrences.'''
@@ -57,15 +57,15 @@ class _VariationRemovingMixin:
                 "`PermSpace`, because we need to use the "
                 "`UnrecurrentedPerm` type to unrecurrent it."
             )
-        
+
         sequence_copy = list(self.sequence)
         processed_fixed_map = {}
         for key, value in self.fixed_map:
             index = sequence_copy.index(value)
             sequence_copy[value] = misc.MISSING_ELEMENT
             processed_fixed_map[key] = (index, value)
-            
-            
+
+
         return PermSpace(
             enumerate(self.sequence), n_elements=self.n_elements,
             domain=self.domain, fixed_map=processed_fixed_map,
@@ -73,7 +73,7 @@ class _VariationRemovingMixin:
             perm_type=UnrecurrentedComb if self.is_combination
                                                          else UnrecurrentedPerm
         )
-      
+
 
     @caching.CachedProperty
     def unpartialled(self):
@@ -91,7 +91,7 @@ class _VariationRemovingMixin:
                 "non-partialled, because we'll need to extend the domain with "
                 "more items and we don't know which to use."
             )
-            
+
         return PermSpace(
             self.sequence, n_elements=self.sequence_length,
             fixed_map=self.fixed_map, degrees=self.degrees,
@@ -130,7 +130,7 @@ class _VariationRemovingMixin:
         ),
         doc='''A version of this `PermSpace` without a custom domain.'''
     )
-      
+
     @caching.CachedProperty
     def unfixed(self):
         '''An unfixed version of this `PermSpace`.'''
@@ -142,7 +142,7 @@ class _VariationRemovingMixin:
             domain=self.domain, fixed_map=None, degrees=self.degrees,
             is_combination=self.is_combination, perm_type=self.perm_type
         )
-    
+
     @caching.CachedProperty
     def undegreed(self):
         '''An undegreed version of this `PermSpace`.'''
@@ -154,20 +154,20 @@ class _VariationRemovingMixin:
             fixed_map=self.fixed_map, degrees=None,
             is_combination=self.is_combination, perm_type=self.perm_type
         )
-    
+
     unsliced = caching.CachedProperty(
         lambda self: PermSpace(
             self.sequence, n_elements=self.n_elements, domain=self.domain,
-            fixed_map=self.fixed_map, is_combination=self.is_combination, 
+            fixed_map=self.fixed_map, is_combination=self.is_combination,
             degrees=self.degrees, slice_=None, perm_type=self.perm_type
         ),
         doc='''An unsliced version of this `PermSpace`.'''
     )
-        
+
     untyped = caching.CachedProperty(
         lambda self: PermSpace(
             self.sequence, n_elements=self.n_elements, domain=self.domain,
-            fixed_map=self.fixed_map, is_combination=self.is_combination, 
+            fixed_map=self.fixed_map, is_combination=self.is_combination,
             degrees=self.degrees, slice_=self.slice_,
             perm_type=self.default_perm_type
         ),
@@ -176,20 +176,20 @@ class _VariationRemovingMixin:
 
     ###########################################################################
     ###########################################################################
-    
+
     # More exotic variation removals below:
-    
+
     _just_fixed = caching.CachedProperty(
         lambda self: self._get_just_fixed(),
         """A version of this perm space without any variations except fixed."""
     )
-    
+
     def _get_just_fixed(self):
         # This gets overridden in `__init__`.
         raise RuntimeError
-        
-      
+
+
     _nominal_perm_space_of_perms = caching.CachedProperty(
-        lambda self: self.unsliced.undegreed.unfixed, 
+        lambda self: self.unsliced.undegreed.unfixed,
     )
-        
+

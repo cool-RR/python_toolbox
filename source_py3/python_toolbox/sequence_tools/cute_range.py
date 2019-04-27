@@ -21,28 +21,28 @@ def parse_range_args(*args):
 
     if len(args) == 0:
         return (0, infinity, 1)
-    
+
     elif len(args) == 1:
         (stop,) = args
         if stop == -infinity: raise TypeError
         elif stop is None: stop = infinity
         return (0, stop, 1)
-    
+
     elif len(args) == 2:
         (start, stop) = args
-        
+
         if start in infinities: raise TypeError
         elif start is None: start = 0
 
         if stop == -infinity: raise TypeError
         elif stop is None: stop = infinity
-        
+
         return (start, stop, 1)
-    
+
     else:
         assert len(args) == 3
         (start, stop, step) = args
-        
+
         if step == 0: raise TypeError
 
         if start in infinities:
@@ -56,23 +56,23 @@ def parse_range_args(*args):
                 "Can't have `step=%s` because then what would the second item "
                 "be, %s? No can do." % (step, step)
             )
-            
+
         elif start is None: start = 0
-        
+
         elif step > 0:
-                
+
             if stop == -infinity: raise TypeError
             elif stop is None: stop = infinity
-            
+
         else:
             assert step < 0
-        
+
             if stop == infinity: raise TypeError
             elif stop is None: stop = (-infinity)
-            
-            
+
+
         return (start, stop, step)
-    
+
 
 def _is_integral_or_none(thing):
     return isinstance(thing, (numbers.Integral, NoneType))
@@ -82,59 +82,59 @@ def _is_integral_or_none(thing):
 class CuteRange(CuteSequence):
     '''
     Improved version of Python's `range` that has extra features.
-    
+
     `CuteRange` is like Python's built-in `range`, except (1) it's cute and (2)
     it's completely different. LOL, just kidding.
-    
+
     `CuteRange` takes `start`, `stop` and `step` arguments just like `range`,
     but it allows you to use floating-point numbers (or decimals), and it
     allows you to use infinite numbers to produce infinite ranges.
-    
+
     Obviously, `CuteRange` allows iteration, index access, searching for a
     number's index number, checking whether a number is in the range or not,
     and slicing.
-    
+
     Examples:
-    
+
         `CuteRange(float('inf'))` is an infinite range starting at zero and
         never ending.
-        
+
         `CuteRange(7, float('inf'))` is an infinite range starting at 7 and
         never ending. (Like `itertools.count(7)` except it has all the
         amenities of a sequence, you can get items using list notation, you can
         slice it, you can get index numbers of items, etc.)
-        
+
         `CuteRange(-1.6, 7.3)` is the finite range of numbers `(-1.6, -0.6,
         0.4, 1.4, 2.4, 3.4, 4.4, 5.4, 6.4)`.
-        
+
         `CuteRange(10.4, -float('inf'), -7.1)` is the infinite range of numbers
         `(10.4, 3.3, -3.8, -10.9, -18.0, -25.1, ... )`.
 
     '''
     def __init__(self, *args):
         self.start, self.stop, self.step = parse_range_args(*args)
-        
+
     _reduced = property(lambda self: (type(self), (self.start, self.stop,
                                                    self.step)))
-    
+
     __hash__ = lambda self: hash(self._reduced)
-        
+
     __eq__ = lambda self, other: (type(self) == type(other) and
                                   (self._reduced == other._reduced))
-    
+
     distance_to_cover = caching.CachedProperty(lambda self:
                                                         self.stop - self.start)
-    
+
     @caching.CachedProperty
     def length(self):
         '''
         The length of the `CuteRange`.
-        
+
         We're using a property `.length` rather than the built-in `__len__`
         because `__len__` can't handle infinite values or floats.
         '''
         from python_toolbox import math_tools
-        
+
         if math_tools.get_sign(self.distance_to_cover) != \
                                                 math_tools.get_sign(self.step):
             return 0
@@ -144,25 +144,25 @@ class CuteRange(CuteSequence):
             )
             raw_length += (remainder != 0)
             return raw_length
-    
+
     __repr__ = lambda self: self._repr
-        
-        
+
+
     @caching.CachedProperty
     def _repr(self):
         return '%s(%s%s%s)' % (
             type(self).__name__,
             '%s, ' % self.start,
-            '%s' % self.stop, 
+            '%s' % self.stop,
             (', %s' % self.step) if self.step != 1 else '',
         )
-        
-        
+
+
     @caching.CachedProperty
     def short_repr(self):
         '''
         A shorter representation of the `CuteRange`.
-        
+
         This is different than `repr(cute_range)` only in cases where `step=1`.
         In these cases, while `repr(cute_range)` would be something like
         `CuteRange(7, 20)`, `cute_range.short_repr` would be `7..20`.
@@ -171,8 +171,8 @@ class CuteRange(CuteSequence):
             return self._repr
         else:
             return '%s..%s' % (self.start, self.stop - 1)
-        
-    
+
+
     def __getitem__(self, i, allow_out_of_range=False):
         from python_toolbox import sequence_tools
         if isinstance(i, numbers.Integral):
@@ -208,11 +208,11 @@ class CuteRange(CuteSequence):
             )
         else:
             raise TypeError
-        
+
     def __len__(self):
         # Sadly Python doesn't allow infinity or floats here.
         return self.length if isinstance(self.length, numbers.Integral) else 0
-        
+
     def index(self, i, start=-infinity, stop=infinity):
         '''Get the index number of `i` in this `CuteRange`.'''
         from python_toolbox import math_tools
@@ -233,6 +233,5 @@ class CuteRange(CuteSequence):
 
             else:
                 raise ValueError
-            
+
     is_infinite = caching.CachedProperty(lambda self: self.length == infinity)
-        

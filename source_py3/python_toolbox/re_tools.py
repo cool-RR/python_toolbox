@@ -7,7 +7,7 @@ import re
 def searchall(pattern, string, flags=0):
     '''
     Return all the substrings of `string` that match `pattern`.
-    
+
     Note: Currently returns only non-overlapping matches.
     '''
     if isinstance(pattern, str):
@@ -15,7 +15,7 @@ def searchall(pattern, string, flags=0):
     matches = []
     start = 0
     end = len(string)
-    
+
     while True:
         match = pattern.search(string, start, end)
         if match:
@@ -23,6 +23,5 @@ def searchall(pattern, string, flags=0):
             start = match.end()
         else:
             break
-    
+
     return matches
-        

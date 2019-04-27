@@ -14,7 +14,7 @@ except AttributeError:
     # No `getcallargs` on Python 2.6
     def getcallargs(func, *positional, **named):
         """Get the mapping of arguments to values.
-    
+
         A dict is returned, with keys the function argument names (including the
         names of the * and ** arguments, if any), and values the respective bound
         values from 'positional' and 'named'."""
@@ -22,7 +22,7 @@ except AttributeError:
         args, varargs, varkw, defaults = getargspec(func)
         f_name = func.__name__
         arg2value = {}
-    
+
         # The following closures are basically because of tuple parameter unpacking.
         assigned_tuple_params = []
         def assign(arg, value):
@@ -101,7 +101,7 @@ except AttributeError:
                 f_name, 'at least' if defaults else 'exactly', num_required,
                 'arguments' if num_required > 1 else 'argument', num_total))
         return arg2value
-    
+
 
 ###############################################################################
 

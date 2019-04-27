@@ -15,15 +15,15 @@ from .temp_value_setter import TempValueSetter
 class TempRecursionLimitSetter(TempValueSetter):
     '''
     Context manager for temporarily changing the recurstion limit.
-    
+
     The temporary recursion limit comes into effect before the suite starts,
     and the original recursion limit returns after the suite finishes.
     '''
-    
+
     def __init__(self, recursion_limit):
         '''
         Construct the `TempRecursionLimitSetter`.
-        
+
         `recursion_limit` is the temporary recursion limit to use.
         '''
         assert isinstance(recursion_limit, int)

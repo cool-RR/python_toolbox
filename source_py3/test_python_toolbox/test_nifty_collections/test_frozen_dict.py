@@ -26,11 +26,11 @@ def test():
     assert {frozen_dict, frozen_dict} == {frozen_dict}
     assert {frozen_dict: frozen_dict} == {frozen_dict: frozen_dict}
     assert isinstance(hash(frozen_dict), int)
-    
+
     assert frozen_dict.copy({'meow': 'frrr'}) == \
            frozen_dict.copy(meow='frrr') == \
            FrozenDict({'1': 'a', '2': 'b', '3': 'c', 'meow': 'frrr',})
-    
+
     assert repr(frozen_dict).startswith('FrozenDict(')
-    
+
     assert pickle.loads(pickle.dumps(frozen_dict)) == frozen_dict

@@ -25,27 +25,27 @@ resources_package = __resources_package.__name__
 
 def test_zip():
     '''Test `exists` works on zip-imported modules.'''
-    
+
     assert not exists('zip_imported_module_bla_bla')
-    
+
     zip_string = pkg_resources.resource_string(resources_package,
                                                'archive_with_module.zip')
-    
+
     with temp_file_tools.create_temp_folder(
                                  prefix='test_python_toolbox_') as temp_folder:
 
         temp_zip_path = temp_folder / 'archive_with_module.zip'
-        
+
         with temp_zip_path.open('wb') as temp_zip_file:
-            temp_zip_file.write(zip_string)            
-                
+            temp_zip_file.write(zip_string)
+
         assert not exists('zip_imported_module_bla_bla')
-        
+
         with sys_tools.TempSysPathAdder(temp_zip_path):
             assert exists('zip_imported_module_bla_bla')
             import zip_imported_module_bla_bla
             assert zip_imported_module_bla_bla.__doc__ == \
                    ('Module for testing `import_tools.exists` on zip-archived '
                     'modules.')
-            
-            
+
+

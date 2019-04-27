@@ -12,19 +12,19 @@ class _FixedMapManagingMixin(object):
     '''
     Mixin for `PermSpace` to manage the `fixed_map`. (For fixed perm spaces.)
     '''
-    
+
     @caching.CachedProperty
     def fixed_indices(self):
         '''
         The indices of any fixed items in this `PermSpace`.
-        
+
         This'll be different from `self.fixed_map.keys()` for dapplied perm
         spaces.
         '''
         if not self.fixed_map:
             return ()
         return tuple(map(self.domain.index, self.fixed_map))
-    
+
     free_indices = caching.CachedProperty(
         lambda self: tuple(item for item in range(self.sequence_length)
                            if item not in self._undapplied_fixed_map.keys()),
@@ -34,9 +34,9 @@ class _FixedMapManagingMixin(object):
         lambda self: tuple(item for item in self.domain
                            if item not in self.fixed_map.keys()),
         doc='''Indices (possibly from domain) of free items.'''
-        
+
     )
-    
+
     @caching.CachedProperty
     def free_values(self):
         '''Items that can change between permutations.'''
@@ -53,29 +53,29 @@ class _FixedMapManagingMixin(object):
             else:
                 free_values.append(item)
         return tuple(free_values)
-    
+
     @caching.CachedProperty
     def _n_cycles_in_fixed_items_of_just_fixed(self):
         '''
         The number of cycles in the fixed items of this `PermSpace`.
-        
+
         This is used for degree calculations.
         '''
         unvisited_items = set(self._undapplied_unrapplied_fixed_map)
         n_cycles = 0
         while unvisited_items:
             starting_item = current_item = next(iter(unvisited_items))
-            
+
             while current_item in unvisited_items:
                 unvisited_items.remove(current_item)
                 current_item = \
                             self._undapplied_unrapplied_fixed_map[current_item]
-                
+
             if current_item == starting_item:
                 n_cycles += 1
-                
+
         return n_cycles
-    
+
     @caching.CachedProperty
     def _undapplied_fixed_map(self):
         if self.is_dapplied:
@@ -83,7 +83,7 @@ class _FixedMapManagingMixin(object):
                     in self.fixed_map.items())
         else:
             return self.fixed_map
-            
+
     @caching.CachedProperty
     def _undapplied_unrapplied_fixed_map(self):
         if self.is_dapplied or self.is_rapplied:
@@ -91,13 +91,13 @@ class _FixedMapManagingMixin(object):
                     for key, value in self.fixed_map.items())
         else:
             return self.fixed_map
-        
-    
+
+
     @caching.CachedProperty
     def _free_values_purified_perm_space(self):
         '''
         A purified `PermSpace` of the free values in the `PermSpace`.
-        
+
         Non-fixed permutation spaces have this set to `self` in the
         constructor.
         '''
@@ -108,8 +108,8 @@ class _FixedMapManagingMixin(object):
             )
         else:
             return self.purified
-    
-    
+
+
     _free_values_unsliced_perm_space = caching.CachedProperty(
         lambda self: self._free_values_purified_perm_space.get_degreed(
             (degree - self._n_cycles_in_fixed_items_of_just_fixed
@@ -118,4 +118,4 @@ class _FixedMapManagingMixin(object):
             get_dapplied(self.free_keys).
                           get_partialled(self.n_elements - len(self.fixed_map)),
     )
-    
+

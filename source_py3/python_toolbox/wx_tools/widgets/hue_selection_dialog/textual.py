@@ -32,71 +32,70 @@ class Textual(CutePanel):
         self.SetHelpText(
             u'Set the hue in angles (0%s-359%s).' % (unichr(176), unichr(176))
         )
-        
+
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue
-        
+
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
-        
+
         self.hue_static_text = wx.StaticText(self, label='&Hue:')
-        
+
         self.main_v_sizer.Add(self.hue_static_text, 0,
                               wx.ALIGN_LEFT | wx.BOTTOM, border=5)
-        
+
         self.h_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        
+
         self.main_v_sizer.Add(self.h_sizer, 0)
-        
+
         self.spin_ctrl = wx.SpinCtrl(self, min=0, max=359,
                                      initial=ratio_to_round_degrees(self.hue),
                                      size=(70, -1), style=wx.SP_WRAP)
         if wx_tools.is_mac:
             self.spin_ctrl.SetValue(ratio_to_round_degrees(self.hue))
-        
+
         self.h_sizer.Add(self.spin_ctrl, 0)
-        
+
         self.degree_static_text = wx.StaticText(self, label=unichr(176))
-        
+
         self.h_sizer.Add(self.degree_static_text, 0)
-        
+
         self.SetSizerAndFit(self.main_v_sizer)
-        
+
         self.Bind(wx.EVT_SPINCTRL, self._on_spin, source=self.spin_ctrl)
         self.Bind(wx.EVT_TEXT, self._on_text, source=self.spin_ctrl)
-        
-        
+
+
     value_freezer = freezing.FreezerProperty()
-                    
-        
+
+
     def update(self):
         '''Update to show the new hue.'''
         if not self.value_freezer.frozen and \
            self.hue != self.hue_selection_dialog.hue:
             self.hue = self.hue_selection_dialog.hue
             self.spin_ctrl.SetValue(ratio_to_round_degrees(self.hue))
-    
 
-            
+
+
     def _on_spin(self, event):
         self.hue_selection_dialog.setter(
             degrees_to_ratio(self.spin_ctrl.Value)
         )
 
-        
+
     def _on_text(self, event):
         with self.value_freezer:
             self.hue_selection_dialog.setter(
                 degrees_to_ratio(self.spin_ctrl.Value)
             )
 
-            
+
     def set_focus_on_spin_ctrl_and_select_all(self):
         '''
-        
-        
+
+
         The "select all" part works only on Windows and generic `wx.SpinCtrl`
         implementations.
         '''
         self.spin_ctrl.SetFocus()
         self.spin_ctrl.SetSelection(-1, -1)
-        

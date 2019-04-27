@@ -14,23 +14,23 @@ def test_chain_spaces():
     for i, item in enumerate(chain_space):
         assert chain_space[i] == item
         assert chain_space.index(item) == i
-        
+
     assert chain_space == chain_space
-    
+
     assert 0 in chain_space
     assert 'm' in chain_space
     assert [] not in chain_space
-    
+
     with cute_testing.RaiseAssertor(ValueError): chain_space.index('nope')
     with cute_testing.RaiseAssertor(IndexError): chain_space[-11]
     with cute_testing.RaiseAssertor(IndexError): chain_space[-110]
     with cute_testing.RaiseAssertor(IndexError): chain_space[11]
     with cute_testing.RaiseAssertor(IndexError): chain_space[1100]
-    
+
     assert chain_space[-1] == 20
     assert chain_space[-2] == 21
     assert chain_space[-10] == 0
-    
+
     assert not ChainSpace(())
-    
+
 

@@ -11,4 +11,3 @@ def test():
                                                1)
     assert general_product((2, 3), start=(0, 1)) == (0, 1, 0, 1, 0, 1, 0, 1, 0,
                                                      1, 0, 1)
-    

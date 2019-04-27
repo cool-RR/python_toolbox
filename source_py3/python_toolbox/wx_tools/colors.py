@@ -27,14 +27,14 @@ is_win = (wx.Platform == '__WXMSW__')
 
 @caching.cache()
 def get_foreground_color():
-    '''Get the default foreground color.'''    
+    '''Get the default foreground color.'''
     return wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUTEXT)
 
 
 @caching.cache()
 def get_background_color():
     '''Get the default background color'''
-    
+
     if is_win:
         # return wx.Colour(212, 208, 200)
         return wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR)
@@ -44,14 +44,14 @@ def get_background_color():
         # Until `SYS_COLOUR_*` get their act togother, we're using Windows
         # colors for Linux.
         return wx.Colour(212, 208, 200)
-    
+
     else:
         warnings.warn("Unidentified platform! It's neither '__WXGTK__', "
                       "'__WXMAC__' nor '__WXMSW__'. Things might not work "
                       "properly.")
         return wx.Colour(212, 208, 200)
-    
-    
+
+
 @caching.cache()
 def get_background_brush():
     '''Get the default background brush.'''

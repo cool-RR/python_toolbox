@@ -25,7 +25,7 @@ def get_open_grab():
     if hotspot is not None:
         image.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_X, hotspot[0])
         image.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_Y, hotspot[1])
-        
+
     cursor = wx.CursorFromImage(image)
     return cursor
 
@@ -42,6 +42,6 @@ def get_closed_grab():
     if hotspot is not None:
         image.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_X, hotspot[0])
         image.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_Y, hotspot[1])
-        
+
     cursor = wx.CursorFromImage(image)
     return cursor

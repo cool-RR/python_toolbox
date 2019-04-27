@@ -10,7 +10,7 @@ _catalog = []
 def string_to_integer(string):
     '''
     If the string isn't cataloged already, catalog it.
-    
+
     In any case, returns the number associated with the string.
     '''
     global _catalog

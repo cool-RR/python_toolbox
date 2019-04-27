@@ -9,12 +9,12 @@ from .context_manager_type_type import ContextManagerTypeType
 class ContextManagerType(abc.ABCMeta, metaclass=ContextManagerTypeType):
     '''
     Metaclass for `ContextManager`.
-    
+
     Use this directly as a decorator to create a `ContextManager` from a
     generator function.
-    
+
     Example:
-    
+
         @ContextManagerType
         def MyContextManager():
             # preparation
@@ -22,10 +22,10 @@ class ContextManagerType(abc.ABCMeta, metaclass=ContextManagerTypeType):
                 yield
             finally:
                 pass # cleanup
-                
+
     The resulting context manager could be called either with the `with`
     keyword or by using it as a decorator to a function.
-                
+
     For more details, see documentation of the containing module,
     `python_toolbox.context_manager`.
     '''
@@ -33,7 +33,7 @@ class ContextManagerType(abc.ABCMeta, metaclass=ContextManagerTypeType):
     def __new__(mcls, name, bases, namespace):
         '''
         Create either `ContextManager` itself or a subclass of it.
-        
+
         For subclasses of `ContextManager`, if a `manage_context` method is
         available, we will use `__enter__` and `__exit__` that will use the
         generator returned by `manage_context`.
@@ -59,14 +59,14 @@ class ContextManagerType(abc.ABCMeta, metaclass=ContextManagerTypeType):
                 ContextManager._ContextManager__enter_using_manage_context
             namespace['__exit__'] = \
                 ContextManager._ContextManager__exit_using_manage_context
-            
+
         result_class = super().__new__(mcls, name, bases, namespace)
-        
-        
+
+
         if (not result_class.__is_the_base_context_manager_class()) and \
            ('manage_context' not in namespace) and \
            hasattr(result_class, 'manage_context'):
-            
+
             # What this `if` just checked for is: Is this a class that doesn't
             # define `manage_context`, but whose base context manager class
             # *does* define `manage_context`?
@@ -78,24 +78,24 @@ class ContextManagerType(abc.ABCMeta, metaclass=ContextManagerTypeType):
             # for this class to define just one of these methods, say
             # `__enter__`, because then it will not have an `__exit__` to work
             # with.
-            
+
             from .context_manager import ContextManager
-            
+
             our_enter_uses_manage_context = (
                 result_class.__enter__ == ContextManager.\
                                     _ContextManager__enter_using_manage_context
             )
-            
+
             our_exit_uses_manage_context = (
                 result_class.__exit__ == ContextManager.\
                                      _ContextManager__exit_using_manage_context
             )
-            
+
             if our_exit_uses_manage_context and not \
                our_enter_uses_manage_context:
-                
+
                 assert '__enter__' in namespace
-            
+
                 raise Exception("The %s class defines an `__enter__` method, "
                                 "but not an `__exit__` method; we cannot use "
                                 "the `__exit__` method of its base context "
@@ -103,36 +103,35 @@ class ContextManagerType(abc.ABCMeta, metaclass=ContextManagerTypeType):
                                 "`manage_context` generator function." %
                                 result_class)
 
-            
+
             if our_enter_uses_manage_context and not \
                our_exit_uses_manage_context:
-                
+
                 assert '__exit__' in namespace
-                
+
                 raise Exception("The %s class defines an `__exit__` method, "
                                 "but not an `__enter__` method; we cannot use "
                                 "the `__enter__` method of its base context "
                                 "manager class because it uses the "
                                 "`manage_context` generator function." %
                                 result_class)
-            
+
         return result_class
 
-    
+
     def __is_the_base_context_manager_class(cls):
         '''
         Return whether `cls` is `ContextManager`.
-        
+
         It's an ugly method, but unfortunately it's necessary because at one
         point we want to test if a class is `ContextManager` before
         `ContextManager` is defined in this module.
         '''
-        
+
         return (
             (cls.__name__ == 'ContextManager') and
             (cls.__module__ == 'python_toolbox.context_management.'
                                'context_manager') and
             (cls.mro() == [cls, object])
         )
-    
-    
+

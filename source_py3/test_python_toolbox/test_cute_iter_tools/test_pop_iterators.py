@@ -9,19 +9,18 @@ from python_toolbox.cute_iter_tools import (iterate_pop, iterate_popitem,
 
 
 def test():
-    
+
     deque = collections.deque(range(10))
     assert tuple(iterate_pop(deque)) == tuple(range(9, -1, -1))
     assert not deque
-    
+
     deque = collections.deque(range(10))
     assert tuple(iterate_popleft(deque)) == tuple(range(10))
     assert not deque
-    
+
     dict_ = {1: 2, 3: 4, 5: 6,}
     assert dict(iterate_popitem(dict_)) == {1: 2, 3: 4, 5: 6,}
     assert not dict_
-    
+
     lazy_tuple = iterate_pop(list(range(5)), lazy_tuple=True)
     assert isinstance(lazy_tuple, nifty_collections.LazyTuple)
-    

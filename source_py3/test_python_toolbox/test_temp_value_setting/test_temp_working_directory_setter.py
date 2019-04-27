@@ -27,23 +27,23 @@ def test():
                                  prefix='test_python_toolbox_') as temp_folder:
         old_cwd = os.getcwd()
         with TempWorkingDirectorySetter(temp_folder):
-            
+
             # Note that on Mac OS, the working dir will be phrased differently,
             # so we can't do `assert os.getcwd() == temp_dir`. Instead we'll
             # create a small file and check we can access it:
-            
+
             with pathlib.Path('just_a_file').open('w') as my_file:
                 my_file.write(u'One two three.')
-            
+
             with pathlib.Path('just_a_file').open('r') as my_file:
                 assert my_file.read() == 'One two three.'
-        
+
         with (temp_folder / 'just_a_file').open('r') as my_file:
             assert my_file.read() == 'One two three.'
-        
+
         assert os.getcwd() == old_cwd
-    
-    
+
+
 def test_exception():
     '''Test `TempWorkingDirectorySetter` recovering from exception in suite.'''
     # Not using `assert_raises` here because getting the `with` suite in there
@@ -53,32 +53,32 @@ def test_exception():
         old_cwd = os.getcwd()
         try:
             with TempWorkingDirectorySetter(temp_folder):
-                
+
                 # Note that on Mac OS, the working dir will be phrased
                 # differently, so we can't do `assert os.getcwd() ==
                 # temp_folder`. Instead we'll create a small file and check we
                 # can access it:
-                
+
                 with pathlib.Path('just_a_file').open('w') as my_file:
                     my_file.write(u'One two three.')
-                
+
                 with pathlib.Path('just_a_file').open('r') as my_file:
                     assert my_file.read() == 'One two three.'
-                
+
                 raise MyException
-            
+
         except MyException:
 
             with (temp_folder / 'just_a_file').open('r') as my_file:
                 assert my_file.read() == 'One two three.'
-                
+
         else:
             raise Exception
-        
+
         with (temp_folder / 'just_a_file').open('r') as my_file:
             assert my_file.read() == 'One two three.'
 
-        
+
 def test_as_decorator():
     '''Test `TempWorkingDirectorySetter` used as a decorator.'''
     with temp_file_tools.create_temp_folder(
@@ -89,19 +89,18 @@ def test_as_decorator():
             # Note that on Mac OS, the working dir will be phrased differently,
             # so we can't do `assert os.getcwd() == temp_folder`. Instead we'll
             # create a small file and check we can access it:
-            
+
             with pathlib.Path('just_a_file').open('w') as my_file:
                 my_file.write(u'One two three.')
-            
+
             with pathlib.Path('just_a_file').open('r') as my_file:
                 assert my_file.read() == 'One two three.'
-                
+
         f()
-        
+
         cute_testing.assert_polite_wrapper(f)
-        
+
         with (temp_folder / 'just_a_file').open('r') as my_file:
             assert my_file.read() == 'One two three.'
-        
+
         assert os.getcwd() == old_cwd
-        

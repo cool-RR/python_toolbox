@@ -21,7 +21,7 @@ null_callback()
 
 
 class GenericDictTest(unittest2.TestCase):
-    
+
     def test_constructor(self):
         # calling built-in types without argument must return empty
         self.assertEqual(
@@ -33,7 +33,7 @@ class GenericDictTest(unittest2.TestCase):
             CuteSleekValueDict(null_callback)
         )
 
-        
+
     def test_bool(self):
         self.assertIs(
             not CuteSleekValueDict(null_callback),
@@ -46,7 +46,7 @@ class GenericDictTest(unittest2.TestCase):
             True
         )
 
-        
+
     def test_keys(self):
         d = CuteSleekValueDict(null_callback)
         self.assertEqual(list(d.keys()), [])
@@ -57,7 +57,7 @@ class GenericDictTest(unittest2.TestCase):
 
         self.assertRaises(TypeError, d.keys, None)
 
-        
+
     def test_values(self):
         d = CuteSleekValueDict(null_callback)
         self.assertEqual(list(d.values()), [])
@@ -66,7 +66,7 @@ class GenericDictTest(unittest2.TestCase):
 
         self.assertRaises(TypeError, d.values, None)
 
-        
+
     def test_items(self):
         d = CuteSleekValueDict(null_callback)
         self.assertEqual(list(d.items()), [])
@@ -76,7 +76,7 @@ class GenericDictTest(unittest2.TestCase):
 
         self.assertRaises(TypeError, d.items, None)
 
-        
+
     def test_has_key(self):
         d = CuteSleekValueDict(null_callback)
         self.assertFalse('a' in d)
@@ -87,7 +87,7 @@ class GenericDictTest(unittest2.TestCase):
 
         self.assertRaises(TypeError, d.has_key)
 
-        
+
     def test_contains(self):
         d = CuteSleekValueDict(null_callback)
         self.assertNotIn('a', d)
@@ -100,14 +100,14 @@ class GenericDictTest(unittest2.TestCase):
 
         self.assertRaises(TypeError, d.__contains__)
 
-        
+
     def test_len(self):
         d = CuteSleekValueDict(null_callback)
         self.assertEqual(len(d), 0)
         d = CuteSleekValueDict(null_callback, {'a': 1, 'b': 2})
         self.assertEqual(len(d), 2)
 
-        
+
     def test_getitem(self):
         d = CuteSleekValueDict(null_callback, {'a': 1, 'b': 2})
         self.assertEqual(d['a'], 1)
@@ -149,7 +149,7 @@ class GenericDictTest(unittest2.TestCase):
         x.fail = True
         self.assertRaises(Exc, d.__getitem__, x)
 
-        
+
     def test_clear(self):
         d = CuteSleekValueDict(null_callback, {1: 1, 2: 2, 3: 3})
         d.clear()
@@ -157,7 +157,7 @@ class GenericDictTest(unittest2.TestCase):
 
         self.assertRaises(TypeError, d.clear, None)
 
-        
+
     def test_update(self):
         d = CuteSleekValueDict(null_callback)
         d.update(CuteSleekValueDict(null_callback, {1: 100}))
@@ -186,7 +186,7 @@ class GenericDictTest(unittest2.TestCase):
                 return list(self.d.keys())
             def __getitem__(self, i):
                 return self.d[i]
-            
+
         d.clear()
         d.update(SimpleUserDict())
         self.assertEqual(
@@ -253,7 +253,7 @@ class GenericDictTest(unittest2.TestCase):
             [(1, 2, 3)]
         )
 
-        
+
     def test_fromkeys(self):
         self.assertEqual(
             CuteSleekValueDict.fromkeys('abc'),
@@ -261,7 +261,7 @@ class GenericDictTest(unittest2.TestCase):
                                      {'a': None, 'b': None, 'c': None}
                                      )
         )
-        
+
         d = CuteSleekValueDict(null_callback)
         self.assertIsNot(d.fromkeys('abc'), d)
         self.assertEqual(
@@ -277,14 +277,14 @@ class GenericDictTest(unittest2.TestCase):
             d.fromkeys([]),
             CuteSleekValueDict(null_callback)
         )
-        
+
         def g():
             yield 1
         self.assertEqual(
             d.fromkeys(g()),
             CuteSleekValueDict(null_callback, {1: None})
         )
-        
+
         self.assertRaises(
             TypeError,
             CuteSleekValueDict(null_callback).fromkeys,
@@ -318,7 +318,7 @@ class GenericDictTest(unittest2.TestCase):
             #CuteSleekValueDict(null_callback, {'a': None, 'b': None})
         #)
         #self.assertIsInstance(
-            #ud,            
+            #ud,
             #UserDict.UserDict
         #)
         self.assertRaises(TypeError, CuteSleekValueDict.fromkeys)
@@ -351,7 +351,7 @@ class GenericDictTest(unittest2.TestCase):
             CuteSleekValueDict.fromkeys(d, 0),
             CuteSleekValueDict(null_callback, list(zip(list(range(6)), [0]*6))))
 
-        
+
     def test_copy(self):
         d = CuteSleekValueDict(null_callback, {1: 1, 2: 2, 3: 3})
         self.assertEqual(
@@ -364,7 +364,7 @@ class GenericDictTest(unittest2.TestCase):
         )
         self.assertRaises(TypeError, d.copy, None)
 
-        
+
     def test_get(self):
         d = CuteSleekValueDict(null_callback)
         self.assertIs(d.get('c'), None)
@@ -403,7 +403,7 @@ class GenericDictTest(unittest2.TestCase):
         x.fail = True
         self.assertRaises(Exc, d.setdefault, x, [])
 
-        
+
     def test_popitem(self):
         if sys_tools.is_pypy:
             raise nose.SkipTest("Pypy doesn't maintain dict order.")
@@ -433,7 +433,7 @@ class GenericDictTest(unittest2.TestCase):
         d = CuteSleekValueDict(null_callback)
         self.assertRaises(KeyError, d.popitem)
 
-        
+
     def test_pop(self):
         # Tests for pop with specified key
         d = CuteSleekValueDict(null_callback)
@@ -477,7 +477,7 @@ class GenericDictTest(unittest2.TestCase):
         x.fail = True
         self.assertRaises(Exc, d.pop, x)
 
-        
+
     def test_mutatingiteration(self):
         # changing dict size during iteration
         d = CuteSleekValueDict(null_callback)
@@ -486,7 +486,7 @@ class GenericDictTest(unittest2.TestCase):
             for i in d:
                 d[i+1] = 1
 
-                
+
     #def test_le(self):
         #self.assertFalse(
             #CuteSleekValueDict(null_callback) < \
@@ -511,7 +511,7 @@ class GenericDictTest(unittest2.TestCase):
         #with self.assertRaises(Exc):
             #d1 < d2
 
-            
+
     def test_missing(self):
         # Make sure dict doesn't have a __missing__ method
         self.assertFalse(hasattr(CuteSleekValueDict, "__missing__"))
@@ -564,7 +564,7 @@ class GenericDictTest(unittest2.TestCase):
             d[(1,)]
         #self.assertEqual(c.exception.args, ((1,),))
 
-        
+
     #def test_bad_key(self):
         ## Dictionary lookups should fail if __cmp__() raises an exception.
         #class CustomException(Exception):
@@ -596,7 +596,7 @@ class GenericDictTest(unittest2.TestCase):
             #with self.assertRaises(CustomException):
                 #exec(stmt, locals())
 
-                
+
     def test_resize1(self):
         # Dict resizing bug, found by Jack Jansen in 2.2 CVS development.
         # This version got an assert failure in debug build, infinite loop in
@@ -613,7 +613,7 @@ class GenericDictTest(unittest2.TestCase):
         for i in range(5, 9):  # i==8 was the problem
             d[i] = i
 
-            
+
     def test_resize2(self):
         # Another dict resizing bug (SF bug #1456209).
         # This caused Segmentation faults or Illegal instructions.
@@ -636,7 +636,7 @@ class GenericDictTest(unittest2.TestCase):
         resizing = True
         d[9] = 6
 
-        
+
     def test_empty_presized_dict_in_freelist(self):
         # Bug #3537: if an empty but presized dict with a size larger
         # than 7 was in the freelist, it triggered an assertion failure
@@ -648,7 +648,7 @@ class GenericDictTest(unittest2.TestCase):
             )
         d = CuteSleekValueDict(null_callback)
 
-    
+
     def test_container_iterator(self):
         # Bug #3680: tp_traverse was not implemented for dictiter objects
 
@@ -665,6 +665,6 @@ class GenericDictTest(unittest2.TestCase):
             del obj, container
             gc_tools.collect()
             self.assertIs(ref(), None, "Cycle was not collected")
-    
 
-    
+
+

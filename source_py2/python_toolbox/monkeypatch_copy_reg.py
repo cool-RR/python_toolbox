@@ -19,12 +19,12 @@ def reduce_method(method):
     return (
         getattr,
         (
-            
+
             method.im_self or method.im_class,
             # `im_self` for bound methods, `im_class` for unbound methods.
-            
+
             method.im_func.__name__
-        
+
         )
     )
 

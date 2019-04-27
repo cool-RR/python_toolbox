@@ -27,7 +27,7 @@ class _BasePermView(object):
     def __init__(self, perm):
         self.perm = perm
     __repr__ = lambda self: '<%s: %s>' % (type(self).__name__, self.perm)
-    
+
     @abc.abstractmethod
     def __getitem__(self, i): pass
 
@@ -36,31 +36,31 @@ class PermItems(sequence_tools.CuteSequenceMixin, _BasePermView,
                 collections.Sequence):
     '''
     A viewer of a perm's items, similar to `dict.items()`.
-    
+
     This is useful for dapplied perms; it lets you view the perm (both index
     access and iteration) as a sequence where each item is a 2-tuple, where the
     first item is from the domain and the second item is its corresponding item
     from the sequence.
     '''
-    
+
     def __getitem__(self, i):
         return (self.perm.domain[i], self.perm[self.perm.domain[i]])
-    
+
 
 class PermAsDictoid(sequence_tools.CuteSequenceMixin, _BasePermView,
                     collections.Mapping):
-    '''A dict-like interface to a `Perm`.'''    
+    '''A dict-like interface to a `Perm`.'''
     def __getitem__(self, key):
         return self.perm[key]
     def __iter__(self):
         return iter(self.perm.domain)
-        
-    
+
+
 
 class PermType(abc.ABCMeta):
     '''
     Metaclass for `Perm` and `Comb`.
-    
+
     The functionality provided is: If someone tries to create a `Perm` with a
     `CombSpace`, we automatically use `Comb`.
     '''
@@ -68,28 +68,28 @@ class PermType(abc.ABCMeta):
         if cls == Perm and isinstance(perm_space, CombSpace):
             cls = Comb
         return super(PermType, cls).__call__(item, perm_space)
-        
+
 
 @functools.total_ordering
 class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
     '''
     A permutation of items from a `PermSpace`.
-    
+
     In combinatorics, a permutation is a sequence of items taken from the
     original sequence.
-    
+
     Example:
-    
+
         >>> perm_space = PermSpace('abcd')
         >>> perm = Perm('dcba', perm_space)
         >>> perm
         <Perm: ('d', 'c', 'b', 'a')>
         >>> perm_space.index(perm)
         23
-    
+
     '''
     __metaclass__ = PermType
-    
+
     @classmethod
     def coerce(cls, item, perm_space=None):
         '''Coerce item into a perm, optionally of a specified `PermSpace`.'''
@@ -98,12 +98,12 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
             return item
         else:
             return cls(item, perm_space)
-    
-    
+
+
     def __init__(self, perm_sequence, perm_space=None):
         '''
         Create the `Perm`.
-        
+
         If `perm_space` is not supplied, we assume that this is a pure
         permutation, i.e. a permutation on `range(len(perm_sequence))`.
         '''
@@ -112,7 +112,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
         assert isinstance(perm_sequence, collections.Iterable)
         perm_sequence = sequence_tools. \
                            ensure_iterable_is_immutable_sequence(perm_sequence)
-        
+
         ### Analyzing `perm_space`: ###########################################
         #                                                                     #
         if perm_space is None:
@@ -125,14 +125,14 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
                 self.nominal_perm_space = PermSpace(len(perm_sequence))
         else: # perm_space is not None
             self.nominal_perm_space = perm_space.unsliced.undegreed.unfixed
-            
+
         # `self.nominal_perm_space` is a perm space that preserves only the
         # rapplied, recurrent, partial, dapplied and combination properties of
         # the original `PermSpace`.
-            
+
         #                                                                     #
         ### Finished analyzing `perm_space`. ##################################
-        
+
         self.is_rapplied = self.nominal_perm_space.is_rapplied
         self.is_recurrent = self.nominal_perm_space.is_recurrent
         self.is_partial = self.nominal_perm_space.is_partial
@@ -140,23 +140,23 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
         self.is_dapplied = self.nominal_perm_space.is_dapplied
         self.is_pure = not (self.is_rapplied or self.is_dapplied
                             or self.is_partial or self.is_combination)
-        
+
         if not self.is_rapplied: self.unrapplied = self
         if not self.is_dapplied: self.undapplied = self
         if not self.is_combination: self.uncombinationed = self
-        
+
         self._perm_sequence = sequence_tools. \
              ensure_iterable_is_immutable_sequence(perm_sequence)
-            
+
         assert self.is_combination == isinstance(self, Comb)
-            
-            
+
+
     _reduced = property(lambda self: (
         type(self), self._perm_sequence, self.nominal_perm_space
     ))
-            
+
     __iter__ = lambda self: iter(self._perm_sequence)
-    
+
     def __eq__(self, other):
         return type(self) == type(other) and \
                       self.nominal_perm_space == other.nominal_perm_space and \
@@ -166,7 +166,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
     __hash__ = lambda self: hash(self._reduced)
     __bool__ = lambda self: bool(self._perm_sequence)
     __nonzero__ = __bool__
-    
+
     def __contains__(self, item):
         try:
             return (item in self._perm_sequence)
@@ -174,47 +174,47 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
             # Gotta have this `except` because Python complains if you try `1
             # in 'meow'`.
             return False
-    
+
     def __repr__(self):
         return '<%s%s: %s(%s%s)>' % (
-            type(self).__name__, 
+            type(self).__name__,
             (', n_elements=%s' % len(self)) if self.is_partial else '',
             ('(%s) => ' % ', '.join(map(repr, self.domain)))
                                                    if self.is_dapplied else '',
             ', '.join(repr(item) for item in self),
             ',' if self.length == 1 else ''
         )
-        
+
     def index(self, member):
         '''
         Get the index number of `member` in the permutation.
-        
+
         Example:
-        
+
             >>> perm = PermSpace(5)[10]
             >>> perm
             <Perm: (0, 2, 4, 1, 3)>
             >>> perm.index(3)
             4
-        
+
         '''
         numerical_index = self._perm_sequence.index(member)
         return self.nominal_perm_space. \
                domain[numerical_index] if self.is_dapplied else numerical_index
-        
+
 
     @caching.CachedProperty
     def inverse(self):
         '''
         The inverse of this permutation.
-        
+
         i.e. the permutation that we need to multiply this permutation by to
         get the identity permutation.
-        
+
         This is also accessible as `~perm`.
-        
+
         Example:
-        
+
             >>> perm = PermSpace(5)[10]
             >>> perm
             <Perm: (0, 2, 4, 1, 3)>
@@ -222,7 +222,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
             <Perm: (0, 3, 1, 4, 2)>
             >>> perm * ~perm
             <Perm: (0, 1, 2, 3, 4)>
-           
+
         '''
         if self.is_partial:
             raise TypeError("Partial perms don't have an inverse.")
@@ -238,16 +238,16 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
             for i, item in enumerate(self):
                 _perm[item] = i
             return type(self)(_perm, self.nominal_perm_space)
-        
-        
+
+
     __invert__ = lambda self: self.inverse
-    
+
     domain = caching.CachedProperty(
         lambda self: self.nominal_perm_space.domain,
         '''The permutation's domain.'''
     )
-    
-        
+
+
     @caching.CachedProperty
     def unrapplied(self):
         '''An unrapplied version of this permutation.'''
@@ -265,19 +265,19 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
             new_perm_sequence.append(i_index)
         #                                                                     #
         ### Finished calculating the new perm sequence. #######################
-        
+
         unrapplied = type(self)(new_perm_sequence,
                                 self.nominal_perm_space.unrapplied)
         assert not unrapplied.is_rapplied
         return unrapplied
-    
+
     undapplied = caching.CachedProperty(
         lambda self: type(self)(
             self._perm_sequence,
             self.nominal_perm_space.undapplied
         ),
         '''An undapplied version of this permutation.'''
-        
+
     )
     uncombinationed = caching.CachedProperty(
         lambda self: Perm(
@@ -285,7 +285,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
             self.nominal_perm_space.uncombinationed
         ),
         '''A non-combination version of this permutation.'''
-        
+
     )
 
     def __getitem__(self, i):
@@ -299,17 +299,17 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
         else:
             i_to_use = i
         return self._perm_sequence[i_to_use]
-        
+
     length = property(
         lambda self: self.nominal_perm_space.n_elements
     )
-    
+
     def apply(self, sequence, result_type=None):
         '''
         Apply the perm to a sequence, choosing items from it.
-        
+
         This can also be used as `sequence * perm`. Example:
-        
+
         >>> perm = PermSpace(5)[10]
         >>> perm
         <Perm: (0, 2, 4, 1, 3)>
@@ -317,7 +317,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
         'golrw'
         >>> 'growl' * perm
         'golrw'
-        
+
         Specify `result_type` to determine the type of the result returned. If
         `result_type=None`, will use `tuple`, except when `other` is a `str` or
         `Perm`, in which case that same type would be used.
@@ -328,7 +328,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
                                                sequence_tools.get_length(self):
             raise Exception("Can't apply permutation on sequence of "
                             "shorter length.")
-        
+
         permed_generator = (sequence[i] for i in self)
         if result_type is not None:
             if result_type is str:
@@ -342,14 +342,14 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
             return ''.join(permed_generator)
         else:
             return tuple(permed_generator)
-            
-            
+
+
     __rmul__ = apply
-    
+
     __mul__ = lambda self, other: other.__rmul__(self)
     # (Must define this explicitly because of Python special-casing
     # multiplication of objects of the same type.)
-            
+
     def __pow__(self, exponent):
         '''Raise the perm by the power of `exponent`.'''
         assert isinstance(exponent, numbers.Integral)
@@ -360,13 +360,13 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
         else:
             assert exponent >= 1
             return misc_tools.general_product((self,) * exponent)
-        
-            
+
+
     @caching.CachedProperty
     def degree(self):
         '''
         The permutation's degree.
-        
+
         You can think of a permutation's degree like this: Imagine that you're
         starting with the identity permutation, and you want to make this
         permutation, by switching two items with each other over and over again
@@ -377,13 +377,13 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
             return NotImplemented
         else:
             return len(self) - self.n_cycles
-        
-    
+
+
     @caching.CachedProperty
     def n_cycles(self):
         '''
         The number of cycles in this permutation.
-        
+
         If item 1 points at item 7, and item 7 points at item 3, and item 3
         points at item 1 again, then that's one cycle. `n_cycles` is the total
         number of cycles in this permutation.
@@ -394,27 +394,27 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
             return self.unrapplied.n_cycles
         if self.is_dapplied:
             return self.undapplied.n_cycles
-        
+
         unvisited_items = set(self)
         n_cycles = 0
         while unvisited_items:
             starting_item = current_item = next(iter(unvisited_items))
-            
+
             while current_item in unvisited_items:
                 unvisited_items.remove(current_item)
                 current_item = self[current_item]
-                
+
             if current_item == starting_item:
                 n_cycles += 1
-                
+
         return n_cycles
-      
-      
+
+
     @misc_tools.limit_positional_arguments(1)
     def get_neighbors(self, degrees=(1,), perm_space=None):
         '''
         Get the neighbor permutations of this permutation.
-        
+
         This means, get the permutations that are close to this permutation. By
         default, this means permutations that are one transformation (switching
         a pair of items) away from this permutation. You can specify a custom
@@ -436,21 +436,21 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
                 ) if tuple(perm) in perm_space
             )
         )
-        
-        
+
+
     def __lt__(self, other):
         if isinstance(other, Perm) and \
                            self.nominal_perm_space == other.nominal_perm_space:
             return self._perm_sequence < other._perm_sequence
         else:
             return NotImplemented
-        
+
     __reversed__ = lambda self: type(self)(reversed(self._perm_sequence),
                                            self.nominal_perm_space)
-    
+
     items = caching.CachedProperty(PermItems)
     as_dictoid = caching.CachedProperty(PermAsDictoid)
-    
+
 
 class UnrecurrentedMixin(object):
     '''Mixin for a permutation in a space that's been unrecurrented.'''
@@ -463,11 +463,11 @@ class UnrecurrentedMixin(object):
                                                             if pair[1] == item)
     ]
     '''Get the index number of `member` in the permutation.'''
-    
+
 class UnrecurrentedPerm(UnrecurrentedMixin, Perm):
     '''A permutation in a space that's been unrecurrented.'''
-        
-        
+
+
 
 from .perm_space import PermSpace
 from .comb_space import CombSpace

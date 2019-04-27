@@ -7,9 +7,9 @@ from python_toolbox import sequence_tools
 class NumberEncoder:
     '''
     A very simple encoder between lines and strings.
-    
+
     Example:
-    
+
         >>> my_encoder = number_encoding.NumberEncoder('isogram')
         >>> my_encoder.encode(10000)
         'rssir'
@@ -25,11 +25,11 @@ class NumberEncoder:
         recurrences = sequence_tools.get_recurrences(self.characters)
         if recurrences:
             raise Exception('`characters` must not have recurring characters.')
-        
+
     def encode(self, number, minimum_length=1):
         '''
         Encode the number into a string.
-        
+
         If `minimum_length > 1`, the string will be padded (with the "zero"
         character) if the number isn't big enough.
         '''
@@ -45,11 +45,10 @@ class NumberEncoder:
 
     def decode(self, string):
         '''Decode `string` into a number'''
-        
+
         assert isinstance(string, (str, bytes))
         return sum((len(self.characters)**i) * self.characters.index(x)
                                          for (i, x) in enumerate(string[::-1]))
 
     def __repr__(self):
         return '<%s: %s>' % (type(self).__name__, repr(self.characters))
-        

@@ -15,7 +15,7 @@ def test_inverse_factorial():
     assert inverse_factorial(6, round_up=False) == 3
     assert inverse_factorial(24, round_up=True) == 4
     assert inverse_factorial(24, round_up=False) == 4
-    
+
     assert inverse_factorial(25, round_up=True) == 5
     assert inverse_factorial(25, round_up=False) == 4
     assert inverse_factorial(26, round_up=True) == 5

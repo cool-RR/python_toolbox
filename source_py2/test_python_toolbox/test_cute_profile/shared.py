@@ -14,20 +14,19 @@ segments = ('function calls in', 'Ordered by', 'ncalls', 'tottime', 'percall',
 
 def call_and_check_if_profiled(f):
     '''Call the function `f` and return whether it profiled itself.'''
-    
+
     with OutputCapturer() as output_capturer:
         f()
-    
+
     output = output_capturer.output
-        
+
     segments_found = [(segment in output) for segment in segments]
-    
+
     if not logic_tools.all_equivalent(segments_found):
         raise Exception("Some segments were found, but some weren't; can't "
                         "know if this was a profiled call or not. Possibly "
                         "some of our segments are wrong.")
-    
+
     return segments_found[0]
-    
-    
-    
+
+

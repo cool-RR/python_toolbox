@@ -33,7 +33,7 @@ def test():
         (range(100), [100]),
         (range(100), [109]),
     )
-    
+
     for true_pair in true_pairs:
         assert is_subsequence(*true_pair)
     for false_pair in false_pairs:

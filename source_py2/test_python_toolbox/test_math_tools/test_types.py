@@ -13,7 +13,7 @@ def test_possibly_infinite_integral():
         assert isinstance(match, PossiblyInfiniteIntegral)
     for non_match in non_matches:
         assert not isinstance(non_match, PossiblyInfiniteIntegral)
-        
+
 
 def test_possibly_infinite_real():
     matches = [0, 1, -100, 102341, 232, 10 ** 1000, infinity, -infinity,

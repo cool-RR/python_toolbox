@@ -15,7 +15,7 @@ def underscore_hating_key(string):
 def process_key_function_or_attribute_name(key_function_or_attribute_name):
     '''
     Make a key function given either a key function or an attribute name.
-    
+
     Some functions let you sort stuff by entering a key function or an
     attribute name by which the elements will be sorted. This function tells
     whether we were given a key function or an attribute name, and generates a

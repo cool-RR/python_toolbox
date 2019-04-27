@@ -13,7 +13,7 @@ def test():
         pass
     with read_write_lock.read as enter_return_value:
         assert enter_return_value is read_write_lock
-        
+
     with read_write_lock.read:
         with read_write_lock.read:
             with read_write_lock.read:
@@ -23,7 +23,7 @@ def test():
                             with read_write_lock.write:
                                 with read_write_lock.write:
                                     pass
-                                
+
     with read_write_lock.write:
         with read_write_lock.write:
             with read_write_lock.write:
@@ -33,5 +33,4 @@ def test():
                             with read_write_lock.read:
                                 with read_write_lock.read:
                                     pass
-                                
-    
+

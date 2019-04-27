@@ -11,4 +11,3 @@ def test():
     my_dict = {1: 2, 3: 4, 5: 6,}
     assert set(dict_tools.devour_keys(my_dict)) == {1, 3, 5}
     assert not my_dict
-    

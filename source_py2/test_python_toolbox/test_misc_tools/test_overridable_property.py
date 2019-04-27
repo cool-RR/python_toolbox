@@ -11,12 +11,11 @@ def test():
         @OverridableProperty
         def meow(self):
             return 'bark bark!'
-        
+
     a = A()
     assert a.meow == 'bark bark!'
     assert a.meow == 'bark bark!'
     assert a.meow == 'bark bark!'
     a.meow = 'Meow indeed, my love.'
     assert a.meow == 'Meow indeed, my love.'
-            
-            
+

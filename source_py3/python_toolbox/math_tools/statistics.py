@@ -20,8 +20,8 @@ def get_median(iterable):
     else:
         midpoint = len(iterable) // 2
         return sorted_values[midpoint]
-    
-    
+
+
 def get_mean(iterable):
     '''Get the mean (average) of an iterable of numbers.'''
     sum_ = 0
@@ -29,4 +29,4 @@ def get_mean(iterable):
         sum_ += value
     return sum_ / (i + 1)
 
-        
+

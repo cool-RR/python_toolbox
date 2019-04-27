@@ -9,7 +9,7 @@ from python_toolbox import caching
 
 def test_lone_freezer_property():
     '''Test a class that has only one freezer property without handlers.'''
-    
+
     class A(object):
         lone_freezer = FreezerProperty()
 
@@ -18,8 +18,8 @@ def test_lone_freezer_property():
     assert a.lone_freezer.frozen == 0
     with a.lone_freezer:
         assert a.lone_freezer.frozen
-        
-    
+
+
 def test_decorate_happy_freezer_property():
     '''Test a freezer property which decorates both handlers.'''
     class C(object):
@@ -51,7 +51,7 @@ def test_decorate_happy_freezer_property():
     assert b.decorate_happy_freezer.frozen == 0
     assert b.decorate_happy_freeze_counter == 1
     assert b.decorate_happy_thaw_counter == 1
-    
+
     with b.decorate_happy_freezer:
         assert b.decorate_happy_freezer.frozen == 1
         assert b.decorate_happy_freeze_counter == 2
@@ -59,13 +59,13 @@ def test_decorate_happy_freezer_property():
     assert b.decorate_happy_freezer.frozen == 0
     assert b.decorate_happy_freeze_counter == 2
     assert b.decorate_happy_thaw_counter == 2
-        
-    
+
+
 def test_argument_happy_freezer_property():
     '''Test a freezer property which defines both handlers with arguments.'''
     class C(object):
         argument_happy_freeze_counter = caching.CachedProperty(0)
-        argument_happy_thaw_counter = caching.CachedProperty(0)        
+        argument_happy_thaw_counter = caching.CachedProperty(0)
         def increment_argument_happy_freeze_counter(self):
             self.argument_happy_freeze_counter += 1
         def increment_argument_happy_thaw_counter(self):
@@ -75,7 +75,7 @@ def test_argument_happy_freezer_property():
             on_thaw=increment_argument_happy_thaw_counter,
             name='argument_happy_freezer'
         )
-     
+
     c = C()
     assert c.argument_happy_freezer.frozen == 0
     assert c.argument_happy_freeze_counter == 0
@@ -94,7 +94,7 @@ def test_argument_happy_freezer_property():
     assert c.argument_happy_freezer.frozen == 0
     assert c.argument_happy_freeze_counter == 1
     assert c.argument_happy_thaw_counter == 1
-    
+
     with c.argument_happy_freezer:
         assert c.argument_happy_freezer.frozen == 1
         assert c.argument_happy_freeze_counter == 2
@@ -102,8 +102,8 @@ def test_argument_happy_freezer_property():
     assert c.argument_happy_freezer.frozen == 0
     assert c.argument_happy_freeze_counter == 2
     assert c.argument_happy_thaw_counter == 2
-    
-        
+
+
 def test_mix_freezer_property():
     '''
     Test freezer property which mixes decorated and arg-specified handlers.
@@ -117,7 +117,7 @@ def test_mix_freezer_property():
         @mix_freezer.on_thaw
         def increment_mix_thaw_counter(self):
             self.mix_thaw_counter += 1
-     
+
     d = D()
     assert d.mix_freezer.frozen == 0
     assert d.mix_freeze_counter == 0
@@ -136,7 +136,7 @@ def test_mix_freezer_property():
     assert d.mix_freezer.frozen == 0
     assert d.mix_freeze_counter == 1
     assert d.mix_thaw_counter == 1
-    
+
     with d.mix_freezer:
         assert d.mix_freezer.frozen == 1
         assert d.mix_freeze_counter == 2
@@ -144,21 +144,21 @@ def test_mix_freezer_property():
     assert d.mix_freezer.frozen == 0
     assert d.mix_freeze_counter == 2
     assert d.mix_thaw_counter == 2
-        
-    
+
+
 def test_different_type_freezer_property():
     '''Test a freezer property that specifies a non-default freezer type.'''
-    
+
     class CustomFreezer(Freezer):
         def __init__(self, obj):
             self.obj = obj
-            
+
         def freeze_handler(self):
             self.obj.different_type_freeze_counter += 1
-            
+
         def thaw_handler(self):
             self.obj.different_type_thaw_counter += 1
-    
+
     class E(object):
         different_type_freeze_counter = caching.CachedProperty(0)
         different_type_thaw_counter = caching.CachedProperty(0)
@@ -166,7 +166,7 @@ def test_different_type_freezer_property():
             freezer_type=CustomFreezer,
             doc='A freezer using a custom freezer class.'
         )
-     
+
     e = E()
     assert E.different_type_freezer.__doc__ == \
            'A freezer using a custom freezer class.'
@@ -187,7 +187,7 @@ def test_different_type_freezer_property():
     assert e.different_type_freezer.frozen == 0
     assert e.different_type_freeze_counter == 1
     assert e.different_type_thaw_counter == 1
-    
+
     with e.different_type_freezer:
         assert e.different_type_freezer.frozen == 1
         assert e.different_type_freeze_counter == 2

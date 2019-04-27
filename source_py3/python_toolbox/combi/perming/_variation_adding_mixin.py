@@ -27,11 +27,11 @@ class _VariationAddingMixin:
             is_combination=self.is_combination,
             perm_type=self.perm_type
         )
-    
+
     # There's no `.get_recurrented` because we can't know which sequence you'd
     # want. If you want a recurrent perm space you need to use `.get_rapplied`
     # with a recurrent sequence.
-    
+
     def get_partialled(self, n_elements):
         '''Get a partialled version of this `PermSpace`.'''
         if self.is_sliced:
@@ -46,7 +46,7 @@ class _VariationAddingMixin:
             is_combination=self.is_combination,
             perm_type=self.perm_type
         )
-    
+
     @caching.CachedProperty
     def combinationed(self):
         '''Get a combination version of this perm space.'''
@@ -65,18 +65,18 @@ class _VariationAddingMixin:
             )
         if self.is_degreed:
             raise TypeError("Can't use degrees with combination spaces.")
-        
+
         return PermSpace(
-            self.sequence, n_elements=self.n_elements, domain=self.domain, 
+            self.sequence, n_elements=self.n_elements, domain=self.domain,
             fixed_map=self.fixed_map, is_combination=True,
             perm_type=Comb
         )
-        
-        
+
+
     def get_dapplied(self, domain):
         '''Get a version of this `PermSpace` that has a domain of `domain`.'''
         from . import variations
-        
+
         if self.is_combination:
             raise variations.UnallowedVariationSelectionException(
                 {variations.Variation.DAPPLIED: True,
@@ -93,7 +93,7 @@ class _VariationAddingMixin:
             is_combination=self.is_combination,
             perm_type=self.perm_type
         )
-    
+
     def get_fixed(self, fixed_map):
         '''Get a fixed version of this `PermSpace`.'''
         if self.is_sliced:
@@ -107,17 +107,17 @@ class _VariationAddingMixin:
             if key in self.fixed_map:
                 assert self.fixed_map[key] == value
             combined_fixed_map[key] = value
-            
+
         return PermSpace(
             self.sequence, n_elements=self.n_elements, domain=self.domain,
             fixed_map=combined_fixed_map, degrees=self.degrees, slice_=None,
             is_combination=self.is_combination, perm_type=self.perm_type
         )
-    
+
     def get_degreed(self, degrees):
         '''Get a version of this `PermSpace` restricted to certain degrees.'''
         from . import variations
-        
+
         if self.is_sliced:
             raise TypeError(
                 "Can't be used on sliced perm spaces. Try "
@@ -136,13 +136,13 @@ class _VariationAddingMixin:
            degrees if not self.is_degreed else set(degrees) & set(self.degrees)
         return PermSpace(
             self.sequence, n_elements=self.n_elements, domain=self.domain,
-            fixed_map=self.fixed_map, degrees=degrees_to_use, 
+            fixed_map=self.fixed_map, degrees=degrees_to_use,
             is_combination=self.is_combination, perm_type=self.perm_type
         )
-    
+
     # There's no `get_sliced` because slicing is done using Python's normal
     # slice notation, e.g. perm_space[4:-7].
-    
+
     def get_typed(self, perm_type):
         '''
         Get a version of this `PermSpace` where perms are of a custom type.
@@ -153,4 +153,3 @@ class _VariationAddingMixin:
             slice_=self.canonical_slice, is_combination=self.is_combination,
             perm_type=perm_type
         )
-    

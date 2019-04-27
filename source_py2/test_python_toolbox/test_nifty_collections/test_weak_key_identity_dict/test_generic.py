@@ -68,14 +68,14 @@ class MappingTestCase(TestBase):
         dict = WeakKeyIdentityDict({o:364})
         self.assertTrue(dict[o] == 364)
 
-        
+
     def test_make_weak_keyed_dict_from_weak_keyed_dict(self):
         o = Object(3)
         dict1 = WeakKeyIdentityDict({o:364})
         dict2 = WeakKeyIdentityDict(dict1)
         self.assertTrue(dict1[o] == 364)
 
-        
+
     def make_weak_keyed_dict(self):
         dict_ = WeakKeyIdentityDict()
         objects = map(Object, range(self.COUNT))
@@ -103,7 +103,7 @@ class MappingTestCase(TestBase):
         else:
             self.assertTrue(v is value2)
 
-        
+
     def test_weak_keyed_dict_setdefault(self):
         key, value1, value2 = C(), "value 1", "value 2"
         self.assertTrue(value1 is not value2,
@@ -122,7 +122,7 @@ class MappingTestCase(TestBase):
         assert weakdict.get(key) is value1
         assert weakdict[key] is value1
 
-        
+
     def test_update(self):
         #
         #  This exercises d.update(), len(d), d.keys(), in d,
@@ -142,8 +142,8 @@ class MappingTestCase(TestBase):
             v = dict_[k]
             assert v is weakdict[k]
             assert v is weakdict.get(k)
-            
-        
+
+
     def test_weak_keyed_delitem(self):
         d = WeakKeyIdentityDict()
         o1 = Object('1')
@@ -170,7 +170,7 @@ class MappingTestCase(TestBase):
         self.assertRaises(TypeError, d.__getitem__,  13)
         self.assertRaises(TypeError, d.__setitem__,  13, 13)
 
-        
+
     def test_weak_keyed_cascading_deletes(self):
         # SF bug 742860.  For some reason, before 2.3 __delitem__ iterated
         # over the keys via self.data.iterkeys().  If things vanished from
@@ -217,7 +217,7 @@ class MappingTestCase(TestBase):
         self.assertEqual(len(d), 0)
         self.assertEqual(count, 2)
 
-        
+
 class WeakKeyIdentityDictTestCase(
     forked_mapping_tests.BasicTestMappingProtocol
     ):

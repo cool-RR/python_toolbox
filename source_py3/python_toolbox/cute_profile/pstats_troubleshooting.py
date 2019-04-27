@@ -15,13 +15,13 @@ from python_toolbox import import_tools
 def troubleshoot_pstats():
     '''
     Let the user know if there might be an error importing `pstats`.
-    
+
     Raises an exception if it thinks it caught the problem. So if this function
     didn't raise an exception, it means it didn't manage to diagnose the
     problem.
-    '''    
+    '''
     if not import_tools.exists('pstats') and os.name == 'posix':
-        
+
         raise ImportError(
             "The required `pstats` Python module is not installed on your "
             "computer. Since you are using Linux, it's possible that this is "
@@ -30,5 +30,4 @@ def troubleshoot_pstats():
             "`python-profiler` package in your OS's package manager. "
             "(Possibly you will have to get this package from the multiverse.)"
         )
-    
-        
+

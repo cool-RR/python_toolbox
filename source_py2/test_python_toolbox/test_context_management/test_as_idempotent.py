@@ -18,8 +18,8 @@ class SomeContextManager(ContextManager):
             pass
         finally:
             self.x -= 1
-            
-            
+
+
 
 def test_as_idempotent():
     some_context_manager = SomeContextManager()
@@ -30,7 +30,7 @@ def test_as_idempotent():
         assert enter_result[0] is enter_result[1] is some_context_manager
         assert some_context_manager.x == 1
     assert some_context_manager.x == 0
-    
+
     some_context_manager.__enter__()
     assert some_context_manager.x == 1
     some_context_manager.__enter__()
@@ -47,20 +47,20 @@ def test_as_idempotent():
         some_context_manager.__exit__(None, None, None)
     with cute_testing.RaiseAssertor():
         some_context_manager.__exit__(None, None, None)
-        
+
     with cute_testing.RaiseAssertor(KeyError):
         with some_context_manager:
             raise KeyError
-        
+
     with some_context_manager:
         raise ZeroDivisionError
-        
+
     ###########################################################################
-    
-        
+
+
     another_context_manager = SomeContextManager()
     idempotent_context_manager = as_idempotent(another_context_manager)
-    
+
     assert another_context_manager is idempotent_context_manager.__wrapped__
 
     with idempotent_context_manager as enter_result:
@@ -68,7 +68,7 @@ def test_as_idempotent():
         assert len(enter_result) == 2
         assert enter_result[0] is enter_result[1] is another_context_manager
         assert another_context_manager.x == 1
-        
+
 
     idempotent_context_manager.__enter__()
     assert idempotent_context_manager.__wrapped__.x == 1
@@ -82,29 +82,29 @@ def test_as_idempotent():
     assert idempotent_context_manager.__wrapped__.x == 0
     idempotent_context_manager.__exit__(None, None, None)
     assert idempotent_context_manager.__wrapped__.x == 0
-    
+
     with cute_testing.RaiseAssertor(KeyError):
         with idempotent_context_manager:
             raise KeyError
-        
+
     with idempotent_context_manager:
         raise ZeroDivisionError
-        
-        
+
+
 def test_decorator_class():
-    
+
     @as_idempotent
     class Meow(ContextManager):
         n = 0
-            
+
         def manage_context(self):
             self.n += 1
             try:
                 yield
             finally:
                 self.n -= 1
-                
-            
+
+
     meow = Meow()
     assert meow.n == 0
     with meow:
@@ -116,21 +116,21 @@ def test_decorator_class():
             assert meow.n == 0
         assert meow.n == 0
     assert meow.n == 0
-        
+
 def test_decorator_class_enter_exit():
-    
+
     @as_idempotent
     class Meow(ContextManager):
         n = 0
-            
+
         def __enter__(self):
             self.n += 1
             return self
-        
+
         def __exit__(self, exc_type, exc_value, exc_traceback):
             self.n -= 1
-                
-            
+
+
     meow = Meow()
     assert meow.n == 0
     with meow:
@@ -142,12 +142,12 @@ def test_decorator_class_enter_exit():
             assert meow.n == 0
         assert meow.n == 0
     assert meow.n == 0
-        
-        
+
+
 def test_decorator_decorator():
-    
+
     counter = {'n': 0,}
-            
+
     @as_idempotent
     @ContextManagerType
     def Meow():
@@ -156,8 +156,8 @@ def test_decorator_decorator():
             yield
         finally:
             counter['n'] -= 1
-                
-            
+
+
     meow = Meow()
     assert counter['n'] == 0
     with meow:
@@ -169,6 +169,5 @@ def test_decorator_decorator():
             assert counter['n'] == 0
         assert counter['n'] == 0
     assert counter['n'] == 0
-        
-        
-        
+
+

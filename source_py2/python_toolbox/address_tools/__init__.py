@@ -17,7 +17,7 @@ For example:
     '[1, 2, {3: 4}]'
     >>> address_tools.resolve('{email.encoders: 1}')
     {<module 'email.encoders' from 'c:\Python27\lib\email\encoders.pyc'>: 1}
-    
+
 '''
 
 

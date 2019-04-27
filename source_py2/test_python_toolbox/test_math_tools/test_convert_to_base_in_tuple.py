@@ -17,7 +17,7 @@ def test():
         1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1,
         1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1
     )
-           
+
 
 
 def test_trivial():
@@ -41,4 +41,3 @@ def test_negative():
         convert_to_base_in_tuple(-13462, 4)
     with cute_testing.RaiseAssertor(NotImplementedError):
         convert_to_base_in_tuple(-23451759010224, 11)
-        

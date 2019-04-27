@@ -40,5 +40,5 @@ def nested(*managers):
             # the right information. Another exception may
             # have been raised and caught by an exit method
             raise exc[1].with_traceback(exc[2])
-    
+
 

@@ -9,6 +9,6 @@ from python_toolbox.misc_tools import NonInstantiable
 def test():
     class MyNonInstantiable(NonInstantiable):
         pass
-    
+
     with cute_testing.RaiseAssertor(exception_type=RuntimeError):
         MyNonInstantiable()

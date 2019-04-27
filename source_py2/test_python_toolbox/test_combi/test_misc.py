@@ -12,11 +12,11 @@ def test():
                                                    str(math_tools.factorial(7))
     assert combi.misc.get_short_factorial_string(7, minus_one=True) == \
                                                str(math_tools.factorial(7) - 1)
-    
+
     assert combi.misc.get_short_factorial_string(17) == '17!'
     assert combi.misc.get_short_factorial_string(17, minus_one=True) == \
                                                                       '17! - 1'
-    
+
     assert combi.misc.get_short_factorial_string(float('inf')) == \
                                                              '''float('inf')'''
     assert combi.misc.get_short_factorial_string(float('inf'),

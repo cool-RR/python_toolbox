@@ -14,11 +14,11 @@ except ImportError:
 class OrderedDict(StdlibOrderedDict):
     '''
     A dictionary with an order.
-    
+
     This is a subclass of `collections.OrderedDict` with a couple of
     improvements.
     '''
-    
+
     def move_to_end(self, key, last=True):
         '''Move an existing element to the end (or beginning if last==False).
 
@@ -56,12 +56,12 @@ class OrderedDict(StdlibOrderedDict):
                 link[0] = self.__root
                 link[1] = first
                 root[1] = first[0] = link
-            
+
 
     def sort(self, key=None, reverse=False):
         '''
         Sort the items according to their keys, changing the order in-place.
-        
+
         The optional `key` argument, (not to be confused with the dictionary
         keys,) will be passed to the `sorted` function as a key function.
         '''
@@ -70,8 +70,8 @@ class OrderedDict(StdlibOrderedDict):
         sorted_keys = sorted(self.keys(), key=key_function, reverse=reverse)
         for key_ in sorted_keys[1:]:
             self.move_to_end(key_)
-        
-    
+
+
     def index(self, key):
         '''Get the index number of `key`.'''
         if key not in self:
@@ -80,7 +80,7 @@ class OrderedDict(StdlibOrderedDict):
             if key_ == key:
                 return i
         raise RuntimeError
-    
+
     @property
     def reversed(self):
         '''Get a version of this `OrderedDict` with key order reversed.'''

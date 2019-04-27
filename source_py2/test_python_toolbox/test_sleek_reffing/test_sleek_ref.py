@@ -16,7 +16,7 @@ from python_toolbox.sleek_reffing import (SleekCallArgs,
 
 from .shared import _is_weakreffable, A, counter
 
-    
+
 def test_sleek_ref():
     '''Test the basic workings of `SleekRef`.'''
 
@@ -24,7 +24,7 @@ def test_sleek_ref():
                        set((1, 2, 3)), (None, 3, {None: 4})]
     unvolatile_things = [__builtins__, type, sum, None]
     # (Used to have `list` here too but Pypy 2.0b choked on it.)
-    
+
     while volatile_things:
         volatile_thing = volatile_things.pop()
         sleek_ref = SleekRef(volatile_thing, counter)
@@ -41,12 +41,12 @@ def test_sleek_ref():
             gc_tools.collect()
             assert counter() == count + 1
             assert sleek_ref() is not None
-    
+
     while unvolatile_things:
         unvolatile_thing = unvolatile_things.pop()
         sleek_ref = SleekRef(unvolatile_thing, counter)
         assert sleek_ref() is unvolatile_thing
-        
+
         count = counter()
         del unvolatile_thing
         gc_tools.collect()

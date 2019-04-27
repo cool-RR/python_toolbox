@@ -12,4 +12,3 @@ def test():
     assert get_length(xrange(4)) == 4
     assert get_length(set(xrange(5))) == 5
     assert get_length(iter(set(xrange(16, 10, -1)))) == 6
-    

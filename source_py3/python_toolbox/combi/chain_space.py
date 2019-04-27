@@ -13,16 +13,16 @@ from python_toolbox import nifty_collections
 infinity = float('inf')
 
 
-        
+
 class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     '''
     A space of sequences chained together.
-    
+
     This is similar to `itertools.chain`, except that items can be fetched by
     index number rather than just iteration.
-    
+
     Example:
-    
+
         >>> chain_space = ChainSpace(('abc', (1, 2, 3)))
         >>> chain_space
         <ChainSpace: 3+3>
@@ -32,7 +32,7 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
         ('a', 'b', 'c', 1, 2, 3)
         >>> chain_space.index(2)
         4
-    
+
     '''
     def __init__(self, sequences):
         self.sequences = nifty_collections.LazyTuple(
@@ -40,13 +40,13 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
                 sequence, default_type=nifty_collections.LazyTuple)
                                                      for sequence in sequences)
         )
-        
+
     @caching.CachedProperty
     @nifty_collections.LazyTuple.factory()
     def accumulated_lengths(self):
         '''
         A sequence of the accumulated length as every sequence is added.
-        
+
         For example, if this chain space has sequences with lengths of 10, 100
         and 1000, this would be `[0, 10, 110, 1110]`.
         '''
@@ -55,16 +55,16 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
         for sequence in self.sequences:
             total += sequence_tools.get_length(sequence)
             yield total
-        
-        
+
+
     length = caching.CachedProperty(lambda self: self.accumulated_lengths[-1])
-        
+
     def __repr__(self):
         return '<%s: %s>' % (
             type(self).__name__,
             '+'.join(str(len(sequence)) for sequence in self.sequences),
         )
-        
+
     def __getitem__(self, i):
         if isinstance(i, slice):
             raise NotImplementedError
@@ -83,21 +83,21 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
             raise IndexError
         sequence_start = self.accumulated_lengths[sequence_index]
         return self.sequences[sequence_index][i - sequence_start]
-        
-    
+
+
     def __iter__(self):
         for sequence in self.sequences:
             yield from sequence
-        
+
     _reduced = property(lambda self: (type(self), self.sequences))
-             
+
     __eq__ = lambda self, other: (isinstance(other, ChainSpace) and
                                   self._reduced == other._reduced)
-    
+
     def __contains__(self, item):
         return any(item in sequence for sequence in self.sequences
                    if (not isinstance(sequence, str) or isinstance(item, str)))
-        
+
     def index(self, item):
         '''Get the index number of `item` in this space.'''
         for sequence, accumulated_length in zip(self.sequences,
@@ -113,7 +113,7 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
                 return index_in_sequence + accumulated_length
         else:
             raise ValueError
-    
+
     def __bool__(self):
         try: next(iter(self))
         except StopIteration: return False

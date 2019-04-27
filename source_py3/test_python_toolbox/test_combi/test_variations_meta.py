@@ -17,7 +17,7 @@ infinities = (infinity, -infinity)
 def test():
     assert len(combi.perming.variations.variation_selection_space) == \
                                    2 ** len(combi.perming.variations.Variation)
-    
+
     for i, variation_selection in \
                  enumerate(combi.perming.variations.variation_selection_space):
         assert isinstance(variation_selection,
@@ -25,8 +25,7 @@ def test():
         assert combi.perming.variations.variation_selection_space. \
                                                 index(variation_selection) == i
         assert cute_iter_tools.is_sorted(variation_selection.variations)
-        
+
         assert isinstance(variation_selection.is_allowed, bool)
-        
-    
-    
+
+

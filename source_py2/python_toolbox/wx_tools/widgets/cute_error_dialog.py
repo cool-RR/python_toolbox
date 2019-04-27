@@ -20,4 +20,3 @@ class CuteErrorDialog(wx.MessageDialog, CuteDialog):
                                   style=style)
         CuteDialog.__init__(self, skip_wx_init=True)
         self.ExtraStyle &= ~wx.FRAME_EX_CONTEXTHELP
-        

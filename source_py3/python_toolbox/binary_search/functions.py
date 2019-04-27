@@ -4,9 +4,9 @@
 '''Module for doing a binary search in a sequence.'''
 
 # Todo: wrap all things in tuples?
-# 
+#
 # todo: add option to specify `cmp`.
-# 
+#
 # todo: i think `binary_search_by_index` should have the core logic, and the
 # other one will use it. I think this will save many sequence accesses, and
 # some sequences can be expensive.
@@ -26,26 +26,26 @@ def binary_search_by_index(sequence, value,
                            rounding=CLOSEST):
     '''
     Do a binary search, returning answer as index number.
-    
+
     For all rounding options, a return value of None is returned if no matching
     item is found. (In the case of `rounding=BOTH`, either of the items in the
     tuple may be `None`)
-    
+
     You may optionally pass a key function as `function`, so instead of the
     objects in `sequence` being compared, their outputs from `function` will be
     compared. If you do pass in a function, it's assumed that it's strictly
     rising.
-    
+
     Note: This function uses `None` to express its inability to find any
     matches; therefore, you better not use it on sequences in which None is a
     possible item.
-    
+
     Similiar to `binary_search` (refer to its documentation for more info). The
     difference is that instead of returning a result in terms of sequence
     items, it returns the indexes of these items in the sequence.
-    
+
     For documentation of rounding options, check `binary_search.roundings`.
-    ''' 
+    '''
     my_range = range(len(sequence))
     fixed_function = lambda index: function(sequence[index])
     result = binary_search(my_range, value, function=fixed_function,
@@ -57,18 +57,18 @@ def _binary_search_both(sequence, value,
                         function=misc_tools.identity_function):
     '''
     Do a binary search through a sequence with the `BOTH` rounding.
-    
+
     You may optionally pass a key function as `function`, so instead of the
     objects in `sequence` being compared, their outputs from `function` will be
     compared. If you do pass in a function, it's assumed that it's strictly
     rising.
-    
+
     Note: This function uses `None` to express its inability to find any
     matches; therefore, you better not use it on sequences in which `None` is a
     possible item.
     '''
     # todo: i think this should be changed to return tuples
-    
+
     ### Preparing: ############################################################
     #                                                                         #
     get = lambda number: function(sequence[number])
@@ -77,17 +77,17 @@ def _binary_search_both(sequence, value,
     high = len(sequence) - 1
     #                                                                         #
     ### Finished preparing. ###################################################
-    
+
     ### Handling edge cases: ##################################################
     #                                                                         #
     if not sequence:
         return (None, None)
-    
+
     low_value, high_value = get(low), get(high)
-        
+
     if value in (low_value, high_value):
         return tuple((value, value))
-    
+
     elif low_value > value:
         return tuple((None, sequence[low]))
 
@@ -95,11 +95,11 @@ def _binary_search_both(sequence, value,
         return (sequence[high], None)
     #                                                                         #
     ### Finished handling edge cases. #########################################
-        
-        
+
+
     # Now we know the value is somewhere inside the sequence.
     assert low_value < value < high_value
-    
+
     while high - low > 1:
         medium = (low + high) // 2
         medium_value = get(medium)
@@ -111,34 +111,34 @@ def _binary_search_both(sequence, value,
             continue
         if medium_value == value:
             return (sequence[medium], sequence[medium])
-    
+
     return (sequence[low], sequence[high])
-    
+
 
 
 def binary_search(sequence, value, function=misc_tools.identity_function,
                   rounding=CLOSEST):
     '''
     Do a binary search through a sequence.
-    
+
     For all rounding options, a return value of None is returned if no matching
     item is found. (In the case of `rounding=BOTH`, either of the items in the
     tuple may be `None`)
-    
+
     You may optionally pass a key function as `function`, so instead of the
     objects in `sequence` being compared, their outputs from `function` will be
     compared. If you do pass in a function, it's assumed that it's strictly
     rising.
-    
+
     Note: This function uses `None` to express its inability to find any
     matches; therefore, you better not use it on sequences in which None is a
     possible item.
-    
+
     For documentation of rounding options, check `binary_search.roundings`.
     '''
-    
+
     from .binary_search_profile import BinarySearchProfile
-    
+
     binary_search_profile = BinarySearchProfile(sequence, value,
                                                 function=function)
     return binary_search_profile.results[rounding]
@@ -148,7 +148,7 @@ def make_both_data_into_preferred_rounding(
             both, value, function=misc_tools.identity_function, rounding=BOTH):
     '''
     Convert results gotten using `BOTH` to a different rounding option.
-    
+
     This function takes the return value from `binary_search` (or other such
     functions) with `rounding=BOTH` as the parameter `both`. It then gives the
     data with a different rounding, specified with the parameter `rounding`.
@@ -157,30 +157,30 @@ def make_both_data_into_preferred_rounding(
     # `BinarySearchProfile`
     if rounding is BOTH:
         return both
-    
+
     elif rounding is LOW:
         return both[0]
-    
+
     elif rounding is LOW_IF_BOTH:
         return both[0] if both[1] is not None else None
-    
+
     elif rounding is LOW_OTHERWISE_HIGH:
         return both[0] if both[0] is not None else both[1]
-    
+
     elif rounding is HIGH:
         return both[1]
-    
+
     elif rounding is HIGH_IF_BOTH:
         return both[1] if both[0] is not None else None
-    
+
     elif rounding is HIGH_OTHERWISE_LOW:
         return both[1] if both[1] is not None else both[0]
-    
+
     elif rounding is EXACT:
         results = [item for item in both if
                    (item is not None and function(item) == value)]
         return results[0] if results else None
-    
+
     elif rounding in (CLOSEST, CLOSEST_IF_BOTH):
         if rounding is CLOSEST_IF_BOTH:
             if None in both:
@@ -192,5 +192,4 @@ def make_both_data_into_preferred_rounding(
             return both[0]
         else:
             return both[1]
-        
-        
+

@@ -20,52 +20,51 @@ def test():
 
     assert get_equivalence_classes({1: 2, 3: 4, 'meow': 2}) == \
                                             {2: set((1, 'meow')), 4: set((3,))}
-    
+
 def test_iterable_input():
     assert get_equivalence_classes(range(1, 5), str) == \
               {'1': set((1,)), '2': set((2,)), '3': set((3,)), '4': set((4,)),}
-    
+
     assert get_equivalence_classes([1, 2+3j, 4, 5-6j], 'imag') \
                          == {0: set((1, 4)), 3: set((2+3j,)), -6: set((5-6j,))}
-    
-    
+
+
 def test_ordered_dict_output():
     # Insertion order:
-    
+
     assert get_equivalence_classes(
         nifty_collections.OrderedDict(((1, 2), (3, 4), ('meow', 2))),
         use_ordered_dict=True) == \
     nifty_collections.OrderedDict([(2, set((1, 'meow'))), (4, set((3,)))])
-    
+
     assert get_equivalence_classes(
         nifty_collections.OrderedDict((('meow', 2), (1, 2), (3, 4))),
         use_ordered_dict=True) == \
     nifty_collections.OrderedDict([(2, set((1, 'meow'))), (4, set((3,)))])
-    
+
     assert get_equivalence_classes(
         nifty_collections.OrderedDict(((3, 4), (1, 2), ('meow', 2))),
         use_ordered_dict=True) == \
     nifty_collections.OrderedDict([(4, set((3,))), (2, set((1, 'meow',)))])
-    
+
     assert get_equivalence_classes(
         nifty_collections.OrderedDict(((1, 2), (3, 4), ('meow', 2))),
-        container=tuple, 
+        container=tuple,
         use_ordered_dict=True) == \
     nifty_collections.OrderedDict([(2, (1, 'meow')), (4, (3,))])
-    
+
     assert get_equivalence_classes(
         nifty_collections.OrderedDict((('meow', 2), (1, 2), (3, 4))),
-        container=tuple, 
+        container=tuple,
         use_ordered_dict=True) == \
     nifty_collections.OrderedDict([(2, ('meow', 1)), (4, (3,))])
-    
+
     # Sorting:
-    
+
     assert get_equivalence_classes({1: 2, 3: 4, 'meow': 2},
                                                    sort_ordered_dict=True) == \
     nifty_collections.OrderedDict([(2, set((1, 'meow'))), (4, set((3,)))])
-    
+
     assert get_equivalence_classes({1: 2, 3: 4, 'meow': 2},
                                            sort_ordered_dict=lambda x: -x) == \
     nifty_collections.OrderedDict([(4, set((3,))), (2, set((1, 'meow')))])
-    

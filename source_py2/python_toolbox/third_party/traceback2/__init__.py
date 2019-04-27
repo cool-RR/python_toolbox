@@ -490,7 +490,7 @@ class TracebackException:
     @classmethod
     def from_exception(self, exc, *args, **kwargs):
         """Create a TracebackException from an exception.
-        
+
         Only useful in Python 3 specific code.
         """
         return TracebackException(

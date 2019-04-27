@@ -12,4 +12,3 @@ def test():
     assert set(dict_tools.devour_items(my_dict)) == \
                                                   set(((1, 2), (3, 4), (5, 6)))
     assert not my_dict
-    

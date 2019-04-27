@@ -35,12 +35,12 @@ else:
 def get_python_toolbox_packages():
     '''
     Get all the packages in `python_toolbox`.
-    
+
     Returns something like:
-    
+
         ['python_toolbox', 'python_toolbox.caching',
         'python_toolbox.nifty_collections', ... ]
-        
+
     '''
     return ['python_toolbox.' + p for p in
             setuptools.find_packages('%s/python_toolbox' % source_folder)] + \
@@ -50,12 +50,12 @@ def get_python_toolbox_packages():
 def get_test_python_toolbox_packages():
     '''
     Get all the packages in `test_python_toolbox`.
-    
+
     Returns something like:
-    
+
         ['test_python_toolbox', 'test_python_toolbox.test_caching',
         'test_python_toolbox.test_nifty_collections', ... ]
-        
+
     '''
     return ['test_python_toolbox.' + p for p in
             setuptools.find_packages('%s/test_python_toolbox'
@@ -66,12 +66,12 @@ def get_test_python_toolbox_packages():
 def get_packages():
     '''
     Get all the packages in `python_toolbox` and `test_python_toolbox`.
-    
+
     Returns something like:
-    
+
         ['test_python_toolbox', 'python_toolbox', 'python_toolbox.caching',
         'test_python_toolbox.test_nifty_collections', ... ]
-        
+
     '''
     return get_python_toolbox_packages() + get_test_python_toolbox_packages()
 
@@ -84,19 +84,19 @@ contains:
 
  - ``python_toolbox.caching``: Tools for caching functions, class instances and
     properties.
- 
+
  - ``python_toolbox.cute_iter_tools``: Tools for manipulating iterables. Adds
     useful functions not found in Python's built-in ``itertools``.
- 
+
  - ``python_toolbox.context_management``: Pimping up your context managers.
- 
+
  - ``python_toolbox.emitting``: A publisher-subscriber framework that doesn't
     abuse strings.
-   
+
  - And many, *many* more! The Python Toolbox contains **100+** useful
    little tools.
 
-   
+
 Documentation: http://python-toolbox.readthedocs.io
 
 Python Toolbox on GitHub: https://github.com/cool-RR/python_toolbox
@@ -134,7 +134,7 @@ Make a 1.0 release and start maintaining backward compatibility.
 
 -------------------------------------------------------
 
-The Python Toolbox was created by Ram Rachum. I provide 
+The Python Toolbox was created by Ram Rachum. I provide
 `Development services in Python and Django <https://chipmunkdev.com>`_.
 
 
@@ -142,9 +142,9 @@ The Python Toolbox was created by Ram Rachum. I provide
 
 my_classifiers = [
     'Development Status :: 3 - Alpha',
-    'Intended Audience :: Developers', 
+    'Intended Audience :: Developers',
     'License :: OSI Approved :: MIT License',
-    'Operating System :: OS Independent', 
+    'Operating System :: OS Independent',
     'Programming Language :: Python',
     'Programming Language :: Python :: 2.6',
     'Programming Language :: Python :: 2.7',
@@ -156,7 +156,7 @@ my_classifiers = [
 
 
 install_requires = ['setuptools']
-    
+
 
 setuptools.setup(
     name='python_toolbox',
@@ -168,7 +168,7 @@ setuptools.setup(
     description='A collection of Python tools for various tasks',
     author='Ram Rachum',
     author_email='ram@rachum.com',
-    package_dir={'': source_folder}, 
+    package_dir={'': source_folder},
     packages=get_packages(),
     scripts=['%s/test_python_toolbox/scripts/_test_python_toolbox.py'
                                                               % source_folder],
@@ -176,7 +176,7 @@ setuptools.setup(
         'console_scripts': [
             '_test_python_toolbox = test_python_toolbox:invoke_nose',
         ],
-    }, 
+    },
     long_description=my_long_description,
     license='MIT',
     classifiers=my_classifiers,

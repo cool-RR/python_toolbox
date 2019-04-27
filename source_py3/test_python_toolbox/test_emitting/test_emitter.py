@@ -14,9 +14,9 @@ def test():
     @misc_tools.set_attributes(call_counter=0)
     def my_function():
         my_function.call_counter += 1
-    
+
     emitter_1.add_output(my_function)
-    
+
     assert my_function.call_counter == 0
     emitter_1.emit()
     assert my_function.call_counter == 1

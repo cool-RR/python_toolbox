@@ -19,7 +19,7 @@ class TempImportHookSetter(TempValueSetter):
     def __init__(self, import_hook):
         '''
         Construct the `TempImportHookSetter`.
-        
+
         `import_hook` is the function to be used as the import hook.
         '''
         assert callable(import_hook)
