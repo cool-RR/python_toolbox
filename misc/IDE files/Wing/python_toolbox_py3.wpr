@@ -1,7 +1,7 @@
 #!wing
-#!version=5.0
+#!version=7.0
 ##################################################################
-# Wing IDE project file                                          #
+# Wing project file                                              #
 ##################################################################
 [project attributes]
 debug.launch-configs = (1,
