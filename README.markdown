@@ -5,15 +5,15 @@ contains:
 
  - `python_toolbox.caching`: Tools for caching functions, class instances and
    properties.
- 
+
  - `python_toolbox.cute_iter_tools`: Tools for manipulating iterables. Adds
    useful functions not found in Python's built-in `itertools`.
- 
+
  - `python_toolbox.context_management`: Pimping up your context managers.
- 
+
  - `python_toolbox.emitting`: A publisher-subscriber framework that doesn't
    abuse strings.
-   
+
  - And many, *many* more! The Python Toolbox contains **100+** useful little
    tools.
 
@@ -55,7 +55,7 @@ If you want to be informed on new releases of the Python Toolbox, sign up for
 **[the low-traffic python-toolbox-announce Google Group](https://groups.google.com/forum/#!forum/python-toolbox-announce)**.
 
 # Python versions #
- 
+
 The Python Toolbox supports Python versions 2.7 and 3.3+.
 
 It's tested on both CPython and PyPy 2.1.
@@ -72,7 +72,7 @@ to run the tests.
 
 ------------------------------------------------------------------
 
-The Python Toolbox was created by Ram Rachum. I provide 
+The Python Toolbox was created by Ram Rachum. I provide
 [Development services in Python and Django](https://chipmunkdev.com)
 and [give Python workshops](http://pythonworkshops.co/) to teach people
 Python and related topics. ([Hebrew website](http://pythonworkshops.co.il/).)

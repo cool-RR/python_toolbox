@@ -9,6 +9,6 @@ ignore_errors = True
 
 omit =
     *third_party*
-    
+
 [html]
 directory = .coverage_html_report

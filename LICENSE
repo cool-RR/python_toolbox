@@ -13,7 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 # Included subpackages #
 
-Python Toolbox includes third-party Python packages as subpackages that are used internally. (These are in the `third_party` package.) These are: 
+Python Toolbox includes third-party Python packages as subpackages that are used internally. (These are in the `third_party` package.) These are:
 
  * `Envelopes` by Tomasz Wójcik and others, MIT license.
  * `sortedcontainers` by Grant Jenks and others, Apache license 2.0.
