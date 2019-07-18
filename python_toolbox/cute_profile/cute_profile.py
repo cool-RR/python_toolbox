@@ -85,7 +85,8 @@ def profile_ready(condition=None, off_after=True, profile_handler=None):
 
     def decorator(function):
 
-        def inner(function_, *args, **kwargs):
+        @functools.wraps(function)
+        def inner(*args, **kwargs):
 
             if decorated_function.condition is not None:
 
@@ -120,7 +121,7 @@ def profile_ready(condition=None, off_after=True, profile_handler=None):
 
                 return decorated_function.original_function(*args, **kwargs)
 
-        decorated_function = decorator(inner, function)
+        decorated_function = inner
 
         decorated_function.original_function = function
         decorated_function.profiling_on = None
