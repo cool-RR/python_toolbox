@@ -15,6 +15,7 @@ import python_toolbox.version_info
 import python_toolbox.monkeypatch_copyreg
 import python_toolbox.monkeypatch_envelopes
 
-__version_info__ = python_toolbox.version_info.VersionInfo(1, 0, 0)
-__version__ = __version_info__.version_text
-
+__version__ = '1.0.1'
+__version_info__ = python_toolbox.version_info(
+    *(map(int, __version__.split('.')))
+)

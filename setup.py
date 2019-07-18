@@ -6,8 +6,16 @@
 '''Setuptools setup file for `python_toolbox`.'''
 
 import os
+import re
 import setuptools
 import sys
+
+def read_file(filename):
+    with open(filename) as file:
+        return file.read()
+
+version = re.search("__version__ = '([0-9.]*)'",
+                    read_file('python_toolbox/__init__.py')).group(1)
 
 
 
@@ -118,7 +126,7 @@ install_requires = ['setuptools']
 
 setuptools.setup(
     name='python_toolbox',
-    version='1.0.0',
+    version=version,
     test_suite='nose.collector',
     install_requires=install_requires,
     tests_require=['nose>=1.0.0',

@@ -30,20 +30,6 @@ The Python Toolbox is released under the MIT license.
 Backward compatibility is currently *not* maintained. If you're using Python Toolbox in your code and you want to upgrade to a newer version of Python Toolbox, you'll need to ensure that all the calls to Python Toolbox aren't failing. (A good test suite will usually do the trick.)
 
 
-# Roadmap #
-
-## Present ##
-
-Python Toolbox is at version 1.0.0. It's being used in production every day, but backward compatibility isn't guaranteed yet.
-
-## Next tasks ##
-
-Adding more useful tools.
-
-## Future ##
-
-Make a 1.0 release and start maintaining backward compatibility.
-
 
 # Mailing lists #
 
