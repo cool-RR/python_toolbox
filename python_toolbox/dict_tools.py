@@ -118,7 +118,7 @@ def remove_keys(d, keys_to_remove):
 
     If key doesn't exist, doesn't raise an exception.
     '''
-    if isinstance(keys_to_remove, collections.Iterable):
+    if isinstance(keys_to_remove, collections.abc.Iterable):
         for key in keys_to_remove:
             try:
                 del d[key]

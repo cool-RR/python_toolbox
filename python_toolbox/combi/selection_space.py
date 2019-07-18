@@ -74,7 +74,7 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
 
     def index(self, selection):
         '''Find the index number of `selection` in this `SelectionSpace`.'''
-        if not isinstance(selection, collections.Iterable):
+        if not isinstance(selection, collections.abc.Iterable):
             raise ValueError
 
         selection_set = set(selection)

@@ -50,7 +50,7 @@ class CanonicalSlice:
             elif isinstance(iterable_or_length, collections.abc.Sequence):
                 self.length = sequence_tools.get_length(iterable_or_length)
             else:
-                assert isinstance(iterable_or_length, collections.Iterable)
+                assert isinstance(iterable_or_length, collections.abc.Iterable)
                 self.length = cute_iter_tools.get_length(iterable_or_length)
         else:
             self.length = None

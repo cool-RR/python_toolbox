@@ -107,7 +107,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.abc.Sequence,
         '''
         perm_space = None if perm_space is None \
                                               else PermSpace.coerce(perm_space)
-        assert isinstance(perm_sequence, collections.Iterable)
+        assert isinstance(perm_sequence, collections.abc.Iterable)
         perm_sequence = sequence_tools. \
                            ensure_iterable_is_immutable_sequence(perm_sequence)
 

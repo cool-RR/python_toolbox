@@ -165,7 +165,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         #                                                                     #
         assert isinstance(
             iterable_or_length,
-            (collections.Iterable, numbers.Integral)
+            (collections.abc.Iterable, numbers.Integral)
         )
         if isinstance(iterable_or_length, numbers.Integral):
             assert iterable_or_length >= 0
@@ -186,7 +186,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             self.sequence = sequence_tools.CuteRange(iterable_or_length)
             self.sequence_length = iterable_or_length
         else:
-            assert isinstance(iterable_or_length, collections.Iterable)
+            assert isinstance(iterable_or_length, collections.abc.Iterable)
             self.sequence = sequence_tools. \
                       ensure_iterable_is_immutable_sequence(iterable_or_length)
             range_candidate = sequence_tools.CuteRange(len(self.sequence))
@@ -753,7 +753,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
 
     def index(self, perm):
         '''Get the index number of permutation `perm` in this space.'''
-        if not isinstance(perm, collections.Iterable):
+        if not isinstance(perm, collections.abc.Iterable):
             raise ValueError
 
         try:

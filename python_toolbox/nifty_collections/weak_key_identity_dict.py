@@ -27,7 +27,7 @@ class IdentityRef(weakref.ref):
         return self._hash
 
 
-class WeakKeyIdentityDict(collections.MutableMapping):
+class WeakKeyIdentityDict(collections.abc.MutableMapping):
     """
     A weak key dictionary which cares about the keys' identities.
 

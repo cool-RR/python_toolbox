@@ -241,7 +241,7 @@ def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
     specified in `default_type`.
     '''
     from python_toolbox import nifty_collections
-    assert isinstance(iterable, collections.Iterable)
+    assert isinstance(iterable, collections.abc.Iterable)
     if not allow_unordered and \
                    isinstance(iterable, nifty_collections.DefinitelyUnordered):
         raise UnorderedIterableException
@@ -263,7 +263,7 @@ def ensure_iterable_is_sequence(iterable, default_type=tuple,
     makes it into a `tuple`, or into any other data type specified in
     `default_type`.
     '''
-    assert isinstance(iterable, collections.Iterable)
+    assert isinstance(iterable, collections.abc.Iterable)
     if not allow_unordered and isinstance(iterable, (set, frozenset)):
         raise UnorderedIterableException
     if isinstance(iterable, collections.abc.Sequence) and \

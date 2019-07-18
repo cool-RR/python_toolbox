@@ -824,7 +824,7 @@ class _FrozenBagMixin:
 
 
 
-class _BaseDictDelegator(collections.MutableMapping):
+class _BaseDictDelegator(collections.abc.MutableMapping):
     '''
     Base class for a dict-like object.
 

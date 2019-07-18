@@ -48,7 +48,7 @@ class BrutePermSpace:
                  fixed_map={}, degrees=None, is_combination=False,
                  slice_=None, perm_type=None):
         self.sequence = tuple(iterable_or_length) if \
-            isinstance(iterable_or_length, collections.Iterable) else \
+            isinstance(iterable_or_length, collections.abc.Iterable) else \
                                    sequence_tools.CuteRange(iterable_or_length)
         self.sequence_length = len(self.sequence)
         self._sequence_frozen_bag = \
