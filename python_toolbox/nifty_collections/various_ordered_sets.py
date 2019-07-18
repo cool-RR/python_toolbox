@@ -109,7 +109,7 @@ class FrozenOrderedSet(BaseOrderedSet):
 
 
 
-class OrderedSet(BaseOrderedSet, collections.MutableSet):
+class OrderedSet(BaseOrderedSet, collections.abc.MutableSet):
     '''
     A `set` with an order.
 
