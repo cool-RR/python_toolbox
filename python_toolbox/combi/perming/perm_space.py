@@ -268,7 +268,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         if fixed_map is None:
             fixed_map = {}
         if not isinstance(fixed_map, dict):
-            if isinstance(fixed_map, collections.Callable):
+            if isinstance(fixed_map, collections.abc.Callable):
                 fixed_map = {item: fixed_map(item) for item in self.sequence}
             else:
                 fixed_map = dict(fixed_map)

@@ -128,7 +128,7 @@ def remove_keys(d, keys_to_remove):
         if isinstance(keys_to_remove, collections.abc.Container):
             filter_function = lambda value: value in keys_to_remove
         else:
-            assert isinstance(keys_to_remove, collections.Callable)
+            assert isinstance(keys_to_remove, collections.abc.Callable)
             filter_function = keys_to_remove
         for key in list(d.keys()):
             if filter_function(key):

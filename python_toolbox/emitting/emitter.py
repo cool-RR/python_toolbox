@@ -72,7 +72,7 @@ class Emitter:
         inputs = sequence_tools.to_tuple(inputs,
                                          item_type=Emitter)
         outputs = sequence_tools.to_tuple(outputs,
-                                          item_type=(collections.Callable,
+                                          item_type=(collections.abc.Callable,
                                                      Emitter))
 
         self._inputs = set()
@@ -220,7 +220,7 @@ class Emitter:
         If adding an emitter, every time this emitter will emit the output
         emitter will emit as well.
         '''
-        assert isinstance(thing, (Emitter, collections.Callable))
+        assert isinstance(thing, (Emitter, collections.abc.Callable))
         self._outputs.add(thing)
         if isinstance(thing, Emitter):
             thing._inputs.add(self)
@@ -228,7 +228,7 @@ class Emitter:
 
     def remove_output(self, thing):
         '''Remove an output from this emitter.'''
-        assert isinstance(thing, (Emitter, collections.Callable))
+        assert isinstance(thing, (Emitter, collections.abc.Callable))
         self._outputs.remove(thing)
         if isinstance(thing, Emitter):
             thing._inputs.remove(self)
