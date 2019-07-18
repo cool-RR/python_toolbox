@@ -4,10 +4,7 @@
 '''This module defines miscellaneous tools that don't fit anywhere else.'''
 
 import operator
-try:
-    import pathlib
-except:
-    from python_toolbox.third_party import pathlib
+import pathlib
 
 import re
 import math

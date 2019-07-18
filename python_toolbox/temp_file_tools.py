@@ -5,10 +5,7 @@
 
 import tempfile
 import shutil
-try:
-    import pathlib
-except ImportError:
-    from python_toolbox.third_party import pathlib
+import pathlib
 
 
 from python_toolbox import context_management

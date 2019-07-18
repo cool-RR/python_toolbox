@@ -4,10 +4,7 @@
 import threading
 import datetime as datetime_module
 import marshal
-try:
-    import pathlib
-except:
-    from python_toolbox.third_party import pathlib
+import pathlib
 
 import abc
 import pstats

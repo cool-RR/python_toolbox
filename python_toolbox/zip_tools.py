@@ -8,10 +8,7 @@ import zipfile as zip_module
 import io
 import os
 import re
-try:
-    import pathlib
-except:
-    from python_toolbox.third_party import pathlib
+import pathlib
 
 import fnmatch
 

@@ -1,10 +1,7 @@
 # Copyright 2009-2017 Ram Rachum.
 # This program is distributed under the MIT license.
 
-try:
-    import pathlib
-except:
-    from python_toolbox.third_party import pathlib
+import pathlib
 
 import os
 import re

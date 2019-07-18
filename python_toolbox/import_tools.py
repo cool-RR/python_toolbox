@@ -8,10 +8,7 @@ import os.path
 import imp
 import zipimport
 import functools
-try:
-    import pathlib
-except:
-    from python_toolbox.third_party import pathlib
+import pathlib
 
 
 from python_toolbox import package_finder

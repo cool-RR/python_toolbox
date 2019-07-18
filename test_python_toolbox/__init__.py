@@ -4,10 +4,7 @@
 '''Testing package for `python_toolbox`.'''
 
 import sys
-try:
-    import pathlib
-except:
-    from python_toolbox.third_party import pathlib
+import pathlib
 
 
 import nose
