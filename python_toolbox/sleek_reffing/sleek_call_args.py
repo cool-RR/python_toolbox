@@ -52,10 +52,9 @@ class SleekCallArgs:
         '''
 
         args_spec = inspect.getfullargspec(function)
-        star_args_name, star_kwargs_name = \
-                      args_spec.varargs, args_spec.keywords
+        star_args_name, star_kwargs_name = args_spec.varargs, args_spec.varkw
 
-        call_args = inspect.getfullargspec(function, *args, **kwargs)
+        call_args = inspect.getcallargs(function, *args, **kwargs)
         del args, kwargs
 
         self.star_args_refs = []
