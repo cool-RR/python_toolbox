@@ -6,14 +6,14 @@
 import sys
 
 import nose
-from python_toolbox.third_party import unittest2
+import unittest
 
 import python_toolbox
 from python_toolbox.context_management import (ContextManager,
                                                     ContextManagerType)
 
 
-class ContextManagerTestCase(unittest2.TestCase):
+class ContextManagerTestCase(unittest.TestCase):
 
     def test_contextmanager_plain(self):
         state = []
@@ -103,8 +103,8 @@ class ContextManagerTestCase(unittest2.TestCase):
         self.assertEqual(baz.__name__,'baz')
         self.assertEqual(baz.foo, 'bar')
 
-    @unittest2.skipIf(hasattr(sys, 'flags') and sys.flags.optimize >= 2,
-                      "Docstrings are omitted with -O2 and above")
+    @unittest.skipIf(hasattr(sys, 'flags') and sys.flags.optimize >= 2,
+                     "Docstrings are omitted with -O2 and above")
     def test_contextmanager_doc_attrib(self):
         raise nose.SkipTest('Not sure what to do about this.')
         baz = self._create_contextmanager_attribs()
@@ -125,7 +125,7 @@ class MyContextManager(ContextManager):
         return self.catch
 
 
-class TestContextDecorator(unittest2.TestCase):
+class TestContextDecorator(unittest.TestCase):
 
     def test_contextdecorator(self):
         context = MyContextManager()

@@ -1,8 +1,8 @@
-from python_toolbox.third_party import unittest2
+import unittest
 
 __test__ = False
 
-class BasicTestMappingProtocol(unittest2.TestCase):
+class BasicTestMappingProtocol(unittest.TestCase):
     # This base class can be used to check that an object conforms to the
     # mapping protocol
 
@@ -26,7 +26,7 @@ class BasicTestMappingProtocol(unittest2.TestCase):
         return x
 
     def __init__(self, *args, **kw):
-        unittest2.TestCase.__init__(self, *args, **kw)
+        unittest.TestCase.__init__(self, *args, **kw)
         self.reference = self._reference().copy()
 
         # A (key, value) pair not in the mapping

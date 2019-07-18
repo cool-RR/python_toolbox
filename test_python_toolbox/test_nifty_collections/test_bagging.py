@@ -6,7 +6,7 @@ import pickle
 import abc
 import collections
 import decimal as decimal_module
-from python_toolbox.third_party import unittest2
+import unittest
 import copy
 
 import nose

@@ -7,9 +7,9 @@ import sys
 import random
 import string
 import weakref
+import unittest
 
 import nose
-from python_toolbox.third_party import unittest2
 from python_toolbox import sys_tools
 from python_toolbox import gc_tools
 
@@ -20,7 +20,7 @@ null_callback = lambda: None
 null_callback()
 
 
-class GenericDictTest(unittest2.TestCase):
+class GenericDictTest(unittest.TestCase):
 
     def test_constructor(self):
         # calling built-in types without argument must return empty

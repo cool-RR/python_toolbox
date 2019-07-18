@@ -6,8 +6,7 @@
 import nose
 import sys
 import inspect
-
-from python_toolbox.third_party import unittest2
+import unittest
 
 from python_toolbox import context_management
 from python_toolbox.exceptions import CuteException
@@ -141,7 +140,7 @@ def assert_polite_wrapper(wrapper, wrapped=None, same_signature=True):
     assert wrapper.__wrapped__ == wrapped
 
 
-class TestCase(unittest2.TestCase, context_management.ContextManager):
+class TestCase(unittest.TestCase, context_management.ContextManager):
     setUp = misc_tools.ProxyProperty('.setup')
     tearDown = misc_tools.ProxyProperty('.tear_down')
     def manage_context(self):

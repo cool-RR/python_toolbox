@@ -17,5 +17,4 @@ Python Toolbox includes third-party Python packages as subpackages that are used
 
  * `Envelopes` by Tomasz Wójcik and others, MIT license.
  * `sortedcontainers` by Grant Jenks and others, Apache license 2.0.
- * `unittest2` by Robert Collins and others, BSD license.
  * `decorator` by Michele Simionato and others, BSD license.
