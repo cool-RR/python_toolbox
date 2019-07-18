@@ -113,25 +113,6 @@ When ``python_toolbox`` isn't installed, you may run ``nosetests`` at the repo
 root to run the tests.
 
 
-Roadmap
-=======
-
-Present
--------
-
-Python Toolbox is at version 0.9.4. It's being used in production every day,
-but backward compatibility isn't guaranteed yet.
-
-Next tasks
-----------
-
-Adding more useful tools.
-
-Future
-------
-
-Make a 1.0 release and start maintaining backward compatibility.
-
 -------------------------------------------------------
 
 The Python Toolbox was created by Ram Rachum. I provide
@@ -160,7 +141,7 @@ install_requires = ['setuptools']
 
 setuptools.setup(
     name='python_toolbox',
-    version='0.9.4',
+    version='1.0.0',
     test_suite='nose.collector',
     install_requires=install_requires,
     tests_require=['nose>=1.0.0',

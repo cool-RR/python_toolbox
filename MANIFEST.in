@@ -1,9 +1,9 @@
-recursive-include source_py2 *
-recursive-exclude source_py2 *.pyc
-recursive-exclude source_py2 *.pyo
-recursive-include source_py3 *
-recursive-exclude source_py3 *.pyc
-recursive-exclude source_py3 *.pyo
+recursive-include python_toolbox *
+recursive-exclude python_toolbox *.pyc
+recursive-exclude python_toolbox *.pyo
+recursive-include test_python_toolbox *
+recursive-exclude test_python_toolbox *.pyc
+recursive-exclude test_python_toolbox *.pyo
 include README.markdown
 include MANIFEST.in
 include .coveragerc
