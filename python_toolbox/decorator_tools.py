@@ -46,7 +46,7 @@ def helpful_decorator_builder(decorator_builder):
 
     assert isinstance(decorator_builder, types.FunctionType)
 
-    def inner(same_decorator_builder, *args, **kwargs):
+    def inner(*args, **kwargs):
 
         if args and isinstance(args[0], types.FunctionType):
             function = args[0]
@@ -59,4 +59,4 @@ def helpful_decorator_builder(decorator_builder):
         else:
             return decorator_builder(*args, **kwargs)
 
-    return functools.wraps(inner)(decorator_builder)
+    return functools.wraps(decorator_builder)(inner)
