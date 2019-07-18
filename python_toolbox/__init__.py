@@ -11,7 +11,6 @@ more.
 Visit http://pypi.python.org/pypi/python_toolbox/ for more info.
 '''
 
-import python_toolbox._bootstrap
 import python_toolbox.version_info
 import python_toolbox.monkeypatch_copyreg
 import python_toolbox.monkeypatch_envelopes
