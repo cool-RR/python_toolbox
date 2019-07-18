@@ -20,7 +20,7 @@ def get_default_args_dict(function):
 
     '''
     arg_spec = inspect.getfullargspec(function)
-    (s_args, s_star_args, s_star_kwargs, s_defaults) = arg_spec
+    (s_args, s_star_args, s_star_kwargs, s_defaults, *_) = arg_spec
 
     # `getargspec` has a weird policy, when inspecting a function with no
     # defaults, to give a `defaults` of `None` instead of the more consistent
