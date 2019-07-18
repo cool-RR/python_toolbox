@@ -105,7 +105,7 @@ def change_defaults(function=None, new_defaults={}):
     be changed.
     '''
     def change_defaults_(function_, new_defaults_):
-        signature = inspect.Signature.from_function(function_)
+        signature = inspect.Signature.from_callable(function_)
         defaults = list(function_.__defaults__ or ())
         kwdefaults = function_.__kwdefaults__ or {}
         defaultful_parameters = dict_tools.filter_items(

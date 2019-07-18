@@ -5,10 +5,10 @@
 import sys
 import uuid
 import types
+import inspect
 
 import nose
 
-from python_toolbox import cute_inspect
 from python_toolbox import cute_testing
 
 from python_toolbox import monkeypatching_tools
@@ -147,7 +147,7 @@ def test_monkeypatch_staticmethod():
     def my_static_method(x):
         return (x, 'Success')
 
-    assert isinstance(cute_inspect.getattr_static(A, 'my_static_method'),
+    assert isinstance(inspect.getattr_static(A, 'my_static_method'),
                       staticmethod)
     assert isinstance(A.my_static_method, types.FunctionType)
 
@@ -169,7 +169,7 @@ def test_monkeypatch_classmethod():
     def my_class_method(cls):
         return cls
 
-    assert isinstance(cute_inspect.getattr_static(A, 'my_class_method'),
+    assert isinstance(inspect.getattr_static(A, 'my_class_method'),
                       classmethod)
     assert isinstance(A.my_class_method, types.MethodType)
 
@@ -199,9 +199,9 @@ def test_monkeypatch_classmethod_subclass():
     def my_funky_class_method(cls):
         return cls
 
-    assert isinstance(cute_inspect.getattr_static(A, 'my_funky_class_method'),
+    assert isinstance(inspect.getattr_static(A, 'my_funky_class_method'),
                       FunkyClassMethod)
-    assert cute_inspect.getattr_static(A, 'my_funky_class_method').is_funky
+    assert inspect.getattr_static(A, 'my_funky_class_method').is_funky
     assert isinstance(A.my_funky_class_method, types.MethodType)
 
     assert A.my_funky_class_method() == A

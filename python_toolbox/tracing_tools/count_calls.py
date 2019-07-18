@@ -7,7 +7,7 @@ Defines the `count_calls` decorator.
 See its documentation for more details.
 '''
 
-from python_toolbox import decorator_tools
+from python_toolbox.third_party.decorator import decorator
 
 
 def count_calls(function):
@@ -39,7 +39,7 @@ def count_calls(function):
         decorated_function.call_count += 1
         return function(*args, **kwargs)
 
-    decorated_function = decorator_tools.decorator(_count_calls, function)
+    decorated_function = decorator(_count_calls, function)
 
     decorated_function.call_count = 0
 

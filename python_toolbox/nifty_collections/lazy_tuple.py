@@ -9,6 +9,7 @@ import itertools
 from python_toolbox import misc_tools
 from python_toolbox import decorator_tools
 from python_toolbox import comparison_tools
+from python_toolbox.third_party.decorator import decorator
 
 
 infinity = float('inf')
@@ -36,7 +37,7 @@ def _convert_index_to_exhaustion_point(index):
         return infinity
 
 
-@decorator_tools.decorator
+@decorator
 def _with_lock(method, *args, **kwargs):
     '''Decorator for using the `LazyTuple`'s lock.'''
     self = args[0]
@@ -118,7 +119,7 @@ class LazyTuple(collections.abc.Sequence):
         def inner(function, *args, **kwargs):
             return cls(function(*args, **kwargs),
                        definitely_infinite=definitely_infinite)
-        return decorator_tools.decorator(inner)
+        return decorator(inner)
 
 
     @property

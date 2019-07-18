@@ -7,8 +7,8 @@ Defines the `CachedProperty` class.
 See its documentation for more details.
 '''
 
-from python_toolbox import decorator_tools
 from python_toolbox import misc_tools
+from python_toolbox.third_party.decorator import decorator
 
 
 class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
@@ -73,7 +73,7 @@ class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
         def inner(same_method_function, self_obj, *args, **kwargs):
             with getattr(self_obj, self.get_our_name(self_obj)):
                 return method_function(self_obj, *args, **kwargs)
-        return decorator_tools.decorator(inner, method_function)
+        return decorator(inner, method_function)
 
 
     def __repr__(self):

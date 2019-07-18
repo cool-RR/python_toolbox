@@ -1,7 +1,7 @@
 # Copyright 2009-2017 Ram Rachum.
 # This program is distributed under the MIT license.
 
-from python_toolbox import decorator_tools
+from python_toolbox.third_party.decorator import decorator
 
 
 class _DecoratingContextManagerMixin:
@@ -24,4 +24,4 @@ class _DecoratingContextManagerMixin:
         def inner(function_, *args, **kwargs):
             with self:
                 return function_(*args, **kwargs)
-        return decorator_tools.decorator(inner, function)
+        return decorator(inner, function)

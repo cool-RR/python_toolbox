@@ -3,7 +3,7 @@
 
 '''Defines various introspection tools, similar to the stdlib's `inspect`.'''
 
-from python_toolbox import cute_inspect
+import inspect
 
 from python_toolbox.nifty_collections import OrderedDict
 
@@ -19,7 +19,7 @@ def get_default_args_dict(function):
         OrderedDict([('c', 1), ('d', 'meow')])
 
     '''
-    arg_spec = cute_inspect.getargspec(function)
+    arg_spec = inspect.getfullargspec(function)
     (s_args, s_star_args, s_star_kwargs, s_defaults) = arg_spec
 
     # `getargspec` has a weird policy, when inspecting a function with no

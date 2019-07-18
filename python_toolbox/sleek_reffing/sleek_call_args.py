@@ -7,7 +7,8 @@ Defines the `SleekCallArgs` class.
 See its documentation for more details.
 '''
 
-from python_toolbox import cute_inspect
+import inspect
+
 from python_toolbox import cheat_hashing
 
 from .sleek_ref import SleekRef
@@ -50,11 +51,11 @@ class SleekCallArgs:
         `dict` we'll try to remove ourselves from when 1 of our sleekrefs dies.
         '''
 
-        args_spec = cute_inspect.getargspec(function)
+        args_spec = inspect.getfullargspec(function)
         star_args_name, star_kwargs_name = \
                       args_spec.varargs, args_spec.keywords
 
-        call_args = cute_inspect.getcallargs(function, *args, **kwargs)
+        call_args = inspect.getfullargspec(function, *args, **kwargs)
         del args, kwargs
 
         self.star_args_refs = []

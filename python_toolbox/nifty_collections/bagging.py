@@ -11,6 +11,7 @@ import copy
 
 from python_toolbox import misc_tools
 from python_toolbox import math_tools
+from python_toolbox.third_party.decorator import decorator
 
 from .lazy_tuple import LazyTuple
 from .ordered_dict import OrderedDict
@@ -124,11 +125,10 @@ class _BootstrappedCachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
         '''
         Decorate method to use value of `CachedProperty` as a context manager.
         '''
-        from python_toolbox import decorator_tools
         def inner(same_method_function, self_obj, *args, **kwargs):
             with getattr(self_obj, self.get_our_name(self_obj)):
                 return method_function(self_obj, *args, **kwargs)
-        return decorator_tools.decorator(inner, method_function)
+        return decorator(inner, method_function)
 
 
     def __repr__(self):

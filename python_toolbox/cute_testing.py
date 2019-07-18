@@ -5,10 +5,10 @@
 
 import nose
 import sys
+import inspect
 
 from python_toolbox.third_party import unittest2
 
-from python_toolbox import cute_inspect
 from python_toolbox import context_management
 from python_toolbox.exceptions import CuteException
 from python_toolbox import logic_tools
@@ -109,7 +109,7 @@ class RaiseAssertor(context_management.ContextManager):
 
 def assert_same_signature(*callables):
     '''Assert that all the `callables` have the same function signature.'''
-    arg_specs = [cute_inspect.getargspec(callable_) for callable_ in callables]
+    arg_specs = [inspect.getfullargspec(callable_) for callable_ in callables]
     if not logic_tools.all_equivalent(arg_specs, assume_transitive=False):
         raise Failure('Not all the callables have the same signature.')
 

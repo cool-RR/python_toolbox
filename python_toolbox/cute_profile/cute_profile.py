@@ -11,7 +11,7 @@ import functools
 import marshal
 
 from python_toolbox import misc_tools
-from python_toolbox import decorator_tools
+from python_toolbox.third_party.decorator import decorator
 
 from . import base_profile
 from . import profile_handling
@@ -120,7 +120,7 @@ def profile_ready(condition=None, off_after=True, profile_handler=None):
 
                 return decorated_function.original_function(*args, **kwargs)
 
-        decorated_function = decorator_tools.decorator(inner, function)
+        decorated_function = decorator(inner, function)
 
         decorated_function.original_function = function
         decorated_function.profiling_on = None

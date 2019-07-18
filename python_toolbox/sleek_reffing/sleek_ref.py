@@ -9,8 +9,6 @@ See its documentation for more info.
 
 import weakref
 
-from python_toolbox import cute_inspect
-
 from .exceptions import SleekRefDied
 
 

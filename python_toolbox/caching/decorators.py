@@ -14,6 +14,7 @@ from python_toolbox import misc_tools
 from python_toolbox import binary_search
 from python_toolbox import decorator_tools
 from python_toolbox.sleek_reffing import SleekCallArgs
+from python_toolbox.third_party.decorator import decorator as decorator_
 
 infinity = float('inf')
 
@@ -158,7 +159,7 @@ def cache(max_size=infinity, time_to_keep=None):
                     return value
 
 
-        result = decorator_tools.decorator(cached, function)
+        result = decorator_(cached, function)
 
         def cache_clear(key=CLEAR_ENTIRE_CACHE):
             if key is CLEAR_ENTIRE_CACHE:
