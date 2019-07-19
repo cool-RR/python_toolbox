@@ -10,7 +10,7 @@ import pickle as pickle_module
 
 def compickle(thing):
     '''Pickle `thing` and compress it using `zlib`.'''
-    return zlib.compress(pickle_module.dumps(thing, protocol=2))
+    return zlib.compress(pickle_module.dumps(thing, protocol=5))
 
 def decompickle(thing):
     '''Unpickle `thing` after decompressing it using `zlib`.'''
