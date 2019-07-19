@@ -77,38 +77,14 @@ def normal_import(module_name):
         return __import__(module_name)
 
 
-@caching.cache() # todo: clear cache if `sys.path` changes
-def import_if_exists(module_name, silent_fail=False):
+def import_if_exists(module_name):
     '''
     Import module by name and return it, only if it exists.
-
-    If `silent_fail` is `True`, will return `None` if the module doesn't exist.
-    If `silent_fail` is False, will raise `ImportError`.
-
-    `silent_fail` applies only to whether the module exists or not; if it does
-    exist, but there's an error importing it... *release the hounds.*
-
-    I mean, we just raise the error.
     '''
-    if '.' in module_name:
-        package_name, submodule_name = module_name.rsplit('.', 1)
-        package = import_if_exists(package_name, silent_fail=silent_fail)
-        if not package:
-            assert silent_fail is True
-            return None
-        if not exists(submodule_name, package_name):
-            if silent_fail is True:
-                return None
-            else: # silent_fail is False
-                raise ImportError("Can't find %s." % module_name)
-    else: # '.' not in module_name
-        if not exists(module_name):
-            if silent_fail is True:
-                return None
-            else: # silent_fail is False
-                raise ImportError("Can't find %s." % module_name)
-
-    return normal_import(module_name)
+    try:
+        return __import__(module_name)
+    except ModuleNotFoundError:
+        return None
 
 
 def exists(module_name, package_name=None):

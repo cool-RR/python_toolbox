@@ -146,7 +146,6 @@ def get_object_by_address(address, root=None, namespace={}):
 
                 import_tools.import_if_exists(
                     '.'.join((parent_object.__name__, address)),
-                    silent_fail=True
                 )
                 # Not keeping reference, just importing so we could get later.
 
