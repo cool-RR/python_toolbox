@@ -96,12 +96,12 @@ class ContextManagerType(abc.ABCMeta, metaclass=ContextManagerTypeType):
 
                 assert '__enter__' in namespace
 
-                raise Exception("The %s class defines an `__enter__` method, "
-                                "but not an `__exit__` method; we cannot use "
-                                "the `__exit__` method of its base context "
-                                "manager class because it uses the "
-                                "`manage_context` generator function." %
-                                result_class)
+                raise Exception(
+                    f"The {result_class} class defines an `__enter__` method, "
+                    f"but not an `__exit__` method; we cannot use the "
+                    f"`__exit__` method of its base context manager class "
+                    f"because it uses the `manage_context` generator function."
+                )
 
 
             if our_enter_uses_manage_context and not \
@@ -109,12 +109,12 @@ class ContextManagerType(abc.ABCMeta, metaclass=ContextManagerTypeType):
 
                 assert '__exit__' in namespace
 
-                raise Exception("The %s class defines an `__exit__` method, "
-                                "but not an `__enter__` method; we cannot use "
-                                "the `__enter__` method of its base context "
-                                "manager class because it uses the "
-                                "`manage_context` generator function." %
-                                result_class)
+                raise Exception(
+                    f"The {result_class} class defines an `__exit__` method, "
+                    f"but not an `__enter__` method; we cannot use the "
+                    f"`__enter__` method of its base context manager class "
+                    f"because it uses the `manage_context` generator function."
+                )
 
         return result_class
 

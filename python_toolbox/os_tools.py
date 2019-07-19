@@ -24,6 +24,6 @@ def start_file(path):
 
     else:
         raise NotImplementedError(
-            "Your operating system `%s` isn't supported by "
-            "`start_file`." % sys.platform)
+            f"Your operating system {sys.platform} isn't supported by "
+            f"`start_file`.")
 

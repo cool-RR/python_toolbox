@@ -62,7 +62,7 @@ class WeakKeyIdentityDict(collections.abc.MutableMapping):
 
 
     def __repr__(self):
-        return "<WeakKeyIdentityDict at %s>" % id(self)
+        return f"<WeakKeyIdentityDict at {id(self)}>"
 
 
     def __setitem__(self, key, value):

@@ -513,7 +513,7 @@ def _iterate_tests():
             fucking_globals = dict(globals())
             fucking_globals.update(locals())
             yield eval(
-                'lambda: _check_variation_selection(*product_space_[%s])' % i,
+                f'lambda: _check_variation_selection(*product_space_[{i}])',
                 fucking_globals, locals()
             )
 
@@ -521,7 +521,7 @@ def _iterate_tests():
 # We use this shit because Nose (RIP) can't parallelize generator tests:
 lambdas = []
 for i, f in enumerate(_iterate_tests()):
-    f.name = 'f_%s' % i
+    f.name = f'f_{i}'
     locals()[f.name] = f
     lambdas.append(f)
 for i, partition in enumerate(sequence_tools.partitions(lambdas, 500)):

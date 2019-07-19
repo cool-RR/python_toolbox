@@ -185,8 +185,8 @@ def find_clear_place_on_circle(circle_points, circle_size=1):
     sorted_circle_points = sorted(circle_points)
     last_point = sorted_circle_points[-1]
     if last_point >= circle_size:
-        raise Exception("One of the points (%s) is bigger than the circle "
-                        "size %s." % (last_point, circle_size))
+        raise Exception(f"One of the points ({last_point}) is bigger than the "
+                        f"circle size {circle_size}.")
     clear_space = {}
 
     for first_point, second_point in \
@@ -318,9 +318,9 @@ def decimal_number_from_string(string):
     if isinstance(string, bytes):
         string = string.decode()
     if not isinstance(string, str):
-        raise Exception("%s isn't a decimal number." % string)
+        raise Exception(f"{string} isn't a decimal number.")
     if not _decimal_number_pattern.match(string):
-        raise Exception("%s isn't a decimal number." % string)
+        raise Exception(f"{string} isn't a decimal number.")
     return float(string) if '.' in string else int(string)
 
 

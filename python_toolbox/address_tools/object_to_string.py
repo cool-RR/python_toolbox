@@ -140,9 +140,9 @@ def get_address(obj, shorten=False, root=None, namespace={}):
     # We'll probably have to do some kind of search.
 
     if not (isinstance(obj, types.ModuleType) or hasattr(obj, '__module__')):
-        raise TypeError("`%s` is not a module, nor does it have a "
-                        "`.__module__` attribute, therefore we can't get its "
-                        "address." % (obj,))
+        raise TypeError(f"`{obj}` is not a module, nor does it have a "
+                        f"`.__module__` attribute, therefore we can't get its "
+                        f"address.")
 
     if isinstance(obj, types.ModuleType):
         address = obj.__name__

@@ -25,7 +25,7 @@ def crop_segment(segment, base_segment):
     if not (base_start <= start <= base_end or \
             base_start <= end <= base_end or \
             start <= base_start <= base_end <= end):
-        raise Exception('%s is not touching %s' % (segment, base_segment))
+        raise Exception(f'{segment} is not touching {base_segment}')
 
     new_start = max((start, base_start))
     new_end = min((end, base_end))

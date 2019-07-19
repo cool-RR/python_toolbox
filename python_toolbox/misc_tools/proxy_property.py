@@ -49,12 +49,14 @@ class ProxyProperty:
         You may specify a docstring as `doc`.
         '''
         if not attribute_name.startswith('.'):
-            raise Exception("The `attribute_name` must start with a dot to "
-                            "make it clear it's an attribute. %s does not "
-                            "start with a dot." % repr(attribute_name))
+            raise Exception(
+                f"The `attribute_name` must start with a dot to make it clear "
+                f"it's an attribute. {repr(attribute_name)} does not start "
+                f"with a dot."
+            )
         self.getter = self.setter = None
-        exec('def getter(thing): return thing%s' % attribute_name)
-        exec('def setter(thing, value): thing%s = value' % attribute_name)
+        exec(f'def getter(thing): return thing{attribute_name}')
+        exec(f'def setter(thing, value): thing{attribute_name} = value')
         exec('self.getter, self.setter = getter, setter')
         self.attribute_name = attribute_name[1:]
         self.__doc__ = doc
@@ -76,6 +78,6 @@ class ProxyProperty:
     def __repr__(self):
         return '<%s: %s%s>' % (
             type(self).__name__,
-            repr('.%s' % self.attribute_name),
-            ', doc=%s' % repr(self.__doc__) if self.__doc__ else ''
+            repr(f'.{self.attribute_name}'),
+            f', doc={repr(self.__doc__) if self.__doc__ else ""}'
         )

@@ -422,7 +422,7 @@ class BaseMutableBagTestCase(BaseBagTestCase):
             assert tuple(bag.items()) == tuple(frozen_bag.items())
         else:
             assert set(bag.items()) == set(frozen_bag.items())
-        assert type(frozen_bag).__name__ == 'Frozen%s' % type(bag).__name__
+        assert type(frozen_bag).__name__ == f'Frozen{type(bag).__name__}'
         assert frozen_bag.get_mutable() == bag
 
     def test_hash(self):
@@ -598,7 +598,7 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
             assert tuple(bag.items()) == tuple(mutable_bag.items())
         else:
             assert set(bag.items()) == set(mutable_bag.items())
-        assert type(bag).__name__ == 'Frozen%s' % type(mutable_bag).__name__
+        assert type(bag).__name__ == f'Frozen{type(mutable_bag).__name__}'
         assert mutable_bag.get_frozen() == bag
 
 

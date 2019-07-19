@@ -20,8 +20,8 @@ def add_attachment_from_string(self, file_data, file_name,
     part.set_payload(file_data)
     email_encoders.encode_base64(part)
 
-    part.add_header('Content-Disposition', 'attachment; filename="%s"'
-                    % file_name)
+    part.add_header('Content-Disposition',
+                    f'attachment; filename="{file_name}"')
 
     self._parts.append((mimetype, part))
 

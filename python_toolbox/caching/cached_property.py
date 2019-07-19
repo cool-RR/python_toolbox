@@ -77,4 +77,4 @@ class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
 
 
     def __repr__(self):
-        return '<%s: %s>' % (type(self).__name__, self.our_name or self.getter)
+        return f'<{type(self).__name__}: {self.our_name or self.getter}>'

@@ -60,5 +60,5 @@ def get_event_code_from_name(name, evt_handler_type):
         except AttributeError:
             pass
     else:
-        raise LookupError("Couldn't find event by the name of '%s'." %
-                          processed_name)
+        raise LookupError(f"Couldn't find event by the name of "
+                          f"'{processed_name}'.")

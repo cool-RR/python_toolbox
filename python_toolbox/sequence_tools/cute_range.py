@@ -47,14 +47,14 @@ def parse_range_args(*args):
 
         if start in infinities:
             raise TypeError(
-                "Can't have `start=%s` because then what would the first item "
-                "be, %s? And the second item, %s + 1? No can do." %
-                (start, start)
+                f"Can't have `start={start}` because then what would the "
+                f"first item be, {start}? And the second item, {start + 1}? "
+                f"No can do."
             )
         if step in infinities:
             raise TypeError(
-                "Can't have `step=%s` because then what would the second item "
-                "be, %s? No can do." % (step, step)
+                f"Can't have `step={step}` because then what would the second "
+                f"item be, {step}? No can do."
             )
 
         elif start is None: start = 0
@@ -152,9 +152,9 @@ class CuteRange(CuteSequence):
     def _repr(self):
         return '%s(%s%s%s)' % (
             type(self).__name__,
-            '%s, ' % self.start,
-            '%s' % self.stop,
-            (', %s' % self.step) if self.step != 1 else '',
+            f'{self.start}, ' %
+            str(self.stop),
+            f', {self.step}' if self.step != 1 else '',
         )
 
 
@@ -170,7 +170,7 @@ class CuteRange(CuteSequence):
         if self.step != 1:
             return self._repr
         else:
-            return '%s..%s' % (self.start, self.stop - 1)
+            return f'{self.start}..{self.stop - 1}'
 
 
     def __getitem__(self, i, allow_out_of_range=False):

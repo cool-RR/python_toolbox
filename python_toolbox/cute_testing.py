@@ -73,10 +73,10 @@ class RaiseAssertor(context_management.ContextManager):
                 if self.exception_type is not type(exception):
                     assert issubclass(type(exception), self.exception_type)
                     raise Failure(
-                        "The exception `%s` was raised, and it *is* an "
-                        "instance of the `%s` we were expecting; but its type "
-                        "is not `%s`, it's `%s`, which is a subclass of `%s`, "
-                        "but you specified `assert_exact_type=True`, so "
+                        "The exception %s was raised, and it *is* an "
+                        "instance of the %s we were expecting; but its type "
+                        "is not %s, it's %s, which is a subclass of %s, "
+                        "and you specified `assert_exact_type=True`, so "
                         "subclasses aren't acceptable." % (repr(exception),
                         self.exception_type.__name__,
                         self.exception_type.__name__, type(exception).__name__,
@@ -87,24 +87,24 @@ class RaiseAssertor(context_management.ContextManager):
                 if isinstance(self.text, str):
                     if self.text not in message:
                         raise Failure(
-                            "A `%s` was raised but %s wasn't in its message." %
-                            (self.exception_type.__name__, repr(self.text))
+                            f"A {self.exception_type.__name__} was raised "
+                            f"but {repr(self.text)} wasn't in its message."
                         )
                 else:
                     # It's a regex pattern
                     if not self.text.match(message):
                         raise Failure(
-                            "A `%s` was raised but it didn't match the given "
-                            "regex." % self.exception_type.__name__
+                            f"A {self.exception_type.__name__} was raised "
+                            f"but it didn't match the given regex."
                         )
         except BaseException as different_exception:
             raise Failure(
-                "%s was excpected, but a different exception %s was raised "
-                "instead." % (self.exception_type.__name__,
-                              type(different_exception).__name__)
+                f"{self.exception_type.__name__} was excpected, but a "
+                f"different exception {type(different_exception).__name__} "
+                f"was raised instead."
             )
         else:
-            raise Failure("%s wasn't raised." % self.exception_type.__name__)
+            raise Failure(f"{self.exception_type.__name__} wasn't raised.")
 
 
 def assert_same_signature(*callables):

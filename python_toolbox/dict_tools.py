@@ -164,9 +164,9 @@ def reverse(d):
     for key, value in d.items():
         if value in new_d:
             raise Exception(
-                "Value %s appeared twice! Once with a key of %s and then "
-                "again with a key of %s. This function is intended only for "
-                "dicts with distinct values." % (value, key, new_d[value])
+                f"Value {value} appeared twice! Once with a key of {key} and "
+                f"then again with a key of {new_d[value]}. This function is "
+                f"intended only for dicts with distinct values."
             )
         new_d[value] = key
     return new_d

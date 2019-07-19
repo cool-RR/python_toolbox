@@ -47,13 +47,13 @@ def _process_count(count):
     '''Process a count of an item to ensure it's a positive `int`.'''
     if not math_tools.is_integer(count):
         raise TypeError(
-            'You passed %s as a count, while a `Bag` can only handle integer '
-            'counts.' % repr(count)
+            f'You passed {repr(count)} as a count, while a `Bag` can only '
+            f'handle integer counts.'
         )
     if count < 0:
         raise TypeError(
-            "You passed %s as a count, while `Bag` doesn't support negative "
-            "amounts." % repr(count)
+            f"You passed {repr(count)} as a count, while `Bag` doesn't support"
+            f"negative amounts."
         )
 
     if count == 0:
@@ -132,7 +132,7 @@ class _BootstrappedCachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
 
 
     def __repr__(self):
-        return '<%s: %s>' % (type(self).__name__, self.our_name or self.getter)
+        return f'<{type(self).__name__}: {self.our_name or self.getter}>'
 
 
 class _BaseBagMixin:
@@ -505,11 +505,8 @@ class _BaseBagMixin:
 
     def __repr__(self):
         if not self:
-            return '%s()' % type(self).__name__
-        return '%s(%s)' % (
-            type(self).__name__,
-            self._dict if self._dict else ''
-        )
+            return f'{type(self).__name__}()'
+        return f'{type(self).__name__}({self._dict if self._dict else ""})'
 
     __deepcopy__ = lambda self, memo: type(self)(
                                                copy.deepcopy(self._dict, memo))

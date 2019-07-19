@@ -82,10 +82,7 @@ class CuteSleekValueDict(collections.UserDict):
 
 
     def __repr__(self):
-        return 'CuteSleekValueDict(%s, %s)' % (
-            self.callback,
-            dict(self)
-        )
+        return f'CuteSleekValueDict({self.callback}, {dict(self)})'
 
 
     def __setitem__(self, key, value):

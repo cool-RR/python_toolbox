@@ -59,8 +59,9 @@ class FunctionAnchoringType(type):
                 # Something already exists at the anchor address; let's be
                 # careful.
                 if already_defined_object is not function:
-                    raise Exception("An object `%s.%s` already exists! Can't "
-                                    "anchor function." % \
-                                    (module_name, function_name))
+                    raise Exception(
+                        f"An object `{module_name}.{function_name}` already "
+                        f"exists! Can't anchor function."
+                    )
         return my_type
 

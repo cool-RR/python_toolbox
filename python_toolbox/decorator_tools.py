@@ -52,10 +52,11 @@ def helpful_decorator_builder(decorator_builder):
             function = args[0]
             function_name = function.__name__
             decorator_builder_name = decorator_builder.__name__
-            raise TypeError('It seems that you forgot to add parentheses '
-                            'after `@%s` when decorating the `%s` '
-                            'function.' % (decorator_builder_name,
-                            function_name))
+            raise TypeError(
+                f'It seems that you forgot to add parentheses after '
+                f'@{decorator_builder_name} when decorating the
+                f'{function_name} function.'
+            )
         else:
             return decorator_builder(*args, **kwargs)
 

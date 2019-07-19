@@ -101,7 +101,7 @@ def test_perm_spaces():
 
     assert isinstance(first_perm.items, combi.perming.perm.PermItems)
     assert first_perm.items[2] == (2, 2)
-    assert repr(first_perm.items) == '<PermItems: %s>' % repr(first_perm)
+    assert repr(first_perm.items) == f'<PermItems: {repr(first_perm)}>'
     assert isinstance(first_perm.as_dictoid, combi.perming.perm.PermAsDictoid)
     assert first_perm.as_dictoid[2] == 2
     assert dict(first_perm.as_dictoid) == {0: 0, 1: 1, 2: 2, 3: 3}

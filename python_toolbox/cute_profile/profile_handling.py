@@ -29,8 +29,8 @@ class BaseProfileHandler(object, metaclass=abc.ABCMeta):
     def handle(self):
         pass
 
-    make_file_name = lambda self: ('%s.profile' %
-                              datetime_module.datetime.now()).replace(':', '.')
+    make_file_name = lambda self: (
+                 f'{datetime_module.datetime.now()}.profile').replace(':', '.')
 
 
 

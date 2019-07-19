@@ -51,7 +51,7 @@ class SleekRef:
         '''
         self.callback = callback
         if callback and not callable(callback):
-            raise TypeError('%s is not a callable object.' % callback)
+            raise TypeError(f'{callback} is not a callable object.')
 
         self.is_none = (thing is None)
         '''Flag saying whether `thing` is `None`.'''

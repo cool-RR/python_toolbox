@@ -25,9 +25,9 @@ class ReasonedBool:
 
     def __repr__(self):
         if self.reason is not None:
-            return '<%s because %s>' % (self.value, repr(self.reason))
+            return f'<{self.value} because {repr(self.reason)}>'
         else: # self.reason is None
-            return '<%s with no reason>' % self.value
+            return f'<{self.value} with no reason>'
 
 
     def __eq__(self, other):

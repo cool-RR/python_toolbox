@@ -49,9 +49,8 @@ class CombSpace(PermSpace):
         return '<%s: %s%s>%s' % (
             type(self).__name__,
             sequence_repr,
-            (', n_elements=%s' % (self.n_elements,)) if self.is_partial
-                                                                       else '',
-            ('[%s:%s]' % (self.slice_.start, self.slice_.stop)) if
+            (f', n_elements={self.n_elements}') if self.is_partial else '',
+            f'[{self.slice_.start}:{self.slice_.stop}]' if
                                                          self.is_sliced else ''
         )
 

@@ -163,8 +163,8 @@ def atomic_create(path, binary=False):
     '''
     path = pathlib.Path(path)
     if path.exists():
-        raise Exception("There's already a file called %s" % path)
-    desired_temp_file_path = path.parent / ('._%s.tmp' % path.stem)
+        raise FileExistsError(f"There's already a file called {path}")
+    desired_temp_file_path = path.parent / f'._{path.stem}.tmp'
     try:
         with create_file_renaming_if_taken(desired_temp_file_path,
                                          'xb' if binary else 'x') as temp_file:
@@ -174,7 +174,7 @@ def atomic_create(path, binary=False):
         # This part runs only if there was no exception when writing to the
         # file:
         if path.exists():
-            raise Exception("There's already a file called %s" % path)
+            raise FileExistsError(f"There's already a file called {path}")
         actual_temp_file_path.rename(path)
         assert path.exists()
 

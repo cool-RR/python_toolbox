@@ -44,9 +44,9 @@ class BindSavvyEvtHandler(wx.EvtHandler, metaclass=BindSavvyEvtHandlerType):
         `bind_event_handlers` function is being called.
         '''
         if not isinstance(self, cls):
-            raise TypeError('`cls` must be a class that the event handler is '
-                            'an instance of; you gave a `cls` of `%s`, which '
-                            '`%s` is not an instance of.' % (cls, self))
+            raise TypeError(f'`cls` must be a class that the event handler is '
+                            f'an instance of; you gave a `cls` of `{cls}`, '
+                            f'which `{self}` is not an instance of.')
         event_handler_grokkers = \
             cls._BindSavvyEvtHandlerType__event_handler_grokkers
         for event_handler_grokker in event_handler_grokkers:

@@ -111,8 +111,8 @@ def partitions(sequence, partition_size=None, *, n_partitions=None,
                                           is not None else n_partitions)
 
     if not allow_remainder and remainder_length > 0:
-        raise Exception("You set `allow_remainder=False`, but there's a "
-                        "remainder of %s left." % remainder_length)
+        raise Exception(f"You set `allow_remainder=False`, but there's a "
+                        f"remainder of {remainder_length} left.")
     #                                                                         #
     ### Finished validating input. ############################################
 
