@@ -5,6 +5,8 @@
 
 import weakref
 
+import pytest
+
 from python_toolbox import gc_tools
 
 from python_toolbox.sleek_reffing import (SleekCallArgs,
