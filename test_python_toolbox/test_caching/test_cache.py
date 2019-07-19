@@ -134,8 +134,8 @@ def test_helpful_message_when_forgetting_parentheses():
 
     with cute_testing.RaiseAssertor(
         TypeError,
-        'It seems that you forgot to add parentheses after `@cache` when '
-        'decorating the `f` function.'
+        'It seems that you forgot to add parentheses after @cache when '
+        'decorating the f function.'
     ):
 
         confusedly_forget_parentheses()
