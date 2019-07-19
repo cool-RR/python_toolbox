@@ -1,5 +1,7 @@
 # What is the Python Toolbox? #
 
+[![Travis CI](https://img.shields.io/travis/cool-RR/python_toolbox/master.svg)](https://travis-ci.org/cool-RR/python_toolbox)
+
 The Python Toolbox is a collection of Python tools for various tasks. It
 contains:
 
