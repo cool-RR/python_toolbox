@@ -153,6 +153,7 @@ def _enumerate(iterable, reverse_index):
         return builtins.enumerate(iterable)
     else:
         from python_toolbox import sequence_tools
+        from python_toolbox import nifty_collections
         try:
             length = sequence_tools.get_length(iterable)
         except AttributeError:
