@@ -100,9 +100,9 @@ def test_assert_exact_type():
         raise KeyError("Look at me, I'm a KeyError")
 
     error_message = (
-        "was raised, and it *is* an instance of the `LookupError` we were "
-        "expecting; but its type is not `LookupError`, it's `KeyError`, which "
-        "is a subclass of `LookupError`, but you specified "
+        "was raised, and it *is* an instance of the LookupError we were "
+        "expecting; but its type is not LookupError, it's KeyError, which "
+        "is a subclass of LookupError, and you specified "
         "`assert_exact_type=True`, so subclasses aren't acceptable."
     )
 
