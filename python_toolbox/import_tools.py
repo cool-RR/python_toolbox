@@ -96,8 +96,7 @@ def import_if_exists(module_name, silent_fail=False):
         if not package:
             assert silent_fail is True
             return None
-        package_path = package.__path__
-        if not exists(submodule_name, package_path):
+        if not exists(submodule_name, package_name):
             if silent_fail is True:
                 return None
             else: # silent_fail is False
@@ -112,7 +111,7 @@ def import_if_exists(module_name, silent_fail=False):
     return normal_import(module_name)
 
 
-def exists(module_name, path=None):
+def exists(module_name, package_name=None):
     '''
     Return whether a module by the name `module_name` exists.
 
@@ -124,7 +123,7 @@ def exists(module_name, path=None):
     '''
     if '.' in module_name:
         raise NotImplementedError
-    return bool(importlib.util.find_spec(module_name))
+    return bool(importlib.util.find_spec(module_name, package_name))
 
 
 def _module_address_to_partial_path(module_address):
