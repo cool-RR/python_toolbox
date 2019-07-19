@@ -5,7 +5,7 @@
 
 import sys
 import os.path
-import imp
+import importlib
 import zipimport
 import functools
 import pathlib
