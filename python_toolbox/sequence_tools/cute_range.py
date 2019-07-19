@@ -152,7 +152,7 @@ class CuteRange(CuteSequence):
     def _repr(self):
         return '%s(%s%s%s)' % (
             type(self).__name__,
-            f'{self.start}, ' %
+            f'{self.start}, ',
             str(self.stop),
             f', {self.step}' if self.step != 1 else '',
         )
