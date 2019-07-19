@@ -6,6 +6,8 @@
 import sys
 import abc
 
+import pytest
+
 from python_toolbox.abc_tools import AbstractStaticMethod
 
 
