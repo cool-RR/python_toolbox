@@ -77,6 +77,7 @@ class ProxyProperty:
 
     def __repr__(self):
         return '<%s: %s%s>' % (
+
             type(self).__name__,
             repr(f'.{self.attribute_name}'),
             f', doc={repr(self.__doc__)}' if self.__doc__ else ''
