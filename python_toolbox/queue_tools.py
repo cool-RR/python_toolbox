@@ -3,6 +3,7 @@
 
 '''Defines various functions for working with queues.'''
 
+from __future__ import generator_stop
 
 import queue as queue_module
 import sys

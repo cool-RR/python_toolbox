@@ -3,10 +3,11 @@
 
 '''Defines various tools related to temporary files.'''
 
+from __future__ import generator_stop
+
 import tempfile
 import shutil
 import pathlib
-
 
 from python_toolbox import context_management
 

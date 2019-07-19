@@ -1,6 +1,8 @@
 # Copyright 2009-2017 Ram Rachum.
 # This program is distributed under the MIT license.
 
+from __future__ import generator_stop
+
 from python_toolbox import cute_testing
 
 from python_toolbox.context_management import (ContextManager,

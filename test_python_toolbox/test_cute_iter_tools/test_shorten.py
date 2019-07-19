@@ -3,6 +3,8 @@
 
 '''Testing module for `python_toolbox.cute_iter_tools.shorten`.'''
 
+from __future__ import generator_stop
+
 from python_toolbox import nifty_collections
 from python_toolbox import cute_iter_tools
 from python_toolbox.cute_iter_tools import shorten

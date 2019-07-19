@@ -3,6 +3,8 @@
 
 '''Run generic `dict` tests on `CuteSleekValueDict`.'''
 
+from __future__ import generator_stop
+
 import sys
 import random
 import string

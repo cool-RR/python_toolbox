@@ -3,6 +3,8 @@
 
 '''Testing module for various problematic context managers.'''
 
+from __future__ import generator_stop
+
 from python_toolbox import cute_testing
 
 from python_toolbox.context_management import (ContextManager,

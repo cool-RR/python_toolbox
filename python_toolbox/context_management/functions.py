@@ -7,6 +7,8 @@ This module defines various functions related to context managers.
 See their documentation for more information.
 '''
 
+from __future__ import generator_stop
+
 import sys
 
 from .context_manager_type import ContextManagerType

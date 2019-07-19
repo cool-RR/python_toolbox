@@ -3,6 +3,8 @@
 
 '''Testing module for `cute_iter_tools.iter_with`.'''
 
+from __future__ import generator_stop
+
 import itertools
 
 from python_toolbox import nifty_collections
