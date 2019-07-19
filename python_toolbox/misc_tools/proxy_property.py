@@ -79,5 +79,5 @@ class ProxyProperty:
         return '<%s: %s%s>' % (
             type(self).__name__,
             repr(f'.{self.attribute_name}'),
-            f', doc={repr(self.__doc__) if self.__doc__ else ""}'
+            f', doc={repr(self.__doc__)}' if self.__doc__ else ''
         )

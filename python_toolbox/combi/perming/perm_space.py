@@ -523,8 +523,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             sequence_repr,
             (f', n_elements={self.n_elements}') if self.is_partial else '',
             ', is_combination=True' if self.is_combination else '',
-            (f', fixed_map={fixed_map_repr}' if self.is_fixed else '',
-            (f', degrees={self.degrees}') if self.is_degreed else '',
+            f', fixed_map={fixed_map_repr}' if self.is_fixed else '',
+            f', degrees={self.degrees}' if self.is_degreed else '',
             (f', perm_type={self.perm_type.__name__}') if self.is_typed
                                                                        else '',
             ('[%s:%s]' % (self.slice_.start, self.slice_.stop)) if
