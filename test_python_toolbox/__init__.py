@@ -4,6 +4,7 @@
 '''Testing package for `python_toolbox`.'''
 
 import sys
+import os
 import pathlib
 import importlib
 
@@ -29,6 +30,7 @@ __bootstrap()
 
 def invoke_tests():
     '''Start Pytest using this `test_python_toolbox` test package.'''
+    os.chdir(os.path.dirname(__file__))
     pytest.main()
     # nose.run(defaultTest='test_python_toolbox',
              # argv=(arguments + sys.argv[1:]))
