@@ -19,7 +19,7 @@ my_messy_object = (
     ((((((((((((())))))))))))),
     u'unicode_too',
     (((((3, 4, 5j)))))
-)
+) * 100
 
 def test():
     compickled = pickle_tools.compickle(my_messy_object)
