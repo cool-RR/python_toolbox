@@ -54,7 +54,7 @@ def helpful_decorator_builder(decorator_builder):
             decorator_builder_name = decorator_builder.__name__
             raise TypeError(
                 f'It seems that you forgot to add parentheses after '
-                f'@{decorator_builder_name} when decorating the
+                f'@{decorator_builder_name} when decorating the '
                 f'{function_name} function.'
             )
         else:
