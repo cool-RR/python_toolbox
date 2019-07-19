@@ -3,6 +3,8 @@
 
 '''Testing module for `python_toolbox.address_tools.resolve`.'''
 
+import pytest
+
 from python_toolbox.address_tools import describe, resolve
 
 
