@@ -5,7 +5,7 @@
 
 import re
 
-import nose
+import pytest
 
 from python_toolbox import cute_testing
 from python_toolbox.cute_testing import RaiseAssertor, Failure
@@ -25,21 +25,21 @@ def test_basic():
     def f():
         with RaiseAssertor(ZeroDivisionError):
             raise MyException
-    nose.tools.assert_raises(Failure, f)
+    pytest.raises(Failure, f)
     with RaiseAssertor(Failure):
         f()
 
     def g():
         with RaiseAssertor(Exception):
             pass
-    nose.tools.assert_raises(Failure, g)
+    pytest.raises(Failure, g)
     with RaiseAssertor(Failure):
         g()
 
     def h():
         with RaiseAssertor(RuntimeError, 'booga'):
             pass
-    nose.tools.assert_raises(Failure, h)
+    pytest.raises(Failure, h)
     with RaiseAssertor(Failure):
         h()
 

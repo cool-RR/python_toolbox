@@ -52,7 +52,7 @@ The Python Toolbox supports Python versions 3.6+.
 Tests can be run by running the `_test_python_toolbox.py` script that's
 installed automatically with the Python Toolbox.
 
-When `python_toolbox` isn't installed, you may run `nosetests` at the repo root
+When `python_toolbox` isn't installed, you may run `pytest` at the repo root
 to run the tests.
 
 

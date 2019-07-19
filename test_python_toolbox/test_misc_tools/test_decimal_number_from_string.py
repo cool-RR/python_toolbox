@@ -1,8 +1,6 @@
 # Copyright 2009-2017 Ram Rachum.
 # This program is distributed under the MIT license.
 
-import nose.tools
-
 from python_toolbox import cute_testing
 
 from python_toolbox.misc_tools import decimal_number_from_string

@@ -3,8 +3,6 @@
 
 import sys
 
-import nose
-
 from python_toolbox import cute_testing
 
 from python_toolbox.nifty_collections.ordered_dict import OrderedDict

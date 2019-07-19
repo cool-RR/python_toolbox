@@ -95,7 +95,7 @@ Tests
 Test can be run by running the ``_test_python_toolbox.py`` script that's
 installed automatically with the Python Toolbox.
 
-When ``python_toolbox`` isn't installed, you may run ``nosetests`` at the repo
+When ``python_toolbox`` isn't installed, you may run ``pytest`` at the repo
 root to run the tests.
 
 
@@ -127,10 +127,7 @@ install_requires = ['setuptools']
 setuptools.setup(
     name='python_toolbox',
     version=version,
-    test_suite='nose.collector',
     install_requires=install_requires,
-    tests_require=['nose>=1.0.0',
-                   'docutils>=0.8'],
     description='A collection of Python tools for various tasks',
     author='Ram Rachum',
     author_email='ram@rachum.com',
@@ -139,7 +136,7 @@ setuptools.setup(
     scripts=['test_python_toolbox/scripts/_test_python_toolbox.py'],
     entry_points={
         'console_scripts': [
-            '_test_python_toolbox = test_python_toolbox:invoke_nose',
+            '_test_python_toolbox = test_python_toolbox:invoke_tests',
         ],
     },
     long_description=my_long_description,
@@ -147,5 +144,11 @@ setuptools.setup(
     classifiers=my_classifiers,
     include_package_data=True,
     zip_safe=False,
+    extras_require={
+        'tests': {
+            'pytest',
+            'docutils>=0.8',
+        },
+    },
 )
 

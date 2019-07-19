@@ -7,8 +7,6 @@ import uuid
 import types
 import inspect
 
-import nose
-
 from python_toolbox import cute_testing
 
 from python_toolbox import monkeypatching_tools

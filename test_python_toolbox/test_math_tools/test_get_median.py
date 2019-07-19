@@ -3,7 +3,7 @@
 
 import sys
 
-import nose
+import pytest
 
 from python_toolbox.math_tools import get_median
 

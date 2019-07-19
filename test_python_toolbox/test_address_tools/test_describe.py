@@ -3,8 +3,7 @@
 
 '''Testing module for `python_toolbox.address_tools.describe`.'''
 
-
-import nose
+import pytest
 
 from python_toolbox import import_tools
 from python_toolbox.temp_value_setting import TempValueSetter
@@ -27,8 +26,8 @@ def test_on_locally_defined_class():
     # Testing for locally defined class:
 
 
-    raise nose.SkipTest("This test doesn't currently pass because `describe` "
-                        "doesn't support nested classes yet.")
+    pytest.skip("This test doesn't currently pass because `describe` "
+                "doesn't support nested classes yet.")
 
     result = describe(A.B)
     assert result == prefix + 'A.B'
@@ -243,7 +242,7 @@ def test_bad_module_name():
 
 def test_function_in_something():
     '''Test `describe` doesn't fail when describing `{1: sum}`.'''
-    raise nose.SkipTest("This test doesn't pass yet.")
+    pytest.skip("This test doesn't pass yet.")
     assert describe({1: sum}) == '{1: sum}'
     describe((sum, sum, list, chr)) == '(sum, sum, list, chr)'
 

@@ -5,8 +5,6 @@
 
 import weakref
 
-import nose.tools
-
 from python_toolbox import gc_tools
 
 from python_toolbox.sleek_reffing import (SleekCallArgs,
@@ -34,7 +32,7 @@ def test_sleek_ref():
             del volatile_thing
             gc_tools.collect()
             assert counter() == count + 2
-            nose.tools.assert_raises(SleekRefDied, sleek_ref)
+            pytest.raises(SleekRefDied, sleek_ref)
         else:
             count = counter()
             del volatile_thing

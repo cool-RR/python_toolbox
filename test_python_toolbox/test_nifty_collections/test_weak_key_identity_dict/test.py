@@ -3,7 +3,7 @@
 
 '''Testing module for `WeakKeyIdentityDict`.'''
 
-import nose
+import pytest
 
 from python_toolbox.nifty_collections import WeakKeyIdentityDict
 
@@ -21,8 +21,7 @@ def test():
     assert wki_dict[my_weakreffable_list] == 7
     identical_weakreffable_list = WeakreffableList([1, 2])
     assert identical_weakreffable_list not in wki_dict
-    nose.tools.assert_raises(KeyError,
-                             lambda: wki_dict[identical_weakreffable_list])
+    pytest.raises(KeyError, lambda: wki_dict[identical_weakreffable_list])
 
     my_weakreffable_list.append(3)
     assert my_weakreffable_list in wki_dict
@@ -30,5 +29,4 @@ def test():
 
     del wki_dict[my_weakreffable_list]
     assert my_weakreffable_list not in wki_dict
-    nose.tools.assert_raises(KeyError,
-                             lambda: wki_dict[my_weakreffable_list])
+    pytest.raises(KeyError, lambda: wki_dict[my_weakreffable_list])

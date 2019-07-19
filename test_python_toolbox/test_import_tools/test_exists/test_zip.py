@@ -10,8 +10,6 @@ import os
 import tempfile
 import shutil
 
-import nose.tools
-
 from python_toolbox import sys_tools
 from python_toolbox import cute_testing
 from python_toolbox import import_tools

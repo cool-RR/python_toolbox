@@ -3,8 +3,6 @@
 
 '''Testing module for `python_toolbox.cute_iter_tools.is_iterable`.'''
 
-import nose.tools
-
 from python_toolbox import cute_iter_tools
 from python_toolbox.cute_iter_tools import is_iterable
 

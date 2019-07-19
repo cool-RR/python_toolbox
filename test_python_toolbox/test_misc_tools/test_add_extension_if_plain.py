@@ -1,8 +1,6 @@
 # Copyright 2009-2017 Ram Rachum.
 # This program is distributed under the MIT license.
 
-import nose.tools
-
 from python_toolbox import temp_file_tools
 
 from python_toolbox.misc_tools import add_extension_if_plain

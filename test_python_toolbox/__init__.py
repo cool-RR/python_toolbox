@@ -6,12 +6,8 @@
 import sys
 import pathlib
 
+import pytest
 
-import nose
-
-
-if nose.__versioninfo__ < (1, 0, 0):
-    raise Exception('Nose version 1.0.0 or higher is required to run tests.')
 
 
 def __bootstrap():
@@ -52,17 +48,8 @@ def __bootstrap():
 __bootstrap()
 
 
-_default_nose_arguments = [
-    '--verbosity=3',
-    '--detailed-errors',
-    '--with-xunit',
-    '--cover-erase',
-    '--cover-package=python_toolbox,test_python_toolbox',
-    '--exe', # Needed because `setup.py` makes our test modules executable
-]
-
-
-def invoke_nose(arguments=_default_nose_arguments):
-    '''Start Nose using this `test_python_toolbox` test package.'''
-    nose.run(defaultTest='test_python_toolbox',
-             argv=(arguments + sys.argv[1:]))
+def invoke_tests():
+    '''Start Pytest using this `test_python_toolbox` test package.'''
+    pytest.main()
+    # nose.run(defaultTest='test_python_toolbox',
+             # argv=(arguments + sys.argv[1:]))

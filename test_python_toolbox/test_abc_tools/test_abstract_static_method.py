@@ -6,8 +6,6 @@
 import sys
 import abc
 
-import nose
-
 from python_toolbox.abc_tools import AbstractStaticMethod
 
 
@@ -19,7 +17,7 @@ def test_instantiate_without_subclassing():
         def f():
             pass
 
-    nose.tools.assert_raises(TypeError, lambda: A())
+    pytest.raises(TypeError, lambda: A())
 
 
 def test_override():

@@ -8,8 +8,6 @@ import datetime as datetime_module
 import re
 import weakref
 
-import nose.tools
-
 from python_toolbox import caching
 from python_toolbox.caching import cache
 from python_toolbox import misc_tools

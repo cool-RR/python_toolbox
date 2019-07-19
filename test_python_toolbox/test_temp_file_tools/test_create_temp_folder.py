@@ -7,9 +7,6 @@ import tempfile
 import os.path
 import pathlib
 
-
-import nose.tools
-
 import python_toolbox
 
 from python_toolbox.temp_file_tools import create_temp_folder

@@ -3,7 +3,6 @@
 
 '''This module defines tools for testing.'''
 
-import nose
 import sys
 import inspect
 import unittest

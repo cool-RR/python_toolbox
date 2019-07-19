@@ -4,7 +4,6 @@
 
 import sys
 
-import nose
 
 from python_toolbox.math_tools import restrict_number_to_range
 

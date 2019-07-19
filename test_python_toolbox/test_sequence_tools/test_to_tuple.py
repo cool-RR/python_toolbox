@@ -3,7 +3,7 @@
 
 '''Testing module for `sequence_tools.to_tuple`.'''
 
-import nose
+import pytest
 
 from python_toolbox import cute_testing
 
@@ -74,7 +74,7 @@ def test_item_test():
 
 def test_tuple_in_tuple():
     '''Test input of tuple inside a tuple.'''
-    raise nose.SkipTest("Don't know how to solve this case.")
+    pytest.skip("Don't know how to solve this case.")
     assert to_tuple(((1,), (2,)), item_test=is_tuple_like) == ((1,), (2,))
 
 

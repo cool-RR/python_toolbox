@@ -6,8 +6,6 @@
 # and `pickle`.)
 from python_toolbox.pickle_tools import pickle_module
 
-import nose
-
 from python_toolbox import import_tools
 
 from python_toolbox import pickle_tools

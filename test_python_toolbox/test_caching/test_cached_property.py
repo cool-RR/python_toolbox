@@ -3,8 +3,6 @@
 
 '''Testing module for `python_toolbox.caching.CachedProperty`.'''
 
-import nose
-
 from python_toolbox import context_management
 from python_toolbox import misc_tools
 

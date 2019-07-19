@@ -6,7 +6,7 @@
 
 import sys
 
-import nose
+import pytest
 
 from python_toolbox.context_management import (
     ContextManager, ContextManagerType, SelfHook, AbstractContextManager
@@ -37,9 +37,9 @@ def test_abstractness():
     def h():
         ExitlessContextManager()
 
-    nose.tools.assert_raises(TypeError, f)
-    nose.tools.assert_raises(TypeError, g)
-    nose.tools.assert_raises(TypeError, h)
+    pytest.raises(TypeError, f)
+    pytest.raises(TypeError, g)
+    pytest.raises(TypeError, h)
 
 
 def test_can_instantiate_when_defining_manage_context():

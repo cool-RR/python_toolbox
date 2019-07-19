@@ -12,4 +12,4 @@ import test_python_toolbox
 
 
 if __name__ == '__main__':
-    test_python_toolbox.invoke_nose()
+    test_python_toolbox.invoke_tests()

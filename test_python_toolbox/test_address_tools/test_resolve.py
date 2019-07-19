@@ -3,8 +3,6 @@
 
 '''Testing module for `python_toolbox.address_tools.resolve`.'''
 
-import nose.tools
-
 from python_toolbox.address_tools import describe, resolve
 
 
@@ -139,14 +137,14 @@ def test_address_in_expression():
 def test_illegal_input():
     '''Test `resolve` raises exception when given illegal input.'''
 
-    nose.tools.assert_raises(Exception,
+    pytest.raises(Exception,
                              resolve,
                              'asdgfasdgas if 4 else asdfasdfa ')
 
-    nose.tools.assert_raises(Exception,
+    pytest.raises(Exception,
                              resolve,
                              'dgf sdfg sdfga ')
 
-    nose.tools.assert_raises(Exception,
+    pytest.raises(Exception,
                              resolve,
                              '4- ')

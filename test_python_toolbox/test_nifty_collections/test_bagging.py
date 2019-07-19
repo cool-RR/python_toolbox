@@ -9,8 +9,6 @@ import decimal as decimal_module
 import unittest
 import copy
 
-import nose
-
 from python_toolbox import cute_iter_tools
 from python_toolbox import temp_value_setting
 from python_toolbox import sequence_tools

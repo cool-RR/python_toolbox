@@ -5,8 +5,6 @@
 
 import sys
 
-import nose
-
 from python_toolbox.math_tools import convert_to_base_in_tuple
 from python_toolbox import cute_testing
 

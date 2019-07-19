@@ -6,7 +6,7 @@ import itertools
 import collections
 import ast
 
-import nose
+import pytest
 
 from python_toolbox import nifty_collections
 from python_toolbox import context_management
@@ -516,7 +516,7 @@ def _iterate_tests():
             )
 
 
-# We use this shit because Nose can't parallelize generator tests:
+# We use this shit because Nose (RIP) can't parallelize generator tests:
 lambdas = []
 for i, f in enumerate(_iterate_tests()):
     f.name = 'f_%s' % i

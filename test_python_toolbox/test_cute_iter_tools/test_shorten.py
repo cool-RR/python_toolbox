@@ -3,8 +3,6 @@
 
 '''Testing module for `python_toolbox.cute_iter_tools.shorten`.'''
 
-import nose.tools
-
 from python_toolbox import nifty_collections
 from python_toolbox import cute_iter_tools
 from python_toolbox.cute_iter_tools import shorten
@@ -46,13 +44,13 @@ def test_dont_pull_extra_item():
         yield from [1, 2, 3]
         raise Exception
 
-    nose.tools.assert_raises(Exception, lambda: list(generator()))
+    pytest.raises(Exception, lambda: list(generator()))
 
     iterator_1 = shorten(generator(), 4)
-    nose.tools.assert_raises(Exception, lambda: list(iterator_1))
+    pytest.raises(Exception, lambda: list(iterator_1))
 
     iterator_2 = shorten(generator(), infinity)
-    nose.tools.assert_raises(Exception, lambda: list(iterator_2))
+    pytest.raises(Exception, lambda: list(iterator_2))
 
     iterator_3 = shorten(generator(), 3)
     list(iterator_3) # Pulling exactly three so we avoid the exception.

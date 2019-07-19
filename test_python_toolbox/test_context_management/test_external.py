@@ -4,9 +4,9 @@
 '''Tests taken from Python's `contextlib'.'''
 
 import sys
-
-import nose
 import unittest
+
+import pytest
 
 import python_toolbox
 from python_toolbox.context_management import (ContextManager,
@@ -85,7 +85,7 @@ class ContextManagerTestCase(unittest.TestCase):
         #self.assertEqual(state, [1, 42, 999])
 
     def _create_contextmanager_attribs(self):
-        raise nose.SkipTest
+        pytest.skip()
         def attribs(**kw):
             def decorate(func):
                 for k,v in kw.items():
@@ -106,7 +106,7 @@ class ContextManagerTestCase(unittest.TestCase):
     @unittest.skipIf(hasattr(sys, 'flags') and sys.flags.optimize >= 2,
                      "Docstrings are omitted with -O2 and above")
     def test_contextmanager_doc_attrib(self):
-        raise nose.SkipTest('Not sure what to do about this.')
+        pytest.skip('Not sure what to do about this.')
         baz = self._create_contextmanager_attribs()
         self.assertEqual(baz.__doc__, "Whee!")
 
@@ -210,7 +210,7 @@ class TestContextDecorator(unittest.TestCase):
 
 
     def test_typo_enter(self):
-        raise nose.SkipTest
+        pytest.skip()
         class MyContextManager(ContextManager):
             def __unter__(self):
                 pass
@@ -223,7 +223,7 @@ class TestContextDecorator(unittest.TestCase):
 
 
     def test_typo_exit(self):
-        raise nose.SkipTest
+        pytest.skip()
         class MyContextManager(ContextManager):
             def __enter__(self):
                 pass

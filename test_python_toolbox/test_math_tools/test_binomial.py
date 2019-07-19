@@ -3,8 +3,6 @@
 
 import sys
 
-import nose
-
 from python_toolbox.math_tools import binomial
 
 

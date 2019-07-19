@@ -9,7 +9,8 @@ import string
 import weakref
 import unittest
 
-import nose
+import pytest
+
 from python_toolbox import sys_tools
 from python_toolbox import gc_tools
 
@@ -406,7 +407,7 @@ class GenericDictTest(unittest.TestCase):
 
     def test_popitem(self):
         if sys_tools.is_pypy:
-            raise nose.SkipTest("Pypy doesn't maintain dict order.")
+            pytest.skip("Pypy doesn't maintain dict order.")
         for copymode in -1, +1:
             # -1: b has same structure as a
             # +1: b is a.copy()

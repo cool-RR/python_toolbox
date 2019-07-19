@@ -3,7 +3,7 @@
 
 '''Testing module for `python_toolbox.import_tools.exists`.'''
 
-import nose.tools
+import pytest
 
 from python_toolbox import import_tools
 from python_toolbox.import_tools import exists
@@ -16,5 +16,5 @@ def test():
     assert exists('email')
     assert exists('re')
     assert exists('sys')
-    nose.tools.assert_raises(NotImplementedError,
-                             lambda: exists('email.encoders'))
+    pytest.raises(NotImplementedError,
+                  lambda: exists('email.encoders'))
