@@ -269,7 +269,6 @@ def _check_variation_selection(variation_selection, perm_space_type,
         assert perm in perm_space
         assert tuple(perm) in perm_space
         assert iter(list(perm)) in perm_space
-        assert set(perm) not in perm_space
 
         assert isinstance(perm, combi.Perm)
         assert perm.is_rapplied == variation_selection.is_rapplied
