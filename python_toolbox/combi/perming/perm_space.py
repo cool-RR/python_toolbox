@@ -755,14 +755,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         if not isinstance(perm, collections.abc.Iterable):
             raise ValueError
 
-        try:
-            perm = sequence_tools.ensure_iterable_is_immutable_sequence(
-                perm,
-                allow_unordered=False
-            )
-        except sequence_tools.UnorderedIterableException:
-            raise ValueError('An unordered iterable is never contained in a '
-                             '`PermSpace`. Try an ordered one.')
+        perm = sequence_tools.ensure_iterable_is_immutable_sequence(perm)
 
         perm_set = set(perm) if not isinstance(perm, UnrecurrentedPerm) \
                                                   else set(perm._perm_sequence)

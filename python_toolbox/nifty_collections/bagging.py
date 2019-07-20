@@ -17,7 +17,7 @@ from .lazy_tuple import LazyTuple
 from .ordered_dict import OrderedDict
 from .various_ordered_sets import FrozenOrderedSet
 from .various_frozen_dicts import FrozenDict, FrozenOrderedDict
-from .abstract import Ordered, DefinitelyUnordered
+from .abstract import Ordered
 
 
 class _NO_DEFAULT(misc_tools.NonInstantiable):
@@ -891,7 +891,7 @@ class _OrderedDictDelegator(Ordered, _BaseDictDelegator):
         doc='Sort the keys in this dict. (With optional `key` function.)'
     )
 
-class _DictDelegator(DefinitelyUnordered, _BaseDictDelegator):
+class _DictDelegator(_BaseDictDelegator):
     '''
     A `dict`-like object.
 

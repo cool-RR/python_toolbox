@@ -6,7 +6,7 @@ import operator
 import functools
 import itertools
 
-from .abstract import Ordered, DefinitelyUnordered
+from .abstract import Ordered
 from .ordered_dict import OrderedDict
 
 
@@ -46,7 +46,7 @@ class _AbstractFrozenDict(collections.abc.Mapping):
     __reduce__ = lambda self: (self.__class__ , (self._dict,))
 
 
-class FrozenDict(DefinitelyUnordered, _AbstractFrozenDict):
+class FrozenDict(_AbstractFrozenDict):
     '''
     An immutable `dict`.
 

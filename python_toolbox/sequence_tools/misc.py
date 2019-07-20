@@ -16,12 +16,6 @@ from python_toolbox import misc_tools
 infinity = float('inf')
 
 
-class UnorderedIterableException(Exception):
-    '''
-    An unordered iterable was encountered when we expected an orderable one.
-    '''
-
-
 def are_equal_regardless_of_order(seq1, seq2):
     '''
     Do `seq1` and `seq2` contain the same elements, same number of times?
@@ -231,8 +225,7 @@ def get_recurrences(sequence):
 
 
 def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
-                                          unallowed_types=(bytes,),
-                                          allow_unordered=True):
+                                          unallowed_types=(bytes,)):
     '''
     Return a version of `iterable` that is an immutable sequence.
 
@@ -242,9 +235,6 @@ def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
     '''
     from python_toolbox import nifty_collections
     assert isinstance(iterable, collections.abc.Iterable)
-    if not allow_unordered and \
-                   isinstance(iterable, nifty_collections.DefinitelyUnordered):
-        raise UnorderedIterableException
     if isinstance(iterable, collections.abc.MutableSequence) or \
        isinstance(iterable, unallowed_types) or \
        not isinstance(iterable, collections.abc.Sequence):
@@ -254,8 +244,7 @@ def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
 
 
 def ensure_iterable_is_sequence(iterable, default_type=tuple,
-                                unallowed_types=(bytes,),
-                                allow_unordered=True):
+                                unallowed_types=(bytes,)):
     '''
     Return a version of `iterable` that is a sequence.
 
@@ -264,8 +253,6 @@ def ensure_iterable_is_sequence(iterable, default_type=tuple,
     `default_type`.
     '''
     assert isinstance(iterable, collections.abc.Iterable)
-    if not allow_unordered and isinstance(iterable, (set, frozenset)):
-        raise UnorderedIterableException
     if isinstance(iterable, collections.abc.Sequence) and \
        not isinstance(iterable, unallowed_types):
         return iterable
@@ -336,10 +323,8 @@ def is_subsequence(big_sequence, small_sequence):
     strings.
     '''
     from python_toolbox import nifty_collections
-    big_sequence = ensure_iterable_is_sequence(big_sequence,
-                                               allow_unordered=False)
-    small_sequence = ensure_iterable_is_sequence(small_sequence,
-                                                 allow_unordered=False)
+    big_sequence = ensure_iterable_is_sequence(big_sequence)
+    small_sequence = ensure_iterable_is_sequence(small_sequence)
     small_sequence_length = len(small_sequence)
     last_index_that_subsequence_can_start = \
                                     len(big_sequence) - len(small_sequence) + 1

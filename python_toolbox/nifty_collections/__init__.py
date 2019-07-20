@@ -15,4 +15,4 @@ from ..cute_enum import CuteEnum
 
 from .emitting_weak_key_default_dict import EmittingWeakKeyDefaultDict
 
-from .abstract import Ordered, DefinitelyUnordered
+from .abstract import Ordered

@@ -6,7 +6,7 @@ import multiprocessing.queues
 import queue as queue_module
 
 from python_toolbox import nifty_collections
-from python_toolbox.nifty_collections import Ordered, DefinitelyUnordered
+from python_toolbox.nifty_collections import Ordered
 
 
 def _make_instance_of_type(type_):
@@ -52,9 +52,4 @@ def test():
 
         assert issubclass(type_, Ordered) == (thing in ordereds)
         assert isinstance(instance, Ordered) == (thing in ordereds)
-
-        assert issubclass(type_, DefinitelyUnordered) == \
-                                               (thing in definitely_unordereds)
-        assert isinstance(instance, DefinitelyUnordered) == \
-                                               (thing in definitely_unordereds)
 
