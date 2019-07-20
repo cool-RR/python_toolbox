@@ -11,47 +11,8 @@ import functools
 import pathlib
 
 
-from python_toolbox import package_finder
 from python_toolbox import caching
 
-
-
-def import_all(package, exclude='__init__', silent_fail=False):
-    '''
-    Import all the modules and packages that live inside the given package.
-
-    This is not recursive. Modules and packages defined inside a subpackage
-    will not be imported (of course, that subpackage itself may import them
-    anyway.)
-
-    You may specify a module/package to exclude, which is by default
-    `__init__`.
-
-    Returns a list with all the imported modules and packages.
-
-    todo: only tested with __init__ passed in
-    '''
-
-    paths = package_finder.get_packages_and_modules_filenames(package)
-
-    names = {}
-    for path in paths:
-        name = path.stem
-        if name == exclude:
-            continue
-        full_name = package.__name__ + '.' + name
-        names[path] = full_name
-
-    d = {}
-
-    for (path, name) in names.items():
-        try:
-            d[name] = normal_import(name)
-        except Exception:
-            if not silent_fail:
-                raise
-
-    return d
 
 
 def normal_import(module_name):
