@@ -117,7 +117,6 @@ def test_perm_spaces():
 
 
     assert first_perm in pure_perm_space
-    assert set(first_perm) not in pure_perm_space # No order? Not contained.
     assert some_perm in pure_perm_space
     assert last_perm in pure_perm_space
     assert tuple(first_perm) in pure_perm_space
