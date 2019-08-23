@@ -12,10 +12,8 @@ Visit http://pypi.python.org/pypi/python_toolbox/ for more info.
 '''
 
 import python_toolbox.version_info
-import python_toolbox.monkeypatch_copyreg
-import python_toolbox.monkeypatch_envelopes
 
-__version__ = '1.0.7'
+__version__ = '1.0.8'
 __version_info__ = python_toolbox.version_info.VersionInfo(
     *(map(int, __version__.split('.')))
 )
