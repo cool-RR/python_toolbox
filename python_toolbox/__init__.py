@@ -13,7 +13,7 @@ Visit http://pypi.python.org/pypi/python_toolbox/ for more info.
 
 import python_toolbox.version_info
 
-__version__ = '1.0.9'
+__version__ = '1.0.10'
 __version_info__ = python_toolbox.version_info.VersionInfo(
     *(map(int, __version__.split('.')))
 )
