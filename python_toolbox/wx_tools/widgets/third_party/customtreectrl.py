@@ -4325,8 +4325,8 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
 
             try:
                 index = parent.GetChildren().index(idPrevious)
-            except:
-                raise Exception("ERROR: Previous Item In CustomTreeCtrl.InsertItem() Is Not A Sibling")
+            except Exception as exception:
+                raise Exception("ERROR: Previous Item In CustomTreeCtrl.InsertItem() Is Not A Sibling") from exception
 
         return self.DoInsertItem(parentId, index+1, text, ct_type, wnd, image, selImage, data)
 

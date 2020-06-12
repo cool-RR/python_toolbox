@@ -81,7 +81,7 @@ class RaiseAssertor(context_management.ContextManager):
                         self.exception_type.__name__,
                         self.exception_type.__name__, type(exception).__name__,
                         self.exception_type.__name__)
-                    )
+                    ) from exception
             if self.text:
                 message = exception.args[0]
                 if isinstance(self.text, str):
@@ -89,20 +89,20 @@ class RaiseAssertor(context_management.ContextManager):
                         raise Failure(
                             f"A {self.exception_type.__name__} was raised "
                             f"but {repr(self.text)} wasn't in its message."
-                        )
+                        ) from exception
                 else:
                     # It's a regex pattern
                     if not self.text.match(message):
                         raise Failure(
                             f"A {self.exception_type.__name__} was raised "
                             f"but it didn't match the given regex."
-                        )
+                        ) from exception
         except BaseException as different_exception:
             raise Failure(
                 f"{self.exception_type.__name__} was excpected, but a "
                 f"different exception {type(different_exception).__name__} "
                 f"was raised instead."
-            )
+            ) from different_exception
         else:
             raise Failure(f"{self.exception_type.__name__} wasn't raised.")
 

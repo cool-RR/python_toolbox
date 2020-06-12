@@ -73,9 +73,11 @@ class ContextManager(AbstractContextManager, _DecoratingContextManagerMixin,
             return self if (generator_return_value is SelfHook) else \
                    generator_return_value
 
-        except StopIteration:
-            raise RuntimeError("The generator didn't yield even one time; it "
-                               "must yield one time exactly.")
+        except StopIteration as stop_iteration:
+            raise RuntimeError(
+                "The generator didn't yield even one time; it must yield one "
+                "time exactly."
+            ) from stop_iteration
 
 
     def __exit_using_manage_context(self, exc_type, exc_value, exc_traceback):

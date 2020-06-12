@@ -48,12 +48,12 @@ class CuteSleekValueDict(collections.UserDict):
     def __getitem__(self, key):
         try:
             return self.data[key]()
-        except (KeyError, SleekRefDied):
+        except (KeyError, SleekRefDied) as exception:
             missing_method = getattr(type(self), '__missing__', None)
             if missing_method:
                 return missing_method(self, key)
             else:
-                raise KeyError(key)
+                raise KeyError(key) from exception
 
 
     def __contains__(self, key):
@@ -179,11 +179,11 @@ class CuteSleekValueDict(collections.UserDict):
         otherwise KeyError is raised """
         try:
             return self.data.pop(key)()
-        except (KeyError, SleekRefDied):
+        except (KeyError, SleekRefDied) as exception:
             if args:
                 (default,) = args
                 return default
-            raise KeyError(key)
+            raise KeyError(key) from exception
 
 
     def setdefault(self, key, default=None):

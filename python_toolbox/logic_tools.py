@@ -110,11 +110,11 @@ def get_equivalence_classes(iterable, key=None, container=set, *,
         else:
             try:
                 d = dict(iterable)
-            except ValueError:
+            except ValueError as value_error:
                 raise Exception(
                     "You can't put in a non-dict without also supplying a "
                     "`key` function. We need to know which key to use."
-                )
+                ) from value_error
     else: # key is not None
         assert cute_iter_tools.is_iterable(iterable)
         key_function = comparison_tools.process_key_function_or_attribute_name(

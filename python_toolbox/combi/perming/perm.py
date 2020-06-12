@@ -289,10 +289,10 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.abc.Sequence,
         if self.is_dapplied:
             try:
                 i_to_use = self.domain.index(i)
-            except TypeError:
+            except TypeError as type_error:
                 # Some types, like `str`, annoyingly raise `TypeError` instead
                 # of `IndexError`.
-                raise IndexError
+                raise IndexError from type_error
         else:
             i_to_use = i
         return self._perm_sequence[i_to_use]

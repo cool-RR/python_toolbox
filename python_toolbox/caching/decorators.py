@@ -77,12 +77,12 @@ def cache(max_size=infinity, time_to_keep=None):
         if not isinstance(time_to_keep, datetime_module.timedelta):
             try:
                 time_to_keep = datetime_module.timedelta(**time_to_keep)
-            except Exception:
+            except Exception as exception:
                 raise TypeError(
                     '`time_limit` must be either a `timedelta` object or a '
                     'dict of keyword arguments for constructing a '
                     '`timedelta` object.'
-                )
+                ) from exception
         assert isinstance(time_to_keep, datetime_module.timedelta)
 
 
