@@ -3,8 +3,10 @@
 
 '''Testing module for `python_toolbox.cute_profile`.'''
 
-import dummy_threading
 import time
+import sys
+
+import pytest
 
 from python_toolbox import cute_profile
 from python_toolbox import temp_value_setting
@@ -224,7 +226,9 @@ def test_polite_wrapper():
     )
 
 
+@pytest.mark.skipif(sys.version_info >= (3, 7), reason='`dummy_threading` deprecated')
 def test_folder_handler():
+    import dummy_threading
     with temp_value_setting.TempValueSetter((cute_profile.profile_handling,
                                              'threading'), dummy_threading):
         with temp_file_tools.create_temp_folder(
