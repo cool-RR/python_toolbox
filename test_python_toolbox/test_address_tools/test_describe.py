@@ -12,7 +12,7 @@ import python_toolbox
 from python_toolbox.address_tools import describe, resolve
 
 # todo: Make test that when a root or namespace is given, it's top priority to
-# use it, even if it prevents shorterning and results in an overall longer
+# use it, even if it prevents shortening and results in an overall longer
 # address.
 
 

@@ -7409,7 +7409,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         rect = self.GetBoundingRect(root, True)
 
         # It looks like the space between the "+" and the node
-        # rect occupies 4 pixels approximatively
+        # rect occupies 4 pixels approximately
         maxwidth = rect.x + rect.width + 4
         lastheight = rect.y + rect.height
 
@@ -7446,7 +7446,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             rect = self.GetBoundingRect(child, True)
 
             # It looks like the space between the "+" and the node
-            # rect occupies 4 pixels approximatively
+            # rect occupies 4 pixels approximately
             maxwidth = max(maxwidth, rect.x + rect.width + 4)
             lastheight = rect.y + rect.height
 

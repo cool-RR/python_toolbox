@@ -41,7 +41,7 @@ def get_background_color():
     elif is_mac:
         return wx.Colour(232, 232, 232)
     elif is_gtk:
-        # Until `SYS_COLOUR_*` get their act togother, we're using Windows
+        # Until `SYS_COLOUR_*` get their act together, we're using Windows
         # colors for Linux.
         return wx.Colour(212, 208, 200)
 

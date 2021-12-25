@@ -19,12 +19,12 @@ from .shared import (_address_pattern, _contained_address_pattern,
 
 
 _unresolvable_string_pattern = re.compile("<[^<>]*?'[^<>]*?'[^<>]*?>")
-'''Pattern for unresorvable strings, like "<type 'list'>".'''
+'''Pattern for unresolvable strings, like "<type 'list'>".'''
 
 
 _address_in_unresolvable_string_pattern = re.compile("[^']*?'([^']*?)'[^']*?")
 '''
-Pattern for extracting address from unresorvable strings.
+Pattern for extracting address from unresolvable strings.
 
 For example, matching "type 'list'" would result in `match.groups() ==
 ('list',)`.
