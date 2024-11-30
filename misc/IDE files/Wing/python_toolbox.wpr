@@ -50,4 +50,4 @@ proj.shared-attribute-names = ['proj.shared-attribute-names',
                                'console.toolbox']
 testing.auto-test-file-specs = [('regex',
                                  'test_python_toolbox(/test[^/.]*)+[.]py')]
-testing.test-framework = {None: 'nose'}
+testing.test-framework = {None: ':internal pytest'}
