@@ -129,7 +129,7 @@ def write_to_file_renaming_if_taken(path, data, mode='x',
         return file.write(data)
 
 
-def atomic_create_and_write(path, data=None, binary=False):
+def atomic_create_and_write(path, data=None, binary=False, encoding=None):
     '''
     Write data to file, but use a temporary file as a buffer.
 
@@ -140,12 +140,12 @@ def atomic_create_and_write(path, data=None, binary=False):
 
     This way you're sure you're not getting a half-baked file.
     '''
-    with atomic_create(path, binary=binary) as file:
+    with atomic_create(path, binary=binary, encoding=encoding) as file:
         return file.write(data)
 
 
 @context_management.ContextManagerType
-def atomic_create(path, binary=False):
+def atomic_create(path, binary=False, encoding=None):
     '''
     Create a file for writing, but use a temporary file as a buffer.
 
@@ -167,7 +167,8 @@ def atomic_create(path, binary=False):
     desired_temp_file_path = path.parent / f'._{path.stem}.tmp'
     try:
         with create_file_renaming_if_taken(desired_temp_file_path,
-                                         'xb' if binary else 'x') as temp_file:
+                                         'xb' if binary else 'x',
+                                         encoding=encoding) as temp_file:
             actual_temp_file_path = pathlib.Path(temp_file.name)
             yield temp_file
 
