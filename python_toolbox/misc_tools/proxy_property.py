@@ -55,9 +55,14 @@ class ProxyProperty:
                 f"with a dot."
             )
         self.getter = self.setter = None
-        exec(f'def getter(thing): return thing{attribute_name}')
-        exec(f'def setter(thing, value): thing{attribute_name} = value')
-        exec('self.getter, self.setter = getter, setter')
+        namespace = {}
+        exec(f'def getter(thing): return thing{attribute_name}', 
+             globals(), namespace)
+        exec(f'def setter(thing, value): thing{attribute_name} = value',
+             globals(), namespace)
+        exec('self.getter, self.setter = getter, setter',
+             globals(),
+             {'self': self, 'getter': namespace['getter'], 'setter': namespace['setter']})
         self.attribute_name = attribute_name[1:]
         self.__doc__ = doc
 
