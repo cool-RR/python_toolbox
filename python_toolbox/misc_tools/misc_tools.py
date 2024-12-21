@@ -7,11 +7,11 @@ import operator
 import pathlib
 
 import re
-import math
-import types
+import io
 import functools
 import sys
-import threading
+import datetime as datetime_module
+from typing import Optional
 
 
 _email_pattern = re.compile(
@@ -350,3 +350,68 @@ class AlternativeLengthMixin:
         from python_toolbox import sequence_tools
         return bool(sequence_tools.get_length(self))
 
+
+
+class RotatingLogStream:
+    '''
+    A stream that writes to a log file with automatic rotation.
+
+    This class implements a file-like object that writes log messages to a file,
+    automatically rotating it when it gets too large. Each log entry is prefixed
+    with a timestamp.
+
+    The log file will be rotated when it exceeds max_size_in_mb (default 10MB).
+    When rotation occurs, the existing log is renamed to .old and a new log file
+    is started.
+
+    Args:
+        log_path: Path where the log file will be written
+        original_stream: Optional stream to also write output to (e.g. sys.stdout)
+        max_size_in_mb: Maximum size of log file before rotation, in megabytes
+
+    Example:
+        >>> stream = RotatingLogStream('app.log')
+        >>> stream.write('Hello world')  # Writes timestamped message to log
+        >>> RotatingLogStream.install('app.log')  # Replace stdout/stderr
+    '''
+
+    def __init__(self, log_path: pathlib.Path, original_stream: Optional[io.TextIOBase] = None,
+                 max_size_in_mb: int = 10) -> None:
+        self.log_path = log_path
+        self.old_log_path = log_path.with_suffix('.old')
+        self.original_stream = original_stream
+        self._write_count = 0
+        self.max_size_in_bytes = max_size_in_mb * 1024 * 1024
+
+    def write(self, s):
+        if self.original_stream is not None:
+            self.original_stream.write(s)
+        if isinstance(s, bytes):
+            s = s.decode()
+        s = s.replace('\r', '')
+        lines = filter(None, s.split('\n'))
+        s = ''.join(f'{line}\n' for line in lines)
+        if re.fullmatch(r'''\s*''', s):
+            return
+
+        self.log_path.parent.mkdir(parents=True, exist_ok=True)
+        self._write_count += 1
+        if self._write_count % 10 == 0:
+            try:
+                if self.log_path.stat().st_size > self.max_size_in_bytes:
+                    if self.old_log_path.exists():
+                        self.old_log_path.unlink()
+                    self.log_path.rename(self.old_log_path)
+            except OSError:
+                pass
+
+        with self.log_path.open('a', encoding='utf-8') as log_file:
+            log_file.write(f'{datetime_module.datetime.now().isoformat()} {s}')
+
+    def flush(self):
+        pass
+
+    @staticmethod
+    def install(log_path: pathlib.Path) -> None:
+        sys.stdout = RotatingLogStream(log_path, sys.stdout)
+        sys.stderr = RotatingLogStream(log_path, sys.stderr)
