@@ -412,6 +412,6 @@ class RotatingLogStream:
         pass
 
     @staticmethod
-    def install(log_path: pathlib.Path, max_size_in_mb: int = 10) -> None:
+    def install(log_path: pathlib.Path, max_size_in_mb: int = 1) -> None:
         sys.stdout = RotatingLogStream(log_path, sys.stdout, max_size_in_mb=max_size_in_mb)
         sys.stderr = RotatingLogStream(log_path, sys.stderr, max_size_in_mb=max_size_in_mb)
