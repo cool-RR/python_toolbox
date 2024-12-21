@@ -69,7 +69,7 @@ def test_install():
         original_stderr = sys.stderr
 
         try:
-            RotatingLogStream.install(log_path)
+            RotatingLogStream.install(log_path, max_size_in_mb=0.0001)
 
             print('stdout message')
             print('error message', file=sys.stderr)

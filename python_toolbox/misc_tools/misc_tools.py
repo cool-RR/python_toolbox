@@ -375,7 +375,7 @@ class RotatingLogStream:
         >>> RotatingLogStream.install('app.log')  # Replace stdout/stderr
     '''
 
-    def __init__(self, log_path: pathlib.Path, original_stream: Optional[io.TextIOBase] = None,
+    def __init__(self, log_path: pathlib.Path, original_stream: Optional[io.TextIOBase] = None, *,
                  max_size_in_mb: int = 10) -> None:
         self.log_path = log_path
         self.old_log_path = log_path.with_suffix('.old')
@@ -412,6 +412,6 @@ class RotatingLogStream:
         pass
 
     @staticmethod
-    def install(log_path: pathlib.Path) -> None:
-        sys.stdout = RotatingLogStream(log_path, sys.stdout)
-        sys.stderr = RotatingLogStream(log_path, sys.stderr)
+    def install(log_path: pathlib.Path, max_size_in_mb: int = 10) -> None:
+        sys.stdout = RotatingLogStream(log_path, sys.stdout, max_size_in_mb=max_size_in_mb)
+        sys.stderr = RotatingLogStream(log_path, sys.stderr, max_size_in_mb=max_size_in_mb)
