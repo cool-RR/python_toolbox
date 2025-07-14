@@ -1,5 +1,5 @@
 #!wing
-#!version=10.0
+#!version=11.0
 ##################################################################
 # Wing project file                                              #
 ##################################################################
@@ -50,4 +50,4 @@ proj.shared-attribute-names = ['proj.shared-attribute-names',
                                'console.toolbox']
 testing.auto-test-file-specs = [('regex',
                                  'test_python_toolbox(/test[^/.]*)+[.]py')]
-testing.test-framework = {None: ':internal pytest'}
+testing.test-framework = {None: 'nose'}
