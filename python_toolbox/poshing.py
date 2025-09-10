@@ -23,14 +23,17 @@ def format_envvar(x: str) -> str:
     return '~' if x == 'HOME' else f'${x}'
 
 
-def _posh(path_string: str = None) -> str:
+def _posh(path_string: str = None, allow_cwd: bool = True) -> str:
     # Return URLs (like http://) unaltered
     if re.match(r'^[a-zA-Z]+://', path_string):
         return path_string
 
     path = pathlib.Path(path_string)
     if not path.is_absolute():
-        path = pathlib.Path.cwd() / path
+        if allow_cwd:
+            path = pathlib.Path.cwd() / path
+        else:
+            return pathlib.Path(os.path.normpath(path)).as_posix()
     path = pathlib.Path(os.path.normpath(path))
 
     if ((sys.platform == 'win32') and
@@ -98,7 +101,8 @@ def _posh(path_string: str = None) -> str:
 
 def posh(path_strings: Iterable[str] | str | None = None,
          quote_mode: str = QUOTE_AUTO,
-         separator: str = SEPARATOR_NEWLINE) -> str:
+         separator: str = SEPARATOR_NEWLINE,
+         allow_cwd: bool = True) -> str:
     """
     Convert paths to a more readable format using environment variables.
 
@@ -106,6 +110,7 @@ def posh(path_strings: Iterable[str] | str | None = None,
         paths: A single path or list of paths to process
         quote_mode: Whether to quote paths (QUOTE_AUTO, QUOTE_NEVER, or QUOTE_ALWAYS)
         separator: Separator to use between multiple paths (SEPARATOR_NEWLINE or SEPARATOR_SPACE)
+        allow_cwd: When False, don't resolve relative paths against current working directory
 
     Returns:
         Formatted path string(s)
@@ -116,7 +121,7 @@ def posh(path_strings: Iterable[str] | str | None = None,
     if not isinstance(path_strings, (list, tuple)):
         path_strings = [path_strings]
 
-    results = [_posh(path_string) for path_string in path_strings]
+    results = [_posh(path_string, allow_cwd=allow_cwd) for path_string in path_strings]
 
     if quote_mode == QUOTE_ALWAYS:
         quoted_results = [f'"{result}"' for result in results]
@@ -159,9 +164,11 @@ def ensure_windows_path_string(path_string: str) -> str:
         return path_string
 
 
-def posh_path(path: pathlib.Path | str) -> str:
+def posh_path(path: pathlib.Path | str, allow_cwd: bool = True) -> str:
     """Process a path using the posh function directly."""
     path_str = str(path)
     if sys.platform == 'win32':
         path_str = ensure_windows_path_string(path_str)
-    return _posh(path_str)
+    return _posh(path_str, allow_cwd=allow_cwd)
+
+posh('foo')
