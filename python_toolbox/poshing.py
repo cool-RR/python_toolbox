@@ -48,6 +48,7 @@ def _posh(path_string: str = None, allow_cwd: bool = True) -> str:
     envvar_paths = {
         'DXRV': [],
         'DXR': [],
+        'VP': [], 
         'DX': [],
         'PF': [],
         'PF8': [],
