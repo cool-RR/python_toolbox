@@ -6,6 +6,7 @@ import socket
 import sys
 import re
 import urllib.parse
+import json
 from typing import Iterable
 
 # Constants for CLI
@@ -21,6 +22,30 @@ unc_drive_pattern = re.compile(r'^\\\\(?P<host>[^\\]+)\\(?P<share>[^\\])$')
 
 def format_envvar(x: str) -> str:
     return '~' if x == 'HOME' else f'${x}'
+
+
+def load_envvar_paths() -> dict:
+    """
+    Load environment variable paths from ~/.posh/envvars.json.
+    Returns an empty dict if the file doesn't exist or is empty.
+
+    Expected format:
+    {
+        "ENVVAR_NAME": ["path1", "path2", ...],
+        ...
+    }
+    """
+    config_path = pathlib.Path.home() / '.posh' / 'envvars.json'
+
+    if not config_path.exists():
+        return {}
+
+    try:
+        with open(config_path, 'r') as f:
+            data = json.load(f)
+            return data if isinstance(data, dict) else {}
+    except (json.JSONDecodeError, IOError):
+        return {}
 
 
 def _posh(path_string: str = None, allow_cwd: bool = True) -> str:
@@ -44,39 +69,14 @@ def _posh(path_string: str = None, allow_cwd: bool = True) -> str:
         path = pathlib.Path(f'{share}:\\', *path.parts[1:])
 
 
-    # Define hardcoded paths for some envvars
-    envvar_paths = {
-        'DXRV': [],
-        'DXR': [],
-        'VP': [], 
-        'DX': [],
-        'PF': [],
-        'PF8': [],
-        'SU': [],
-        'RS': [],
-        'RG': [],
-        'T0V': [],
-        'H0V': [],
-        'M0V': [
-            r'\\VBoxSvr\ROOT\home\ramrachum\.viola',
-            r'\\melfi\melfi\home\ramrachum\.viola',
-        ],
-        'L0V': [r'L:\Users\Administrator\.viola'],
-        'W0V': [],
-        'R0V': [],
-        'N0V': [],
-        'T0': [],
-        'H0': [],
-        'M0': [
-            r'\\VBoxSvr\ROOT\home\ramrachum',
-            r'\\melfi\melfi\home\ramrachum',
-        ],
-        'L0': [r'L:\Users\Administrator'],
-        'W0': [],
-        'R0': [],
-        'N0': [],
-        'HOME': [],
-    }
+    # Load envvar paths from config file
+    envvar_paths = load_envvar_paths()
+
+    # Convert string paths to pathlib.Path objects
+    for envvar_name in list(envvar_paths.keys()):
+        if not isinstance(envvar_paths[envvar_name], list):
+            envvar_paths[envvar_name] = []
+        envvar_paths[envvar_name] = [pathlib.Path(p) for p in envvar_paths[envvar_name]]
 
     # Add environment values if they exist
     for envvar_name in envvar_paths:
@@ -172,4 +172,3 @@ def posh_path(path: pathlib.Path | str, allow_cwd: bool = True) -> str:
         path_str = ensure_windows_path_string(path_str)
     return _posh(path_str, allow_cwd=allow_cwd)
 
-posh('foo')
