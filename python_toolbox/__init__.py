@@ -13,7 +13,7 @@ Visit http://pypi.python.org/pypi/python_toolbox/ for more info.
 
 import python_toolbox.version_info
 
-__version__ = '1.2.8'
+__version__ = '1.2.9'
 __version_info__ = python_toolbox.version_info.VersionInfo(
     *(map(int, __version__.split('.')))
 )
