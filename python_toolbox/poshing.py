@@ -100,10 +100,32 @@ def _posh(path_string: str = None, allow_cwd: bool = True) -> str:
     return path.as_posix()
 
 
+def apply_shawty(path_string: str, shawty_length_threshold: int = 30) -> str:
+    """Apply shawty abbreviation to a path string."""
+    slash_count = path_string.count('/')
+    if slash_count < 2:
+        return path_string
+
+    # Find first and last slash positions
+    first_slash = path_string.index('/')
+    last_slash = path_string.rindex('/')
+
+    # Build abbreviated path (without slashes around ellipsis)
+    abbreviated = path_string[:first_slash] + '…' + path_string[last_slash + 1:]
+
+    # If still over threshold, delete everything before the ellipsis
+    if len(abbreviated) > shawty_length_threshold:
+        abbreviated = '…' + path_string[last_slash + 1:]
+
+    return abbreviated
+
+
 def posh(path_strings: Iterable[str] | str | None = None,
          quote_mode: str = QUOTE_AUTO,
          separator: str = SEPARATOR_NEWLINE,
-         allow_cwd: bool = True) -> str:
+         allow_cwd: bool = True,
+         shawty: bool = False,
+         shawty_length_threshold: int = 30) -> str:
     """
     Convert paths to a more readable format using environment variables.
 
@@ -112,6 +134,8 @@ def posh(path_strings: Iterable[str] | str | None = None,
         quote_mode: Whether to quote paths (QUOTE_AUTO, QUOTE_NEVER, or QUOTE_ALWAYS)
         separator: Separator to use between multiple paths (SEPARATOR_NEWLINE or SEPARATOR_SPACE)
         allow_cwd: When False, don't resolve relative paths against current working directory
+        shawty: Abbreviate paths with 2+ slashes: replace middle sections with ellipsis
+        shawty_length_threshold: If abbreviated path still exceeds this length, trim further
 
     Returns:
         Formatted path string(s)
@@ -123,6 +147,9 @@ def posh(path_strings: Iterable[str] | str | None = None,
         path_strings = [path_strings]
 
     results = [_posh(path_string, allow_cwd=allow_cwd) for path_string in path_strings]
+
+    if shawty:
+        results = [apply_shawty(result, shawty_length_threshold) for result in results]
 
     if quote_mode == QUOTE_ALWAYS:
         quoted_results = [f'"{result}"' for result in results]
