@@ -102,12 +102,22 @@ def _posh(path_string: str = None, allow_cwd: bool = True) -> str:
 
 def apply_shawty(path_string: str, shawty_length_threshold: int = 30) -> str:
     """Apply shawty abbreviation to a path string."""
+    starts_with_slash = path_string.startswith('/')
     slash_count = path_string.count('/')
-    if slash_count < 2:
+
+    # Adjust count if path starts with slash (leading slash doesn't count)
+    adjusted_count = slash_count - 1 if starts_with_slash else slash_count
+
+    if adjusted_count < 2:
         return path_string
 
     # Find first and last slash positions
-    first_slash = path_string.index('/')
+    if starts_with_slash:
+        # Skip the leading slash, find the second slash
+        first_slash = path_string.index('/', 1)
+    else:
+        first_slash = path_string.index('/')
+
     last_slash = path_string.rindex('/')
 
     # Build abbreviated path (without slashes around ellipsis)
