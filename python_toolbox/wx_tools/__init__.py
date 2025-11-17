@@ -14,7 +14,6 @@ is_win = (wx.Platform == '__WXMSW__')
 from . import colors
 from . import keyboard
 from . import window_tools
-from . import bitmap_tools
 from . import cursors
 from . import event_tools
 from . import generic_bitmaps

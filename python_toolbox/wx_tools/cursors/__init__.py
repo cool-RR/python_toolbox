@@ -3,5 +3,4 @@
 
 '''Defines various cursor-related tools.'''
 
-from . import collection
 from .cursor_changer import CursorChanger
