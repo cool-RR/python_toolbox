@@ -24,28 +24,37 @@ def format_envvar(x: str) -> str:
     return '~' if x == 'HOME' else f'${x}'
 
 
-def load_envvar_paths() -> dict:
+def load_config() -> tuple[dict, int]:
     """
-    Load environment variable paths from ~/.posh/envvars.json.
-    Returns an empty dict if the file doesn't exist or is empty.
+    Load configuration from ~/.posh/config.json.
+    Returns (envvar_paths_dict, shawty_length_threshold).
 
     Expected format:
     {
-        "ENVVAR_NAME": ["path1", "path2", ...],
-        ...
+        "envvars": {
+            "ENVVAR_NAME": ["path1", "path2", ...],
+            ...
+        },
+        "shawty_length_threshold": 30
     }
     """
-    config_path = pathlib.Path.home() / '.posh' / 'envvars.json'
+    config_path = pathlib.Path.home() / '.posh' / 'config.json'
 
     if not config_path.exists():
-        return {}
+        return {}, 30
 
     try:
         with open(config_path, 'r') as f:
             data = json.load(f)
-            return data if isinstance(data, dict) else {}
+            if not isinstance(data, dict):
+                return {}, 30
+
+            envvars = data.get('envvars', {})
+            threshold = data.get('shawty_length_threshold', 30)
+
+            return (envvars if isinstance(envvars, dict) else {}), threshold
     except (json.JSONDecodeError, IOError):
-        return {}
+        return {}, 30
 
 
 def _posh(path_string: str = None, allow_cwd: bool = True) -> str:
@@ -70,7 +79,7 @@ def _posh(path_string: str = None, allow_cwd: bool = True) -> str:
 
 
     # Load envvar paths from config file
-    envvar_paths = load_envvar_paths()
+    envvar_paths, _ = load_config()
 
     # Convert string paths to pathlib.Path objects
     for envvar_name in list(envvar_paths.keys()):
@@ -135,7 +144,7 @@ def posh(path_strings: Iterable[str] | str | None = None,
          separator: str = SEPARATOR_NEWLINE,
          allow_cwd: bool = True,
          shawty: bool = False,
-         shawty_length_threshold: int = 30) -> str:
+         shawty_length_threshold: int | None = None) -> str:
     """
     Convert paths to a more readable format using environment variables.
 
@@ -145,7 +154,7 @@ def posh(path_strings: Iterable[str] | str | None = None,
         separator: Separator to use between multiple paths (SEPARATOR_NEWLINE or SEPARATOR_SPACE)
         allow_cwd: When False, don't resolve relative paths against current working directory
         shawty: Abbreviate paths with 2+ slashes: replace middle sections with ellipsis
-        shawty_length_threshold: If abbreviated path still exceeds this length, trim further
+        shawty_length_threshold: If abbreviated path still exceeds this length, trim further (defaults to config.json value)
 
     Returns:
         Formatted path string(s)
@@ -156,10 +165,14 @@ def posh(path_strings: Iterable[str] | str | None = None,
     if not isinstance(path_strings, (list, tuple)):
         path_strings = [path_strings]
 
+    # Load config to get default threshold if not provided
+    _, config_threshold = load_config()
+    threshold = shawty_length_threshold if shawty_length_threshold is not None else config_threshold
+
     results = [_posh(path_string, allow_cwd=allow_cwd) for path_string in path_strings]
 
     if shawty:
-        results = [apply_shawty(result, shawty_length_threshold) for result in results]
+        results = [apply_shawty(result, threshold) for result in results]
 
     if quote_mode == QUOTE_ALWAYS:
         quoted_results = [f'"{result}"' for result in results]
