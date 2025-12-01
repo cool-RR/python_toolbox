@@ -24,6 +24,82 @@ def format_envvar(x: str) -> str:
     return '~' if x == 'HOME' else f'${x}'
 
 
+def expand_envvars(s: str) -> str:
+    """Expand environment variables in a string. Supports $VAR and ${VAR} syntax."""
+    result = s
+
+    # Handle ${VAR} syntax
+    result = re.sub(
+        r'\$\{([^}]+)\}',
+        lambda m: os.environ.get(m.group(1), m.group(0)),
+        result
+    )
+
+    # Handle $VAR syntax (variable name ends at non-alphanumeric/underscore)
+    result = re.sub(
+        r'\$([A-Za-z_][A-Za-z0-9_]*)',
+        lambda m: os.environ.get(m.group(1), m.group(0)),
+        result
+    )
+
+    return result
+
+
+def ensure_windows_path_string(path_string: str) -> str:
+    """Convert Linux/POSIX-style paths to Windows format."""
+    # Handle file:/// URLs
+    if path_string.startswith('file:///'):
+        return urllib.parse.unquote(path_string[8:])
+
+    # Return other URLs (like http://) unaltered
+    if re.match(r'^[a-zA-Z]+://', path_string):
+        return path_string
+
+    path = pathlib.Path(path_string)
+    posix_path = path.as_posix()
+    if re.match('^/[a-zA-Z]/.*$', posix_path):
+        # Handle local drive paths like /c/Users/...
+        return '%s:%s' % (
+            posix_path[1],
+            re.sub('(?<=[^\\\\])\\\\ ', ' ', posix_path).replace('/', '\\')[2:]
+        )
+    elif re.match('^//[^/]+/.*$', posix_path):
+        # Handle UNC network paths like //server/share/...
+        return posix_path.replace('/', '\\')
+    else:
+        return path_string
+
+
+def normalize_path_separators(s: str) -> str:
+    """Normalize path separators for the current OS."""
+    if sys.platform == 'win32':
+        return ensure_windows_path_string(s)
+    else:
+        return ensure_linux_path_string(s)
+
+
+def ensure_linux_path_string(path_string: str) -> str:
+    """Convert Windows-style paths to Linux/POSIX format."""
+    # Handle file:/// URLs
+    if path_string.startswith('file:///'):
+        return urllib.parse.unquote(path_string[8:])
+
+    # Return other URLs (like http://) unaltered
+    if re.match(r'^[a-zA-Z]+://', path_string):
+        return path_string
+
+    # Convert backslashes to forward slashes
+    result = path_string.replace('\\', '/')
+
+    # Handle Windows drive paths like C:/Users/... -> /c/Users/...
+    if re.match(r'^[a-zA-Z]:/', result):
+        result = '/' + result[0].lower() + result[2:]
+
+    # Handle UNC paths like //server/share -> //server/share (already correct)
+
+    return result
+
+
 def load_config() -> tuple[dict, int]:
     """
     Load configuration from ~/.posh/config.json.
@@ -81,11 +157,14 @@ def _posh(path_string: str = None, allow_cwd: bool = True) -> str:
     # Load envvar paths from config file
     envvar_paths, _ = load_config()
 
-    # Convert string paths to pathlib.Path objects
+    # Convert string paths to pathlib.Path objects (with envvar expansion and separator normalization)
     for envvar_name in list(envvar_paths.keys()):
         if not isinstance(envvar_paths[envvar_name], list):
             envvar_paths[envvar_name] = []
-        envvar_paths[envvar_name] = [pathlib.Path(p) for p in envvar_paths[envvar_name]]
+        envvar_paths[envvar_name] = [
+            pathlib.Path(normalize_path_separators(expand_envvars(p)))
+            for p in envvar_paths[envvar_name]
+        ]
 
     # Add environment values if they exist
     for envvar_name in envvar_paths:
@@ -188,31 +267,6 @@ def posh(path_strings: Iterable[str] | str | None = None,
 
     sep = '\n' if separator == SEPARATOR_NEWLINE else ' '
     return sep.join(quoted_results)
-
-
-def ensure_windows_path_string(path_string: str) -> str:
-    # Handle file:/// URLs
-    if path_string.startswith('file:///'):
-        # Strip the file:/// prefix and decode URL encoding
-        return urllib.parse.unquote(path_string[8:])
-
-    # Return other URLs (like http://) unaltered
-    if re.match(r'^[a-zA-Z]+://', path_string):
-        return path_string
-
-    path = pathlib.Path(path_string)
-    posix_path = path.as_posix()
-    if re.match('^/[a-zA-Z]/.*$', posix_path):
-        # Handle local drive paths like /c/Users/...
-        return '%s:%s' % (
-            posix_path[1],
-            re.sub('(?<=[^\\\\])\\\\ ', ' ', posix_path).replace('/', '\\')[2:]
-        )
-    elif re.match('^//[^/]+/.*$', posix_path):
-        # Handle UNC network paths like //server/share/...
-        return posix_path.replace('/', '\\')
-    else:
-        return path_string
 
 
 def posh_path(path: pathlib.Path | str, allow_cwd: bool = True) -> str:
